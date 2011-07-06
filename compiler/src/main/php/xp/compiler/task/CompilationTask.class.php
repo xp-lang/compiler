@@ -158,10 +158,26 @@
           throw new CompilationException('Unknown error', $e);
         }
 
-        // Register type as done
-        $this->done[$this->source]= $result->type();
+        // Register type as done. 
+        //
+        // XXX TODO: Find out why cloning is necessary?! If we don't clone but instead 
+        // store a reference, we end up with the value occasionally being overwritten.
+        $this->done[$this->source]= clone $result->type();
       }
       return $this->done[$this->source];
+    }
+    
+    /**
+     * Creates a string representation of this compilation task
+     *
+     * @return  string
+     */
+    public function toString() {
+      $s= $this->getClassName().'(source: '.$this->source->toString().")@{\n";
+      foreach ($this->done->keys() as $key) {
+        $s.= '  ['.$key->toString().'] '.$this->done[$key]->getClassName().'('.$this->done[$key]->name().")\n";
+      }
+      return $s.'}';
     }
   }
 ?>
