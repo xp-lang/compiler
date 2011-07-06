@@ -1009,7 +1009,7 @@
       
       // First catch.
       $op->append('} catch('.$this->resolveType($first->type)->literal().' $'.$first->variable.') {'); {
-        $this->scope[0]->setType(new VariableNode($first->variable->variable), $first->type);
+        $this->scope[0]->setType(new VariableNode($first->variable), $first->type);
         $this->emitAll($op, (array)$first->statements);
         $this->finalizers[0] && $this->emitOne($op, $this->finalizers[0]);
       }
