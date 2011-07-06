@@ -219,7 +219,7 @@
      * @return  bool
      */
     public function hasOperator($symbol) {
-      return $this->class->hasMethod('operator··'.self::$ovl[$symbol]);
+      return isset(self::$ovl[$symbol]) ? $this->class->hasMethod('operator··'.self::$ovl[$symbol]) : FALSE;
     }
     
     /**
