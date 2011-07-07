@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<ivy-module
+ version="2.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xp="http://xp-framework.net/ivy/extra"
+ xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd"
+>
+  <info 
+   organisation="net.xp_framework" 
+   module="compiler"
+   status="integration"
+   revision="5.8.2"
+  >
+    <license name="BSD"/>
+    <description homepage="http://xp-framework.net/">
+      XP compiler and language
+    </description>
+  </info>
+  <configurations>
+    <conf name="default" visibility="public" description="Default, runtime configuration"/>
+    <conf name="test" visibility="public" description="Test configuration - required for testing this artifact"/>
+  </configurations>
+  <publications>
+    <artifact name="compiler" type="xar" ext="xar" conf="default"/>
+    <artifact name="compiler-test" type="xar" ext="xar" conf="test"/>
+  </publications>
+  <dependencies>
+    <dependency name="core" rev="latest.integration" revConstraint="5.8.2" conf="*->default"/>
+  </dependencies>
+</ivy-module>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="xp-framework-core" basedir=".">
+  <property name="xp.publish.resolver" value="public-authenticated"/>
+  <import file="${user.home}/.ant/xp-build/build-loader.xml"/>
+
+  <fileset id="build.testConfigurations" dir="${basedir}/src/resources">
+    <include name="unittest/*.ini"/>
+  </fileset>
+</project>
