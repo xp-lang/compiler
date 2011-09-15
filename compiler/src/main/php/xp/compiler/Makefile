@@ -3,7 +3,7 @@
 #
 # $Id$
 
-GEN=../../../ports/technologies/opt/jay
+GEN?=../../../ports/technologies/opt/jay
 
 all: syntax/xp/Parser.class.php syntax/php/Parser.class.php
 
