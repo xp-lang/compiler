@@ -1844,12 +1844,15 @@
       $initializable && $op->append('= ')->append(var_export($init, TRUE));
       $op->append(';');
 
+      // Copy annotations
+      $this->metadata[0][0][$field->name]= array(
+        DETAIL_ANNOTATIONS  => $this->annotationsAsMetadata((array)$field->annotations)
+      );
+
       // Add field metadata (type, stored in @type annotation, see
       // lang.reflect.Field and lang.XPClass::detailsForField()). 
       $type= $this->resolveType($field->type);
-      $this->metadata[0][0][$field->name]= array(
-        DETAIL_ANNOTATIONS  => array('type' => $type->name())
-      );
+      $this->metadata[0][0][$field->name][DETAIL_ANNOTATIONS]['type']= $type->name();
 
       // Register type information
       $f= new xp·compiler·types·Field();
