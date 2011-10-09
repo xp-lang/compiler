@@ -93,5 +93,50 @@
         new int[] {1, 2, 3};
       '));
     }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function arrayTypeArray() {
+      $this->assertEquals(
+        array(new ArrayNode(array(
+          'values'        => array(),
+          'type'          => new TypeName('string[][]'),
+        ))),
+        $this->parse('new string[][] {};')
+      );
+    }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function mapTypeArray() {
+      $this->assertEquals(
+        array(new ArrayNode(array(
+          'values'        => array(),
+          'type'          => new TypeName('[:var][]'),
+        ))),
+        $this->parse('new [:var][] {};')
+      );
+    }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function genericTypeArray() {
+      $this->assertEquals(
+        array(new ArrayNode(array(
+          'values'        => array(),
+          'type'          => new TypeName('List<string>[]'),
+        ))),
+        $this->parse('new List<string>[] {};')
+      );
+    }
   }
 ?>

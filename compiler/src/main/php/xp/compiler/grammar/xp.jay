@@ -980,7 +980,7 @@ typename:
 ;
 
 arraytype:
-    qualifiedname '[' ']' { $$= new TypeName($1.'[]'); }
+    typeref '[' ']' { $$= new TypeName($1->compoundName().'[]'); }
 ;
 
 maptype:
