@@ -46,7 +46,7 @@
       if ($scope->declarations[0] instanceof InterfaceNode) {
         if (!$empty) {
           return array('R403', 'Interface methods may not have a body '.$qname);
-        } else if (MODIFIER_PUBLIC != $routine->modifiers) {
+        } else if ($routine->modifiers !== MODIFIER_PUBLIC && $routine->modifiers !== 0) {
           return array('R401', 'Interface methods may only be public '.$qname);
         }
       } else {
