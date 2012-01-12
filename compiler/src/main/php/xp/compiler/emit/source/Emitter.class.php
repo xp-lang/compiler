@@ -1103,7 +1103,7 @@
       // emitClass() during declaration emittance.
       $generic= NULL;
       if (isset($new->body)) {
-        $parent= $this->resolveType($new->type, $this, FALSE);
+        $parent= $this->resolveType($new->type, FALSE);
         if (Types::INTERFACE_KIND === $parent->kind()) {
           $p= array('parent' => new TypeName('lang.Object'), 'implements' => array($new->type));
           
@@ -1112,7 +1112,7 @@
           if ($new->type->components) {
             $components= array();
             foreach ($new->type->components as $component) {
-              $components[]= $this->resolveType($component, $this, FALSE)->name();
+              $components[]= $this->resolveType($component, FALSE)->name();
             }
             $generic= array($parent->name(), NULL, $components);
           }
@@ -2384,11 +2384,12 @@
      * case.
      *
      * @param   xp.compiler.types.TypeName
+     * @param   bool register default TRUE
      * @return  xp.compiler.types.Types
      */
-    protected function resolveType(TypeName $t) {
+    protected function resolveType(TypeName $t, $register= TRUE) {
       try {
-        $ptr= $this->scope[0]->resolveType($t);
+        $ptr= $this->scope[0]->resolveType($t, $register);
         $this->cat && $this->cat->info('Resolve', $t, '=', $ptr);
         return $ptr;
       } catch (ResolveException $e) {
