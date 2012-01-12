@@ -138,6 +138,24 @@
     }
 
     /**
+     * Test interface methods
+     *
+     */
+    #[@test]
+    public function interfaceMethodsMayOmitModifier() {
+      $m= new MethodNode(array(
+        'name'        => 'run',
+        'modifiers'   => 0,
+        'returns'     => TypeName::$VOID,
+        'parameters'  => array(),
+        'body'        => NULL
+      ));
+      $this->assertNull(
+        $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Runnable')))
+      );
+    }
+
+    /**
      * Test class methods
      *
      */
