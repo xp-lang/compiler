@@ -62,37 +62,37 @@
     }
     
     /**
-     * Test
+     * Test parent class is not used (but added in emitTypeName())
      *
      */
     #[@test]
-    public function emptyClassUsesObject() {
+    public function emptyClass() {
       $this->assertEquals(
-        array(new TypeName('lang.Object')), 
+        array(), 
         $this->usedClassesIn('public class %s { }')
       );
     }
 
     /**
-     * Test extends
+     * Test parent class is not used (but added in emitTypeName())
      *
      */
     #[@test]
-    public function throwableSubclassUsesThrowable() {
+    public function throwableSubclass() {
       $this->assertEquals(
-        array(new TypeName('lang.Throwable')), 
+        array(), 
         $this->usedClassesIn('public class %s extends Throwable { }')
       );
     }
 
     /**
-     * Test implements
+     * Test implemnted interface is not used (but added in emitTypeName())
      *
      */
     #[@test]
-    public function runnableImplementationUsesObjectAndRunnable() {
+    public function runnableImplementation() {
       $this->assertEquals(
-        array(new TypeName('lang.Object'), new TypeName('lang.Runnable')), 
+        array(), 
         $this->usedClassesIn('public class %s implements Runnable { }')
       );
     }
@@ -104,7 +104,7 @@
     #[@test]
     public function memberInitializationToThrowableInstanceUsesThrowable() {
       $this->assertEquals(
-        array(new TypeName('lang.Object'), new TypeName('lang.Throwable')), 
+        array(new TypeName('lang.Throwable')), 
         $this->usedClassesIn('public class %s { 
           var $member= new Throwable();
         }')
@@ -118,7 +118,7 @@
     #[@test]
     public function memberInitializationToThrowableClassUsesThrowable() {
       $this->assertEquals(
-        array(new TypeName('lang.Object'), new TypeName('lang.Throwable')), 
+        array(new TypeName('lang.Throwable'), new TypeName('lang.XPClass')), 
         $this->usedClassesIn('public class %s { 
           var $member= Throwable::class;
         }')
@@ -126,13 +126,14 @@
     }
 
     /**
-     * Test member initialization
+     * Test member initialization: Anonymous class' parent class is not 
+     * used (but added in emitTypeName())
      *
      */
     #[@test]
     public function memberInitializationToAnonymousInstanceUsesRunnable() {
       $this->assertEquals(
-        array(new TypeName('lang.Object'), new TypeName('lang.Runnable')), 
+        array(), 
         $this->usedClassesIn('public class %s { 
           var $member= new Runnable() {
             public void run() {
@@ -150,7 +151,7 @@
     #[@test]
     public function localVariableAssginmentToThrowableInstanceUsesThrowable() {
       $this->assertEquals(
-        array(new TypeName('lang.Object'), new TypeName('lang.Throwable')), 
+        array(new TypeName('lang.Throwable')), 
         $this->usedClassesIn('public class %s {
           public static void main(string[] $args) {
             $instance= new Throwable();
@@ -160,13 +161,14 @@
     }
 
     /**
-     * Test assignment
+     * Test assignment: Anonymous class' parent class is not used (but 
+     * added in emitTypeName())
      *
      */
     #[@test]
     public function localVariableAssginmentToAnonymousInstanceUsesRunnable() {
       $this->assertEquals(
-        array(new TypeName('lang.Object'), new TypeName('lang.Runnable')), 
+        array(), 
         $this->usedClassesIn('public class %s {
           public static void main(string[] $args) {
             $instance= new Runnable() {
@@ -186,7 +188,7 @@
     #[@test]
     public function localVariableAssginmentToThrowableClassUsesThrowable() {
       $this->assertEquals(
-        array(new TypeName('lang.Object'), new TypeName('lang.Throwable')), 
+        array(new TypeName('lang.Throwable')), 
         $this->usedClassesIn('public class %s {
           public static void main(string[] $args) {
             $class= lang.Throwable::class;
@@ -202,7 +204,7 @@
     #[@test]
     public function localVariableAssginmentToThrowableClassLoaderUsesThrowable() {
       $this->assertEquals(
-        array(new TypeName('lang.Object'), new TypeName('lang.Throwable')), 
+        array(new TypeName('lang.Throwable'), new TypeName('lang.XPClass')), 
         $this->usedClassesIn('public class %s {
           public static void main(string[] $args) {
             $loader= lang.Throwable::class.getClassLoader();
