@@ -278,7 +278,15 @@
       // Locate class. If the classloader already knows this class,
       // we can simply use this class. TODO: Use specialized 
       // JitClassLoader?
-      if (!$this->resolved->containsKey($qualified)) {
+      if ($this->resolved->containsKey($qualified)) {
+        if ($register) do {
+          $q= new TypeName($qualified);
+          foreach ($this->used as $cmp) {
+            if ($q->equals($cmp)) break 2;
+          }
+          $this->used[]= new TypeName($qualified);
+        } while (0);
+      } else {
         if (
           class_exists(xp::reflect($qualified), FALSE) || 
           interface_exists(xp::reflect($qualified), FALSE) || 
@@ -301,7 +309,7 @@
         }
         $register && $this->used[]= new TypeName($qualified);
       }
-      
+
       return $this->resolved[$qualified];
     }
     
