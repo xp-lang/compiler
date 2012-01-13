@@ -198,16 +198,52 @@
     }
 
     /**
-     * Test assignment
+     * Test method call
      *
      */
     #[@test]
-    public function localVariableAssginmentToThrowableClassLoaderUsesThrowable() {
+    public function staticCallToXpClassForNameUsesXpClass() {
       $this->assertEquals(
-        array(new TypeName('lang.Throwable'), new TypeName('lang.XPClass')), 
+        array(new TypeName('lang.XPClass')), 
         $this->usedClassesIn('public class %s {
           public static void main(string[] $args) {
-            $loader= lang.Throwable::class.getClassLoader();
+            XPClass::forName($args[0]);
+          }
+        }')
+      );
+    }
+
+    /**
+     * Test method call
+     *
+     */
+    #[@test]
+    public function methodCallsReturnValueDoesNotGetUsed() {
+      $this->assertEquals(
+        array(), 
+        $this->usedClassesIn('public class %s {
+          public static void main(string[] $args) {
+            self::class.getClassLoader();
+          }
+        }')
+      );
+    }
+
+    /**
+     * Test method declaration
+     *
+     */
+    #[@test]
+    public function methodDeclarationsReturnValueDoesNotGetUsed() {
+      $this->assertEquals(
+        array(new TypeName('lang.XPClass')), 
+        $this->usedClassesIn('public class %s {
+          static IClassLoader loaderOf(string $name) {
+            return XPClass::forName($name).getClassLoader();
+          }
+          
+          public static void main(string[] $args) {
+            self::loaderOf($args[0]);
           }
         }')
       );
