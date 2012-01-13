@@ -248,5 +248,21 @@
         }')
       );
     }
+
+    /**
+     * Test method declaration
+     *
+     */
+    #[@test]
+    public function extensionMethodDeclarationsExtensionGetUsed() {
+      $this->assertEquals(
+        array(new TypeName('lang.types.String')), 
+        $this->usedClassesIn('public class %s {
+          static void delete(this lang.types.String $self, int? $pos, int? $length) {
+            // TBI
+          }
+        }')
+      );
+    }
   }
 ?>
