@@ -254,6 +254,22 @@
      *
      */
     #[@test]
+    public function methodDeclarationsArgumentTypesGetUsed() {
+      $this->assertEquals(
+        array(new TypeName('lang.types.String')), 
+        $this->usedClassesIn('public class %s {
+          static void deleteFrom(lang.types.String $string, int? $pos, int? $length) {
+            // TBI
+          }
+        }')
+      );
+    }
+
+    /**
+     * Test method declaration
+     *
+     */
+    #[@test]
     public function extensionMethodDeclarationsExtensionGetUsed() {
       $this->assertEquals(
         array(new TypeName('lang.types.String')), 
