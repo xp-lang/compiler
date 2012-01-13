@@ -98,6 +98,20 @@
     }
 
     /**
+     * Test member declaration
+     *
+     */
+    #[@test]
+    public function memberTypeDeclarationGetsUsed() {
+      $this->assertEquals(
+        array(new TypeName('lang.Throwable')), 
+        $this->usedClassesIn('public class %s { 
+          Throwable $member= null;
+        }')
+      );
+    }
+
+    /**
      * Test member initialization
      *
      */
