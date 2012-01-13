@@ -407,7 +407,7 @@
       $this->emitOne($op, $call->target);
       
       // Check for extension methods
-      $ptr= new TypeInstance($this->resolveType($this->scope[0]->typeOf($call->target)));
+      $ptr= new TypeInstance($this->resolveType($this->scope[0]->typeOf($call->target), FALSE));
       if (NULL !== ($ext= $this->scope[0]->getExtension($ptr, $call->name))) {
         $op->insert($ext->holder->literal().'::'.$call->name.'(', $mark);
         if ($call->arguments) {
@@ -1479,7 +1479,7 @@
         $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
       }
       
-      $return= $this->resolveType($method->returns);
+      $return= $this->resolveType($method->returns, FALSE);
       $this->metadata[0][1][$method->name]= array(
         DETAIL_ARGUMENTS    => array(),
         DETAIL_RETURNS      => $return->name(),
