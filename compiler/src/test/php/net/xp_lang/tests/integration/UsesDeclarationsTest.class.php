@@ -112,6 +112,20 @@
     }
 
     /**
+     * Test member declaration
+     *
+     */
+    #[@test]
+    public function genericMemberTypeDeclarationGetsUsed() {
+      $this->assertEquals(
+        array(new TypeName('util.collections.IList')), // TBD: new TypeName('lang.types.String')), 
+        $this->usedClassesIn('public class %s { 
+          util.collections.IList<lang.types.String> $list;
+        }')
+      );
+    }
+
+    /**
      * Test member initialization
      *
      */
