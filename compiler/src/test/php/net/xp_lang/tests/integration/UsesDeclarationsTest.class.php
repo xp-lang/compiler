@@ -266,6 +266,22 @@
     }
 
     /**
+     * Test constructor declaration
+     *
+     */
+    #[@test]
+    public function constructorDeclarationsArgumentTypesGetUsed() {
+      $this->assertEquals(
+        array(new TypeName('lang.types.String')), 
+        $this->usedClassesIn('public class %s {
+          public __construct(lang.types.String $string) {
+            // TBI
+          }
+        }')
+      );
+    }
+
+    /**
      * Test method declaration
      *
      */
