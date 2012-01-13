@@ -126,6 +126,41 @@
     }
 
     /**
+     * Test indexer declaration
+     *
+     */
+    #[@test]
+    public function indexerTypeDeclarationGetsUsed() {
+      $this->assertEquals(
+        array(new TypeName('lang.types.String')), 
+        $this->usedClassesIn('public class %s { 
+          lang.types.String this[int $index] {
+            get { return $this.strings[$index]; }
+            set { $this.strings[$index]= $value; }
+          }
+        }')
+      );
+    }
+
+
+    /**
+     * Test property declaration
+     *
+     */
+    #[@test]
+    public function propertyTypeDeclarationGetsUsed() {
+      $this->assertEquals(
+        array(new TypeName('lang.types.String')), 
+        $this->usedClassesIn('public class %s { 
+          lang.types.String current {
+            get { return $this.strings[$this.offset]; }
+            set { $this.strings[$this.offset]= $value; }
+          }
+        }')
+      );
+    }
+
+    /**
      * Test member initialization
      *
      */
@@ -161,7 +196,7 @@
     #[@test]
     public function memberInitializationToAnonymousInstanceUsesRunnable() {
       $this->assertEquals(
-        array(), 
+        array(new TypeName('lang.Runnable')), 
         $this->usedClassesIn('public class %s { 
           var $member= new Runnable() {
             public void run() {
