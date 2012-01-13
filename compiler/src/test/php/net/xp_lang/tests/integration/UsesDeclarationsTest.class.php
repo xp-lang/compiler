@@ -41,12 +41,15 @@
     }
     
     /**
-     * Returns scope after compiling
+     * Assertion helper
      *
-     * @param   string src
-     * @return  xp.compiler.types.Scope
+     * @param   string[] uses
+     * @return  string src
+     * @throws  unittest.AssertionFailedError
      */
-    protected function usedClassesIn($src) {
+    protected function assertUses($uses, $src) {
+
+      // Compile sourcecode
       $emitter= new xp·compiler·emit·source·Emitter();
       $scope= new TaskScope(new CompilationTask(
         new FileSource(new File(__FILE__), self::$syntax),
@@ -58,7 +61,14 @@
         self::$syntax->parse(new MemoryInputStream(sprintf($src, 'FixtureForUsesDeclarationsTest·'.($this->counter++))), $this->name),
         $scope
       );
-      return $scope->used;
+
+      // Convert expected list to scope's used member's format
+      $types= array();
+      foreach ($uses as $name) {
+        $types[]= new TypeName($name);
+      }
+
+      $this->assertEquals($types, $scope->used);
     }
     
     /**
@@ -67,9 +77,9 @@
      */
     #[@test]
     public function emptyClass() {
-      $this->assertEquals(
+      $this->assertUses(
         array(), 
-        $this->usedClassesIn('public class %s { }')
+        'public class %s { }'
       );
     }
 
@@ -79,9 +89,9 @@
      */
     #[@test]
     public function throwableSubclass() {
-      $this->assertEquals(
+      $this->assertUses(
         array(), 
-        $this->usedClassesIn('public class %s extends Throwable { }')
+        'public class %s extends Throwable { }'
       );
     }
 
@@ -91,9 +101,9 @@
      */
     #[@test]
     public function runnableImplementation() {
-      $this->assertEquals(
+      $this->assertUses(
         array(), 
-        $this->usedClassesIn('public class %s implements Runnable { }')
+        'public class %s implements Runnable { }'
       );
     }
 
@@ -103,11 +113,11 @@
      */
     #[@test]
     public function memberTypeDeclarationGetsUsed() {
-      $this->assertEquals(
-        array(new TypeName('lang.Throwable')), 
-        $this->usedClassesIn('public class %s { 
+      $this->assertUses(
+        array('lang.Throwable'), 
+        'public class %s { 
           Throwable $member= null;
-        }')
+        }'
       );
     }
 
@@ -117,11 +127,11 @@
      */
     #[@test]
     public function genericMemberTypeDeclarationGetsUsed() {
-      $this->assertEquals(
-        array(new TypeName('util.collections.IList')), // TBD: new TypeName('lang.types.String')), 
-        $this->usedClassesIn('public class %s { 
+      $this->assertUses(
+        array('util.collections.IList'), // TBD: 'lang.types.String',
+        'public class %s { 
           util.collections.IList<lang.types.String> $list;
-        }')
+        }'
       );
     }
 
@@ -131,14 +141,14 @@
      */
     #[@test]
     public function indexerTypeDeclarationGetsUsed() {
-      $this->assertEquals(
-        array(new TypeName('lang.types.String')), 
-        $this->usedClassesIn('public class %s { 
+      $this->assertUses(
+        array('lang.types.String'), 
+        'public class %s { 
           lang.types.String this[int $index] {
             get { return $this.strings[$index]; }
             set { $this.strings[$index]= $value; }
           }
-        }')
+        }'
       );
     }
 
@@ -149,14 +159,14 @@
      */
     #[@test]
     public function propertyTypeDeclarationGetsUsed() {
-      $this->assertEquals(
-        array(new TypeName('lang.types.String')), 
-        $this->usedClassesIn('public class %s { 
+      $this->assertUses(
+        array('lang.types.String'), 
+        'public class %s { 
           lang.types.String current {
             get { return $this.strings[$this.offset]; }
             set { $this.strings[$this.offset]= $value; }
           }
-        }')
+        }'
       );
     }
 
@@ -166,11 +176,11 @@
      */
     #[@test]
     public function memberInitializationToThrowableInstanceUsesThrowable() {
-      $this->assertEquals(
-        array(new TypeName('lang.Throwable')), 
-        $this->usedClassesIn('public class %s { 
+      $this->assertUses(
+        array('lang.Throwable'), 
+        'public class %s { 
           var $member= new Throwable();
-        }')
+        }'
       );
     }
 
@@ -180,11 +190,11 @@
      */
     #[@test]
     public function memberInitializationToThrowableClassUsesThrowable() {
-      $this->assertEquals(
-        array(new TypeName('lang.Throwable'), new TypeName('lang.XPClass')), 
-        $this->usedClassesIn('public class %s { 
+      $this->assertUses(
+        array('lang.Throwable', 'lang.XPClass'), 
+        'public class %s { 
           var $member= Throwable::class;
-        }')
+        }'
       );
     }
 
@@ -195,15 +205,15 @@
      */
     #[@test]
     public function memberInitializationToAnonymousInstanceUsesRunnable() {
-      $this->assertEquals(
-        array(new TypeName('lang.Runnable')), 
-        $this->usedClassesIn('public class %s { 
+      $this->assertUses(
+        array('lang.Runnable'), 
+        'public class %s { 
           var $member= new Runnable() {
             public void run() {
               // TBI
             }
           };
-        }')
+        }'
       );
     }
 
@@ -213,13 +223,13 @@
      */
     #[@test]
     public function localVariableAssginmentToThrowableInstanceUsesThrowable() {
-      $this->assertEquals(
-        array(new TypeName('lang.Throwable')), 
-        $this->usedClassesIn('public class %s {
+      $this->assertUses(
+        array('lang.Throwable'), 
+        'public class %s { 
           public static void main(string[] $args) {
             $instance= new Throwable();
           }
-        }')
+        }'
       );
     }
 
@@ -230,9 +240,9 @@
      */
     #[@test]
     public function localVariableAssginmentToAnonymousInstanceUsesRunnable() {
-      $this->assertEquals(
+      $this->assertUses(
         array(), 
-        $this->usedClassesIn('public class %s {
+        'public class %s { 
           public static void main(string[] $args) {
             $instance= new Runnable() {
               public void run() {
@@ -240,7 +250,7 @@
               }
             };
           }
-        }')
+        }'
       );
     }
 
@@ -250,13 +260,13 @@
      */
     #[@test]
     public function localVariableAssginmentToThrowableClassUsesThrowable() {
-      $this->assertEquals(
-        array(new TypeName('lang.Throwable')), 
-        $this->usedClassesIn('public class %s {
+      $this->assertUses(
+        array('lang.Throwable'), 
+        'public class %s { 
           public static void main(string[] $args) {
             $class= lang.Throwable::class;
           }
-        }')
+        }'
       );
     }
 
@@ -266,13 +276,13 @@
      */
     #[@test]
     public function staticCallToXpClassForNameUsesXpClass() {
-      $this->assertEquals(
-        array(new TypeName('lang.XPClass')), 
-        $this->usedClassesIn('public class %s {
+      $this->assertUses(
+        array('lang.XPClass'), 
+        'public class %s { 
           public static void main(string[] $args) {
             XPClass::forName($args[0]);
           }
-        }')
+        }'
       );
     }
 
@@ -282,13 +292,13 @@
      */
     #[@test]
     public function methodCallsReturnValueDoesNotGetUsed() {
-      $this->assertEquals(
+      $this->assertUses(
         array(), 
-        $this->usedClassesIn('public class %s {
+        'public class %s { 
           public static void main(string[] $args) {
             self::class.getClassLoader();
           }
-        }')
+        }'
       );
     }
 
@@ -298,9 +308,9 @@
      */
     #[@test]
     public function methodDeclarationsReturnValueDoesNotGetUsed() {
-      $this->assertEquals(
-        array(new TypeName('lang.XPClass')), 
-        $this->usedClassesIn('public class %s {
+      $this->assertUses(
+        array('lang.XPClass'), 
+        'public class %s { 
           static IClassLoader loaderOf(string $name) {
             return XPClass::forName($name).getClassLoader();
           }
@@ -308,7 +318,7 @@
           public static void main(string[] $args) {
             self::loaderOf($args[0]);
           }
-        }')
+        }'
       );
     }
 
@@ -318,13 +328,13 @@
      */
     #[@test]
     public function methodDeclarationsArgumentTypesGetUsed() {
-      $this->assertEquals(
-        array(new TypeName('lang.types.String')), 
-        $this->usedClassesIn('public class %s {
+      $this->assertUses(
+        array('lang.types.String'), 
+        'public class %s { 
           static void deleteFrom(lang.types.String $string, int? $pos, int? $length) {
             // TBI
           }
-        }')
+        }'
       );
     }
 
@@ -334,13 +344,13 @@
      */
     #[@test]
     public function constructorDeclarationsArgumentTypesGetUsed() {
-      $this->assertEquals(
-        array(new TypeName('lang.types.String')), 
-        $this->usedClassesIn('public class %s {
+      $this->assertUses(
+        array('lang.types.String'), 
+        'public class %s { 
           public __construct(lang.types.String $string) {
             // TBI
           }
-        }')
+        }'
       );
     }
 
@@ -350,13 +360,13 @@
      */
     #[@test]
     public function extensionMethodDeclarationsExtensionGetUsed() {
-      $this->assertEquals(
-        array(new TypeName('lang.types.String')), 
-        $this->usedClassesIn('public class %s {
+      $this->assertUses(
+        array('lang.types.String'), 
+        'public class %s { 
           static void delete(this lang.types.String $self, int? $pos, int? $length) {
             // TBI
           }
-        }')
+        }'
       );
     }
   }
