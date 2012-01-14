@@ -256,7 +256,7 @@
       
       if ('xp' === $name->name) {
         return new TypeReference($name, Types::UNKNOWN_KIND);
-      } else if ('php.' === substr($name->name, 0, 4)) {
+      } else if (0 === strncmp('php.', $name->name, 4)) {
         return new TypeReflection(new XPClass(substr($name->name, strrpos($name->name, '.')+ 1)));
       } else if (strpos($name->name, '.')) {
         $qualified= $name->name;
