@@ -208,6 +208,34 @@
      *
      */
     #[@test]
+    public function memberInitializationToThrowableArrayUsesThrowable() {
+      $this->assertUses(
+        array('lang.Throwable'), 
+        'public class %s { 
+          var $member= new Throwable[] { } ;
+        }'
+      );
+    }
+
+    /**
+     * Test member initialization
+     *
+     */
+    #[@test]
+    public function memberInitializationToThrowableMapUsesThrowable() {
+      $this->assertUses(
+        array('lang.Throwable'), 
+        'public class %s { 
+          var $member= new [:Throwable] {:} ;
+        }'
+      );
+    }
+
+    /**
+     * Test member initialization
+     *
+     */
+    #[@test]
     public function memberInitializationToThrowableClassUsesThrowable() {
       $this->assertUses(
         array('lang.Throwable', 'lang.XPClass'), 
