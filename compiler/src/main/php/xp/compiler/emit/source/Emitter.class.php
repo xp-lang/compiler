@@ -112,27 +112,27 @@
      * Emit uses statements for a given list of types
      *
      * @param   resource op
-     * @param   xp.compiler.types.TypeName[] types
+     * @param   [:bool] types
      */
     protected function emitUses($op, array $types) {
       if (!$types) return;
       
       $this->cat && $this->cat->debug('uses(', $types, ')');
       $uses= array();
-      foreach ($types as $type) {
+      foreach ($types as $type => $used) {
         
         // Do not add uses() entries for:
         // * Types emitted inside the same sourcefile
         // * Native classes
         if (
-          isset($this->local[0][$type->name]) || 
-          'php.' === substr($type->name, 0, 4)
+          isset($this->local[0][$type]) || 
+          'php.' === substr($type, 0, 4)
         ) {
           continue;
         }
 
         try {
-          $uses[]= $this->resolveType($type, FALSE)->name();
+          $uses[]= $this->resolveType(new TypeName($type), FALSE)->name();
         } catch (Throwable $e) {
           $this->error('0424', $e->toString());
         }
@@ -1882,7 +1882,11 @@
       }
       
       // Ensure parent class and interfaces are loaded.
-      $this->emitUses($op, $dependencies);
+      $uses= array();
+      foreach ($dependencies as $dependency) {
+        $uses[$dependency->name]= TRUE;
+      }
+      $this->emitUses($op, $uses);
 
       // Emit abstract and final modifiers
       if (Modifiers::isAbstract($declaration->modifiers)) {

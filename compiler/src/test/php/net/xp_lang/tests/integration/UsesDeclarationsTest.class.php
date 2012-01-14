@@ -62,13 +62,8 @@
         $scope
       );
 
-      // Convert expected list to scope's used member's format
-      $types= array();
-      foreach ($uses as $name) {
-        $types[]= new TypeName($name);
-      }
-
-      $this->assertEquals($types, $scope->used);
+      // Verify assertion
+      $this->assertEquals($uses, array_keys($scope->used));
     }
     
     /**

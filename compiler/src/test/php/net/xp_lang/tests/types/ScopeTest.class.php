@@ -388,7 +388,7 @@
       $this->fixture->addPackageImport('util.cmd');
       $this->fixture->resolveType(new TypeName('Command'));
       
-      $this->assertEquals(array(new TypeName('util.cmd.Command')), $this->fixture->used);
+      $this->assertEquals(array('util.cmd.Command' => TRUE), $this->fixture->used);
     }
 
     /**
@@ -401,7 +401,7 @@
       $this->fixture->resolveType(new TypeName('Command'));
       $this->fixture->resolveType(new TypeName('Command'));
       
-      $this->assertEquals(array(new TypeName('util.cmd.Command')), $this->fixture->used);
+      $this->assertEquals(array('util.cmd.Command' => TRUE), $this->fixture->used);
     }
 
     /**
@@ -412,7 +412,7 @@
     public function usedAfterTypeImport() {
       $this->fixture->addTypeImport('util.cmd.Command');
       
-      $this->assertEquals(array(new TypeName('util.cmd.Command')), $this->fixture->used);
+      $this->assertEquals(array('util.cmd.Command' => TRUE), $this->fixture->used);
     }
 
     /**
@@ -424,7 +424,7 @@
       $this->fixture->addTypeImport('util.cmd.Command');
       $this->fixture->addTypeImport('util.cmd.Command');
       
-      $this->assertEquals(array(new TypeName('util.cmd.Command')), $this->fixture->used);
+      $this->assertEquals(array('util.cmd.Command' => TRUE), $this->fixture->used);
     }
   }
 ?>
