@@ -227,9 +227,9 @@
      */
     public function resolveType(TypeName $name, $register= TRUE) {
       if ($name->isArray()) {
-        return new ArrayTypeOf($this->resolveType($name->arrayComponentType()));
+        return new ArrayTypeOf($this->resolveType($name->arrayComponentType(), $register));
       } else if ($name->isMap()) {
-        return new MapTypeOf($this->resolveType($name->mapComponentType()));
+        return new MapTypeOf($this->resolveType($name->mapComponentType(), $register));
       } else if (!$name->isClass()) {
         return new TypeReference($name, Types::PRIMITIVE_KIND);
       } else if ($name->isGeneric()) {

@@ -354,7 +354,7 @@
      *
      */
     #[@test]
-    public function methodDeclarationsReturnValueDoesNotGetUsed() {
+    public function methodDeclarationsInterfaceReturnValueDoesNotGetUsed() {
       $this->assertUses(
         array('lang.XPClass'), 
         'public class %s { 
@@ -362,6 +362,66 @@
             return XPClass::forName($name).getClassLoader();
           }
           
+          public static void main(string[] $args) {
+            self::loaderOf($args[0]);
+          }
+        }'
+      );
+    }
+
+    /**
+     * Test method declaration
+     *
+     */
+    #[@test]
+    public function methodDeclarationsClassReturnValueDoesNotGetUsed() {
+      $this->assertUses(
+        array('lang.XPClass'), 
+        'public class %s { 
+          static AbstractClassLoader loaderOf(string $name) {
+            return XPClass::forName($name).getClassLoader();
+          }
+
+          public static void main(string[] $args) {
+            self::loaderOf($args[0]);
+          }
+        }'
+      );
+    }
+
+    /**
+     * Test method declaration
+     *
+     */
+    #[@test]
+    public function methodDeclarationsArrayReturnValueDoesNotGetUsed() {
+      $this->assertUses(
+        array(), 
+        'public class %s { 
+          static AbstractClassLoader[] loadersOf(string $name) {
+            // TBI
+          }
+
+          public static void main(string[] $args) {
+            self::loaderOf($args[0]);
+          }
+        }'
+      );
+    }
+
+    /**
+     * Test method declaration
+     *
+     */
+    #[@test]
+    public function methodDeclarationsMapReturnValueDoesNotGetUsed() {
+      $this->assertUses(
+        array(), 
+        'public class %s { 
+          static [:AbstractClassLoader] loadersOf(string $name) {
+            // TBI
+          }
+
           public static void main(string[] $args) {
             self::loaderOf($args[0]);
           }
