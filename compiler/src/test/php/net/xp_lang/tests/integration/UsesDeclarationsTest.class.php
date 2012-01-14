@@ -98,7 +98,7 @@
     public function stringListExtension() {
       $this->assertUses(
         array(), 
-        'public interface %s extends util.collections.IList<string> { }'
+        'public interface %s<T> extends util.collections.IList<T> { }'
       );
     }
 
@@ -122,7 +122,7 @@
     public function stringListImplementation() {
       $this->assertUses(
         array(), 
-        'public class %s implements util.collections.IList<string> { }'
+        'public class %s<T> implements util.collections.IList<T> { }'
       );
     }
 
