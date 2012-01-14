@@ -20,7 +20,7 @@
     public function emptyUntypedMap() {
       $this->assertEquals(
         array(new MapNode(array(
-          'elements'      => NULL,
+          'elements'      => array(),
           'type'          => NULL,
         ))), 
         $this->parse('[:];')
@@ -34,7 +34,7 @@
     #[@test]
     public function emptyTypedMap() {
       $this->assertEquals(array(new MapNode(array(
-        'elements'      => NULL,
+        'elements'      => array(),
         'type'          => new TypeName('[:string]'),
       ))), $this->parse('
         new [:string] {:};
@@ -48,7 +48,7 @@
     #[@test]
     public function intArrayMap() {
       $this->assertEquals(array(new MapNode(array(
-        'elements'      => NULL,
+        'elements'      => array(),
         'type'          => new TypeName('[:int[]]'),
       ))), $this->parse('
         new [:int[]] {:};
@@ -62,7 +62,7 @@
     #[@test]
     public function varArrayMap() {
       $this->assertEquals(array(new MapNode(array(
-        'elements'      => NULL,
+        'elements'      => array(),
         'type'          => new TypeName('[:var[]]'),
       ))), $this->parse('
         new [:var[]] {:};
@@ -76,7 +76,7 @@
     #[@test]
     public function intMapMap() {
       $this->assertEquals(array(new MapNode(array(
-        'elements'      => NULL,
+        'elements'      => array(),
         'type'          => new TypeName('[:[:int]]'),
       ))), $this->parse('
         new [:[:int]] {:};
@@ -90,7 +90,7 @@
     #[@test]
     public function stringToGeneric() {
       $this->assertEquals(array(new MapNode(array(
-        'elements'      => NULL,
+        'elements'      => array(),
         'type'          => new TypeName('[:util.Vector<lang.types.String>]'),
       ))), $this->parse('
         new [:util.Vector<lang.types.String>] {:};

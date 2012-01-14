@@ -687,12 +687,12 @@ instancecreation:
   | arraytype '{' expressionlist_opt '}' {
       $$= new ArrayNode();
       $$->type= $1;
-      $$->values= $3;
+      $$->values= (array)$3;
     }
   | maptype '{' mapliteral_opt '}' {
       $$= new MapNode();
       $$->type= $1;
-      $$->elements= $3;
+      $$->elements= (array)$3;
     }
 ;
 
@@ -853,10 +853,10 @@ literal:
 
 map_or_list:
     expressionlist_opt {
-      $$= $yyLex->create(new ArrayNode(array('values' => $1)));
+      $$= $yyLex->create(new ArrayNode(array('values' => (array)$1)));
     }
   | mapliteral_opt {
-      $$= $yyLex->create(new MapNode(array('elements' => $1)));
+      $$= $yyLex->create(new MapNode(array('elements' => (array)$1)));
     }
 ;
 

@@ -19,7 +19,7 @@
     #[@test]
     public function emptyUntypedArray() {
       $this->assertEquals(array(new ArrayNode(array(
-        'values'        => NULL,
+        'values'        => array(),
         'type'          => NULL,
       ))), $this->parse('
         [];
@@ -33,7 +33,7 @@
     #[@test]
     public function emptyTypedArray() {
       $this->assertEquals(array(new ArrayNode(array(
-        'values'        => NULL,
+        'values'        => array(),
         'type'          => new TypeName('int[]'),
       ))), $this->parse('
         new int[] {};

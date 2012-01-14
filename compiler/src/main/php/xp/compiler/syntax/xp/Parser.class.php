@@ -2225,14 +2225,14 @@
     {
       $yyVal= new ArrayNode();
       $yyVal->type= $yyVals[-3+$yyTop];
-      $yyVal->values= $yyVals[-1+$yyTop];
+      $yyVal->values= (array)$yyVals[-1+$yyTop];
     } break;
 
     case 167:  #line 692 "grammar/xp.jay"
     {
       $yyVal= new MapNode();
       $yyVal->type= $yyVals[-3+$yyTop];
-      $yyVal->elements= $yyVals[-1+$yyTop];
+      $yyVal->elements= (array)$yyVals[-1+$yyTop];
     } break;
 
     case 168:  #line 700 "grammar/xp.jay"
@@ -2458,12 +2458,12 @@
 
     case 210:  #line 855 "grammar/xp.jay"
     {
-      $yyVal= $yyLex->create(new ArrayNode(array('values' => $yyVals[0+$yyTop])));
+      $yyVal= $yyLex->create(new ArrayNode(array('values' => (array)$yyVals[0+$yyTop])));
     } break;
 
     case 211:  #line 858 "grammar/xp.jay"
     {
-      $yyVal= $yyLex->create(new MapNode(array('elements' => $yyVals[0+$yyTop])));
+      $yyVal= $yyLex->create(new MapNode(array('elements' => (array)$yyVals[0+$yyTop])));
     } break;
 
     case 212:  #line 864 "grammar/xp.jay"
