@@ -91,7 +91,19 @@
     }
 
     /**
-     * Test implemnted interface is not used (but added in emitTypeName())
+     * Test parent class is not used (but added in emitTypeName())
+     *
+     */
+    #[@test]
+    public function stringListExtension() {
+      $this->assertUses(
+        array(), 
+        'public interface %s extends util.collections.IList<string> { }'
+      );
+    }
+
+    /**
+     * Test implemented interface is not used (but added in emitTypeName())
      *
      */
     #[@test]
@@ -99,6 +111,18 @@
       $this->assertUses(
         array(), 
         'public class %s implements Runnable { }'
+      );
+    }
+
+    /**
+     * Test implemented interface is not used (but added in emitTypeName())
+     *
+     */
+    #[@test]
+    public function stringListImplementation() {
+      $this->assertUses(
+        array(), 
+        'public class %s implements util.collections.IList<string> { }'
       );
     }
 

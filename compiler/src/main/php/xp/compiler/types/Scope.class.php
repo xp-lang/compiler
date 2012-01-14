@@ -233,7 +233,7 @@
       } else if (!$name->isClass()) {
         return new TypeReference($name, Types::PRIMITIVE_KIND);
       } else if ($name->isGeneric()) {
-        return new GenericType($this->resolveType(new TypeName($name->name)), $name->components);
+        return new GenericType($this->resolveType(new TypeName($name->name), $register), $name->components);
       }
 
       if ($this->declarations) {
