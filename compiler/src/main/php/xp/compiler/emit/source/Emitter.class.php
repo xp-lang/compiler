@@ -115,29 +115,67 @@
      * @param   [:bool] types
      */
     protected function emitUses($op, array $types) {
-      if (!$types) return;
-      
+      static $bootstrap= array(
+        'lang.Object' => TRUE,
+        'lang.StackTraceElement' => TRUE,
+        'lang.Throwable' => TRUE,
+        'lang.Error' => TRUE,
+        'lang.XPException' => TRUE,
+        'lang.Type' => TRUE,
+        'lang.Primitive' => TRUE,
+        'lang.types.Character' => TRUE,
+        'lang.types.Number' => TRUE,
+        'lang.types.Byte' => TRUE,
+        'lang.types.Bytes' => TRUE,
+        'lang.types.String' => TRUE,
+        'lang.types.Integer' => TRUE,
+        'lang.types.Double' => TRUE,
+        'lang.types.Boolean' => TRUE,
+        'lang.types.ArrayListIterator' => TRUE,
+        'lang.types.ArrayList' => TRUE,
+        'lang.ArrayType' => TRUE,
+        'lang.MapType' => TRUE,
+        'lang.reflect.Routine' => TRUE,
+        'lang.reflect.Parameter' => TRUE,
+        'lang.reflect.TargetInvocationException' => TRUE,
+        'lang.reflect.Method' => TRUE,
+        'lang.reflect.Field' => TRUE,
+        'lang.reflect.Constructor' => TRUE,
+        'lang.reflect.Modifiers' => TRUE,
+        'lang.reflect.Package' => TRUE,
+        'lang.XPClass' => TRUE,
+        'lang.NullPointerException' => TRUE,
+        'lang.IllegalAccessException' => TRUE,
+        'lang.IllegalArgumentException' => TRUE,
+        'lang.IllegalStateException' => TRUE,
+        'lang.FormatException' => TRUE,
+        'lang.ClassNotFoundException' => TRUE,
+        'lang.AbstractClassLoader' => TRUE,
+        'lang.FileSystemClassLoader' => TRUE,
+        'lang.DynamicClassLoader' => TRUE,
+        'lang.archive.ArchiveClassLoader' => TRUE,
+        'lang.ClassLoader' => TRUE,
+      );
+
+      // Do not add uses() entries for:
+      // * Types emitted inside the same sourcefile
+      // * Native classes
+      // * Bootstrap classes
       $this->cat && $this->cat->debug('uses(', $types, ')');
       $uses= array();
       foreach ($types as $type => $used) {
-        
-        // Do not add uses() entries for:
-        // * Types emitted inside the same sourcefile
-        // * Native classes
-        if (
-          isset($this->local[0][$type]) || 
-          'php.' === substr($type, 0, 4)
-        ) {
-          continue;
-        }
+        if (isset($this->local[0][$type]) ||  'php.' === substr($type, 0, 4) ||  isset($bootstrap[$type])) continue;
 
+        // TODO: Find out why this would make a difference, $type should already be fully-qualified
+        // @net.xp_lang.tests.execution.source.PropertiesOverloadingTest
+        // @net.xp_lang.tests.integration.CircularDependencyTest
         try {
           $uses[]= $this->resolveType(new TypeName($type), FALSE)->name();
         } catch (Throwable $e) {
           $this->error('0424', $e->toString());
         }
       }
-      $uses && $op->append('uses(\'')->append(implode("', '", $uses))->append('\');');
+      $uses && $op->insert('uses(\''.implode("', '", $uses).'\');', 0);
     }
     
     /**
@@ -1868,9 +1906,8 @@
      * @param   resource op
      * @param   string type
      * @param   xp.compiler.ast.TypeDeclarationNode declaration
-     * @param   xp.compiler.types.TypeName[] dependencies
      */
-    protected function emitTypeName($op, $type, TypeDeclarationNode $declaration, $dependencies) {
+    protected function emitTypeName($op, $type, TypeDeclarationNode $declaration) {
       $this->metadata[0]['class']= array();
 
       // Check whether class needs to be fully qualified
@@ -1881,13 +1918,6 @@
         $declaration->literal= $declaration->name->name;
       }
       
-      // Ensure parent class and interfaces are loaded.
-      $uses= array();
-      foreach ($dependencies as $dependency) {
-        $uses[$dependency->name]= TRUE;
-      }
-      $this->emitUses($op, $uses);
-
       // Emit abstract and final modifiers
       if (Modifiers::isAbstract($declaration->modifiers)) {
         $op->append('abstract ');
@@ -1931,7 +1961,7 @@
      */
     protected function emitEnum($op, EnumNode $declaration) {
       $parent= $declaration->parent ? $declaration->parent : new TypeName('lang.Enum');
-      $parentType= $this->resolveType($parent, FALSE);
+      $parentType= $this->resolveType($parent);
       $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $declaration), $parentType);
       $this->scope[0]->addResolved('self', $thisType);
       $this->scope[0]->addResolved('parent', $parentType);
@@ -1943,10 +1973,7 @@
       $this->enter(new TypeDeclarationScope());
 
       // Ensure parent class and interfaces are loaded
-      $this->emitTypeName($op, 'class', $declaration, array_merge(
-        array($parent), 
-        (array)$declaration->implements
-      ));
+      $this->emitTypeName($op, 'class', $declaration);
       $op->append(' extends '.$parentType->literal(TRUE));
       array_unshift($this->metadata, array(array(), array()));
       $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
@@ -1969,7 +1996,7 @@
           if ($type->isGeneric()) {
             $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['implements'][$i]= $this->genericComponentAsMetadata($type);
           }
-          $op->append($this->resolveType($type, FALSE)->literal(TRUE));
+          $op->append($this->resolveType($type)->literal(TRUE));
           $i < $s && $op->append(', ');
         }
       }
@@ -2057,7 +2084,7 @@
       $this->scope[0]->addResolved('self', $thisType);
 
       $this->enter(new TypeDeclarationScope());    
-      $this->emitTypeName($op, 'interface', $declaration, (array)$declaration->parents);
+      $this->emitTypeName($op, 'interface', $declaration);
       array_unshift($this->metadata, array(array(), array()));
       $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
 
@@ -2073,7 +2100,7 @@
           if ($type->isGeneric()) {
             $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['extends'][$i]= $this->genericComponentAsMetadata($type);
           }
-          $op->append($this->resolveType($type, FALSE)->literal(TRUE));
+          $op->append($this->resolveType($type)->literal(TRUE));
           $i < $s && $op->append(', ');
         }
       }
@@ -2102,16 +2129,13 @@
      */
     protected function emitClass($op, ClassNode $declaration) {
       $parent= $declaration->parent ? $declaration->parent : new TypeName('lang.Object');
-      $parentType= $this->resolveType($parent, FALSE);
+      $parentType= $this->resolveType($parent);
       $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $declaration), $parentType);
       $this->scope[0]->addResolved('self', $thisType);
       $this->scope[0]->addResolved('parent', $parentType);
       
       $this->enter(new TypeDeclarationScope());    
-      $this->emitTypeName($op, 'class', $declaration, array_merge(
-        $declaration->parent ? array($parent) : array(),
-        (array)$declaration->implements
-      ));
+      $this->emitTypeName($op, 'class', $declaration);
       $op->append(' extends '.$parentType->literal(TRUE));
       array_unshift($this->metadata, array(array(), array()));
       $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
@@ -2142,7 +2166,7 @@
             if ($type->isGeneric()) {
               $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['implements'][$i]= $this->genericComponentAsMetadata($type);
             }
-            $op->append($this->resolveType($type, FALSE)->literal(TRUE));
+            $op->append($this->resolveType($type)->literal(TRUE));
           } else {
             $op->append($type);
           }
