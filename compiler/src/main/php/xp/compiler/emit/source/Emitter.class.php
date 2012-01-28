@@ -1284,9 +1284,11 @@
           ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($operator->comment, 4, strpos($operator->comment, '* @')- 2)))
           : NULL
         ,
-        DETAIL_ANNOTATIONS  => $this->annotationsAsMetadata((array)$operator->annotations)
+        DETAIL_ANNOTATIONS  => array(),
+        DETAIL_TARGET_ANNO  => array()
       );
       array_unshift($this->method, $name);
+      $this->emitAnnotations($this->metadata[0][1][$name], (array)$operator->annotations);
 
       $op->append('public static function ')->append($name);
       $signature= $this->emitParameters($op, (array)$operator->parameters, '{');
@@ -1407,38 +1409,47 @@
     }
 
     /**
-     * Create annotations meta data
+     * Emit annotations
      *
-     * @param   xp.compiler.ast.AnnotationNode[]
-     * @return  array<string, var> annotations
+     * @param   &var meta
+     * @param   xp.compiler.ast.AnnotationNode[] annotations
      */
-    protected function annotationsAsMetadata(array $annotations) {
-      $meta= array();
+    protected function emitAnnotations(&$meta, $annotations) {
       foreach ($annotations as $annotation) {
-        $params= array();
-        foreach ((array)$annotation->parameters as $name => $value) {
-          if ($value instanceof ClassAccessNode) {    // class literal
-            $params[$name]= $this->resolveType($value->class)->name();
-          } else if ($value instanceof Resolveable) {
-            $params[$name]= $value->resolve();
-          } else if ($value instanceof ArrayNode) {
-            $params[$name]= array();
-            foreach ($value->values as $element) {
-              $element instanceof Resolveable && $params[$name][]= $element->resolve();
-            }
+        $this->emitAnnotation($meta, $annotation);
+      }
+    }
+
+    /**
+     * Emit annotation
+     *
+     * @param   &var meta
+     * @param   xp.compiler.ast.AnnotationNode lambda
+     */
+    protected function emitAnnotation(&$meta, $annotation) {
+      $params= array();
+      foreach ((array)$annotation->parameters as $name => $value) {
+        if ($value instanceof ClassAccessNode) {    // class literal
+          $params[$name]= $this->resolveType($value->class)->name();
+        } else if ($value instanceof Resolveable) {
+          $params[$name]= $value->resolve();
+        } else if ($value instanceof ArrayNode) {
+          $params[$name]= array();
+          foreach ($value->values as $element) {
+            $element instanceof Resolveable && $params[$name][]= $element->resolve();
           }
         }
-
-        if (!$annotation->parameters) {
-          $meta[$annotation->type]= NULL;
-        } else if (isset($annotation->parameters['default'])) {
-          $meta[$annotation->type]= $params['default'];
-        } else {
-          $meta[$annotation->type]= $params;
-        }
       }
-      return $meta;
-    }    
+
+      // Set annotation value
+      if (!$annotation->parameters) {
+        $meta[DETAIL_ANNOTATIONS][$annotation->type]= NULL;
+      } else if (isset($annotation->parameters['default'])) {
+        $meta[DETAIL_ANNOTATIONS][$annotation->type]= $params['default'];
+      } else {
+        $meta[DETAIL_ANNOTATIONS][$annotation->type]= $params;
+      }
+    }
     
     /**
      * Emit a lambda
@@ -1526,10 +1537,11 @@
           ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($method->comment, 4, strpos($method->comment, '* @')- 2)))
           : NULL
         ,
-        DETAIL_ANNOTATIONS  => $this->annotationsAsMetadata((array)$method->annotations)
+        DETAIL_ANNOTATIONS  => array(),
+        DETAIL_TARGET_ANNO  => array()
       );
-
       array_unshift($this->method, $method->name);
+      $this->emitAnnotations($this->metadata[0][1][$method->name], (array)$method->annotations);
 
       // Parameters, body
       if (NULL !== $method->body) {
@@ -1597,10 +1609,12 @@
         DETAIL_RETURNS      => NULL,
         DETAIL_THROWS       => array(),
         DETAIL_COMMENT      => preg_replace('/\n\s+\* ?/', "\n  ", "\n ".$constructor->comment),
-        DETAIL_ANNOTATIONS  => $this->annotationsAsMetadata((array)$constructor->annotations)
+        DETAIL_ANNOTATIONS  => array(),
+        DETAIL_TARGET_ANNO  => array()
       );
 
       array_unshift($this->method, '__construct');
+      $this->emitAnnotations($this->metadata[0][1]['__construct'], (array)$constructor->annotations);
 
       // Arguments, initializations, body
       if (NULL !== $constructor->body) {
@@ -1650,10 +1664,7 @@
       ;
 
       // Copy annotations
-      $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array_merge(
-        isset($this->metadata[0]['class'][DETAIL_ANNOTATIONS]) ? $this->metadata[0]['class'][DETAIL_ANNOTATIONS] : array(),
-        $this->annotationsAsMetadata((array)$declaration->annotations)
-      );
+      $this->emitAnnotations($this->metadata[0]['class'], (array)$declaration->annotations);
 
       $op->append('xp::$registry[\'class.'.$declaration->literal.'\']= \''.$qualified.'\';');
       $op->append('xp::$registry[\'details.'.$qualified.'\']= '.var_export($this->metadata[0], TRUE).';');
@@ -1883,9 +1894,8 @@
       $op->append(';');
 
       // Copy annotations
-      $this->metadata[0][0][$field->name]= array(
-        DETAIL_ANNOTATIONS  => $this->annotationsAsMetadata((array)$field->annotations)
-      );
+      $this->metadata[0][0][$field->name]= array(DETAIL_ANNOTATIONS => array());
+      $this->emitAnnotations($this->metadata[0][0][$field->name], (array)$field->annotations);
 
       // Add field metadata (type, stored in @type annotation, see
       // lang.reflect.Field and lang.XPClass::detailsForField()). 
