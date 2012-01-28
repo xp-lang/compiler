@@ -1441,13 +1441,20 @@
         }
       }
 
+      // Sort out where annotations should go
+      if (isset($annotation->target)) {
+        $ptr= &$meta[DETAIL_TARGET_ANNO][$annotation->target];
+      } else {
+        $ptr= &$meta[DETAIL_ANNOTATIONS];
+      }
+
       // Set annotation value
       if (!$annotation->parameters) {
-        $meta[DETAIL_ANNOTATIONS][$annotation->type]= NULL;
+        $ptr[$annotation->type]= NULL;
       } else if (isset($annotation->parameters['default'])) {
-        $meta[DETAIL_ANNOTATIONS][$annotation->type]= $params['default'];
+        $ptr[$annotation->type]= $params['default'];
       } else {
-        $meta[DETAIL_ANNOTATIONS][$annotation->type]= $params;
+        $ptr[$annotation->type]= $params;
       }
     }
     
