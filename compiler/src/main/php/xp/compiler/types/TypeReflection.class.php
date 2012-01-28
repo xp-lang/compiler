@@ -268,7 +268,7 @@
         $f= new xp·compiler·types·Field();
         $f->name= $field->getName();
         $f->modifiers= $field->getModifiers();
-        $f->type= $this->typeNameOf($field->getType());
+        $f->type= $this->typeNameOf($field->getTypeName());
         $f->holder= $this;
         return $f;
       }
