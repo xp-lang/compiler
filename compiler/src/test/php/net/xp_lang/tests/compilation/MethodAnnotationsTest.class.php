@@ -59,5 +59,19 @@
         $this->compile('class %s { [@experimental(stages= ["beta", "RC"])] void fixture() { } }')->getMethod('fixture')->getAnnotations()
       );
     }
+
+    /**
+     * Test parameter annotation
+     *
+     * @see   https://github.com/xp-framework/rfc/issues/218
+     */
+    #[@test]
+    public function parameterAnnotation() {
+      $type= $this->compile('class %s { [@$conn: inject(name= "db")] void fixture(rdbms.DBConnection $conn) { } }');
+      $this->assertEquals(
+        array('inject' => array('name' => 'db')), 
+        this($type->getMethod('fixture')->getParameters(), 0)->getAnnotations()
+      );
+    }
   }
 ?>
