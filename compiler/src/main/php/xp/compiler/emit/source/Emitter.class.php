@@ -1284,8 +1284,7 @@
           ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($operator->comment, 4, strpos($operator->comment, '* @')- 2)))
           : NULL
         ,
-        DETAIL_ANNOTATIONS  => array(),
-        DETAIL_TARGET_ANNO  => array()
+        DETAIL_ANNOTATIONS  => array()
       );
       array_unshift($this->method, $name);
       $this->emitAnnotations($this->metadata[0][1][$name], (array)$operator->annotations);
@@ -1537,8 +1536,7 @@
           ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($method->comment, 4, strpos($method->comment, '* @')- 2)))
           : NULL
         ,
-        DETAIL_ANNOTATIONS  => array(),
-        DETAIL_TARGET_ANNO  => array()
+        DETAIL_ANNOTATIONS  => array()
       );
       array_unshift($this->method, $method->name);
       $this->emitAnnotations($this->metadata[0][1][$method->name], (array)$method->annotations);
@@ -1609,8 +1607,7 @@
         DETAIL_RETURNS      => NULL,
         DETAIL_THROWS       => array(),
         DETAIL_COMMENT      => preg_replace('/\n\s+\* ?/', "\n  ", "\n ".$constructor->comment),
-        DETAIL_ANNOTATIONS  => array(),
-        DETAIL_TARGET_ANNO  => array()
+        DETAIL_ANNOTATIONS  => array()
       );
 
       array_unshift($this->method, '__construct');
