@@ -112,8 +112,12 @@
       $p= strrpos($import, '.');
       $this->imports[substr($import, $p+ 1)]= $import;
       $ptr= $this->resolveType(new TypeName($import));
-      foreach ($ptr->getExtensions() as $type => $method) {
-        $this->addExtension($this->resolveType($type), $method);
+
+      // Register extension methods ([:xp.compiler.types.Method[]])
+      foreach ($ptr->getExtensions() as $type => $methods) {
+        foreach ($methods as $method) {
+          $this->addExtension($this->resolveType(new TypeName($type)), $method);
+        }
       }
     }
 
