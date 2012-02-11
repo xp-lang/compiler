@@ -133,7 +133,7 @@
     /**
      * Gets a list of extension methods
      *
-     * @return  [:xp.compiler.types.Method]
+     * @return  [:xp.compiler.types.Method[]]
      */
     public function getExtensions() {
       return array();
