@@ -1,0 +1,11 @@
+package integrationtests;
+
+import native standard.implode;
+
+public class ArrayExtensions {
+
+  public static var[] join(this var[] $self, string $characters) {
+    return implode($characters, $self);
+  }
+
+}
