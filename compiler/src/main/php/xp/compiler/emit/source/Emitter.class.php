@@ -1564,7 +1564,7 @@
       $m->returns= new TypeName($return->name());
       $m->parameters= $signature;
       $m->modifiers= $method->modifiers;
-      $this->types[0]->addMethod($m);
+      $this->types[0]->addMethod($m, $method->extension);
     }
 
     /**
