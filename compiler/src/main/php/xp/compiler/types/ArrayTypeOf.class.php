@@ -132,6 +132,15 @@
     }
 
     /**
+     * Gets a list of extension methods
+     *
+     * @return  [:xp.compiler.types.Method]
+     */
+    public function getExtensions() {
+      return array();
+    }
+
+    /**
      * Returns whether an operator by a given symbol exists
      *
      * @param   string symbol

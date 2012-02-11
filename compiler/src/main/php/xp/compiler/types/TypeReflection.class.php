@@ -203,6 +203,15 @@
       }
     }
 
+    /**
+     * Gets a list of extension methods
+     *
+     * @return  [:xp.compiler.types.Method]
+     */
+    public function getExtensions() {
+      return array();
+    }
+
     public static $ovl= array(
       '~'   => 'concat',
       '-'   => 'minus',

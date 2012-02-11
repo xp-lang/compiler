@@ -154,6 +154,15 @@
     }
 
     /**
+     * Gets a list of extension methods
+     *
+     * @return  [:xp.compiler.types.Method]
+     */
+    public function getExtensions() {
+      return array();
+    }
+
+    /**
      * Adds an operator
      *
      * @param   xp.compiler.types.Operator operator
