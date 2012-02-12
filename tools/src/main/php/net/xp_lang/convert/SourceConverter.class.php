@@ -414,10 +414,15 @@
             } 
             
             if ('__construct' !== $token[1]) {
-              $out.= (isset($meta['return']) ? $this->mapName($meta['return'][0], $package, $imports).' ' : 'void ').$token[1];
-            } else {
-              $out.= $token[1];
+              if (isset($generic['return'])) {
+                $out.= $generic['return'].' ';
+              } else if (isset($meta['return'])) {
+                $out.= $this->mapName($meta['return'][0], $package, $imports).' ';
+              } else {
+                $out.= 'void ';
+              }
             }
+            $out.= $token[1];
             array_unshift($state, self::ST_FUNC_ARGS);
             $parameter= 0;
             $restriction= NULL;

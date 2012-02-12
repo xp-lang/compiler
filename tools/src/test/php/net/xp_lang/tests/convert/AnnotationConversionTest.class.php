@@ -31,6 +31,19 @@
      *
      */
     #[@test]
+    public function genericReturnType() {
+      $this->assertConversion(
+        "public T test() { /* ... */ }",
+        "#[@generic(return= 'T')]\npublic function test() { /* ... */ }",
+        SourceConverter::ST_DECL
+      );
+    }
+
+    /**
+     * Test simple "test" annotations
+     *
+     */
+    #[@test]
     public function methodAnnotationWithIndentation() {
       $this->assertConversion(
         "\n  [@test]\n  public void test() { /* ... */ }",
