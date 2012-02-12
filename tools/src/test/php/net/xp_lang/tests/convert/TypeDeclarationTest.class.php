@@ -48,7 +48,7 @@
     #[@test]
     public function fullyQualified() {
       $this->assertConversion(
-        'public class Name { }',
+        'package class Name { }',
         'class fully·qualified·Name { }',
         SourceConverter::ST_NAMESPACE
       );

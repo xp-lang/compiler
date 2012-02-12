@@ -245,9 +245,14 @@
             if (!strstr($out, '-%{IMPORTS}%-')) {
               $out.= '-%{IMPORTS}%-';
             }
-            $out.= 'public '.$token[1].' ';
+
             $declaration= $this->tokenOf($t[$i+ 2]);
-            $out.= (FALSE !== $p= strrpos($declaration[1], '·')) ? substr($declaration[1], $p+ 1) : $declaration[1];
+            if (FALSE !== $p= strrpos($declaration[1], '·')) {
+              $out.= 'package '.$token[1].' '.substr($declaration[1], $p+ 1);
+            } else {
+              $out.= 'public '.$token[1].' '.$declaration[1];
+            }
+
             $i+= 2;
             array_unshift($state, self::ST_DECL);
             break;
