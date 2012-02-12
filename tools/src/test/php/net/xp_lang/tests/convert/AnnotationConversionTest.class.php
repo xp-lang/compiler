@@ -27,14 +27,40 @@
     }
 
     /**
-     * Test simple "test" annotations
+     * Test generic annotation
      *
      */
     #[@test]
     public function genericReturnType() {
       $this->assertConversion(
-        "public T test() { /* ... */ }",
-        "#[@generic(return= 'T')]\npublic function test() { /* ... */ }",
+        "public T[] elements() { /* ... */ }",
+        "#[@generic(return= 'T[]')]\npublic function elements() { /* ... */ }",
+        SourceConverter::ST_DECL
+      );
+    }
+
+    /**
+     * Test generic annotation
+     *
+     */
+    #[@test]
+    public function genericParamType() {
+      $this->assertConversion(
+        "public void add(T \$element) { /* ... */ }",
+        "#[@generic(params= 'T')]\npublic function add(\$element) { /* ... */ }",
+        SourceConverter::ST_DECL
+      );
+    }
+
+    /**
+     * Test generic annotation
+     *
+     */
+    #[@test]
+    public function genericParamTypes() {
+      $this->assertConversion(
+        "public void set(var \$offset, T \$element) { /* ... */ }",
+        "#[@generic(params= ', T')]\npublic function set(\$offset, \$element) { /* ... */ }",
         SourceConverter::ST_DECL
       );
     }

@@ -294,8 +294,13 @@
           }
           
           case self::ST_INTF.'{': {
-            $out.= $token[1];
             array_shift($state);
+            // break missing intentionally
+          }
+
+          case self::ST_DECL.'{': {
+            $out.= $token[1];
+            $generic= array();
             break;
           }
           
@@ -503,7 +508,14 @@
           }
           
           case self::ST_FUNC_ARGS.T_VARIABLE: {
-            if (isset($meta['param'][$parameter])) {
+            if (isset($generic['params'])) {
+              $generic['param']= array_map('trim', explode(',', $generic['params']));
+              unset($generic['params']);
+            }
+
+            if (isset($generic['param']) && $generic['param'][$parameter]) {
+              $type= $generic['param'][$parameter];
+            } else if (isset($meta['param'][$parameter])) {
               $type= $this->mapName($meta['param'][$parameter], $package, $imports);
               
               // If no type restriction was specified, add "?", except for 
