@@ -345,7 +345,7 @@
           }
           
           // Annotations
-          case self::ST_DECL.T_COMMENT: {
+          case self::ST_DECL.T_COMMENT: case self::ST_NAMESPACE.T_COMMENT: {
             if ('#' === $token[1]{0}) {
               $j= $i;
               $comment= '';
@@ -354,12 +354,11 @@
                 $token= $this->tokenOf($t[++$j]);
               }
               $i= $j- 1;
-              $t[$i+ 1][1]= "\n".$t[$i+ 1][1];
               $out.= $this->convert(
                 '', 
                 array_slice(token_get_all('<?php '.substr($comment, 2, -1).'?>'), 1, -1),
                 self::ST_ANNOTATIONS
-              );
+              )."\n";
             } else {
               $out.= $token[1];
             }

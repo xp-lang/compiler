@@ -18,11 +18,24 @@
      *
      */
     #[@test]
-    public function testAnnotation() {
+    public function methodAnnotation() {
       $this->assertConversion(
         "[@test]\npublic void test() { /* ... */ }",
         "#[@test]\npublic function test() { /* ... */ }",
         SourceConverter::ST_DECL
+      );
+    }
+
+    /**
+     * Test simple "test" annotations
+     *
+     */
+    #[@test]
+    public function classAnnotation() {
+      $this->assertConversion(
+        "[@test]\npublic class Vector { /* ... */ }",
+        "#[@test]\nclass Vector { /* ... */ }",
+        SourceConverter::ST_NAMESPACE
       );
     }
 
