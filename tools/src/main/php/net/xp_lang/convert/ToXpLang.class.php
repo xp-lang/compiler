@@ -48,7 +48,7 @@
      */
     #[@arg]
     public function setNameMap($file= NULL) {
-      $file && $this->loadNameMap(create(new File($file))->getInputStream());
+      $file && $this->loadNameMap($this->converter->nameMap, create(new File($file))->getInputStream());
     }
     
     /**
