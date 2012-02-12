@@ -1,0 +1,36 @@
+/* This class is part of the XP framework
+ *
+ * $Id$
+ */
+
+uses('lang.Enum');
+
+/**
+ * Coin enumeration
+ * 
+ * @purpose  Demo
+ */
+public enum Coin {
+  penny(1), nickel(2), dime(10), quarter(25);
+
+  /**
+   * Return this coin's value in cent
+   *
+   */
+  public int value() {
+    return $this->ordinal;
+  }
+
+  /**
+   * Return this coin's color
+   *
+   * @return  string
+   */
+  public string color() {
+    switch ($this) {
+      case self::$penny: return 'copper';
+      case self::$nickel: return 'nickel';
+      case self::$dime: case self::$quarter: return 'silver';
+    }
+  }
+}
