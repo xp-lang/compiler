@@ -122,10 +122,36 @@
      *
      */
     #[@test]
-    public function castsWithFunctinCallInMethodArguments() {
+    public function castsWithFunctionCallInMethodArguments() {
       $this->assertConversion(
         'return range($min as int, max($a, $b) as int);',
         'return range((int)$min, (int)max($a, $b));',
+        SourceConverter::ST_FUNC_BODY
+      );
+    }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function castsInsideAnArray() {
+      $this->assertConversion(
+        "return ['one' : 1, 'two' : \$two as int, 'three' : 3];",
+        "return array('one' => 1, 'two' => (int)\$two, 'three' => 3);",
+        SourceConverter::ST_FUNC_BODY
+      );
+    }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function castsAtTheEndOfAnArray() {
+      $this->assertConversion(
+        "return ['one' : 1, 'two' : 2, 'three' : \$three as int];",
+        "return array('one' => 1, 'two' => 2, 'three' => (int)\$three);",
         SourceConverter::ST_FUNC_BODY
       );
     }

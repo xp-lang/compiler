@@ -686,8 +686,10 @@
 
           case self::ST_CAST.';': case self::ST_CAST.',': {
             if ($brackets[0] <= 0) {
+              array_shift($brackets);
               array_shift($state);
-              $out.= ' as '.$this->mapName(trim($cast, '()'), $package, $imports).$token[0];
+              $out.= ' as '.$this->mapName(trim($cast, '()'), $package, $imports);
+              $i--;   // Back up one token and have it handled by the shifted state
             } else {
               $out.= $token[0];
             }
