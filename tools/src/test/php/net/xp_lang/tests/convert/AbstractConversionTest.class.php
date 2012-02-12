@@ -35,6 +35,16 @@
     public function name($local, $qualified) {
       $this->fixture->nameMap[$local]= $qualified;
     }
+
+    /**
+     * Map a given function
+     *
+     * @param   string local
+     * @param   string qualified
+     */
+    public function func($local, $qualified) {
+      $this->fixture->funcMap[$local]= $qualified;
+    }
     
     /**
      * Assertion helper

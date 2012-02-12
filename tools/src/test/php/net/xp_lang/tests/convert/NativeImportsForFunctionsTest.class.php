@@ -19,6 +19,7 @@
      */
     #[@test]
     public function sprintf() {
+      $this->func('sprintf', 'standard.sprintf');
       $this->assertConversion(
         "import native standard.sprintf;\n\n".
         "public class String { public void format() { return sprintf(); }}",
@@ -33,6 +34,7 @@
      */
     #[@test]
     public function preg_replace() {
+      $this->func('preg_replace', 'pcre.preg_replace');
       $this->assertConversion(
         "import native pcre.preg_replace;\n\n".
         "public class String { public void replace() { return preg_replace(); }}",
@@ -47,6 +49,7 @@
      */
     #[@test]
     public function strlen() {
+      $this->func('strlen', 'core.strlen');
       $this->assertConversion(
         "import native core.strlen;\n\n".
         "public class String { public void length() { return strlen(); }}",

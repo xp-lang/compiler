@@ -770,12 +770,12 @@
             } else if ('(' === $next[0] && '.' !== $out{strlen($out)- 1}) {
               $out.= $token[1];
               if (isset($this->funcMap[$token[1]])) {
-                $extension= $this->funcMap[$token[1]];
+                $qualified= $this->funcMap[$token[1]];
               } else {
                 $this->warn(new IllegalStateException('Cannot find function '.$token[1].' @'.$state[0]));
-                $extension= 'UNKNOWN';
+                $qualified= 'UNKNOWN.'.$token[1];
               }
-              $imported['import native '.$extension.'.'.$token[1].';']= TRUE;
+              $imported['import native '.$qualified.';']= TRUE;
             } else {
               $out.= $token[1];
             }

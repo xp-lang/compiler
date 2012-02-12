@@ -97,6 +97,7 @@
      */
     #[@test]
     public function insideArgs() {
+      $this->func('call_user_func', 'core.call_user_func');
       $this->assertConversion(
         '$s= call_user_func([$a, "toString"]);',
         '$s= call_user_func(array($a, "toString"));',

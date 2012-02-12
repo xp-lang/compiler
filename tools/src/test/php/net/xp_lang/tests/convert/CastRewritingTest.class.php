@@ -110,6 +110,7 @@
      */
     #[@test]
     public function castsInMethodArguments() {
+      $this->func('range', 'standard.range');
       $this->assertConversion(
         'return range($min as int, $max as int);',
         'return range((int)$min, (int)$max);',
@@ -123,6 +124,8 @@
      */
     #[@test]
     public function castsWithFunctionCallInMethodArguments() {
+      $this->func('range', 'standard.range');
+      $this->func('max', 'standard.max');
       $this->assertConversion(
         'return range($min as int, max($a, $b) as int);',
         'return range((int)$min, (int)max($a, $b));',
