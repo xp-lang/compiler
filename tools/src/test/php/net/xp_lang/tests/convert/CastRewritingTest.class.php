@@ -155,5 +155,18 @@
         SourceConverter::ST_FUNC_BODY
       );
     }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function castInsideForeach() {
+      $this->assertConversion(
+        'foreach ($i, $row in $arg  as var[]) { }',
+        'foreach ((array)$arg as $i => $row) { }',
+        SourceConverter::ST_FUNC_BODY
+      );
+    }
   }
 ?>

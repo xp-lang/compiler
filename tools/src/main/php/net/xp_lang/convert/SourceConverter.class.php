@@ -717,7 +717,7 @@
             }
           }
 
-          case self::ST_CAST.';': case self::ST_CAST.',': {
+          case self::ST_CAST.';': case self::ST_CAST.',': case self::ST_CAST.T_AS: {
             if ($brackets[0] <= 0) {
               array_shift($brackets);
               array_shift($state);
