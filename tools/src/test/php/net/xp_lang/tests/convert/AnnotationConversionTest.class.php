@@ -31,10 +31,36 @@
      *
      */
     #[@test]
+    public function methodAnnotationWithIndentation() {
+      $this->assertConversion(
+        "\n  [@test]\n  public void test() { /* ... */ }",
+        "\n    #[@test]\n    public function test() { /* ... */ }",
+        SourceConverter::ST_DECL
+      );
+    }
+
+    /**
+     * Test simple "test" annotations
+     *
+     */
+    #[@test]
     public function classAnnotation() {
       $this->assertConversion(
         "[@test]\npublic class Vector { /* ... */ }",
         "#[@test]\nclass Vector { /* ... */ }",
+        SourceConverter::ST_NAMESPACE
+      );
+    }
+
+    /**
+     * Test simple "test" annotations
+     *
+     */
+    #[@test]
+    public function classAnnotationWithIndentation() {
+      $this->assertConversion(
+        "\n[@test]\npublic class Vector { /* ... */ }",
+        "\n  #[@test]\n  class Vector { /* ... */ }",
         SourceConverter::ST_NAMESPACE
       );
     }

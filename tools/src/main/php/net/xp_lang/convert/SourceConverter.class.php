@@ -353,6 +353,7 @@
                 $comment.= '  '.substr($token[1], 1);
                 $token= $this->tokenOf($t[++$j]);
               }
+              $t[$i+ 1][1]= ltrim(str_replace("\n  ", "", "\n".$t[$i+ 1][1]), "\n");
               $i= $j- 1;
               $out.= $this->convert(
                 '', 
