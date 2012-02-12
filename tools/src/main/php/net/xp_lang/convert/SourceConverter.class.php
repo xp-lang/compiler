@@ -277,6 +277,7 @@
             } else {
               $out.= 'extends '.$this->mapName($token[1], $package, $imports, 'extends');
             }
+            isset($generic['parent']) && $out.= '<'.$generic['parent'].'>';
             array_shift($state);
             break;
           }
@@ -285,11 +286,14 @@
           case self::ST_DECL.T_IMPLEMENTS: {
             $out.= $token[1];
             array_unshift($state, self::ST_INTF);
+            $interface= 0;
             break;
           }
           
           case self::ST_INTF.T_STRING: {
             $out.= $this->mapName($token[1], $package, $imports, $qname);
+            isset($generic['implements'][$interface]) && $out.= '<'.$generic['implements'][$interface].'>';
+            $interface++;
             break;
           }
           

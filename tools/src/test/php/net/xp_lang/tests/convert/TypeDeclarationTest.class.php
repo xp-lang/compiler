@@ -100,6 +100,34 @@
      *
      */
     #[@test]
+    public function genericImplements() {
+      $this->name('IList', 'util.collections.IList');
+      $this->assertConversion(
+        'public class ListOf<T> implements util.collections.IList<T> { }',
+        "#[@generic(self= 'T', implements= array('T'))]\nclass ListOf implements IList { }",
+        SourceConverter::ST_NAMESPACE
+      );
+    }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function genericParent() {
+      $this->name('ListOf', 'com.example.ListOf');
+      $this->assertConversion(
+        'public class SynchronizedListOf<T> extends com.example.ListOf<T> { }',
+        "#[@generic(self= 'T', parent= 'T')]\nclass SynchronizedListOf extends ListOf { }",
+        SourceConverter::ST_NAMESPACE
+      );
+    }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
     public function genericClassWithTwoArguments() {
       $this->assertConversion(
         'public class MapOf<K, V> { }',
