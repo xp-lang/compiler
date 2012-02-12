@@ -210,6 +210,33 @@
     }
 
     /**
+     * Test "[:var]"
+     *
+     */
+    #[@test]
+    public function mapOfVariableType() {
+      $this->assertEquals('[:var]', $this->fixture->mapName('[:var]'));
+    }
+
+    /**
+     * Test "[:string]"
+     *
+     */
+    #[@test]
+    public function mapOfStrings() {
+      $this->assertEquals('[:string]', $this->fixture->mapName('[:string]'));
+    }
+
+    /**
+     * Test "[:Object]"
+     *
+     */
+    #[@test]
+    public function mapOfObjects() {
+      $this->assertEquals('[:lang.Object]', $this->fixture->mapName('[:Object]'));
+    }
+
+    /**
      * Test "lang.Object?"
      *
      */

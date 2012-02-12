@@ -117,6 +117,8 @@
         return $qname;
       } else if (isset($rename[$lookup])) {
         return $rename[$lookup].$spec;
+      } else if ('[' === $lookup{0}) {
+        return '[:'.$this->mapName(substr($lookup, 2), $package, $imports).']';
       } else if (2 === sscanf($lookup, 'array<%[^,],%[^>]>', $tkey, $tvalue)) {
         return '[:'.$this->mapName(strtr(trim($tvalue), $rename), $package, $imports).']';
       }
