@@ -13,6 +13,7 @@
    */
   class SourceConverter extends Object {
     public $nameMap= NULL;
+    public $funcap= NULL;
     public static $primitives= array('string', 'int', 'double', 'bool', 'var', 'void');
 
     // XP tokens
@@ -60,6 +61,7 @@
      */
     public function __construct() {
       $this->nameMap= create('new util.collections.HashTable<string, string>()');
+      $this->funcMap= create('new util.collections.HashTable<string, string>()');
     }
 
     /**
@@ -767,12 +769,10 @@
               $i+= 2;
             } else if ('(' === $next[0] && '.' !== $out{strlen($out)- 1}) {
               $out.= $token[1];
-              try {
-                $func= new ReflectionFunction($token[1]);
-                $ext= $func->getExtension();
-                $extension= $ext ? strtolower($ext->getName()) : 'core';
-              } catch (ReflectionException $e) {
-                $this->warn(new IllegalStateException($e->getMessage().' @'.$state[0]));
+              if (isset($this->funcMap[$token[1]])) {
+                $extension= $this->funcMap[$token[1]];
+              } else {
+                $this->warn(new IllegalStateException('Cannot find function '.$token[1].' @'.$state[0]));
                 $extension= 'UNKNOWN';
               }
               $imported['import native '.$extension.'.'.$token[1].';']= TRUE;

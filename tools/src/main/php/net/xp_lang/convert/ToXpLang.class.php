@@ -77,15 +77,16 @@
     /**
      * Loads name map
      *
+     * @param   util.collections.HashTable<string, string> map
      * @param   io.streams.InputStream
      * @return  int
      */
-    protected function loadNameMap(InputStream $i) {
+    protected function loadNameMap($map, InputStream $i) {
       $r= new TextReader($i);
       $mappings= 0;
       while (NULL !== ($line= $r->readLine())) {
         sscanf($line, '%[^=]=%s', $name, $qualified);
-        $this->converter->nameMap[$name]= $qualified;
+        $map[$name]= $qualified;
         $mappings++;
       }
       $r->close();
@@ -97,7 +98,8 @@
      *
      */
     public function run() {
-      $this->loadNameMap($this->getClass()->getPackage()->getResourceAsStream('name.map')->getInputStream());
+      $this->loadNameMap($this->converter->nameMap, $this->getClass()->getPackage()->getResourceAsStream('name.map')->getInputStream());
+      $this->loadNameMap($this->converter->funcMap, $this->getClass()->getPackage()->getResourceAsStream('func.map')->getInputStream());
       try {
         $this->out->writeLine($this->converter->convert(
           $this->classNameOf($this->file), 
