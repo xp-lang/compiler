@@ -103,5 +103,31 @@
         SourceConverter::ST_FUNC_BODY
       );
     }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function castsInMethodArguments() {
+      $this->assertConversion(
+        'return range($min as int, $max as int);',
+        'return range((int)$min, (int)$max);',
+        SourceConverter::ST_FUNC_BODY
+      );
+    }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function castsWithFunctinCallInMethodArguments() {
+      $this->assertConversion(
+        'return range($min as int, max($a, $b) as int);',
+        'return range((int)$min, (int)max($a, $b));',
+        SourceConverter::ST_FUNC_BODY
+      );
+    }
   }
 ?>

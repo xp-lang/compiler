@@ -678,14 +678,18 @@
 
           case self::ST_CAST.')': {
             $brackets[0]--;
-            $out.= $token[1];
-            break;
+            if ($brackets[0] >= 0) {
+              $out.= $token[0];
+              break;
+            }
           }
 
-          case self::ST_CAST.';': {
+          case self::ST_CAST.';': case self::ST_CAST.',': {
             if ($brackets[0] <= 0) {
               array_shift($state);
-              $out.= ' as '.$this->mapName(trim($cast, '()'), $package, $imports).';';
+              $out.= ' as '.$this->mapName(trim($cast, '()'), $package, $imports).$token[0];
+            } else {
+              $out.= $token[0];
             }
             break;
           }
