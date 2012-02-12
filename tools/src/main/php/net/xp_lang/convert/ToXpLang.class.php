@@ -4,11 +4,11 @@
  * $Id$
  */
  
-  $package= 'cmd.convert';
+  $package= 'net.xp_lang.convert';
  
   uses(
     'util.cmd.Command',
-    'cmd.convert.SourceConverter',
+    'net.xp_lang.convert.SourceConverter',
     'io.File',
     'io.FileUtil',
     'io.streams.TextReader',
@@ -19,7 +19,7 @@
    * Convert a given class file to XP Language
    *
    */
-  class cmd·convert·ToXpLang extends Command {
+  class net·xp_lang·convert·ToXpLang extends Command {
     protected $file= '';
     protected $converter= NULL;
     
