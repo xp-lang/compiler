@@ -81,5 +81,31 @@
         SourceConverter::ST_NAMESPACE
       );
     }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function genericClass() {
+      $this->assertConversion(
+        'public class ListOf<T> { }',
+        "#[@generic(self= 'T')]\nclass ListOf { }",
+        SourceConverter::ST_NAMESPACE
+      );
+    }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function genericClassWithTwoArguments() {
+      $this->assertConversion(
+        'public class MapOf<K, V> { }',
+        "#[@generic(self= 'K, V')]\nclass MapOf { }",
+        SourceConverter::ST_NAMESPACE
+      );
+    }
   }
 ?>

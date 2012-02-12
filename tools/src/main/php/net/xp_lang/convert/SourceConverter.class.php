@@ -174,6 +174,7 @@
       // Tokenize file
       $state= array($initial);
       $imports= array();
+      $generic= array();
       $out= '';
       for ($i= 0, $s= sizeof($t); $i < $s; $i++) {
         $token= $this->tokenOf($t[$i], ($i > 0 ? $t[$i- 1] : NULL));
@@ -252,6 +253,8 @@
             } else {
               $out.= 'public '.$token[1].' '.$declaration[1];
             }
+
+            isset($generic['self']) && $out.= '<'.$generic['self'].'>';
 
             $i+= 2;
             array_unshift($state, self::ST_DECL);
@@ -360,11 +363,15 @@
               }
               $t[$i+ 1][1]= ltrim(str_replace("\n  ", "", "\n".$t[$i+ 1][1]), "\n");
               $i= $j- 1;
-              $out.= $this->convert(
-                '', 
-                array_slice(token_get_all('<?php '.substr($comment, 2, -1).'?>'), 1, -1),
-                self::ST_ANNOTATIONS
-              )."\n";
+              if (strstr($comment, '[@generic')) {
+                $generic= this(XPClass::parseAnnotations($comment, $class), 'generic');
+              } else {
+                $out.= $this->convert(
+                  '', 
+                  array_slice(token_get_all('<?php '.substr($comment, 2, -1).'?>'), 1, -1),
+                  self::ST_ANNOTATIONS
+                )."\n";
+              }
             } else {
               $out.= $token[1];
             }
