@@ -52,5 +52,18 @@
         SourceConverter::ST_FUNC_BODY
       );
     }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function createMethodMayExist() {
+      $this->assertConversion(
+        'public void create() { /* ... */ }',
+        'public function create() { /* ... */ }',
+        SourceConverter::ST_DECL
+      );
+    }
   }
 ?>

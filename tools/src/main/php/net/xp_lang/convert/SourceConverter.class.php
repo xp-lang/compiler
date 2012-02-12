@@ -393,7 +393,7 @@
             break;
           }
           
-          case self::ST_FUNC.T_STRING: {
+          case self::ST_FUNC.T_STRING: case self::ST_FUNC.self::T_CREATE: {
             array_unshift($brackets, 0);
             if ('__static' === $token[1]) {
               $out= rtrim($out, ' ');
