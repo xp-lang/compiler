@@ -9,6 +9,7 @@
   /**
    * Source implementation
    *
+   * @test    xp://net.xp_lang.tests.StringSourceTest
    */
   class StringSource extends Object implements xp·compiler·io·Source {
     protected $source= NULL;
@@ -41,6 +42,7 @@
      *
      * @return  xp.compiler.Syntax
      */
+     
     public function getSyntax() {
       return $this->syntax;
     }
