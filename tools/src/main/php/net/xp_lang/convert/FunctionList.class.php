@@ -39,9 +39,20 @@
           if (sscanf(ltrim($line), 'PHP_NEW_EXTENSION(%[^,],', $name) > 0) break;
         }
         $config->close();
-        if (NULL !== $name) return $name;
+        if (NULL !== $name) return trim($name, '[]');
       }
       return NULL;
+    }
+    
+    /**
+     * Adds a function to the output
+     *
+     * @param   string name
+     * @param   string extension
+     */
+    protected static function add($name, $extension) {
+      $name= trim($name);
+      Console::writeLine($name, '=', $extension, '.', $name);
     }
     
     /**
@@ -73,9 +84,10 @@
           while (NULL !== ($line= $reader->readLine())) {
             $trim= trim($line);
             if (0 !== strncmp($trim, 'PHP', 3)) continue;
-            sscanf($trim, 'PHP_FUNCTION(%[^%)])', $func) > 0 && Console::writeLine($func, '=', $extension, '.', $func);
-            sscanf($trim, 'PHP_FALIAS(%[^%,],', $alias) > 0 && Console::writeLine($alias, '=', $extension, '.', $alias);
-            sscanf($trim, 'PHP_NAMED_FE(%[^%,],', $named) > 0 && Console::writeLine($named, '=', $extension, '.', $named);
+            sscanf($trim, 'PHP_FUNCTION(%[^%)])', $func) > 0 && self::add($func, $extension);
+            sscanf($trim, 'PHP_FALIAS(%[^%,],', $alias) > 0 && self::add($alias, $extension);
+            sscanf($trim, 'PHP_NAMED_FE(%[^%,],', $named) > 0 && self::add($named, $extension);
+            sscanf($trim, 'PHP_NAMED_FUNCTION(php_if_%[^%)])', $named) > 0 && self::add($named, $extension);
           }
           $reader->close();
           Console::$err->write("\x08", '.');
