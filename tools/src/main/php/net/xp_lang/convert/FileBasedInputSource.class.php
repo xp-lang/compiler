@@ -15,12 +15,11 @@
     /**
      * Determine class name from a file
      *
-     * @param   io.File f
+     * @param   string uri
      * @return  string
      * @throws  lang.IllegalArgumentException
      */
-    protected function classNameOf(File $file) {
-      $uri= $file->getURI();
+    public static function classNameOf($uri) {
       $path= dirname($uri);
       $paths= array_flip(array_map('realpath', xp::$registry['classpath']));
       $class= NULL;

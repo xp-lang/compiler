@@ -29,7 +29,7 @@
      */
     public function getSources() {
       return array(new SourceClass(
-        $this->classNameOf($this->file), 
+        self::classNameOf($this->file->getURI()), 
         $this->file->getInputStream()
       ));
     }

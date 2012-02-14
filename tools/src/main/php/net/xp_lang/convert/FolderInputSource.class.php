@@ -4,14 +4,19 @@
  * $Id$ 
  */
 
-  uses('net.xp_lang.convert.FileBasedInputSource', 'io.Folder');
+  uses(
+    'net.xp_lang.convert.FileBasedInputSource', 
+    'net.xp_lang.convert.SourceClassesInCollection', 
+    'io.Folder',
+    'io.collections.FileCollection'
+  );
 
   /**
    * Input source classes from a single folder
    *
    */
   class FolderInputSource extends FileBasedInputSource {
-    protected $folder= NULL;
+    protected $collection= NULL;
     
     /**
      * Constructor
@@ -19,7 +24,7 @@
      * @param   io.Folder folder
      */
     public function __construct(Folder $folder) {
-      $this->folder= $folder;
+      $this->collection= new FileCollection($folder);
     }    
 
     /**
@@ -28,7 +33,7 @@
      * @return  net.xp_lang.convert.SourceClass[]
      */
     public function getSources() {
-      raise('lang.MethodNotImplementedException', __METHOD__);
+      return new SourceClassesInCollection($this->collection);
     }
   }
 ?>
