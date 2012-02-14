@@ -61,6 +61,13 @@
      * @param   string[] args
      */
     public static function main(array $args) {
+      static $mixed= array(
+        'oci8'    => TRUE,
+        'mysqli'  => TRUE,
+        'dom'     => TRUE,
+        'xsl'     => TRUE,
+      );
+
       $ext= new Folder($args[0], 'ext');
       $zend= new Folder($args[0], 'Zend');
       if (!$ext->exists() || !$zend->exists()) {
@@ -79,15 +86,20 @@
         Console::$err->write('- ', $extension, ' [');
         $files= new FilteredIOCollectionIterator($folder, $source, FALSE);
         foreach ($files as $file) {
-          Console::$err->write('#');
+          Console::$err->write(']');
           $reader= new TextReader($file->getInputStream());
           while (NULL !== ($line= $reader->readLine())) {
-            $trim= trim($line);
-            if (0 !== strncmp($trim, 'PHP', 3)) continue;
-            sscanf($trim, 'PHP_FUNCTION(%[^%)])', $func) > 0 && self::add($func, $extension);
-            sscanf($trim, 'PHP_FALIAS(%[^%,],', $alias) > 0 && self::add($alias, $extension);
-            sscanf($trim, 'PHP_NAMED_FE(%[^%,],', $named) > 0 && self::add($named, $extension);
-            sscanf($trim, 'PHP_NAMED_FUNCTION(php_if_%[^%)])', $named) > 0 && self::add($named, $extension);
+            $line= trim($line);
+            if (0 !== strncmp($line, 'PHP', 3)) continue;
+            sscanf($line, 'PHP_FUNCTION(%[^%)])', $func) > 0 && self::add($func, $extension);
+            sscanf($line, 'PHP_NAMED_FE(%[^%,],', $named) > 0 && self::add($named, $extension);
+            sscanf($line, 'PHP_NAMED_FUNCTION(php_if_%[^%)])', $named) > 0 && self::add($named, $extension);
+
+            // Mixed mode extensions - here FALIAS is used to alias class methods and global, 
+            // procedural functions: PHP_FALIAS(query, mysqli_query, arginfo_class_mysqli_query)
+            if (!isset($mixed[$extension])) {
+              sscanf($line, 'PHP_FALIAS(%[^%,],', $alias) > 0 && self::add($alias, $extension);
+            }
           }
           $reader->close();
           Console::$err->write("\x08", '.');
