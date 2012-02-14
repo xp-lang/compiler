@@ -133,7 +133,8 @@
         $p= strrpos($lookup, '.');
       } else if (class_exists($qname, FALSE) || interface_exists($qname, FALSE)) {
         // PHP builtin, ...
-        $p= -1;
+        $lookup= 'php.'.$qname;
+        $p= strrpos($lookup, '.');
       } else {
         $this->warn(new IllegalStateException('Cannot qualify name "'.$qname.'", using as-is'));
         $p= -1;

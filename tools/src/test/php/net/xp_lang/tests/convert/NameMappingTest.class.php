@@ -291,5 +291,23 @@
     public function referencesRemoved() {
       $this->assertEquals('lang.Object', $this->fixture->mapName('&lang.Object'));
     }
+
+    /**
+     * Tests PHP classes
+     *
+     */
+    #[@test]
+    public function phpClass() {
+      $this->assertEquals('php.ReflectionClass', $this->fixture->mapName('ReflectionClass'));
+    }
+
+    /**
+     * Tests PHP classes
+     *
+     */
+    #[@test]
+    public function qualifiedPhpClass() {
+      $this->assertEquals('php.ReflectionClass', $this->fixture->mapName('php.ReflectionClass'));
+    }
   }
 ?>
