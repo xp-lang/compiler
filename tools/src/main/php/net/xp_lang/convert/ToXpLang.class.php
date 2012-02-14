@@ -41,8 +41,8 @@
      * @param   string input
      */
     #[@arg(position= 0)]
-    public function setInput($input= NULL) {
-      if (NULL === $input) {
+    public function setInput($input= '*') {
+      if ('*' === $input) {
         $this->input= new ClassPathInputSource();
       } else if (is_dir($input)) {
         $this->input= new FolderInputSource(new Folder($input));
