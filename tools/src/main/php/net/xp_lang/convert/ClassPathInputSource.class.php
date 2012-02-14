@@ -4,7 +4,13 @@
  * $Id$ 
  */
 
-  uses('net.xp_lang.convert.FileBasedInputSource');
+  uses(
+    'net.xp_lang.convert.FileBasedInputSource', 
+    'net.xp_lang.convert.SourceClassesInCollection',
+    'io.collections.FileCollection',
+    'io.collections.ArchiveCollection',
+    'io.collections.CollectionComposite'
+  );
 
   /**
    * Input source classes from class path
@@ -18,7 +24,15 @@
      * @return  net.xp_lang.convert.SourceClass[]
      */
     public function getSources() {
-      raise('lang.MethodNotImplementedException', __METHOD__);
+      $collections= array();
+      foreach (ClassLoader::getLoaders() as $loader) {
+        if ($loader instanceof FileSystemClassLoader) {
+          $collections[]= new FileCollection($loader->path);
+        } else if ($loader instanceof ArchiveClassLoader) {
+          $collections[]= new ArchiveCollection($loader->path);
+        }
+      }
+      return new SourceClassesInCollection(new CollectionComposite($collections));
     }
   }
 ?>
