@@ -28,7 +28,14 @@
      * @return  net.xp_lang.convert.SourceClass[]
      */
     public function getSources() {
-      raise('lang.MethodNotImplementedException', __METHOD__);
+      $sources= array();
+      foreach ($this->package->getClassNames() as $name) {
+        $sources[]= new SourceClass(
+          $name, 
+          $this->package->getResourceAsStream(strtr($name, '.', '/').xp::CLASS_FILE_EXT)->getInputStream()
+        );
+      }
+      return $sources;
     }
   }
 ?>
