@@ -497,9 +497,7 @@
             break;
           }
           
-          case self::ST_FUNC_ARGS.T_STRING: {
-            $nonClassTypes= array('array');   // Type hints that are not classes
-
+          case self::ST_FUNC_ARGS.T_STRING: case self::ST_FUNC_ARGS.T_ARRAY: {
             // Look ahead, decl(array $a, String $b, $c, $x= FALSE, $z= TRUE)
             // * $a -> array (non-class-type, yield array)
             // * $b -> String (map name)
@@ -511,6 +509,10 @@
             if (T_WHITESPACE === $ws[0] && T_VARIABLE === $var[0]) {
               $restriction= $token[0];
               $i++;
+            } else if (T_ARRAY === $token[0]) {
+              array_unshift($brackets, 0);
+              $out.= '[';
+              array_unshift($state, self::ST_ARRAY);
             } else {
               $out.= $token[1];
             }
@@ -527,15 +529,7 @@
               $type= $generic['param'][$parameter];
             } else if (isset($meta['param'][$parameter])) {
               $type= $this->mapName($meta['param'][$parameter], $package, $imports);
-              
-              // If no type restriction was specified, add "?", except for 
-              // primitives or arrays thereof
-              if (
-                !$restriction && 
-                !(in_array($type, self::$primitives) || in_array(rtrim($type, '[]'), self::$primitives))
-              ) {
-                $type.= '?';
-              }
+              $restriction || $type.= '?';
             } else {
               $type= 'var';
             }
@@ -789,7 +783,6 @@
           // Arrays
           case self::ST_ANNOTATIONS.T_ARRAY:
           case self::ST_FOREACH.T_ARRAY:
-          case self::ST_FUNC_ARGS.T_ARRAY: 
           case self::ST_FUNC_BODY.T_ARRAY: {
             array_unshift($brackets, 0);
             $out.= '[';

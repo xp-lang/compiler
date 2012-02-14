@@ -17,7 +17,7 @@
      *
      * @param   string[] args
      */
-    public static function main($args) {
+    public static function main(array $args) {
       $begin= new Date();
       $end= Date::now();
       $help= new Help();

@@ -36,7 +36,7 @@
         "/**\n".
         " * @param   string a\n".
         " */\n".
-        "public void test(string \$a) { /* ... */ }",
+        "public void test(string? \$a) { /* ... */ }",
         "/**\n".
         " * @param   string a\n".
         " */\n".
@@ -112,7 +112,7 @@
         "/**\n".
         " * @param   mixed a\n".
         " */\n".
-        "public void test(var \$a) { /* ... */ }",
+        "public void test(var? \$a) { /* ... */ }",
         "/**\n".
         " * @param   mixed a\n".
         " */\n".
@@ -131,7 +131,7 @@
         "/**\n".
         " * @param   mixed[] a\n".
         " */\n".
-        "public void test(var[] \$a) { /* ... */ }",
+        "public void test(var[]? \$a) { /* ... */ }",
         "/**\n".
         " * @param   mixed[] a\n".
         " */\n".
@@ -150,7 +150,7 @@
         "/**\n".
         " * @param   float a\n".
         " */\n".
-        "public void test(double \$a) { /* ... */ }",
+        "public void test(double? \$a) { /* ... */ }",
         "/**\n".
         " * @param   float a\n".
         " */\n".
@@ -169,7 +169,7 @@
         "/**\n".
         " * @param   resource a\n".
         " */\n".
-        "public void test(int \$a) { /* ... */ }",
+        "public void test(int? \$a) { /* ... */ }",
         "/**\n".
         " * @param   resource a\n".
         " */\n".
@@ -198,11 +198,30 @@
     }
 
     /**
+     * Test "array" parameter type becomes "var[]?"
+     *
+     */
+    #[@test]
+    public function arrayBecomesVarArrayWithoutVerification() {
+      $this->assertConversion(
+        "/**\n".
+        " * @param   array a\n".
+        " */\n".
+        "public void test(var[]? \$a) { /* ... */ }",
+        "/**\n".
+        " * @param   array a\n".
+        " */\n".
+        "public function test(\$a) { /* ... */ }",
+        SourceConverter::ST_DECL
+      );
+    }
+
+    /**
      * Test "array" parameter type becomes "var[]"
      *
      */
     #[@test]
-    public function arrayBecomesVarArray() {
+    public function arrayWithRestrictionBecomesVarArray() {
       $this->assertConversion(
         "/**\n".
         " * @param   array a\n".
@@ -211,7 +230,7 @@
         "/**\n".
         " * @param   array a\n".
         " */\n".
-        "public function test(\$a) { /* ... */ }",
+        "public function test(array \$a) { /* ... */ }",
         SourceConverter::ST_DECL
       );
     }
