@@ -331,6 +331,11 @@
             break;
           }
 
+          case self::ST_DECL.T_CONST: {
+            $out.= 'const var';
+            break;
+          }
+
           case self::ST_DECL.'=': {
             $out.= '=';
             array_unshift($state, self::ST_FIELD_INIT);

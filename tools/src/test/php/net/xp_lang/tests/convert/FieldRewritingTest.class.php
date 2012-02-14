@@ -181,5 +181,18 @@
         SourceConverter::ST_DECL
       );
     }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function classConstant() {
+      $this->assertConversion(
+        'const var TEST = 0;',
+        'const TEST = 0;',
+        SourceConverter::ST_DECL
+      );
+    }
   }
 ?>
