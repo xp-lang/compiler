@@ -9,7 +9,10 @@
   uses(
     'util.cmd.Command',
     'net.xp_lang.convert.SourceConverter',
-    'io.File',
+    'net.xp_lang.convert.ClassPathInputSource',
+    'net.xp_lang.convert.FolderInputSource',
+    'net.xp_lang.convert.FileInputSource',
+    'net.xp_lang.convert.PackageInputSource',
     'io.FileUtil',
     'io.streams.TextReader',
     'io.streams.InputStream'
@@ -20,7 +23,8 @@
    *
    */
   class net·xp_lang·convert·ToXpLang extends Command {
-    protected $file= '';
+    protected $input= NULL;
+    protected $target= NULL;
     protected $converter= NULL;
     
     /**
@@ -32,13 +36,31 @@
     }
   
     /**
-     * Sets file to convert
+     * Sets input
      *
-     * @param   string file
+     * @param   string input
      */
     #[@arg(position= 0)]
-    public function setInput($file) {
-      $this->file= new File($file);
+    public function setInput($input= NULL) {
+      if (NULL === $input) {
+        $this->input= new ClassPathInputSource();
+      } else if (is_dir($input)) {
+        $this->input= new FolderInputSource(new Folder($input));
+      } else if (is_file($input)) {
+        $this->input= new FileInputSource(new File($input));
+      } else {
+        $this->input= new PackageInputSource(Package::forName($input));
+      }
+    }
+
+    /**
+     * Sets output
+     *
+     * @param   string output
+     */
+    #[@arg(short= 'O')]
+    public function setOutput($output= '.') {
+      $this->target= new Folder($output);
     }
 
     /**
@@ -49,29 +71,6 @@
     #[@arg]
     public function setNameMap($file= NULL) {
       $file && $this->loadNameMap($this->converter->nameMap, create(new File($file))->getInputStream());
-    }
-    
-    /**
-     * Determine class
-     *
-     * @param   io.File f
-     * @return  string
-     * @throws  lang.IllegalArgumentException
-     */
-    protected function classNameOf(File $file) {
-      $uri= $file->getURI();
-      $path= dirname($uri);
-      $paths= array_flip(array_map('realpath', xp::$registry['classpath']));
-      $class= NULL;
-      while (FALSE !== ($pos= strrpos($path, DIRECTORY_SEPARATOR))) { 
-        if (isset($paths[$path])) {
-          return strtr(substr($uri, strlen($path)+ 1, -10), DIRECTORY_SEPARATOR, '.');
-          break;
-        }
-
-        $path= substr($path, 0, $pos); 
-      }
-      throw new IllegalArgumentException('Cannot determine class name from '.$file->toString());
     }
     
     /**
@@ -92,6 +91,20 @@
       $r->close();
       return $mappings;
     }
+    
+    /**
+     * Retrieve an output stream for a give class name
+     *
+     * @param   string name
+     * @return  io.streams.OutputStream
+     */
+    protected function outputStreamFor($name) {
+      $target= new File($this->target, str_replace('.', DIRECTORY_SEPARATOR, $name).'.xp');
+      $place= new Folder($target->getPath());
+      $place->exists() || $place->create();
+
+      return $target->getOutputStream();
+    }
 
     /**
      * Main runner method
@@ -100,14 +113,23 @@
     public function run() {
       $this->loadNameMap($this->converter->nameMap, $this->getClass()->getPackage()->getResourceAsStream('name.map')->getInputStream());
       $this->loadNameMap($this->converter->funcMap, $this->getClass()->getPackage()->getResourceAsStream('func.map')->getInputStream());
-      try {
-        $this->out->writeLine($this->converter->convert(
-          $this->classNameOf($this->file), 
-          token_get_all(FileUtil::getContents($this->file))
-        ));
-      } catch (Throwable $e) {
-        $this->err->writeLine($e);
+
+      $this->err->write('-> ', $this->target, '[');
+      foreach ($this->input->getSources() as $class) {
+        $out= NULL;
+        try {
+          $name= $class->getName();
+          $result= $this->converter->convert($name, token_get_all(Streams::readAll($class->getInputStream())));
+          $out= $this->outputStreamFor($name);
+          $out->write($result);
+          $this->err->write('.');
+        } catch (Throwable $e) {
+          $this->err->writeLine($e);
+        } finally(); {
+          $out && $out->close();
+        }
       }
+      $this->err->write(']');
     }
   }
 ?>
