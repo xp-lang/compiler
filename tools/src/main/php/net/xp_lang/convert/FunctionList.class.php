@@ -57,23 +57,30 @@
         return 1;
       }
 
-      // Scan ext/*/*.h for PHP_FUNCTION
-      $headers= new ExtensionEqualsFilter('.h');
+      // Scan ext/*/*.c for PHP_FUNCTION, PHP_NAMED_FE and PHP_FALIAS
+      $source= new ExtensionEqualsFilter('.c');
       $folders= new FilteredIOCollectionIterator(new FileCollection($ext), new CollectionFilter());
       foreach ($folders as $folder) {
         if (NULL === ($extension= self::extensionName($folder))) {
           Console::$err->writeLine('*** Cannot determine extension name from ', $folder);
           continue;
         }
-        Console::$err->writeLine('# ', $extension);
-        $files= new FilteredIOCollectionIterator($folder, $headers, FALSE);
+        Console::$err->write('- ', $extension, ' [');
+        $files= new FilteredIOCollectionIterator($folder, $source, FALSE);
         foreach ($files as $file) {
+          Console::$err->write('#');
           $reader= new TextReader($file->getInputStream());
           while (NULL !== ($line= $reader->readLine())) {
-            sscanf($line, 'PHP_FUNCTION(%[^%)]);', $func) > 0 && Console::writeLine($func, '=', $extension, '.', $func);
+            $trim= trim($line);
+            if (0 !== strncmp($trim, 'PHP', 3)) continue;
+            sscanf($trim, 'PHP_FUNCTION(%[^%)])', $func) > 0 && Console::writeLine($func, '=', $extension, '.', $func);
+            sscanf($trim, 'PHP_FALIAS(%[^%,],', $alias) > 0 && Console::writeLine($alias, '=', $extension, '.', $alias);
+            sscanf($trim, 'PHP_NAMED_FE(%[^%,],', $named) > 0 && Console::writeLine($named, '=', $extension, '.', $named);
           }
           $reader->close();
+          Console::$err->write("\x08", '.');
         }
+        Console::$err->writeLine(']');
       }
       
       // Scan Zend/zend_builtin_functions.c
