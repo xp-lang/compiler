@@ -439,5 +439,60 @@
     public function coinEnumHasMemberField() {
       $this->assertTrue($this->coinEnum()->hasField('penny'));
     }
+
+    /**
+     * Test getExtensions() method
+     *
+     */
+    #[@test]
+    public function getExtensionsFromStringClass() {
+      $this->assertEquals(array(), $this->stringClass()->getExtensions());
+    }
+
+    /**
+     * Test getExtensions() method
+     *
+     */
+    #[@test]
+    public function getExtensionsFromStringExtensionsClass() {
+      $decl= new TypeDeclaration(
+        new ParseTree(new TypeName('lang.types'), array(), new ClassNode(
+          MODIFIER_PUBLIC, 
+          NULL,
+          new TypeName('StringExtensions'),
+          new TypeName('lang.Object'),
+          NULL,
+          array(
+            new MethodNode(array(
+              'name'        => 'substring',
+              'returns'     => new TypeName('string'),
+              'extension'   => new TypeName('string'),
+              'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
+              'parameters'  => array(
+                array(
+                  'name'  => 'self',
+                  'type'  => new TypeName('string'),
+                  'check' => TRUE
+                ), 
+                array(
+                  'name'  => 'start',
+                  'type'  => new TypeName('int'),
+                  'check' => TRUE
+                ), 
+                array(
+                  'name'  => 'end',
+                  'type'  => new TypeName('int'),
+                  'check' => TRUE
+                )
+              )
+            )),
+          )
+        )),
+        $this->objectClass()
+      );
+      $extensions= $decl->getExtensions();
+      $this->assertEquals(1, sizeof($extensions));
+      $this->assertEquals('substring', $extensions['string'][0]->name());
+    }
   }
 ?>
