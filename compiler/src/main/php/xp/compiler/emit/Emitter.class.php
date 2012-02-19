@@ -9,6 +9,8 @@
     'xp.compiler.ast.ParseTree', 
     'xp.compiler.optimize.Optimizations',
     'xp.compiler.checks.Checks',
+    'xp.compiler.emit.Buffer', 
+    'xp.compiler.emit.EmitterResult', 
     'util.log.Traceable'
   );
 
@@ -121,13 +123,13 @@
     /**
      * Emit a single node
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.Node in
      */
-    protected function emitOne($r, $in) {
+    protected function emitOne($b, $in) {
       $node= $this->optimizations->optimize($in, $this->scope[0]);
 
-      $r->position($node->position);
+      $b->position($node->position);
       $this->cat && $this->cat->debugf(
         '@%-3d Emit %s: %s',
         $node->position[0],
@@ -136,7 +138,7 @@
       );
 
       try {
-        $this->checks->verify($node, $this->scope[0], $this) && call_user_func(array($this, 'emit'.substr(get_class($node), 0, -4)), $r, $node);
+        $this->checks->verify($node, $this->scope[0], $this) && call_user_func(array($this, 'emit'.substr(get_class($node), 0, -4)), $b, $node);
       } catch (Error $e) {
         $this->error('0422', 'Cannot emit '.$node->getClassName().': '.$e->getMessage(), $node);
       } catch (Throwable $e) {
@@ -147,10 +149,10 @@
     /**
      * Emit all given nodes
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.Node[] nodes
      */
-    protected abstract function emitAll($r, array $nodes);
+    protected abstract function emitAll($b, array $nodes);
 
     /**
      * Entry point

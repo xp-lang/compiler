@@ -9,7 +9,6 @@
   uses(
     'xp.compiler.emit.Emitter', 
     'xp.compiler.emit.source.NativeImporter',
-    'xp.compiler.emit.source.Buffer', 
     'xp.compiler.emit.source.Result', 
     'xp.compiler.syntax.php.Lexer',
     'xp.compiler.syntax.php.Parser',
@@ -110,10 +109,10 @@
     /**
      * Emit uses statements for a given list of types
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   [:bool] types
      */
-    protected function emitUses($r, array $types) {
+    protected function emitUses($b, array $types) {
       static $bootstrap= array(
         'lang.Object' => TRUE,
         'lang.StackTraceElement' => TRUE,
@@ -174,35 +173,35 @@
           $this->error('0424', $e->toString());
         }
       }
-      $uses && $r->insert('uses(\''.implode("', '", $uses).'\');', 0);
+      $uses && $b->insert('uses(\''.implode("', '", $uses).'\');', 0);
     }
     
     /**
      * Emit parameters
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.Node[] params
      * @param   bool brackets
      * @return  int
      */
-    protected function emitInvocationArguments($r, array $params, $brackets= TRUE) {
-      $brackets && $r->append('(');
+    protected function emitInvocationArguments($b, array $params, $brackets= TRUE) {
+      $brackets && $b->append('(');
       $s= sizeof($params)- 1;
       foreach ($params as $i => $param) {
-        $this->emitOne($r, $param);
-        $i < $s && $r->append(',');
+        $this->emitOne($b, $param);
+        $i < $s && $b->append(',');
       }
-      $brackets && $r->append(')');
+      $brackets && $b->append(')');
       return sizeof($params);
     }
     
     /**
      * Emit invocations
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.InvocationNode inv
      */
-    protected function emitInvocation($r, InvocationNode $inv) {
+    protected function emitInvocation($b, InvocationNode $inv) {
       if (!isset($this->scope[0]->statics[$inv->name])) {
         if (!($resolved= $this->scope[0]->resolveStatic($inv->name))) {
           $this->error('T501', 'Cannot resolve '.$inv->name.'()', $inv);
@@ -214,12 +213,12 @@
 
       // Static method call vs. function call
       if (TRUE === $ptr) {
-        $r->append($inv->name);
-        $this->emitInvocationArguments($r, (array)$inv->arguments);
+        $b->append($inv->name);
+        $this->emitInvocationArguments($b, (array)$inv->arguments);
         $this->scope[0]->setType($inv, TypeName::$VAR);
       } else {
-        $r->append($ptr->holder->literal().'::'.$ptr->name());
-        $this->emitInvocationArguments($r, (array)$inv->arguments);
+        $b->append($ptr->holder->literal().'::'.$ptr->name());
+        $this->emitInvocationArguments($b, (array)$inv->arguments);
         $this->scope[0]->setType($inv, $ptr->returns);
       }
     }
@@ -227,97 +226,97 @@
     /**
      * Emit strings
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.StringNode str
      */
-    protected function emitString($r, StringNode $str) {
-      $r->append("'");
-      $r->append(strtr($str->resolve(), array(
+    protected function emitString($b, StringNode $str) {
+      $b->append("'");
+      $b->append(strtr($str->resolve(), array(
         "'"   => "\'",
         '\\'  => '\\\\'
       )));
-      $r->append("'");
+      $b->append("'");
     }
 
     /**
      * Emit an array (a sequence of elements with a zero-based index)
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ArrayNode arr
      */
-    protected function emitArray($r, ArrayNode $arr) {
-      $r->append('array(');
+    protected function emitArray($b, ArrayNode $arr) {
+      $b->append('array(');
       foreach ((array)$arr->values as $value) {
-        $this->emitOne($r, $value);
-        $r->append(',');
+        $this->emitOne($b, $value);
+        $b->append(',');
       }
-      $r->append(')');
+      $b->append(')');
     }
 
     /**
      * Emit a map (a key/value pair dictionary)
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.MapNode map
      */
-    protected function emitMap($r, MapNode $map) {
-      $r->append('array(');
+    protected function emitMap($b, MapNode $map) {
+      $b->append('array(');
       foreach ((array)$map->elements as $pair) {
-        $this->emitOne($r, $pair[0]);
-        $r->append(' => ');
-        $this->emitOne($r, $pair[1]);
-        $r->append(',');
+        $this->emitOne($b, $pair[0]);
+        $b->append(' => ');
+        $this->emitOne($b, $pair[1]);
+        $b->append(',');
       }
-      $r->append(')');
+      $b->append(')');
     }
 
     /**
      * Emit booleans
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.BooleanNode const
      */
-    protected function emitBoolean($r, BooleanNode $const) {
-      $r->append($const->resolve() ? 'TRUE' : 'FALSE');
+    protected function emitBoolean($b, BooleanNode $const) {
+      $b->append($const->resolve() ? 'TRUE' : 'FALSE');
     }
 
     /**
      * Emit null
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.NullNode const
      */
-    protected function emitNull($r, NullNode $const) {
-      $r->append('NULL');
+    protected function emitNull($b, NullNode $const) {
+      $b->append('NULL');
     }
     
     /**
      * Emit constants
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ConstantNode const
      */
-    protected function emitConstant($r, ConstantNode $const) {
+    protected function emitConstant($b, ConstantNode $const) {
       if ($constant= $this->scope[0]->resolveConstant($const->value)) {
-        $r->append(var_export($constant->value, TRUE));
+        $b->append(var_export($constant->value, TRUE));
         return;
       }
 
       try {
-        $r->append(var_export($const->resolve(), TRUE));
+        $b->append(var_export($const->resolve(), TRUE));
       } catch (IllegalStateException $e) {
         $this->warn('T201', 'Constant lookup for '.$const->value.' deferred until runtime: '.$e->getMessage(), $const);
-        $r->append($const->value);
+        $b->append($const->value);
       }
     }
 
     /**
      * Emit casts
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.CastNode cast
      */
-    protected function emitCast($r, CastNode $cast) {
+    protected function emitCast($b, CastNode $cast) {
       static $primitives= array(
         'int'     => '(int)',
         'double'  => '(double)',
@@ -328,17 +327,17 @@
       );
 
       if (!$cast->check) {
-        $this->emitOne($r, $cast->expression);
+        $this->emitOne($b, $cast->expression);
       } else if ($cast->type->isPrimitive()) {
-        $r->append($primitives[$cast->type->name]);
-        $this->emitOne($r, $cast->expression);
+        $b->append($primitives[$cast->type->name]);
+        $this->emitOne($b, $cast->expression);
       } else if ($cast->type->isArray() || $cast->type->isMap()) {
-        $r->append('(array)');
-        $this->emitOne($r, $cast->expression);
+        $b->append('(array)');
+        $this->emitOne($b, $cast->expression);
       } else {
-        $r->append('cast(');
-        $this->emitOne($r, $cast->expression);
-        $r->append(', \'')->append($this->resolveType($cast->type)->name())->append('\')');
+        $b->append('cast(');
+        $this->emitOne($b, $cast->expression);
+        $b->append(', \'')->append($this->resolveType($cast->type)->name())->append('\')');
       }
       
       $this->scope[0]->setType($cast, $cast->type);
@@ -347,59 +346,59 @@
     /**
      * Emit integers
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.IntegerNode num
      */
-    protected function emitInteger($r, IntegerNode $num) {
-      $r->append($num->resolve());
+    protected function emitInteger($b, IntegerNode $num) {
+      $b->append($num->resolve());
     }
 
     /**
      * Emit decimals
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.DecimalNode num
      */
-    protected function emitDecimal($r, DecimalNode $num) {
+    protected function emitDecimal($b, DecimalNode $num) {
       $res= $num->resolve();
-      $r->append($res);
+      $b->append($res);
       
       // Prevent float(2) being dumped as "2" and thus an int literal
-      strstr($res, '.') || $r->append('.0');
+      strstr($res, '.') || $b->append('.0');
     }
 
     /**
      * Emit hex numbers
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.HexNode num
      */
-    protected function emitHex($r, HexNode $num) {
-      $r->append($num->resolve());
+    protected function emitHex($b, HexNode $num) {
+      $b->append($num->resolve());
     }
     
     /**
      * Emit a variable
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.VariableNode var
      */
-    protected function emitVariable($r, VariableNode $var) {
-      $r->append('$'.$var->name);
+    protected function emitVariable($b, VariableNode $var) {
+      $b->append('$'.$var->name);
     }
 
     /**
      * Emit a member access. Helper to emitChain()
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.DynamicVariableReferenceNode access
      */
-    public function emitDynamicMemberAccess($r, DynamicVariableReferenceNode $access) {
-      $this->emitOne($r, $call->target);
+    public function emitDynamicMemberAccess($b, DynamicVariableReferenceNode $access) {
+      $this->emitOne($b, $call->target);
 
-      $r->append('->{');
-      $this->emitOne($r, $access->expression);
-      $r->append('}');
+      $b->append('->{');
+      $this->emitOne($b, $access->expression);
+      $b->append('}');
       
       $this->scope[0]->setType($call, TypeName::$VAR);
     }
@@ -407,13 +406,13 @@
     /**
      * Emit static method call
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.StaticMethodCallNode call
      */
-    public function emitStaticMethodCall($r, StaticMethodCallNode $call) {
+    public function emitStaticMethodCall($b, StaticMethodCallNode $call) {
       $ptr= $this->resolveType($call->type);
-      $r->append($ptr->literal().'::'.$call->name);
-      $this->emitInvocationArguments($r, (array)$call->arguments);
+      $b->append($ptr->literal().'::'.$call->name);
+      $this->emitInvocationArguments($b, (array)$call->arguments);
 
       // Record type
       $this->scope[0]->setType($call, $ptr->hasMethod($call->name) ? $ptr->getMethod($call->name)->returns : TypeName::$VAR);
@@ -422,36 +421,36 @@
     /**
      * Emit instance call
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.InstanceCallNode call
      */
-    public function emitInstanceCall($r, InstanceCallNode $call) {
-      $r->append('call_user_func(');
-      $this->emitOne($r, $call->target);
-      $r->append(', ');
-      $this->emitInvocationArguments($r, (array)$call->arguments, FALSE);
-      $r->append(')');
+    public function emitInstanceCall($b, InstanceCallNode $call) {
+      $b->append('call_user_func(');
+      $this->emitOne($b, $call->target);
+      $b->append(', ');
+      $this->emitInvocationArguments($b, (array)$call->arguments, FALSE);
+      $b->append(')');
     }
 
     /**
      * Emit method call
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.MethodCallNode call
      */
-    public function emitMethodCall($r, MethodCallNode $call) {
-      $mark= $r->mark();
-      $this->emitOne($r, $call->target);
+    public function emitMethodCall($b, MethodCallNode $call) {
+      $mark= $b->mark();
+      $this->emitOne($b, $call->target);
       
       // Check for extension methods
       $ptr= new TypeInstance($this->resolveType($this->scope[0]->typeOf($call->target), FALSE));
       if (NULL !== ($ext= $this->scope[0]->getExtension($ptr, $call->name))) {
-        $r->insert($ext->holder->literal().'::'.$call->name.'(', $mark);
+        $b->insert($ext->holder->literal().'::'.$call->name.'(', $mark);
         if ($call->arguments) {
-          $r->append(', ');
-          $this->emitInvocationArguments($r, $call->arguments, FALSE);
+          $b->append(', ');
+          $this->emitInvocationArguments($b, $call->arguments, FALSE);
         }
-        $r->append(')');
+        $b->append(')');
         $this->scope[0]->setType($call, $ext->returns);
         return;
       }
@@ -470,12 +469,12 @@
         !$call->target instanceof StaticMemberAccessNode &&
         !$call->target instanceof StaticMethodCallNode
       ) {
-        $r->insert('create(', $mark);
-        $r->append(')');
+        $b->insert('create(', $mark);
+        $b->append(')');
       }
 
-      $r->append('->'.$call->name);
-      $this->emitInvocationArguments($r, (array)$call->arguments);
+      $b->append('->'.$call->name);
+      $this->emitInvocationArguments($b, (array)$call->arguments);
 
       // Record type
       $this->scope[0]->setType($call, $ptr->hasMethod($call->name) ? $ptr->getMethod($call->name)->returns : TypeName::$VAR);
@@ -484,12 +483,12 @@
     /**
      * Emit member access
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.StaticMemberAccessNode access
      */
-    public function emitStaticMemberAccess($r, StaticMemberAccessNode $access) {
+    public function emitStaticMemberAccess($b, StaticMemberAccessNode $access) {
       $ptr= $this->resolveType($access->type);
-      $r->append($ptr->literal().'::$'.$access->name);
+      $b->append($ptr->literal().'::$'.$access->name);
 
       // Record type
       $this->scope[0]->setType($access, $ptr->hasField($access->name) ? $ptr->getField($access->name)->type : TypeName::$VAR);
@@ -498,19 +497,19 @@
     /**
      * Emit member access
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.MemberAccessNode access
      */
-    public function emitMemberAccess($r, MemberAccessNode $access) {
-      $mark= $r->mark();
-      $this->emitOne($r, $access->target);
+    public function emitMemberAccess($b, MemberAccessNode $access) {
+      $mark= $b->mark();
+      $this->emitOne($b, $access->target);
       
       $type= $this->scope[0]->typeOf($access->target);
       
       // Overload [...].length
       if ($type->isArray() && 'length' === $access->name) {
-        $r->insert('sizeof(', $mark);
-        $r->append(')');
+        $b->insert('sizeof(', $mark);
+        $b->append(')');
         $this->scope[0]->setType($access, new TypeName('int'));
         return;
       }
@@ -529,11 +528,11 @@
         !$access->target instanceof StaticMemberAccessNode &&
         !$access->target instanceof StaticMethodCallNode
       ) {
-        $r->insert('create(', $mark);
-        $r->append(')');
+        $b->insert('create(', $mark);
+        $b->append(')');
       }
 
-      $r->append('->'.$access->name);
+      $b->append('->'.$access->name);
       
       // Record type
       $ptr= new TypeInstance($this->resolveType($type));
@@ -550,12 +549,12 @@
     /**
      * Emit array access
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ArrayAccessNode access
      */
-    public function emitArrayAccess($r, ArrayAccessNode $access) {
-      $mark= $r->mark();
-      $this->emitOne($r, $access->target);
+    public function emitArrayAccess($b, ArrayAccessNode $access) {
+      $mark= $b->mark();
+      $this->emitOne($b, $access->target);
       
       // Manually verify as we can then rely on call target type being available
       if (!$this->checks->verify($access, $this->scope[0], $this, TRUE)) return;
@@ -570,26 +569,26 @@
         !$access->target instanceof VariableNode &&
         !$access->target instanceof StaticMemberAccessNode
       ) {
-        $r->insert('this(', $mark);
-        $r->append(',');
-        $this->emitOne($r, $access->offset);
-        $r->append(')');
+        $b->insert('this(', $mark);
+        $b->append(',');
+        $this->emitOne($b, $access->offset);
+        $b->append(')');
       } else {
-        $r->append('[');
-        $access->offset && $this->emitOne($r, $access->offset);
-        $r->append(']');
+        $b->append('[');
+        $access->offset && $this->emitOne($b, $access->offset);
+        $b->append(']');
       }
     }
 
     /**
      * Emit constant access
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ConstantAccessNode access
      */
-    public function emitConstantAccess($r, ConstantAccessNode $access) {
+    public function emitConstantAccess($b, ConstantAccessNode $access) {
       $ptr= $this->resolveType($access->type);
-      $r->append($ptr->literal().'::'.$access->name);
+      $b->append($ptr->literal().'::'.$access->name);
 
       // Record type
       $this->scope[0]->setType($access, $ptr->hasConstant($access->name) ? $ptr->getConstant($access->name)->type : TypeName::$VAR);
@@ -598,12 +597,12 @@
     /**
      * Emit class access
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ClassAccessNode access
      */
-    public function emitClassAccess($r, ClassAccessNode $access) {
+    public function emitClassAccess($b, ClassAccessNode $access) {
       $ptr= $this->resolveType($access->type);
-      $r->append('XPClass::forName(\''.$ptr->name().'\')');
+      $b->append('XPClass::forName(\''.$ptr->name().'\')');
 
       // Record type
       $this->scope[0]->setType($access, new TypeName('lang.XPClass'));
@@ -612,22 +611,22 @@
     /**
      * Emit a braced expression
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.BracedExpressionNode const
      */
-    protected function emitBracedExpression($r, BracedExpressionNode $braced) {
-      $r->append('(');
-      $this->emitOne($r, $braced->expression);
-      $r->append(')');
+    protected function emitBracedExpression($b, BracedExpressionNode $braced) {
+      $b->append('(');
+      $this->emitOne($b, $braced->expression);
+      $b->append(')');
     }
 
     /**
      * Emit binary operation node
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.BinaryOpNode bin
      */
-    protected function emitBinaryOp($r, BinaryOpNode $bin) {
+    protected function emitBinaryOp($b, BinaryOpNode $bin) {
       static $ops= array(
         '~'   => '.',
         '-'   => '-',
@@ -657,46 +656,46 @@
         $ptr= $this->resolveType($t);
         if ($ptr->hasOperator($bin->op)) {
           $o= $ptr->getOperator($bin->op);
-          $r->append($ptr->literal());
-          $r->append('::operator··')->append($ovl[$bin->op])->append('(');
-          $this->emitOne($r, $bin->lhs);
-          $r->append(',');
-          $this->emitOne($r, $bin->rhs);
-          $r->append(')');
+          $b->append($ptr->literal());
+          $b->append('::operator··')->append($ovl[$bin->op])->append('(');
+          $this->emitOne($b, $bin->lhs);
+          $b->append(',');
+          $this->emitOne($b, $bin->rhs);
+          $b->append(')');
 
           $this->scope[0]->setType($bin, $o->returns);
           return;
         }
       }
       
-      $this->emitOne($r, $bin->lhs);
-      $r->append($ops[$bin->op]);
-      $this->emitOne($r, $bin->rhs);
+      $this->emitOne($b, $bin->lhs);
+      $b->append($ops[$bin->op]);
+      $this->emitOne($b, $bin->rhs);
     }
 
     /**
      * Emit unary operation node
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.UnaryOpNode un
      */
-    protected function emitUnaryOp($r, UnaryOpNode $un) {
+    protected function emitUnaryOp($b, UnaryOpNode $un) {
       static $ops= array(
         '++'   => '++',
         '--'   => '--',
       );
       
       if ('!' === $un->op) {      // FIXME: Use NotNode for this?
-        $r->append('!');
-        $this->emitOne($r, $un->expression);
+        $b->append('!');
+        $this->emitOne($b, $un->expression);
         return;
       } else if ('-' === $un->op) {
-        $r->append('-');
-        $this->emitOne($r, $un->expression);
+        $b->append('-');
+        $this->emitOne($b, $un->expression);
         return;
       } else if ('~' === $un->op) {
-        $r->append('~');
-        $this->emitOne($r, $un->expression);
+        $b->append('~');
+        $this->emitOne($b, $un->expression);
         return;
       } else if (!$this->isWriteable($un->expression)) {
         $this->error('U400', 'Cannot perform unary '.$un->op.' on '.$un->expression->getClassName(), $un);
@@ -704,11 +703,11 @@
       }
 
       if ($un->postfix) {
-        $this->emitOne($r, $un->expression);
-        $r->append($ops[$un->op]);
+        $this->emitOne($b, $un->expression);
+        $b->append($ops[$un->op]);
       } else {
-        $r->append($ops[$un->op]);
-        $this->emitOne($r, $un->expression);
+        $b->append($ops[$un->op]);
+        $this->emitOne($b, $un->expression);
       }
     }
 
@@ -721,24 +720,24 @@
      *   $a= $b ? $b : $c;
      * </code>
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.TernaryNode ternary
      */
-    protected function emitTernary($r, TernaryNode $ternary) {
-      $this->emitOne($r, $ternary->condition);
-      $r->append('?');
-      $this->emitOne($r, $ternary->expression ? $ternary->expression : $ternary->condition);
-      $r->append(':');
-      $this->emitOne($r, $ternary->conditional);
+    protected function emitTernary($b, TernaryNode $ternary) {
+      $this->emitOne($b, $ternary->condition);
+      $b->append('?');
+      $this->emitOne($b, $ternary->expression ? $ternary->expression : $ternary->condition);
+      $b->append(':');
+      $this->emitOne($b, $ternary->conditional);
     }
 
     /**
      * Emit comparison node
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ComparisonNode cmp
      */
-    protected function emitComparison($r, ComparisonNode $cmp) {
+    protected function emitComparison($b, ComparisonNode $cmp) {
       static $ops= array(
         '=='   => '==', 
         '==='  => '===',
@@ -750,71 +749,71 @@
         '>'    => '>',  
       );
 
-      $this->emitOne($r, $cmp->lhs);
-      $r->append(' '.$ops[$cmp->op].' ');
-      $this->emitOne($r, $cmp->rhs);
+      $this->emitOne($b, $cmp->lhs);
+      $b->append(' '.$ops[$cmp->op].' ');
+      $this->emitOne($b, $cmp->rhs);
     }
 
     /**
      * Emit continue statement
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ContinueNode statement
      */
-    protected function emitContinue($r, ContinueNode $statement) {
-      $r->append('continue');
+    protected function emitContinue($b, ContinueNode $statement) {
+      $b->append('continue');
     }
 
     /**
      * Emit break statement
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.BreakNode statement
      */
-    protected function emitBreak($r, BreakNode $statement) {
-      $r->append('break');
+    protected function emitBreak($b, BreakNode $statement) {
+      $b->append('break');
     }
 
     /**
      * Emit noop
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.NoopNode statement
      */
-    protected function emitNoop($r, NoopNode $statement) {
+    protected function emitNoop($b, NoopNode $statement) {
       // NOOP
     }
 
     /**
      * Emit with statement
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.WithNode with
      */
-    protected function emitWith($r, WithNode $with) {
-      $this->emitAll($r, $with->assignments);
-      $this->emitAll($r, $with->statements);
+    protected function emitWith($b, WithNode $with) {
+      $this->emitAll($b, $with->assignments);
+      $this->emitAll($b, $with->statements);
     }
 
     /**
      * Emit statements
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.StatementsNode statements
      */
-    protected function emitStatements($r, StatementsNode $statements) {
-      $this->emitAll($r, (array)$statements->list);
+    protected function emitStatements($b, StatementsNode $statements) {
+      $this->emitAll($b, (array)$statements->list);
     }
 
     /**
      * Emit foreach loop
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ForeachNode loop
      */
-    protected function emitForeach($r, ForeachNode $loop) {
-      $r->append('foreach (');
-      $this->emitOne($r, $loop->expression);
+    protected function emitForeach($b, ForeachNode $loop) {
+      $b->append('foreach (');
+      $this->emitOne($b, $loop->expression);
       
       // Assign key and value types by checking for loop expression's type
       // * var type may be enumerable
@@ -837,132 +836,132 @@
         }
       }
 
-      $r->append(' as ');
+      $b->append(' as ');
       if (isset($loop->assignment['key'])) {
-        $r->append('$'.$loop->assignment['key'].' => ');
+        $b->append('$'.$loop->assignment['key'].' => ');
         $this->scope[0]->setType(new VariableNode($loop->assignment['key']), $kt);
       }
-      $r->append('$'.$loop->assignment['value'].') {');
+      $b->append('$'.$loop->assignment['value'].') {');
       $this->scope[0]->setType(new VariableNode($loop->assignment['value']), $vt);
-      $this->emitAll($r, (array)$loop->statements);
-      $r->append('}');
+      $this->emitAll($b, (array)$loop->statements);
+      $b->append('}');
     }
 
     /**
      * Emit do ... while loop
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.DoNode loop
      */
-    protected function emitDo($r, DoNode $loop) {
-      $r->append('do {');
-      $this->emitAll($r, (array)$loop->statements);
-      $r->append('} while (');
-      $this->emitOne($r, $loop->expression);
-      $r->append(');');
+    protected function emitDo($b, DoNode $loop) {
+      $b->append('do {');
+      $this->emitAll($b, (array)$loop->statements);
+      $b->append('} while (');
+      $this->emitOne($b, $loop->expression);
+      $b->append(');');
     }
 
     /**
      * Emit while loop
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.WhileNode loop
      */
-    protected function emitWhile($r, WhileNode $loop) {
-      $r->append('while (');
-      $this->emitOne($r, $loop->expression);
-      $r->append(') {');
-      $this->emitAll($r, (array)$loop->statements);
-      $r->append('}');
+    protected function emitWhile($b, WhileNode $loop) {
+      $b->append('while (');
+      $this->emitOne($b, $loop->expression);
+      $b->append(') {');
+      $this->emitAll($b, (array)$loop->statements);
+      $b->append('}');
     }
     
     /**
      * Emit components inside a for() statement
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @return  xp.compiler.ast.Node[] nodes
      */
-    protected function emitForComponent($r, array $nodes) {
+    protected function emitForComponent($b, array $nodes) {
       $s= sizeof($nodes)- 1;
       foreach ($nodes as $i => $node) {
-        $this->emitOne($r, $node);
-        $i < $s && $r->append(', ');
+        $this->emitOne($b, $node);
+        $i < $s && $b->append(', ');
       }
     }
 
     /**
      * Emit for loop
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ForNode loop
      */
-    protected function emitFor($r, ForNode $loop) {
-      $r->append('for (');
-      $this->emitForComponent($r, (array)$loop->initialization);
-      $r->append(';');
-      $this->emitForComponent($r, (array)$loop->condition);
-      $r->append(';');
-      $this->emitForComponent($r, (array)$loop->loop);
-      $r->append(') {');
-      $this->emitAll($r, (array)$loop->statements);
-      $r->append('}');
+    protected function emitFor($b, ForNode $loop) {
+      $b->append('for (');
+      $this->emitForComponent($b, (array)$loop->initialization);
+      $b->append(';');
+      $this->emitForComponent($b, (array)$loop->condition);
+      $b->append(';');
+      $this->emitForComponent($b, (array)$loop->loop);
+      $b->append(') {');
+      $this->emitAll($b, (array)$loop->statements);
+      $b->append('}');
     }
     
     /**
      * Emit if statement
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.IfNode if
      */
-    protected function emitIf($r, IfNode $if) {
-      $r->append('if (');
-      $this->emitOne($r, $if->condition);
-      $r->append(') {');
-      $this->emitAll($r, (array)$if->statements);
-      $r->append('}');
+    protected function emitIf($b, IfNode $if) {
+      $b->append('if (');
+      $this->emitOne($b, $if->condition);
+      $b->append(') {');
+      $this->emitAll($b, (array)$if->statements);
+      $b->append('}');
       if ($if->otherwise) {
-        $r->append('else {');
-        $this->emitAll($r, (array)$if->otherwise->statements);
-        $r->append('}');
+        $b->append('else {');
+        $this->emitAll($b, (array)$if->otherwise->statements);
+        $b->append('}');
       }
     }
 
     /**
      * Emit a switch case
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.CaseNode case
      */
-    protected function emitCase($r, CaseNode $case) {
-      $r->append('case ');
-      $this->emitOne($r, $case->expression);
-      $r->append(': ');
-      $this->emitAll($r, (array)$case->statements);
+    protected function emitCase($b, CaseNode $case) {
+      $b->append('case ');
+      $this->emitOne($b, $case->expression);
+      $b->append(': ');
+      $this->emitAll($b, (array)$case->statements);
     }
 
     /**
      * Emit the switch default case
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.DefaultNode default
      */
-    protected function emitDefault($r, DefaultNode $default) {
-      $r->append('default: ');
-      $this->emitAll($r, (array)$default->statements);
+    protected function emitDefault($b, DefaultNode $default) {
+      $b->append('default: ');
+      $this->emitAll($b, (array)$default->statements);
     }
 
     /**
      * Emit switch statement
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.SwitchNode switch
      */
-    protected function emitSwitch($r, SwitchNode $switch) {
-      $r->append('switch (');
-      $this->emitOne($r, $switch->expression);
-      $r->append(') {');
-      $this->emitAll($r, (array)$switch->cases);
-      $r->append('}');
+    protected function emitSwitch($b, SwitchNode $switch) {
+      $b->append('switch (');
+      $this->emitOne($b, $switch->expression);
+      $b->append(') {');
+      $this->emitAll($b, (array)$switch->cases);
+      $b->append('}');
     }
     
     /**
@@ -1008,10 +1007,10 @@
      *   }
      * </code>
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.TryNode try
      */
-    protected function emitTry($r, TryNode $try) {
+    protected function emitTry($b, TryNode $try) {
       static $mangled= '··e';
 
       // Check whether a finalization handler is available. If so, because
@@ -1039,85 +1038,85 @@
         $this->scope[0]->setType(new VariableNode($first->variable), $first->type);
       }
 
-      $r->append('try {'); {
-        $this->emitAll($r, (array)$try->statements);
-        $this->finalizers[0] && $this->emitOne($r, $this->finalizers[0]);
+      $b->append('try {'); {
+        $this->emitAll($b, (array)$try->statements);
+        $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
       }
       
       // First catch.
-      $r->append('} catch('.$this->resolveType($first->type)->literal().' $'.$first->variable.') {'); {
+      $b->append('} catch('.$this->resolveType($first->type)->literal().' $'.$first->variable.') {'); {
         $this->scope[0]->setType(new VariableNode($first->variable), $first->type);
-        $this->emitAll($r, (array)$first->statements);
-        $this->finalizers[0] && $this->emitOne($r, $this->finalizers[0]);
+        $this->emitAll($b, (array)$first->statements);
+        $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
       }
       
       // Additional catches
       for ($i= 1; $i < $numHandlers; $i++) {
-        $r->append('} catch('.$this->resolveType($try->handling[$i]->type)->literal().' $'.$try->handling[$i]->variable.') {'); {
+        $b->append('} catch('.$this->resolveType($try->handling[$i]->type)->literal().' $'.$try->handling[$i]->variable.') {'); {
           $this->scope[0]->setType(new VariableNode($try->handling[$i]->variable), $try->handling[$i]->type);
-          $this->emitAll($r, (array)$try->handling[$i]->statements);
-          $this->finalizers[0] && $this->emitOne($r, $this->finalizers[0]);
+          $this->emitAll($b, (array)$try->handling[$i]->statements);
+          $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
         }
       }
       
-      $r->append('}');
+      $b->append('}');
       array_shift($this->finalizers);
     }
 
     /**
      * Emit an automatic resource management (ARM) block
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ArmNode arm
      */
-    protected function emitArm($r, ArmNode $arm) {
+    protected function emitArm($b, ArmNode $arm) {
       static $mangled= '··e';
       static $ignored= '··i';
 
-      $this->emitAll($r, $arm->initializations);
+      $this->emitAll($b, $arm->initializations);
 
       // Manually verify as we can then rely on call target type being available
       if (!$this->checks->verify($arm, $this->scope[0], $this, TRUE)) return;
 
-      $r->append('$'.$mangled.'= NULL; try {');
-      $this->emitAll($r, (array)$arm->statements);
-      $r->append('} catch (Exception $'.$mangled.') {}');
+      $b->append('$'.$mangled.'= NULL; try {');
+      $this->emitAll($b, (array)$arm->statements);
+      $b->append('} catch (Exception $'.$mangled.') {}');
       foreach ($arm->variables as $v) {
-        $r->append('try { $')->append($v->name)->append('->close(); } catch (Exception $'.$ignored.') {}');
+        $b->append('try { $')->append($v->name)->append('->close(); } catch (Exception $'.$ignored.') {}');
       }
-      $r->append('if ($'.$mangled.') throw $'.$mangled.';'); 
+      $b->append('if ($'.$mangled.') throw $'.$mangled.';'); 
     }
     
     /**
      * Emit a throw node
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ThrowNode throw
      */
-    protected function emitThrow($r, ThrowNode $throw) {
-      $r->append('throw ');
-      $this->emitOne($r, $throw->expression);
+    protected function emitThrow($b, ThrowNode $throw) {
+      $b->append('throw ');
+      $this->emitOne($b, $throw->expression);
     }
 
     /**
      * Emit a finally node
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.FinallyNode finally
      */
-    protected function emitFinally($r, FinallyNode $finally) {
-      $this->emitAll($r, (array)$finally->statements);
+    protected function emitFinally($b, FinallyNode $finally) {
+      $this->emitAll($b, (array)$finally->statements);
     }
 
     /**
      * Emit a dynamic instance creation node
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.DynamicInstanceCreationNode new
      */
-    protected function emitDynamicInstanceCreation($r, DynamicInstanceCreationNode $new) {
-      $r->append('new ')->append('$')->append($new->variable);
-      $this->emitInvocationArguments($r, (array)$new->parameters);
+    protected function emitDynamicInstanceCreation($b, DynamicInstanceCreationNode $new) {
+      $b->append('new ')->append('$')->append($new->variable);
+      $this->emitInvocationArguments($b, (array)$new->parameters);
       
       $this->scope[0]->setType($new, new TypeName('lang.Object'));
     }
@@ -1125,10 +1124,10 @@
     /**
      * Emit an instance creation node
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.InstanceCreationNode new
      */
-    protected function emitInstanceCreation($r, InstanceCreationNode $new) {
+    protected function emitInstanceCreation($b, InstanceCreationNode $new) {
 
       // Anonymous instance creation:
       //
@@ -1177,31 +1176,31 @@
       // core functionality. If this a compiled generic type we may
       // do quite a bit better - but how do we detect this?
       if ($new->type->components && !$generic) {
-        $r->append('create(\'new '.$ptr->name().'<');
+        $b->append('create(\'new '.$ptr->name().'<');
         $s= sizeof($new->type->components)- 1;
         foreach ($new->type->components as $i => $component) {
-          $r->append($this->resolveType($component)->name());
-          $i < $s && $r->append(',');
+          $b->append($this->resolveType($component)->name());
+          $i < $s && $b->append(',');
         }
-        $r->append('>\'');
+        $b->append('>\'');
         if ($new->parameters) {
-          $r->append(',');
-          $this->emitInvocationArguments($r, (array)$new->parameters, FALSE);
+          $b->append(',');
+          $this->emitInvocationArguments($b, (array)$new->parameters, FALSE);
         }
-        $r->append(')');
+        $b->append(')');
       } else {
-        $r->append('new '.$ptr->literal());
-        $this->emitInvocationArguments($r, (array)$new->parameters);
+        $b->append('new '.$ptr->literal());
+        $this->emitInvocationArguments($b, (array)$new->parameters);
       }
     }
     
     /**
      * Emit an assignment
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.AssignmentNode assign
      */
-    protected function emitAssignment($r, AssignmentNode $assign) {
+    protected function emitAssignment($b, AssignmentNode $assign) {
       static $ops= array(
         '='    => '=', 
         '~='   => '.=',
@@ -1232,14 +1231,14 @@
         if ($ptr->hasOperator($assign->op{0})) {
           $o= $ptr->getOperator($assign->op{0});
           
-          $this->emitOne($r, $assign->variable);
-          $r->append('=');
-          $r->append($ptr->literal());
-          $r->append('::operator··')->append($ovl[$assign->op])->append('(');
-          $this->emitOne($r, $assign->variable);
-          $r->append(',');
-          $this->emitOne($r, $assign->expression);
-          $r->append(')');
+          $this->emitOne($b, $assign->variable);
+          $b->append('=');
+          $b->append($ptr->literal());
+          $b->append('::operator··')->append($ovl[$assign->op])->append('(');
+          $this->emitOne($b, $assign->variable);
+          $b->append(',');
+          $this->emitOne($b, $assign->expression);
+          $b->append(')');
 
           $this->scope[0]->setType($assign, $o->returns);
           return;
@@ -1250,19 +1249,19 @@
       // right-hand-side's type. This is done in order to guard for checks
       // on uninitialized variables, which is OK during assignment.
       $this->scope[0]->setType($assign->variable, TypeName::$VOID);
-      $this->emitOne($r, $assign->variable);
-      $r->append($ops[$assign->op]);
-      $this->emitOne($r, $assign->expression);
+      $this->emitOne($b, $assign->variable);
+      $b->append($ops[$assign->op]);
+      $this->emitOne($b, $assign->expression);
       $this->scope[0]->setType($assign->variable, $this->scope[0]->typeOf($assign->expression));
     }
 
     /**
      * Emit an operator
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.OperatorNode method
      */
-    protected function emitOperator($r, OperatorNode $operator) {
+    protected function emitOperator($b, OperatorNode $operator) {
       static $ovl= array(
         '~'   => 'concat',
         '-'   => 'minus',
@@ -1288,10 +1287,10 @@
       array_unshift($this->method, $name);
       $this->emitAnnotations($this->metadata[0][1][$name], (array)$operator->annotations);
 
-      $r->append('public static function ')->append($name);
-      $signature= $this->emitParameters($r, (array)$operator->parameters, '{');
-      $this->emitAll($r, (array)$operator->body);
-      $r->append('}');
+      $b->append('public static function ')->append($name);
+      $signature= $this->emitParameters($b, (array)$operator->parameters, '{');
+      $this->emitAll($b, (array)$operator->body);
+      $b->append('}');
       
       array_shift($this->method);
       $this->leave();
@@ -1308,14 +1307,14 @@
     /**
      * Emit method parameters
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   array<string, *>[] parameters
      * @param   string delim
      * @return  xp.compiler.TypeName[] the signature
      */
-    protected function emitParameters($r, array $parameters, $delim) {
+    protected function emitParameters($b, array $parameters, $delim) {
       $signature= array();
-      $r->append('(');
+      $b->append('(');
       $s= sizeof($parameters)- 1;
       $defer= array();
       $usesGenerics= FALSE;
@@ -1331,11 +1330,11 @@
           if (!$param['check'] || isset($param['vararg'])) {
             // No runtime type checks
           } else if ($t->isArray() || $t->isMap()) {
-            $r->append('array ');
+            $b->append('array ');
           } else if ($t->isClass() && !$this->scope[0]->declarations[0]->name->isPlaceHolder($t)) {
-            $r->append($ptr->literal())->append(' ');
+            $b->append($ptr->literal())->append(' ');
           } else if ('{' === $delim) {
-            $defer[]= create(new xp·compiler·emit·source·Buffer('', $r->line))
+            $defer[]= create(new xp·compiler·emit·Buffer('', $b->line))
               ->append('if (NULL !== $')->append($param['name'])->append(' && !is("'.$t->name.'", $')
               ->append($param['name'])
               ->append(')) throw new IllegalArgumentException("Argument ')
@@ -1366,21 +1365,21 @@
           break;
         }
         
-        $r->append('$'.$param['name']);
+        $b->append('$'.$param['name']);
         if (isset($param['default'])) {
-          $r->append('= ');
+          $b->append('= ');
           $resolveable= FALSE; 
           if ($param['default'] instanceof Resolveable) {
             try {
               $init= $param['default']->resolve();
-              $r->append(var_export($init, TRUE));
+              $b->append(var_export($init, TRUE));
               $resolveable= TRUE; 
             } catch (IllegalStateException $e) {
             }
           }
           if (!$resolveable) {
-            $r->append('NULL');
-            $init= new xp·compiler·emit·source·Buffer('', $r->line);
+            $b->append('NULL');
+            $init= new xp·compiler·emit·Buffer('', $b->line);
             $init->append('if (func_num_args() < ')->append($i + 1)->append(') { ');
             $init->append('$')->append($param['name'])->append('= ');
             $this->emitOne($init, $param['default']);
@@ -1388,15 +1387,15 @@
             $defer[]= $init;
           }
         }
-        $i < $s && !isset($parameters[$i+ 1]['vararg']) && $r->append(',');
+        $i < $s && !isset($parameters[$i+ 1]['vararg']) && $b->append(',');
         
         $this->scope[0]->setType(new VariableNode($param['name']), $t);
       }
-      $r->append(')');
-      $r->append($delim);
+      $b->append(')');
+      $b->append($delim);
       
       foreach ($defer as $src) {
-        $r->append($src);
+        $b->append($src);
       }
 
       if ($usesGenerics) {
@@ -1452,11 +1451,11 @@
     /**
      * Emit a lambda
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.LambdaNode lambda
      * @see     http://cr.openjdk.java.net/~mcimadamore/lambda_trans.pdf
      */
-    protected function emitLambda($r, LambdaNode $lambda) {
+    protected function emitLambda($b, LambdaNode $lambda) {
       $unique= new TypeName('Lambda··'.uniqid());
       
       // Visit all statements, promoting local variable used within tp members
@@ -1500,16 +1499,16 @@
       $this->scope[0]->declarations[]= $decl;
       
       // Finally emit array(new [UNIQUE]([CAPTURE]), "method")
-      $r->append('array(new '.$unique->name.'('.implode(',', array_keys($promoted['replaced'])).'), \'invoke\')');
+      $b->append('array(new '.$unique->name.'('.implode(',', array_keys($promoted['replaced'])).'), \'invoke\')');
     }
 
     /**
      * Emit a method
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.MethodNode method
      */
-    protected function emitMethod($r, MethodNode $method) {
+    protected function emitMethod($b, MethodNode $method) {
       if ($method->extension) {
         $this->scope[0]->addExtension(
           $type= $this->resolveType($method->extension),
@@ -1517,8 +1516,8 @@
         );
         $this->metadata[0]['EXT'][$method->name]= $type->literal();   // HACK, this should be accessible in scope
       }
-      $r->append(implode(' ', Modifiers::namesOf($method->modifiers)));
-      $r->append(' function '.$method->name);
+      $b->append(implode(' ', Modifiers::namesOf($method->modifiers)));
+      $b->append(' function '.$method->name);
       
       // Begin
       $this->enter(new MethodScope($method->name));
@@ -1542,11 +1541,11 @@
 
       // Parameters, body
       if (NULL !== $method->body) {
-        $signature= $this->emitParameters($r, (array)$method->parameters, '{');
-        $this->emitAll($r, $method->body);
-        $r->append('}');
+        $signature= $this->emitParameters($b, (array)$method->parameters, '{');
+        $this->emitAll($b, $method->body);
+        $b->append('}');
       } else {
-        $signature= $this->emitParameters($r, (array)$method->parameters, ';');
+        $signature= $this->emitParameters($b, (array)$method->parameters, ';');
       }
       
       // Finalize
@@ -1569,33 +1568,33 @@
     /**
      * Emit static initializer
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.StaticInitializerNode initializer
      */
-    protected function emitStaticInitializer($r, StaticInitializerNode $initializer) {
+    protected function emitStaticInitializer($b, StaticInitializerNode $initializer) {
       $this->inits[0][2]= TRUE;
-      $r->append('static function __static() {');
+      $b->append('static function __static() {');
       
       // Static initializations outside of initializer
       if ($this->inits[0][TRUE]) {
         foreach ($this->inits[0][TRUE] as $init) {
-          $r->append($init);
+          $b->append($init);
         }
         unset($this->inits[0][TRUE]);
       }
-      $this->emitAll($r, (array)$initializer->statements);
-      $r->append('}');
+      $this->emitAll($b, (array)$initializer->statements);
+      $b->append('}');
     }
 
     /**
      * Emit a constructor
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ConstructorNode constructor
      */
-    protected function emitConstructor($r, ConstructorNode $constructor) {
-      $r->append(implode(' ', Modifiers::namesOf($constructor->modifiers)));
-      $r->append(' function __construct');
+    protected function emitConstructor($b, ConstructorNode $constructor) {
+      $b->append(implode(' ', Modifiers::namesOf($constructor->modifiers)));
+      $b->append(' function __construct');
       
       // Begin
       $this->enter(new MethodScope('__construct'));
@@ -1614,17 +1613,17 @@
 
       // Arguments, initializations, body
       if (NULL !== $constructor->body) {
-        $signature= $this->emitParameters($r, (array)$constructor->parameters, '{');
+        $signature= $this->emitParameters($b, (array)$constructor->parameters, '{');
         if ($this->inits[0][FALSE]) {
           foreach ($this->inits[0][FALSE] as $init) {
-            $r->append($init);
+            $b->append($init);
           }
           unset($this->inits[0][FALSE]);
         }
-        $this->emitAll($r, $constructor->body);
-        $r->append('}');
+        $this->emitAll($b, $constructor->body);
+        $b->append('}');
       } else {
-        $signature= $this->emitParameters($r, (array)$constructor->parameters, ';');
+        $signature= $this->emitParameters($b, (array)$constructor->parameters, ';');
       }
       
       // Finalize
@@ -1646,11 +1645,11 @@
      *   xp::$registry['details.'.$qualified]= $meta;
      * </code>
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.TypeDeclarationNode
      * @param   string qualified
      */
-    protected function registerClass($r, $declaration, $qualified) {
+    protected function registerClass($b, $declaration, $qualified) {
       unset($this->metadata[0]['EXT']);
 
       // Retain comment
@@ -1662,22 +1661,22 @@
       // Copy annotations
       $this->emitAnnotations($this->metadata[0]['class'], (array)$declaration->annotations);
 
-      $r->append('xp::$registry[\'class.'.$declaration->literal.'\']= \''.$qualified.'\';');
-      $r->append('xp::$registry[\'details.'.$qualified.'\']= '.var_export($this->metadata[0], TRUE).';');
+      $b->append('xp::$registry[\'class.'.$declaration->literal.'\']= \''.$qualified.'\';');
+      $b->append('xp::$registry[\'details.'.$qualified.'\']= '.var_export($this->metadata[0], TRUE).';');
       
       // Run static initializer if existant on synthetic types
       if ($declaration->synthetic && $this->inits[0][2]) {
-        $r->append($declaration->literal)->append('::__static();');
+        $b->append($declaration->literal)->append('::__static();');
       }
     }
 
     /**
      * Emit a class property
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.IndexerNode indexer
      */
-    protected function emitIndexer($r, IndexerNode $indexer) {
+    protected function emitIndexer($b, IndexerNode $indexer) {
       $params= array($indexer->parameter);
       $defines= array(
         'get'   => array('offsetGet', $params, $indexer->type),
@@ -1687,7 +1686,7 @@
       );
 
       foreach ($indexer->handlers as $name => $statements) {
-        $this->emitOne($r, new MethodNode(array(
+        $this->emitOne($b, new MethodNode(array(
           'modifiers'  => MODIFIER_PUBLIC,
           'annotations'=> NULL,
           'name'       => $defines[$name][0],
@@ -1711,10 +1710,10 @@
     /**
      * Emit a class property
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.PropertyNode property
      */
-    protected function emitProperty($r, PropertyNode $property) {
+    protected function emitProperty($b, PropertyNode $property) {
       foreach ($property->handlers as $name => $statements) {
         $this->properties[0][$name][$property->name]= array($property->type, $statements);
       }
@@ -1741,61 +1740,61 @@
      *   }
      * </code>
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   array<string, array<string, xp.compiler.ast.Node[]>> properties
      */
-    protected function emitProperties($r, array $properties) {
+    protected function emitProperties($b, array $properties) {
       static $mangled= '··name';
       
       $auto= array();
       if (!empty($properties['get'])) {
-        $r->append('function __get($'.$mangled.') {');
+        $b->append('function __get($'.$mangled.') {');
         $this->enter(new MethodScope('__get'));
         $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
         foreach ($properties['get'] as $name => $definition) {
-          $r->append('if (\''.$name.'\' === $'.$mangled.') {');
+          $b->append('if (\''.$name.'\' === $'.$mangled.') {');
           if (NULL === $definition[1]) {
-            $r->append('return $this->__·'.$name.';');
+            $b->append('return $this->__·'.$name.';');
             $auto[$name]= TRUE;
           } else {
-            $this->emitAll($r, $definition[1]);
+            $this->emitAll($b, $definition[1]);
           }
-          $r->append('} else ');
+          $b->append('} else ');
         }
-        $r->append('return parent::__get($'.$mangled.'); }');
+        $b->append('return parent::__get($'.$mangled.'); }');
         $this->leave();
       }
       if (!empty($properties['set'])) {
-        $r->append('function __set($'.$mangled.', $value) {');
+        $b->append('function __set($'.$mangled.', $value) {');
         $this->enter(new MethodScope('__set'));
         $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
         foreach ($properties['set'] as $name => $definition) {
           $this->scope[0]->setType(new VariableNode('value'), $definition[0]);
-          $r->append('if (\''.$name.'\' === $'.$mangled.') {');
+          $b->append('if (\''.$name.'\' === $'.$mangled.') {');
           if (NULL === $definition[1]) {
-            $r->append('$this->__·'.$name.'= $value;');
+            $b->append('$this->__·'.$name.'= $value;');
             $auto[$name]= TRUE;
           } else {
-            $this->emitAll($r, $definition[1]);
+            $this->emitAll($b, $definition[1]);
           }
-          $r->append('} else ');
+          $b->append('} else ');
         }
-        $r->append('parent::__set($'.$mangled.', $value); }');
+        $b->append('parent::__set($'.$mangled.', $value); }');
         $this->leave();
       }
       
       // Declare auto-properties as private with NULL as initial value
-      foreach ($auto as $name => $none) $r->append('private $__·'.$name.'= NULL;');
+      foreach ($auto as $name => $none) $b->append('private $__·'.$name.'= NULL;');
     }
 
     /**
      * Emit an enum member
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.EnumMemberNode member
      */
-    protected function emitEnumMember($r, EnumMemberNode $member) {
-      $r->append('public static $'.$member->name.';');
+    protected function emitEnumMember($b, EnumMemberNode $member) {
+      $b->append('public static $'.$member->name.';');
 
       // Add field metadata (type, stored in @type annotation, see
       // lang.reflect.Field and lang.XPClass::detailsForField())
@@ -1815,13 +1814,13 @@
     /**
      * Emit a class constant
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ClassConstantNode const
      */
-    protected function emitClassConstant($r, ClassConstantNode $const) {    
-      $r->append('const ')->append($const->name)->append('=');
-      $this->emitOne($r, $const->value);
-      $r->append(';');
+    protected function emitClassConstant($b, ClassConstantNode $const) {    
+      $b->append('const ')->append($const->name)->append('=');
+      $this->emitOne($b, $const->value);
+      $b->append(';');
       
       // Register type information. 
       // Value can safely be resolved as only resolveable values are allowed
@@ -1835,10 +1834,10 @@
     /**
      * Emit a class field
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.FieldNode field
      */
-    protected function emitField($r, FieldNode $field) {    
+    protected function emitField($b, FieldNode $field) {    
       $static= Modifiers::isStatic($field->modifiers);
       
       // See whether an initialization is necessary
@@ -1852,7 +1851,7 @@
             $this->warn('R100', $e->getMessage(), $field->initialization);
           }
         } else {
-          $init= new xp·compiler·emit·source·Buffer('', $r->line);
+          $init= new xp·compiler·emit·Buffer('', $b->line);
           $this->enter(new MethodScope('<init>'));
           if ($static) {
             $variable= new StaticMemberAccessNode(new TypeName('self'), $field->name);
@@ -1880,14 +1879,14 @@
       }
 
       switch ($field->modifiers & (MODIFIER_PUBLIC | MODIFIER_PROTECTED | MODIFIER_PRIVATE)) {
-        case MODIFIER_PRIVATE: $r->append('private '); break;
-        case MODIFIER_PROTECTED: $r->append('protected '); break;
-        default: $r->append('public '); break;
+        case MODIFIER_PRIVATE: $b->append('private '); break;
+        case MODIFIER_PROTECTED: $b->append('protected '); break;
+        default: $b->append('public '); break;
       }
-      $static && $r->append('static ');
-      $r->append('$'.$field->name);
-      $initializable && $r->append('= ')->append(var_export($init, TRUE));
-      $r->append(';');
+      $static && $b->append('static ');
+      $b->append('$'.$field->name);
+      $initializable && $b->append('= ')->append(var_export($init, TRUE));
+      $b->append(';');
 
       // Copy annotations
       $this->metadata[0][0][$field->name]= array(DETAIL_ANNOTATIONS => array());
@@ -1909,16 +1908,16 @@
     /**
      * Emit type name and modifiers
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   string type
      * @param   xp.compiler.ast.TypeDeclarationNode declaration
      */
-    protected function emitTypeName($r, $type, TypeDeclarationNode $declaration) {
+    protected function emitTypeName($b, $type, TypeDeclarationNode $declaration) {
       $this->metadata[0]['class']= array();
 
       // Check whether class needs to be fully qualified
       if ($declaration->modifiers & MODIFIER_PACKAGE) {
-        $r->append('$package= \'')->append($this->scope[0]->package->name)->append("';");
+        $b->append('$package= \'')->append($this->scope[0]->package->name)->append("';");
         $declaration->literal= strtr($this->scope[0]->package->name, '.', '·').'·'.$declaration->name->name;
       } else {
         $declaration->literal= $declaration->name->name;
@@ -1926,13 +1925,13 @@
       
       // Emit abstract and final modifiers
       if (Modifiers::isAbstract($declaration->modifiers)) {
-        $r->append('abstract ');
+        $b->append('abstract ');
       } else if (Modifiers::isFinal($declaration->modifiers)) {
-        $r->append('final ');
+        $b->append('final ');
       } 
       
       // Emit declaration
-      $r->append(' ')->append($type)->append(' ')->append($declaration->literal);
+      $b->append(' ')->append($type)->append(' ')->append($declaration->literal);
     }
 
     /**
@@ -1962,10 +1961,10 @@
      *   }
      * </code>
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.EnumNode declaration
      */
-    protected function emitEnum($r, EnumNode $declaration) {
+    protected function emitEnum($b, EnumNode $declaration) {
       $parent= $declaration->parent ? $declaration->parent : new TypeName('lang.Enum');
       $parentType= $this->resolveType($parent);
       $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $declaration), $parentType);
@@ -1979,8 +1978,8 @@
       $this->enter(new TypeDeclarationScope());
 
       // Ensure parent class and interfaces are loaded
-      $this->emitTypeName($r, 'class', $declaration);
-      $r->append(' extends '.$parentType->literal(TRUE));
+      $this->emitTypeName($b, 'class', $declaration);
+      $b->append(' extends '.$parentType->literal(TRUE));
       array_unshift($this->metadata, array(array(), array()));
       $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
       array_unshift($this->properties, array('get' => array(), 'set' => array()));
@@ -1996,19 +1995,19 @@
 
       // Interfaces
       if ($declaration->implements) {
-        $r->append(' implements ');
+        $b->append(' implements ');
         $s= sizeof($declaration->implements)- 1;
         foreach ($declaration->implements as $i => $type) {
           if ($type->isGeneric()) {
             $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['implements'][$i]= $this->genericComponentAsMetadata($type);
           }
-          $r->append($this->resolveType($type)->literal(TRUE));
-          $i < $s && $r->append(', ');
+          $b->append($this->resolveType($type)->literal(TRUE));
+          $i < $s && $b->append(', ');
         }
       }
       
       // Member declaration
-      $r->append(' {');
+      $b->append(' {');
       
       // public static self[] values() { return parent::membersOf(__CLASS__) }
       $declaration->body[]= new MethodNode(array(
@@ -2031,15 +2030,15 @@
 
       // Members
       foreach ((array)$declaration->body as $node) {
-        $this->emitOne($r, $node);
+        $this->emitOne($b, $node);
       }
-      $this->emitProperties($r, $this->properties[0]);
+      $this->emitProperties($b, $this->properties[0]);
       
       // Initialization
-      $r->append('static function __static() {');
+      $b->append('static function __static() {');
       foreach ($declaration->body as $i => $member) {
         if (!$member instanceof EnumMemberNode) continue;
-        $r->append('self::$'.$member->name.'= ');
+        $b->append('self::$'.$member->name.'= ');
         if ($member->body) {
           if (!$abstract) {
             $this->error('E403', 'Only abstract enums can contain members with bodies ('.$member->name.')');
@@ -2051,24 +2050,24 @@
           $decl->synthetic= TRUE;
           $ptr= new TypeDeclaration(new ParseTree(NULL, array(), $decl), $thisType);
           $this->scope[0]->declarations[]= $decl;
-          $r->append('new '.$unique->name.'(');
+          $b->append('new '.$unique->name.'(');
         } else {
-          $r->append('new self(');
+          $b->append('new self(');
         }
         if ($member->value) {
-          $this->emitOne($r, $member->value);
+          $this->emitOne($b, $member->value);
         } else {
-          $r->append($i);
+          $b->append($i);
         }
-        $r->append(', \''.$member->name.'\');');
+        $b->append(', \''.$member->name.'\');');
       }
-      $r->append('}');
+      $b->append('}');
 
       // Finish
-      $r->append('}');
+      $b->append('}');
 
       $this->leave();
-      $this->registerClass($r, $declaration, $thisType->name());
+      $this->registerClass($b, $declaration, $thisType->name());
       array_shift($this->properties);
       array_shift($this->metadata);
 
@@ -2082,15 +2081,15 @@
     /**
      * Emit a Interface declaration
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.InterfaceNode declaration
      */
-    protected function emitInterface($r, InterfaceNode $declaration) {
+    protected function emitInterface($b, InterfaceNode $declaration) {
       $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $declaration));
       $this->scope[0]->addResolved('self', $thisType);
 
       $this->enter(new TypeDeclarationScope());    
-      $this->emitTypeName($r, 'interface', $declaration);
+      $this->emitTypeName($b, 'interface', $declaration);
       array_unshift($this->metadata, array(array(), array()));
       $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
 
@@ -2100,24 +2099,24 @@
       }
 
       if ($declaration->parents) {
-        $r->append(' extends ');
+        $b->append(' extends ');
         $s= sizeof($declaration->parents)- 1;
         foreach ((array)$declaration->parents as $i => $type) {
           if ($type->isGeneric()) {
             $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['extends'][$i]= $this->genericComponentAsMetadata($type);
           }
-          $r->append($this->resolveType($type)->literal(TRUE));
-          $i < $s && $r->append(', ');
+          $b->append($this->resolveType($type)->literal(TRUE));
+          $i < $s && $b->append(', ');
         }
       }
-      $r->append(' {');
+      $b->append(' {');
       foreach ((array)$declaration->body as $node) {
-        $this->emitOne($r, $node);
+        $this->emitOne($b, $node);
       }
-      $r->append('}');
+      $b->append('}');
 
       $this->leave();
-      $this->registerClass($r, $declaration, $thisType->name());
+      $this->registerClass($b, $declaration, $thisType->name());
       array_shift($this->metadata);
 
       // Register type info
@@ -2130,10 +2129,10 @@
     /**
      * Emit a class declaration
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ClassNode declaration
      */
-    protected function emitClass($r, ClassNode $declaration) {
+    protected function emitClass($b, ClassNode $declaration) {
       $parent= $declaration->parent ? $declaration->parent : new TypeName('lang.Object');
       $parentType= $this->resolveType($parent);
       $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $declaration), $parentType);
@@ -2141,8 +2140,8 @@
       $this->scope[0]->addResolved('parent', $parentType);
       
       $this->enter(new TypeDeclarationScope());    
-      $this->emitTypeName($r, 'class', $declaration);
-      $r->append(' extends '.$parentType->literal(TRUE));
+      $this->emitTypeName($b, 'class', $declaration);
+      $b->append(' extends '.$parentType->literal(TRUE));
       array_unshift($this->metadata, array(array(), array()));
       $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
       array_unshift($this->properties, array());
@@ -2165,27 +2164,27 @@
       
       // Interfaces
       if ($declaration->implements) {
-        $r->append(' implements ');
+        $b->append(' implements ');
         $s= sizeof($declaration->implements)- 1;
         foreach ($declaration->implements as $i => $type) {
           if ($type instanceof TypeName) {
             if ($type->isGeneric()) {
               $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['implements'][$i]= $this->genericComponentAsMetadata($type);
             }
-            $r->append($this->resolveType($type)->literal(TRUE));
+            $b->append($this->resolveType($type)->literal(TRUE));
           } else {
-            $r->append($type);
+            $b->append($type);
           }
-          $i < $s && $r->append(', ');
+          $i < $s && $b->append(', ');
         }
       }
       
       // Members
-      $r->append('{');
+      $b->append('{');
       foreach ((array)$declaration->body as $node) {
-        $this->emitOne($r, $node);
+        $this->emitOne($b, $node);
       }
-      $this->emitProperties($r, $this->properties[0]);
+      $this->emitProperties($b, $this->properties[0]);
       
       // Generate a constructor if initializations are available.
       // They will have already been emitted if a constructor exists!
@@ -2201,7 +2200,7 @@
         } else {
           $body= array();
         }
-        $this->emitOne($r, new ConstructorNode(array(
+        $this->emitOne($b, new ConstructorNode(array(
           'modifiers'    => MODIFIER_PUBLIC,
           'parameters'   => $parameters,
           'annotations'  => NULL,
@@ -2214,16 +2213,16 @@
       // Generate a static initializer if initializations are available.
       // They will have already been emitted if a static initializer exists!
       if ($this->inits[0][TRUE]) {
-        $this->emitOne($r, new StaticInitializerNode(NULL));
+        $this->emitOne($b, new StaticInitializerNode(NULL));
       }
       
       // Create __import
       if (isset($this->metadata[0]['EXT'])) {
-        $r->append('static function __import($scope) {');
+        $b->append('static function __import($scope) {');
         foreach ($this->metadata[0]['EXT'] as $method => $type) {
-          $r->append('xp::$registry["ext"][$scope]["')->append($type)->append('"]= "')->append($thisType->literal())->append('";');
+          $b->append('xp::$registry["ext"][$scope]["')->append($type)->append('"]= "')->append($thisType->literal())->append('";');
         }
-        $r->append('}');
+        $b->append('}');
       }
 
       // Generic instances have {definition-type, null, [argument-type[0..n]]} 
@@ -2232,9 +2231,9 @@
         $this->metadata[0]['class'][DETAIL_GENERIC]= $declaration->generic;
       }
 
-      $r->append('}');
+      $b->append('}');
       $this->leave();
-      $this->registerClass($r, $declaration, $thisType->name());
+      $this->registerClass($b, $declaration, $thisType->name());
       array_shift($this->properties);
       array_shift($this->metadata);
       array_shift($this->inits);
@@ -2249,43 +2248,43 @@
     /**
      * Emit dynamic instanceof
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.DynamicInstanceOfNode instanceof
      */
-    protected function emitDynamicInstanceOf($r, DynamicInstanceOfNode $instanceof) {
-      $this->emitOne($r, $instanceof->expression);
-      $r->append(' instanceof ')->append('$')->append($instanceof->variable);
+    protected function emitDynamicInstanceOf($b, DynamicInstanceOfNode $instanceof) {
+      $this->emitOne($b, $instanceof->expression);
+      $b->append(' instanceof ')->append('$')->append($instanceof->variable);
     }
 
     /**
      * Emit instanceof
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.InstanceOfNode instanceof
      */
-    protected function emitInstanceOf($r, InstanceOfNode $instanceof) {
-      $this->emitOne($r, $instanceof->expression);
-      $r->append(' instanceof ')->append($this->resolveType($instanceof->type)->literal());
+    protected function emitInstanceOf($b, InstanceOfNode $instanceof) {
+      $this->emitOne($b, $instanceof->expression);
+      $b->append(' instanceof ')->append($this->resolveType($instanceof->type)->literal());
     }
 
     /**
      * Emit clone
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.CloneNode clone
      */
-    protected function emitClone($r, CloneNode $clone) {
-      $r->append('clone ');
-      $this->emitOne($r, $clone->expression);
+    protected function emitClone($b, CloneNode $clone) {
+      $b->append('clone ');
+      $this->emitOne($b, $clone->expression);
     }
 
     /**
      * Emit import
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ImportNode import
      */
-    protected function emitImport($r, ImportNode $import) {
+    protected function emitImport($b, ImportNode $import) {
       if ('.*' == substr($import->name, -2)) {
         $this->scope[0]->addPackageImport(substr($import->name, 0, -2));
       } else {
@@ -2296,10 +2295,10 @@
     /**
      * Emit native import
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.NativeImportNode import
      */
-    protected function emitNativeImport($r, NativeImportNode $import) {
+    protected function emitNativeImport($b, NativeImportNode $import) {
       $imported= $this->scope[0]->importer->import($import->name);
       if (0 === ($k= key($imported))) {
         $this->scope[0]->statics[0]= array_merge($this->scope[0]->statics[0], $imported[$k]);
@@ -2319,10 +2318,10 @@
      * A call to lessThanOrEqualTo() "function" then resolves to a static
      * method call to Restrictions::lessThanOrEqualTo()
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.StaticImportNode import
      */
-    protected function emitStaticImport($r, StaticImportNode $import) {
+    protected function emitStaticImport($b, StaticImportNode $import) {
       if ('.*' == substr($import->name, -2)) {
         $this->scope[0]->statics[0][substr($import->name, 0, -2)]= $this->resolveType(new TypeName(substr($import->name, 0, -2)));
       } else {
@@ -2339,42 +2338,42 @@
      *   return [EXPRESSION];   // returning a value
      * </code>
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.ReturnNode new
      */
-    protected function emitReturn($r, ReturnNode $return) {
-      $this->finalizers[0] && $this->emitOne($r, $this->finalizers[0]);
+    protected function emitReturn($b, ReturnNode $return) {
+      $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
       
       if (!$return->expression) {
-        $r->append('return');
+        $b->append('return');
       } else {
-        $r->append('return ');
-        $this->emitOne($r, $return->expression);
+        $b->append('return ');
+        $this->emitOne($b, $return->expression);
       }
     }
 
     /**
      * Emit a silence node
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.SilenceOperatorNode silenced
      */
-    protected function emitSilenceOperator($r, SilenceOperatorNode $silenced) {
-      $r->append('@');
-      $this->emitOne($r, $silenced->expression);
+    protected function emitSilenceOperator($b, SilenceOperatorNode $silenced) {
+      $b->append('@');
+      $this->emitOne($b, $silenced->expression);
       $this->scope[0]->setType($silenced, $this->scope[0]->typeOf($silenced->expression));
     }
 
     /**
      * Emit all given nodes
      *
-     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.ast.Node[] nodes
      */
-    protected function emitAll($r, array $nodes) {
+    protected function emitAll($b, array $nodes) {
       foreach ($nodes as $node) {
-        $this->emitOne($r, $node);
-        $r->append(';');
+        $this->emitOne($b, $node);
+        $b->append(';');
       }
     }
 
@@ -2413,7 +2412,7 @@
       );
       
       // Create and initialize op array
-      $bytes= new xp·compiler·emit·source·Buffer('', 1);
+      $bytes= new xp·compiler·emit·Buffer('', 1);
       
       array_unshift($this->local, array());
       array_unshift($this->scope, $scope->enter(new CompilationUnitScope()));
