@@ -118,7 +118,40 @@
       array_shift($this->scope);
     }
     
-    
+    /**
+     * Emit a single node
+     *
+     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.ast.Node in
+     */
+    protected function emitOne($r, $in) {
+      $node= $this->optimizations->optimize($in, $this->scope[0]);
+
+      $r->position($node->position);
+      $this->cat && $this->cat->debugf(
+        '@%-3d Emit %s: %s',
+        $node->position[0],
+        $node->getClassName(),
+        $node->hashCode()
+      );
+
+      try {
+        $this->checks->verify($node, $this->scope[0], $this) && call_user_func(array($this, 'emit'.substr(get_class($node), 0, -4)), $r, $node);
+      } catch (Error $e) {
+        $this->error('0422', 'Cannot emit '.$node->getClassName().': '.$e->getMessage(), $node);
+      } catch (Throwable $e) {
+        $this->error('0500', $e->toString(), $node);
+      }
+    }
+
+    /**
+     * Emit all given nodes
+     *
+     * @param   xp.compiler.emit.EmitterResult r
+     * @param   xp.compiler.ast.Node[] nodes
+     */
+    protected abstract function emitAll($r, array $nodes);
+
     /**
      * Entry point
      *

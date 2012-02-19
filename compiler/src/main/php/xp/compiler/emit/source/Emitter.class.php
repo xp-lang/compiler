@@ -2364,54 +2364,20 @@
       $this->emitOne($r, $silenced->expression);
       $this->scope[0]->setType($silenced, $this->scope[0]->typeOf($silenced->expression));
     }
-    
-    /**
-     * Emit a single node
-     *
-     * @param   xp.compiler.emit.EmitterResult r
-     * @param   xp.compiler.ast.Node in
-     * @return  int
-     */
-    protected function emitOne($r, $in) {
-      $node= $this->optimizations->optimize($in, $this->scope[0]);
 
-      $r->position($node->position);
-      $this->cat && $this->cat->debugf(
-        '@%-3d Emit %s: %s',
-        $node->position[0], 
-        $node->getClassName(), 
-        $node->hashCode()
-      );
-      
-      try {
-        $this->checks->verify($node, $this->scope[0], $this) && call_user_func(array($this, 'emit'.substr(get_class($node), 0, -4)), $r, $node);
-      } catch (Error $e) {
-        $this->error('0422', 'Cannot emit '.$node->getClassName().': '.$e->getMessage(), $node);
-        return 0;
-      } catch (Throwable $e) {
-        $this->error('0500', $e->toString(), $node);
-        return 0;
-      }
-
-      return 1;
-    }
-    
     /**
      * Emit all given nodes
      *
      * @param   xp.compiler.emit.EmitterResult r
      * @param   xp.compiler.ast.Node[] nodes
-     * @return  int
      */
     protected function emitAll($r, array $nodes) {
-      $emitted= 0;
-      foreach ((array)$nodes as $node) {
-        $emitted+= $this->emitOne($r, $node);
+      foreach ($nodes as $node) {
+        $this->emitOne($r, $node);
         $r->append(';');
       }
-      return $emitted;
     }
-    
+
     /**
      * Resolve a type, raising an error message if type resolution
      * raises an error and return an unknown type reference in this
