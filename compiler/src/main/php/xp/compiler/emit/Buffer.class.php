@@ -4,13 +4,13 @@
  * $Id$ 
  */
 
-  $package= 'xp.compiler.emit.source';
+  $package= 'xp.compiler.emit';
 
   /**
    * Source buffer
    *
    */
-  class xp·compiler·emit·source·Buffer extends Object {
+  class xp·compiler·emit·Buffer extends Object {
     protected $source= '';
     public $line= 1;
     
