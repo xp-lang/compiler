@@ -124,7 +124,7 @@
      *
      * @param   xp.compiler.ast.ParseTree tree
      * @param   xp.compiler.types.Scope scope
-     * @return  xp.compiler.Result
+     * @return  xp.compiler.emit.EmitterResult
      */
     public abstract function emit(ParseTree $tree, Scope $scope);
     
