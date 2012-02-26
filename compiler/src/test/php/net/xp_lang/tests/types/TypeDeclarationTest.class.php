@@ -439,5 +439,52 @@
     public function coinEnumHasMemberField() {
       $this->assertTrue($this->coinEnum()->hasField('penny'));
     }
+
+    /**
+     * Test getExtensions() method
+     *
+     */
+    #[@test]
+    public function getExtensionsFromStringClass() {
+      $this->assertEquals(array(), $this->stringClass()->getExtensions());
+    }
+
+    /**
+     * Test getExtensions() method
+     *
+     */
+    #[@test]
+    public function getExtensionsFromArrayListExtensionsClass() {
+      $decl= new TypeDeclaration(
+        new ParseTree(new TypeName('lang.types'), array(), new ClassNode(
+          MODIFIER_PUBLIC, 
+          NULL,
+          new TypeName('ArraySortingExtensions'),
+          new TypeName('lang.Object'),
+          NULL,
+          array(
+            new MethodNode(array(
+              'name'        => 'sorted',
+              'returns'     => new TypeName('lang.types.ArrayList'),
+              'extension'   => new TypeName('lang.types.ArrayList'),
+              'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
+              'parameters'  => array(
+                array(
+                  'name'  => 'self',
+                  'type'  => new TypeName('lang.types.ArrayList'),
+                  'check' => TRUE
+                ), 
+              )
+            )),
+          )
+        )),
+        $this->objectClass()
+      );
+      $extensions= $decl->getExtensions();
+
+      $this->assertEquals(1, sizeof($extensions));
+      $this->assertEquals('lang.types.ArrayList', key($extensions));
+      $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
+    }
   }
 ?>
