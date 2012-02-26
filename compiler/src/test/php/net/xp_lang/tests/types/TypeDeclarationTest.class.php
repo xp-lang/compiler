@@ -454,36 +454,26 @@
      *
      */
     #[@test]
-    public function getExtensionsFromStringExtensionsClass() {
+    public function getExtensionsFromArrayListExtensionsClass() {
       $decl= new TypeDeclaration(
         new ParseTree(new TypeName('lang.types'), array(), new ClassNode(
           MODIFIER_PUBLIC, 
           NULL,
-          new TypeName('StringExtensions'),
+          new TypeName('ArraySortingExtensions'),
           new TypeName('lang.Object'),
           NULL,
           array(
             new MethodNode(array(
-              'name'        => 'substring',
-              'returns'     => new TypeName('string'),
-              'extension'   => new TypeName('string'),
+              'name'        => 'sorted',
+              'returns'     => new TypeName('lang.types.ArrayList'),
+              'extension'   => new TypeName('lang.types.ArrayList'),
               'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
               'parameters'  => array(
                 array(
                   'name'  => 'self',
-                  'type'  => new TypeName('string'),
+                  'type'  => new TypeName('lang.types.ArrayList'),
                   'check' => TRUE
                 ), 
-                array(
-                  'name'  => 'start',
-                  'type'  => new TypeName('int'),
-                  'check' => TRUE
-                ), 
-                array(
-                  'name'  => 'end',
-                  'type'  => new TypeName('int'),
-                  'check' => TRUE
-                )
               )
             )),
           )
@@ -491,8 +481,10 @@
         $this->objectClass()
       );
       $extensions= $decl->getExtensions();
+
       $this->assertEquals(1, sizeof($extensions));
-      $this->assertEquals('substring', $extensions['string'][0]->name());
+      $this->assertEquals('lang.types.ArrayList', key($extensions));
+      $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
     }
   }
 ?>
