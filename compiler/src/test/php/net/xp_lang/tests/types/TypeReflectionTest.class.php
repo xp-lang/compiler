@@ -271,7 +271,38 @@
      */
     #[@test]
     public function objectClassHasNoExtensionMethods() {
-      $this->assertEquals(array(), create(new TypeReflection(XPClass::forName('lang.Object')))->getExtensions());
+      $this->assertEquals(
+        array(), 
+        create(new TypeReflection(XPClass::forName('lang.Object')))->getExtensions()
+      );
+    }
+
+    /**
+     * Test getExtensions() method
+     *
+     */
+    #[@test]
+    public function extensionMethod() {
+      $fixture= ClassLoader::defineClass('ArraySortingExtensions', 'lang.Object', array(), '{
+        static function __import($scope) {
+          xp::extensions(__CLASS__, $scope);
+        }
+
+        /**
+         * Returns a sorted array list
+         *
+         * @param   lang.types.ArrayList self
+         * @return  lang.types.ArrayList
+         */
+        public static function sorted(ArrayList $self) {
+          // Implementation here
+        }
+      }');
+      $extensions= create(new TypeReflection($fixture))->getExtensions();
+
+      $this->assertEquals(1, sizeof($extensions));
+      $this->assertEquals('lang.types.ArrayList', key($extensions));
+      $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
     }
   }
 ?>
