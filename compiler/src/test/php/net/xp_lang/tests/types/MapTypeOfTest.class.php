@@ -63,5 +63,14 @@
     public function isNotSubclassOfType() {
       $this->assertFalse($this->fixture->isSubclassOf(new TypeReflection(XPClass::forName('lang.Type'))));
     }
+
+    /**
+     * Test getExtensions()
+     *
+     */
+    #[@test]
+    public function mapTypeDoesNotHaveExtensions() {
+      $this->assertEquals(array(), $this->fixture->getExtensions());
+    }
   }
 ?>
