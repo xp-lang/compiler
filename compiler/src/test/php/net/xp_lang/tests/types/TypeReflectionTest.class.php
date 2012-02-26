@@ -264,5 +264,14 @@
       $this->assertEquals(new TypeName('int'), $enum->key);
       $this->assertEquals(new TypeName('var'), $enum->value);
     }
+
+    /**
+     * Test getExtensions() method
+     *
+     */
+    #[@test]
+    public function objectClassHasNoExtensionMethods() {
+      $this->assertEquals(array(), create(new TypeReflection(XPClass::forName('lang.Object')))->getExtensions());
+    }
   }
 ?>

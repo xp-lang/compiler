@@ -1694,7 +1694,6 @@
           'parameters' => $defines[$name][1],
           'throws'     => NULL,
           'body'       => $statements,
-          'extension'  => NULL,
           'comment'      => '(Generated)'
         )));
       }
@@ -2024,7 +2023,6 @@
             array(new StringNode($thisType->literal()))
           ))
         ),
-        'extension'  => NULL,
         'comment'    => '(Generated)'
       ));
 

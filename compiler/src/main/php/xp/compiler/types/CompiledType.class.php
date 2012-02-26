@@ -123,10 +123,10 @@
      * Adds a method
      *
      * @param   xp.compiler.types.Method method
-     * @param   T extension
+     * @param   xp.compiler.types.TypeName extension
      * @return  xp.compiler.types.Method the added method
      */
-    public function addMethod(xp·compiler·types·Method $method, $extension) {
+    public function addMethod(xp·compiler·types·Method $method, $extension= NULL) {
       $method->holder= $this;
       $this->methods[$method->name]= $method;
       if (NULL !== $extension) {
