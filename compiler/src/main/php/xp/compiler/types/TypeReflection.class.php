@@ -220,6 +220,7 @@
       $methods= $this->class->getMethods();
       $r= array();
       foreach (xp::$registry['ext'][0] as $type => $name) {
+        $type= xp::nameOf($type);
         $r[$type]= array();
         foreach ($methods as $method) {
           if (
