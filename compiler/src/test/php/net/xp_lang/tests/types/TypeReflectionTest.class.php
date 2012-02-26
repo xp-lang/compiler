@@ -283,22 +283,7 @@
      */
     #[@test]
     public function extensionMethod() {
-      $fixture= ClassLoader::defineClass('ArraySortingExtensions', 'lang.Object', array(), '{
-        static function __import($scope) {
-          xp::extensions(__CLASS__, $scope);
-        }
-
-        /**
-         * Returns a sorted array list
-         *
-         * @param   lang.types.ArrayList self
-         * @return  lang.types.ArrayList
-         */
-        public static function sorted(ArrayList $self) {
-          // Implementation here
-        }
-      }');
-      $extensions= create(new TypeReflection($fixture))->getExtensions();
+      $extensions= create(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.ArraySortingExtensions')))->getExtensions();
 
       $this->assertEquals(1, sizeof($extensions));
       $this->assertEquals('lang.types.ArrayList', key($extensions));
