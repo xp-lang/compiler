@@ -6,14 +6,13 @@
 
   $package= 'xp.compiler.emit.source';
   
-  uses('io.streams.OutputStream', 'io.streams.Streams');
+  uses('xp.compiler.emit.EmitterResult', 'io.streams.OutputStream', 'io.streams.Streams');
 
   /**
    * Compilation result from source emitter
    *
-   * @ext   oel
    */
-  class xp搾ompiler搪mit新ource愛esult extends Object {
+  class xp搾ompiler搪mit新ource愛esult extends Object implements EmitterResult {
     protected $source= NULL;
     protected $type= NULL;
     
