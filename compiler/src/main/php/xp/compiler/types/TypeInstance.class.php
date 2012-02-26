@@ -9,7 +9,7 @@
   /**
    * Represents a type instance
    *
-   * @test    xp://tests.types.TypeInstanceTest
+   * @test    xp://net.xp_lang.tests.types.TypeInstanceTest
    */
   class TypeInstance extends Types {
     protected $declaration= NULL;

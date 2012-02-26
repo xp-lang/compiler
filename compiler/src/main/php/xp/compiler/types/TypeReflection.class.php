@@ -9,7 +9,7 @@
   /**
    * Represents a reflected type
    *
-   * @test    xp://tests.types.TypeReflectionTest
+   * @test    xp://net.xp_lang.tests.tests.types.TypeReflectionTest
    */
   class TypeReflection extends Types {
     protected $class= NULL;
