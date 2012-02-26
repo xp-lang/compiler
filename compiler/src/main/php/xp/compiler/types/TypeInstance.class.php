@@ -174,7 +174,7 @@
      * @return  [:xp.compiler.types.Method[]]
      */
     public function getExtensions() {
-      return array();
+      return $this->declaration->getExtensions();
     }
 
     /**
