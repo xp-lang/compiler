@@ -195,5 +195,32 @@
     public function noParentParentMethod() {
       $this->assertNull($this->fixtureWithParent(NULL)->getMethod('getClassName'));
     }
+
+    /**
+     * Test getExtensions()
+     *
+     */
+    #[@test]
+    public function emptyTypeHasNoExtensions() {
+      $this->assertEquals(array(), $this->fixture->getExtensions());
+    }
+
+    /**
+     * Test getExtensions()
+     *
+     */
+    #[@test]
+    public function getExtensions() {
+      $m= new xp·compiler·types·Method('sorted');
+      $m->modifiers= MODIFIER_PUBLIC | MODIFIER_STATIC;
+      $m->returns= new TypeName('lang.types.ArrayList');
+      $m->parameters= array(new TypeName('lang.types.ArrayList'));
+      $this->fixture->addMethod($m, new TypeName('lang.types.ArrayList'));
+      $extensions= $this->fixture->getExtensions();
+
+      $this->assertEquals(1, sizeof($extensions));
+      $this->assertEquals('lang.types.ArrayList', key($extensions));
+      $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
+    }
   }
 ?>

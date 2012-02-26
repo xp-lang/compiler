@@ -112,16 +112,11 @@
       $p= strrpos($import, '.');
       $this->imports[substr($import, $p+ 1)]= $import;
       $ptr= $this->resolveType(new TypeName($import));
-      $qualified= $ptr->name();
 
-      // Check if this import created extension methods
-      // FIXME: Use $this->resolved[$qualified]->getExtensions()
-      foreach (xp::$registry as $k => $value) {
-        if ($value instanceof ReflectionMethod && $qualified === xp::nameOf($value->class)) {
-          $this->addExtension(
-            $this->resolveType(new TypeName(substr($k, 0, strpos($k, '::')))), 
-            $ptr->getMethod($value->name)
-          );
+      // Register extension methods ([:xp.compiler.types.Method[]])
+      foreach ($ptr->getExtensions() as $type => $methods) {
+        foreach ($methods as $method) {
+          $this->addExtension($this->resolveType(new TypeName($type)), $method);
         }
       }
     }
