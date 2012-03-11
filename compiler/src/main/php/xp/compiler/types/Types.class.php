@@ -116,6 +116,13 @@
     public abstract function getMethod($name);
 
     /**
+     * Gets a list of extension methods
+     *
+     * @return  [:xp.compiler.types.Method[]]
+     */
+    public abstract function getExtensions();
+
+    /**
      * Returns whether an operator by a given symbol exists
      *
      * @param   string symbol

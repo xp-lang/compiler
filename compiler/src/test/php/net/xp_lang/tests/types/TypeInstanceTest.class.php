@@ -35,5 +35,30 @@
       $m= create(new TypeInstance(new TypeReflection(XPClass::forName('lang.Runnable'))))->getMethod('toString');
       $this->assertEquals(new TypeName('string'), $m->returns);
     }
+
+    /**
+     * Test getExtensions() method
+     *
+     */
+    #[@test]
+    public function objectClassHasNoExtensionMethods() {
+      $this->assertEquals(
+        array(), 
+        create(new TypeInstance(new TypeReflection(XPClass::forName('lang.Object'))))->getExtensions()
+      );
+    }
+
+    /**
+     * Test getExtensions() method
+     *
+     */
+    #[@test]
+    public function extensionMethod() {
+      $extensions= create(new TypeInstance(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.ArraySortingExtensions'))))->getExtensions();
+
+      $this->assertEquals(1, sizeof($extensions));
+      $this->assertEquals('lang.types.ArrayList', key($extensions));
+      $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
+    }
   }
 ?>

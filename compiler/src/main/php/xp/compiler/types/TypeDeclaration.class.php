@@ -15,7 +15,7 @@
   /**
    * Represents a declared type
    *
-   * @test    xp://tests.types.TypeDeclarationTest
+   * @test    xp://net.xp_lang.tests.types.TypeDeclarationTest
    */
   class TypeDeclaration extends Types {
     protected $tree= NULL;
@@ -177,6 +177,33 @@
         }
       }
       return $this->parent ? $this->parent->getMethod($name) : NULL;
+    }
+
+    /**
+     * Gets a list of extension methods
+     *
+     * @return  [:xp.compiler.types.Method[]]
+     */
+    public function getExtensions() {
+      $r= array();
+      foreach ($this->tree->declaration->body as $member) {
+        if ($member instanceof MethodNode && $member->extension) {
+          $n= $member->extension->compoundName();
+
+          $m= new xp·compiler·types·Method();
+          $m->name= $member->name;
+          $m->returns= $member->returns;
+          $m->modifiers= $member->modifiers;
+          foreach ((array)$member->parameters as $p) {
+            $m->parameters[]= $p['type'];
+          }
+          $m->holder= $this;
+
+          isset($r[$n]) || $r[$n]= array();
+          $r[$n][]= $m;
+        }
+      }
+      return $r;
     }
 
     /**

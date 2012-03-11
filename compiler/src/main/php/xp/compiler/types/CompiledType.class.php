@@ -24,6 +24,7 @@
     public $constants= array();
     public $properties= array();
     public $generics= NULL;
+    public $extensions= array();
 
     /**
      * Constructor
@@ -122,11 +123,17 @@
      * Adds a method
      *
      * @param   xp.compiler.types.Method method
+     * @param   xp.compiler.types.TypeName extension
      * @return  xp.compiler.types.Method the added method
      */
-    public function addMethod(xp·compiler·types·Method $method) {
+    public function addMethod(xp·compiler·types·Method $method, $extension= NULL) {
       $method->holder= $this;
       $this->methods[$method->name]= $method;
+      if (NULL !== $extension) {
+        $name= $extension->compoundName();
+        isset($this->extensions[$name]) || $this->extensions[$name]= array();
+        $this->extensions[$name][]= $method;
+      }
       return $method;
     }
 
@@ -151,6 +158,15 @@
         ? $this->methods[$name] 
         : ($this->parent ? $this->parent->getMethod($name) : NULL)
       ;
+    }
+
+    /**
+     * Gets a list of extension methods
+     *
+     * @return  [:xp.compiler.types.Method[]]
+     */
+    public function getExtensions() {
+      return $this->extensions;
     }
 
     /**

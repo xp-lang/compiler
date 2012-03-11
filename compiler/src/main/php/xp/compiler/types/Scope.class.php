@@ -112,16 +112,11 @@
       $p= strrpos($import, '.');
       $this->imports[substr($import, $p+ 1)]= $import;
       $ptr= $this->resolveType(new TypeName($import));
-      $qualified= $ptr->name();
 
-      // Check if this import created extension methods
-      // FIXME: Use $this->resolved[$qualified]->getExtensions()
-      foreach (xp::$registry as $k => $value) {
-        if ($value instanceof ReflectionMethod && $qualified === xp::nameOf($value->class)) {
-          $this->addExtension(
-            $this->resolveType(new TypeName(substr($k, 0, strpos($k, '::')))), 
-            $ptr->getMethod($value->name)
-          );
+      // Register extension methods ([:xp.compiler.types.Method[]])
+      foreach ($ptr->getExtensions() as $type => $methods) {
+        foreach ($methods as $method) {
+          $this->addExtension($this->resolveType(new TypeName($type)), $method);
         }
       }
     }
@@ -227,13 +222,13 @@
      */
     public function resolveType(TypeName $name, $register= TRUE) {
       if ($name->isArray()) {
-        return new ArrayTypeOf($this->resolveType($name->arrayComponentType()));
+        return new ArrayTypeOf($this->resolveType($name->arrayComponentType(), $register));
       } else if ($name->isMap()) {
-        return new MapTypeOf($this->resolveType($name->mapComponentType()));
+        return new MapTypeOf($this->resolveType($name->mapComponentType(), $register));
       } else if (!$name->isClass()) {
         return new TypeReference($name, Types::PRIMITIVE_KIND);
       } else if ($name->isGeneric()) {
-        return new GenericType($this->resolveType(new TypeName($name->name)), $name->components);
+        return new GenericType($this->resolveType(new TypeName($name->name), $register), $name->components);
       }
 
       if ($this->declarations) {
@@ -256,7 +251,7 @@
       
       if ('xp' === $name->name) {
         return new TypeReference($name, Types::UNKNOWN_KIND);
-      } else if ('php.' === substr($name->name, 0, 4)) {
+      } else if (0 === strncmp('php.', $name->name, 4)) {
         return new TypeReflection(new XPClass(substr($name->name, strrpos($name->name, '.')+ 1)));
       } else if (strpos($name->name, '.')) {
         $qualified= $name->name;
@@ -299,9 +294,9 @@
           }
           $this->resolved[$qualified]= $type;
         }
-        $register && $this->used[]= new TypeName($qualified);
       }
-      
+
+      $register && $this->used[$qualified]= TRUE;
       return $this->resolved[$qualified];
     }
     

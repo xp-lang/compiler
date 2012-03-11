@@ -184,5 +184,23 @@
     public function objectAsArray() {
       $this->run('return new lang.Object() as var[];');
     }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function unverifiedStringAsStringArray() {
+      $this->assertEquals('Hello', $this->run('return "Hello" as string[]?;'));
+    }
+
+    /**
+     * Test
+     *
+     */
+    #[@test]
+    public function unverifiedStringAsInt() {
+      $this->assertEquals('1', $this->run('return "1" as int?;'));
+    }
   }
 ?>
