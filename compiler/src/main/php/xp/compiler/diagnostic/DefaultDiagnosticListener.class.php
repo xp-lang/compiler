@@ -25,7 +25,7 @@
       $messages  = array();
     
     /**
-     * (Insert method's description here)
+     * Constructor
      *
      * @param   io.streams.OutputStreamWriter writer
      */
