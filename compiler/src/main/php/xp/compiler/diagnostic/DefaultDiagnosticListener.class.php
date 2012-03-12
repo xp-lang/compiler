@@ -116,7 +116,7 @@
       
       if (!empty($this->messages)) {
         foreach ($this->messages as $uri => $message) {
-          $this->writer->writeLine('* ', basename($uri), ': ', $message);
+          $this->writer->writeLine('* ', basename($uri), ': ', str_replace("\n", "\n  ", $message));
           $this->writer->writeLine();
         }
       }
