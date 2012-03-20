@@ -48,6 +48,15 @@
     }
 
     /**
+     * Return file extension including the leading dot
+     *
+     * @return  string
+     */
+    public function extension() {
+      return xp::CLASS_FILE_EXT;
+    }
+
+    /**
      * Execute with a given environment settings
      *
      * @param   array<string, var> env
