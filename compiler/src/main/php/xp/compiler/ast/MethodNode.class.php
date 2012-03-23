@@ -12,7 +12,7 @@
    */
   class MethodNode extends RoutineNode {
     public $returns   = NULL;
-    public $extension = FALSE;
+    public $extension = NULL;
 
   }
 ?>

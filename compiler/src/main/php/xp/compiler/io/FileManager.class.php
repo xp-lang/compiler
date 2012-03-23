@@ -18,7 +18,7 @@
    * File manager takes care of locating and parsing sourcecode and writing
    * compiled types.
    *
-   * @test    xp://tests.FileManagerTest
+   * @test    xp://net.xp_lang.tests.FileManagerTest
    */
   class FileManager extends Object {
     protected $output= NULL;
@@ -121,7 +121,7 @@
     /**
      * Write compilation result to a given target
      *
-     * @param   xp.compiler.emit.Result r
+     * @param   xp.compiler.emit.EmitterResult r
      * @param   io.File target
      * @throws  io.IOException
      */
@@ -156,22 +156,22 @@
      *    </li>
      * <ul>
      *
-     * @param   xp.compiler.types.Types type
+     * @param   xp.compiler.emit.EmitterResult r
      * @param   xp.compiler.io.Source source
      * @return  io.File target
      */
-    public function getTarget(Types $type, xp·compiler·io·Source $source= NULL) {
-      $mapped= strtr($type->name(), '.', DIRECTORY_SEPARATOR);
+    public function getTarget($r, xp·compiler·io·Source $source= NULL) {
+      $mapped= strtr($r->type()->name(), '.', DIRECTORY_SEPARATOR);
       if ($this->output) {
         $base= $this->output;
       } else if ($source) {
         $name= str_replace('/', DIRECTORY_SEPARATOR, $source->getURI());
-        return new File(str_replace(strstr(basename($name), '.'), xp::CLASS_FILE_EXT, $name));
+        return new File(str_replace(strstr(basename($name), '.'), $r->extension(), $name));
       } else {
         $base= new Folder('.');
       }
       
-      return new File($base, $mapped.xp::CLASS_FILE_EXT);
+      return new File($base, $mapped.$r->extension());
     }
   }
 ?>

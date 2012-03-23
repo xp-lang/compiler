@@ -17,6 +17,21 @@
    */
   class FileManagerTest extends TestCase {
     protected $fixture= NULL;
+    protected static $result;
+
+    /**
+     * Defines the xp.compiler.emit.EmitterResult used for testing
+     *
+     */
+    #[@beforeClass]
+    public static function defineResult() {
+      self::$result= ClassLoader::defineClass('FileManagerTestEmitterResult', 'lang.Object', array('xp.compiler.emit.EmitterResult'), '{
+        protected $type= NULL;
+        public function __construct($name) { $this->type= new TypeReference(new TypeName($name)); }
+        public function type() { return $this->type; }
+        public function extension() { return ".test"; }
+      }');
+    }
   
     /**
      * Sets up test case
@@ -32,8 +47,8 @@
      * @param   string name qualified name
      * @return  xp.compiler.types.Types
      */
-    protected function newType($name) {
-      return new TypeReference(new TypeName($name));
+    protected function newResultWithType($name) {
+      return self::$result->newInstance($name);
     }
     
     /**
@@ -57,8 +72,8 @@
     #[@test]
     public function target() {
       $this->assertTarget(
-        'de/thekid/demo/Value'.xp::CLASS_FILE_EXT,
-        $this->fixture->getTarget($this->newType('de.thekid.demo.Value'))
+        'de/thekid/demo/Value.test',
+        $this->fixture->getTarget($this->newResultWithType('de.thekid.demo.Value'))
       );
     }
 
@@ -69,8 +84,8 @@
     #[@test]
     public function targetWithOutputFolder() {
       $this->assertTarget(
-        'build/de/thekid/demo/Value'.xp::CLASS_FILE_EXT,
-        $this->fixture->withOutput(new Folder('build'))->getTarget($this->newType('de.thekid.demo.Value'))
+        'build/de/thekid/demo/Value.test',
+        $this->fixture->withOutput(new Folder('build'))->getTarget($this->newResultWithType('de.thekid.demo.Value'))
       );
     }
 
@@ -82,8 +97,8 @@
     public function targetWithSource() {
       $source= new FileSource(new File('src/de/thekid/demo/Value.xp'));
       $this->assertTarget(
-        'src/de/thekid/demo/Value'.xp::CLASS_FILE_EXT,
-        $this->fixture->getTarget($this->newType('de.thekid.demo.Value'), $source)
+        'src/de/thekid/demo/Value.test',
+        $this->fixture->getTarget($this->newResultWithType('de.thekid.demo.Value'), $source)
       );
     }
 
@@ -95,8 +110,8 @@
     public function targetWithSourceWithoutPackage() {
       $source= new FileSource(new File('src/Value.xp'));
       $this->assertTarget(
-        'src/Value'.xp::CLASS_FILE_EXT,
-        $this->fixture->getTarget($this->newType('de.thekid.demo.Value'), $source)
+        'src/Value.test',
+        $this->fixture->getTarget($this->newResultWithType('de.thekid.demo.Value'), $source)
       );
     }
 
@@ -108,8 +123,8 @@
     public function targetWithSourceMismatchingPackage() {
       $source= new FileSource(new File('src/com/thekid/demo/Value.xp'));
       $this->assertTarget(
-        'src/com/thekid/demo/Value'.xp::CLASS_FILE_EXT,
-        $this->fixture->getTarget($this->newType('de.thekid.demo.Value'), $source)
+        'src/com/thekid/demo/Value.test',
+        $this->fixture->getTarget($this->newResultWithType('de.thekid.demo.Value'), $source)
       );
     }
   }

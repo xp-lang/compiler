@@ -9,6 +9,8 @@
     'xp.compiler.ast.ParseTree', 
     'xp.compiler.optimize.Optimizations',
     'xp.compiler.checks.Checks',
+    'xp.compiler.emit.Buffer', 
+    'xp.compiler.emit.EmitterResult', 
     'util.log.Traceable'
   );
 
@@ -117,14 +119,599 @@
     protected function leave() {
       array_shift($this->scope);
     }
+
+    /**
+     * Emit uses statements for a given list of types
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   [:bool] types
+     */
+    protected abstract function emitUses($b, array $types);
+
+    /**
+     * Emit invocations
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.InvocationNode inv
+     */
+    protected abstract function emitInvocation($b, $inv);
+
+    /**
+     * Emit strings
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.StringNode str
+     */
+    protected abstract function emitString($b, $str);
+
+    /**
+     * Emit an array (a sequence of elements with a zero-based index)
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ArrayNode arr
+     */
+    protected abstract function emitArray($b, $arr);
+
+    /**
+     * Emit a map (a key/value pair dictionary)
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.MapNode map
+     */
+    protected abstract function emitMap($b, $map);
+
+    /**
+     * Emit booleans
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.BooleanNode const
+     */
+    protected abstract function emitBoolean($b, $const);
+
+    /**
+     * Emit null
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.NullNode const
+     */
+    protected abstract function emitNull($b, $const);
+
+    /**
+     * Emit constants
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ConstantNode const
+     */
+    protected abstract function emitConstant($b, $const);
+
+    /**
+     * Emit casts
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.CastNode cast
+     */
+    protected abstract function emitCast($b, $cast);
+
+    /**
+     * Emit integers
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.IntegerNode num
+     */
+    protected abstract function emitInteger($b, $num);
+
+    /**
+     * Emit decimals
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.DecimalNode num
+     */
+    protected abstract function emitDecimal($b, $num);
+
+    /**
+     * Emit hex numbers
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.HexNode num
+     */
+    protected abstract function emitHex($b, $num);
+
+    /**
+     * Emit a variable
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.VariableNode var
+     */
+    protected abstract function emitVariable($b, $var);
+
+    /**
+     * Emit a member access. Helper to emitChain()
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.DynamicVariableReferenceNode access
+     */
+    public abstract function emitDynamicMemberAccess($b, $access);
+
+    /**
+     * Emit static method call
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.StaticMethodCallNode call
+     */
+    public abstract function emitStaticMethodCall($b, $call);
+
+    /**
+     * Emit instance call
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.InstanceCallNode call
+     */
+    public abstract function emitInstanceCall($b, $call);
+
+    /**
+     * Emit method call
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.MethodCallNode call
+     */
+    public abstract function emitMethodCall($b, $call);
+
+    /**
+     * Emit member access
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.StaticMemberAccessNode access
+     */
+    public abstract function emitStaticMemberAccess($b, $access);
+
+    /**
+     * Emit member access
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.MemberAccessNode access
+     */
+    public abstract function emitMemberAccess($b, $access);
+
+    /**
+     * Emit array access
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ArrayAccessNode access
+     */
+    public abstract function emitArrayAccess($b, $access);
+
+    /**
+     * Emit constant access
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ConstantAccessNode access
+     */
+    public abstract function emitConstantAccess($b, $access);
+
+    /**
+     * Emit class access
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ClassAccessNode access
+     */
+    public abstract function emitClassAccess($b, $access);
+
+    /**
+     * Emit a braced expression
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.BracedExpressionNode const
+     */
+    protected abstract function emitBracedExpression($b, $braced);
+
+    /**
+     * Emit binary operation node
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.BinaryOpNode bin
+     */
+    protected abstract function emitBinaryOp($b, $bin);
+
+    /**
+     * Emit unary operation node
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.UnaryOpNode un
+     */
+    protected abstract function emitUnaryOp($b, $un);
+
+    /**
+     * Emit ternary operator node
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.TernaryNode ternary
+     */
+    protected abstract function emitTernary($b, $ternary);
+
+    /**
+     * Emit comparison node
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ComparisonNode cmp
+     */
+    protected abstract function emitComparison($b, $cmp);
+
+    /**
+     * Emit continue statement
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ContinueNode statement
+     */
+    protected abstract function emitContinue($b, $statement);
+
+    /**
+     * Emit break statement
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.BreakNode statement
+     */
+    protected abstract function emitBreak($b, $statement);
+
+    /**
+     * Emit noop
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.NoopNode statement
+     */
+    protected abstract function emitNoop($b, $statement);
+
+    /**
+     * Emit with statement
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.WithNode with
+     */
+    protected abstract function emitWith($b, $with);
+
+    /**
+     * Emit statements
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.StatementsNode statements
+     */
+    protected abstract function emitStatements($b, $statements);
+
+    /**
+     * Emit foreach loop
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ForeachNode loop
+     */
+    protected abstract function emitForeach($b, $loop);
+
+    /**
+     * Emit do ... while loop
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.DoNode loop
+     */
+    protected abstract function emitDo($b, $loop);
+
+    /**
+     * Emit while loop
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.WhileNode loop
+     */
+    protected abstract function emitWhile($b, $loop);
+
+    /**
+     * Emit components inside a for() statement
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @return  xp.compiler.ast.Node[] nodes
+     */
+    protected abstract function emitForComponent($b, array $nodes);
+
+    /**
+     * Emit for loop
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ForNode loop
+     */
+    protected abstract function emitFor($b, $loop);
+
+    /**
+     * Emit if statement
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.IfNode if
+     */
+    protected abstract function emitIf($b, $if);
+
+    /**
+     * Emit a switch case
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.CaseNode case
+     */
+    protected abstract function emitCase($b, $case);
+
+    /**
+     * Emit the switch default case
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.DefaultNode default
+     */
+    protected abstract function emitDefault($b, $default);
+
+    /**
+     * Emit switch statement
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.SwitchNode switch
+     */
+    protected abstract function emitSwitch($b, $switch);
+
+    /**
+     * Emit a try / catch block
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.TryNode try
+     */
+    protected abstract function emitTry($b, $try);
+
+    /**
+     * Emit an automatic resource management (ARM) block
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ArmNode arm
+     */
+    protected abstract function emitArm($b, $arm);
+
+    /**
+     * Emit a throw node
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ThrowNode throw
+     */
+    protected abstract function emitThrow($b, $throw);
+
+    /**
+     * Emit a finally node
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.FinallyNode finally
+     */
+    protected abstract function emitFinally($b, $finally);
+
+    /**
+     * Emit a dynamic instance creation node
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.DynamicInstanceCreationNode new
+     */
+    protected abstract function emitDynamicInstanceCreation($b, $new);
+
+    /**
+     * Emit an instance creation node
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.InstanceCreationNode new
+     */
+    protected abstract function emitInstanceCreation($b, $new);
+
+    /**
+     * Emit an assignment
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.AssignmentNode assign
+     */
+    protected abstract function emitAssignment($b, $assign);
+
+    /**
+     * Emit an operator
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.OperatorNode method
+     */
+    protected abstract function emitOperator($b, $operator);
+
+    /**
+     * Emit a lambda
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.LambdaNode lambda
+     */
+    protected abstract function emitLambda($b, $lambda);
+
+    /**
+     * Emit a method
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.MethodNode method
+     */
+    protected abstract function emitMethod($b, $method);
+
+    /**
+     * Emit static initializer
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.StaticInitializerNode initializer
+     */
+    protected abstract function emitStaticInitializer($b, $initializer);
+
+    /**
+     * Emit a constructor
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ConstructorNode constructor
+     */
+    protected abstract function emitConstructor($b, $constructor);
+
+    /**
+     * Emit a class property
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.IndexerNode indexer
+     */
+    protected abstract function emitIndexer($b, $indexer);
+
+    /**
+     * Emit a class property
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.PropertyNode property
+     */
+    protected abstract function emitProperty($b, $property);
+
+    /**
+     * Emit an enum member
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.EnumMemberNode member
+     */
+    protected abstract function emitEnumMember($b, $member);
+
+    /**
+     * Emit a class constant
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ClassConstantNode const
+     */
+    protected abstract function emitClassConstant($b, $const);
+
+    /**
+     * Emit a class field
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.FieldNode field
+     */
+    protected abstract function emitField($b, $field);
+
+    /**
+     * Emit an enum declaration
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.EnumNode declaration
+     */
+    protected abstract function emitEnum($b, $declaration);
+
+    /**
+     * Emit a Interface declaration
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.InterfaceNode declaration
+     */
+    protected abstract function emitInterface($b, $declaration);
+
+    /**
+     * Emit a class declaration
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ClassNode declaration
+     */
+    protected abstract function emitClass($b, $declaration);
+
+    /**
+     * Emit dynamic instanceof
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.DynamicInstanceOfNode instanceof
+     */
+    protected abstract function emitDynamicInstanceOf($b, $instanceof);
+
+    /**
+     * Emit instanceof
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.InstanceOfNode instanceof
+     */
+    protected abstract function emitInstanceOf($b, $instanceof);
+
+    /**
+     * Emit clone
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.CloneNode clone
+     */
+    protected abstract function emitClone($b, $clone);
+
+    /**
+     * Emit import
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ImportNode import
+     */
+    protected abstract function emitImport($b, $import);
+
+    /**
+     * Emit native import
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.NativeImportNode import
+     */
+    protected abstract function emitNativeImport($b, $import);
+
+    /**
+     * Emit static import
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.StaticImportNode import
+     */
+    protected abstract function emitStaticImport($b, $import);
+
+    /**
+     * Emit a return statement
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.ReturnNode new
+     */
+    protected abstract function emitReturn($b, $return);
+
+    /**
+     * Emit a silence node
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.SilenceOperatorNode silenced
+     */
+    protected abstract function emitSilenceOperator($b, $silenced);
     
-    
+    /**
+     * Emit a single node
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.Node in
+     */
+    protected function emitOne($b, $in) {
+      $node= $this->optimizations->optimize($in, $this->scope[0]);
+
+      $b->position($node->position);
+      $this->cat && $this->cat->debugf(
+        '@%-3d Emit %s: %s',
+        $node->position[0],
+        $node->getClassName(),
+        $node->hashCode()
+      );
+
+      try {
+        $this->checks->verify($node, $this->scope[0], $this) && call_user_func(array($this, 'emit'.substr(get_class($node), 0, -4)), $b, $node);
+      } catch (Error $e) {
+        $this->error('0422', 'Cannot emit '.$node->getClassName().': '.$e->getMessage(), $node);
+      } catch (Throwable $e) {
+        $this->error('0500', $e->toString(), $node);
+      }
+    }
+
+    /**
+     * Emit all given nodes
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.Node[] nodes
+     */
+    protected abstract function emitAll($b, array $nodes);
+
     /**
      * Entry point
      *
      * @param   xp.compiler.ast.ParseTree tree
      * @param   xp.compiler.types.Scope scope
-     * @return  xp.compiler.Result
+     * @return  xp.compiler.emit.EmitterResult
      */
     public abstract function emit(ParseTree $tree, Scope $scope);
     

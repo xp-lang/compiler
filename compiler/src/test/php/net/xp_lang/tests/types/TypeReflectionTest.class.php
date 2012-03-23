@@ -264,5 +264,30 @@
       $this->assertEquals(new TypeName('int'), $enum->key);
       $this->assertEquals(new TypeName('var'), $enum->value);
     }
+
+    /**
+     * Test getExtensions() method
+     *
+     */
+    #[@test]
+    public function objectClassHasNoExtensionMethods() {
+      $this->assertEquals(
+        array(), 
+        create(new TypeReflection(XPClass::forName('lang.Object')))->getExtensions()
+      );
+    }
+
+    /**
+     * Test getExtensions() method
+     *
+     */
+    #[@test]
+    public function extensionMethod() {
+      $extensions= create(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.ArraySortingExtensions')))->getExtensions();
+
+      $this->assertEquals(1, sizeof($extensions));
+      $this->assertEquals('lang.types.ArrayList', key($extensions));
+      $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
+    }
   }
 ?>

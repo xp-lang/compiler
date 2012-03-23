@@ -9,7 +9,7 @@
   /**
    * Represents a type instance
    *
-   * @test    xp://tests.types.TypeInstanceTest
+   * @test    xp://net.xp_lang.tests.types.TypeInstanceTest
    */
   class TypeInstance extends Types {
     protected $declaration= NULL;
@@ -166,6 +166,15 @@
         return $m;
       }
       return NULL;
+    }
+
+    /**
+     * Gets a list of extension methods
+     *
+     * @return  [:xp.compiler.types.Method[]]
+     */
+    public function getExtensions() {
+      return $this->declaration->getExtensions();
     }
 
     /**

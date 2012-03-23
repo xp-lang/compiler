@@ -141,7 +141,7 @@
           $tree= $this->manager->parseFile($this->source);
           $this->done[$this->source]= $this->partialType($tree);
           $result= $this->emitter->emit($tree, $scope);
-          $target= $this->manager->getTarget($result->type(), $this->source);
+          $target= $this->manager->getTarget($result, $this->source);
           $this->manager->write($result, $target);
           $this->listener->compilationSucceeded($this->source, $target, $this->emitter->messages());
         } catch (ParseException $e) {
