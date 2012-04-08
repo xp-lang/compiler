@@ -427,8 +427,10 @@
     public function emitInstanceCall($b, $call) {
       $b->append('call_user_func(');
       $this->emitOne($b, $call->target);
-      $b->append(', ');
-      $this->emitInvocationArguments($b, (array)$call->arguments, FALSE);
+      if ($call->arguments) {
+        $b->append(', ');
+        $this->emitInvocationArguments($b, $call->arguments, FALSE);
+      }
       $b->append(')');
     }
 
