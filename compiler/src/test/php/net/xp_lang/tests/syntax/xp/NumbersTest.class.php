@@ -145,5 +145,97 @@
         $this->parse('0x0+2;')
       );
     }
+
+    /**
+     * Test octal numbers
+     *
+     */
+    #[@test]
+    public function octal_zero() {
+      $this->assertEquals(array(new IntegerNode('0')), $this->parse('00;'));
+    }
+
+    /**
+     * Test octal numbers
+     *
+     */
+    #[@test]
+    public function octal_0000() {
+      $this->assertEquals(array(new IntegerNode('0')), $this->parse('0000;'));
+    }
+
+    /**
+     * Test octal numbers
+     *
+     */
+    #[@test]
+    public function octal_0777() {
+      $this->assertEquals(array(new IntegerNode('511')), $this->parse('0777;'));
+    }
+
+    /**
+     * Test octal numbers
+     *
+     * @see   http://me.veekun.com/blog/2012/04/09/php-a-fractal-of-bad-design/#numbers
+     */
+    #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal octal/')]
+    public function malformed_octal_09() {
+      $this->parse('09');
+    }
+
+    /**
+     * Test octal numbers
+     *
+     */
+    #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal octal/')]
+    public function malformed_octal_00X() {
+      $this->parse('00X');
+    }
+
+    /**
+     * Test octal numbers
+     *
+     */
+    #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal octal/')]
+    public function malformed_octal_01c() {
+      $this->parse('01c');
+    }
+
+    /**
+     * Test integer numbers
+     *
+     */
+    #[@test]
+    public function integer_zero() {
+      $this->assertEquals(array(new IntegerNode('0')), $this->parse('0;'));
+    }
+
+    /**
+     * Test integer numbers
+     *
+     */
+    #[@test]
+    public function hex_zero() {
+      $this->assertEquals(array(new HexNode('0x0')), $this->parse('0x0;'));
+    }
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test]
+    public function decimal_zero() {
+      $this->assertEquals(array(new DecimalNode('0.0')), $this->parse('0.0;'));
+    }
+
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test]
+    public function decimal() {
+      $this->assertEquals(array(new DecimalNode('6.100')), $this->parse('6.100;'));
+    }
   }
 ?>

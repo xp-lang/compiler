@@ -190,11 +190,10 @@
       while ($hasMore= $this->tokenizer->hasMoreTokens()) {
         $this->position= $this->forward;
         $token= $this->nextToken();
-        
-        // Check for whitespace-only
-        if (FALSE !== strpos(" \n\r\t", $token)) {
-          continue;
-        } else if ("'" === $token{0} || '"' === $token{0}) {
+        if (FALSE !== strpos(" \n\r\t", $token)) continue;    // Skip whitespace
+
+        $length= strlen($token);
+        if ("'" === $token{0} || '"' === $token{0}) {
           $this->token= xp搾ompiler新yntax暖p感arser::T_STRING;
           $this->value= '';
           do {
@@ -265,10 +264,10 @@
             $this->value= $token;
             $this->pushBack($ahead);
           }
-        } else if (FALSE !== strpos(self::DELIMITERS, $token) && 1 == strlen($token)) {
+        } else if (FALSE !== strpos(self::DELIMITERS, $token) && 1 === $length) {
           $this->token= ord($token);
           $this->value= $token;
-        } else if (ctype_digit($token)) {
+        } else if (0 === strcspn($token, '0123456789')) {
           $ahead= $this->nextToken();
           if ('.' === $ahead{0}) {
             $decimal= $this->nextToken();
@@ -278,11 +277,29 @@
             $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
             $this->value= $token.$ahead.$decimal;
           } else {
-            $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
-            $this->value= $token;
             $this->pushBack($ahead);
+            $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
+            if (1 === $length) {
+              $this->value= $token;
+            } else if ('0' === $token[0] && ('x' === $token[1] || 'X' === $token[1])) {
+              if ($length !== strspn($token, '0123456789ABCDEFXabcdefx')) {
+                $this->raise('lang.FormatException', 'Illegal hex number <'.$token.'>');
+              }
+              $this->token= xp搾ompiler新yntax暖p感arser::T_HEX;
+              $this->value= $token;
+            } else if ('0' === $token[0]) {
+              if ($length !== strspn($token, '01234567')) {
+                $this->raise('lang.FormatException', 'Illegal octal number <'.$token.'>');
+              }
+              $this->value= base_convert($token, 8, 10);
+            } else {
+              if ($length !== strspn($token, '0123456789')) {
+                $this->raise('lang.FormatException', 'Illegal number <'.$token.'>');
+              }
+              $this->value= $token;
+            }
           }
-        } else if ('0' === $token{0} && 'x' === @$token{1}) {
+        } else if ('0' === $token{0} && ('x' === @$token{1} || 'X' === @$token{1})) {
           if (!ctype_xdigit(substr($token, 2))) {
             $this->raise('lang.FormatException', 'Illegal hex number <'.$token.'>');
           }
