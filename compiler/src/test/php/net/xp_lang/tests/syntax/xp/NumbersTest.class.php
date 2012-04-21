@@ -233,8 +233,18 @@
      *
      */
     #[@test]
-    public function hex_uppercasecase() {
+    public function hex_uppercase() {
       $this->assertEquals(array(new HexNode('0X61AE')), $this->parse('0X61AE;'));
+    }
+
+
+    /**
+     * Test hex numbers
+     *
+     */
+    #[@test]
+    public function hex_mixedcase() {
+      $this->assertEquals(array(new HexNode('0xACe')), $this->parse('0xACe;'));
     }
 
     /**
