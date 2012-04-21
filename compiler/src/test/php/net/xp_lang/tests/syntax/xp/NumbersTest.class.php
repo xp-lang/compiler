@@ -211,12 +211,30 @@
     }
 
     /**
-     * Test integer numbers
+     * Test hex numbers
      *
      */
     #[@test]
     public function hex_zero() {
       $this->assertEquals(array(new HexNode('0x0')), $this->parse('0x0;'));
+    }
+
+    /**
+     * Test hex numbers
+     *
+     */
+    #[@test]
+    public function hex_lowercase() {
+      $this->assertEquals(array(new HexNode('0x61ae')), $this->parse('0x61ae;'));
+    }
+
+    /**
+     * Test hex numbers
+     *
+     */
+    #[@test]
+    public function hex_uppercasecase() {
+      $this->assertEquals(array(new HexNode('0X61AE')), $this->parse('0X61AE;'));
     }
 
     /**
