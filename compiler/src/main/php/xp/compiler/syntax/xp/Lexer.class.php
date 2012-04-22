@@ -275,15 +275,16 @@
             $length= strlen($decimal);
             $this->value= $token.$ahead.$decimal;
             if ($length !== strcspn($decimal, 'eE')) {
-              if ($length !== strspn($decimal, '0123456789eE')) {
-                $this->raise('lang.FormatException', 'Illegal decimal number <'.$token.$ahead.$decimal.'>');
-              }
               $ahead= $this->nextToken();
               if ('+' === $ahead{0} || '-' === $ahead{0}) {
                 $this->value.= $ahead.$this->nextToken();
-                $p= FALSE;
+                $format= '%d.%d%*1[eE]'.$ahead.'%*d';
               } else {
+                $format= '%d.%d%*1[eE]%*d';
                 $this->pushBack($ahead);
+              }
+              if (4 !== sscanf($this->value, $format, $n, $f)) {
+                $this->raise('lang.FormatException', 'Illegal decimal number <'.$this->value.'>');
               }
             } else {
               if ($length !== strspn($decimal, '0123456789')) {
@@ -308,17 +309,19 @@
               $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
               $this->value= base_convert($token, 8, 10);
             } else if ($length !== strcspn($token, 'eE')) {
-              if ($length !== strspn($token, '0123456789eE')) {
-                $this->raise('lang.FormatException', 'Illegal number <'.$token.'>');
-              }
               if ('+' === $ahead{0} || '-' === $ahead{0}) {
                 $exponent= $ahead.$this->nextToken();
+                $format= '%d%*1[eE]'.$ahead.'%*d';
                 $p= FALSE;
               } else {
+                $format= '%d%*1[eE]%*d';
                 $exponent= '';
               }
               $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
               $this->value= $token.$exponent;
+              if (3 !== sscanf($this->value, $format, $n)) {
+                $this->raise('lang.FormatException', 'Illegal decimal number <'.$this->value.'>');
+              }
             } else {
               if ($length !== strspn($token, '0123456789')) {
                 $this->raise('lang.FormatException', 'Illegal number <'.$token.'>');

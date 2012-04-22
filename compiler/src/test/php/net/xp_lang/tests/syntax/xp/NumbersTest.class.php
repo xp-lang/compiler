@@ -336,5 +336,41 @@
     public function decimal_fraction_exponent_minus() {
       $this->assertEquals(array(new DecimalNode('1.5e-4')), $this->parse('1.5e-4;'));
     }
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
+    public function exponent_missing() {
+      $this->parse('1E;');
+    }
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
+    public function exponent_double() {
+      $this->parse('1EE2;');
+    }
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
+    public function exponent_fraction_missing() {
+      $this->parse('1.5E;');
+    }
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
+    public function exponent_fraction_double() {
+      $this->parse('1.5EE2;');
+    }
   }
 ?>
