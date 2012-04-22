@@ -270,12 +270,26 @@
         } else if (0 === strcspn($token, '0123456789')) {
           $ahead= $this->nextToken();
           if ('.' === $ahead{0}) {
-            $decimal= $this->nextToken();
-            if (strlen($decimal) !== strspn($decimal, '0123456789eE')) {
-              $this->raise('lang.FormatException', 'Illegal decimal number <'.$token.$ahead.$decimal.'>');
-            }
             $this->token= xp·compiler·syntax·xp·Parser::T_DECIMAL;
+            $decimal= $this->nextToken();
+            $length= strlen($decimal);
             $this->value= $token.$ahead.$decimal;
+            if ($length !== strcspn($decimal, 'eE')) {
+              if ($length !== strspn($decimal, '0123456789eE')) {
+                $this->raise('lang.FormatException', 'Illegal decimal number <'.$token.$ahead.$decimal.'>');
+              }
+              $ahead= $this->nextToken();
+              if ('+' === $ahead{0} || '-' === $ahead{0}) {
+                $this->value.= $ahead.$this->nextToken();
+                $p= FALSE;
+              } else {
+                $this->pushBack($ahead);
+              }
+            } else {
+              if ($length !== strspn($decimal, '0123456789')) {
+                $this->raise('lang.FormatException', 'Illegal decimal number <'.$token.$ahead.$decimal.'>');
+              }
+            }
           } else {
             $p= TRUE;
             if (1 === $length) {
