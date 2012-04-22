@@ -9,6 +9,7 @@
   /**
    * Represents a decimal literal
    *
+   * @test  xp://net.xp_lang.tests.resolve.NumberResolveTest
    */
   class DecimalNode extends NumberNode {
 

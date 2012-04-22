@@ -10,6 +10,7 @@
    * Represents an octal literal
    *
    * @see   xp://xp.compiler.ast.NaturalNode
+   * @test  xp://net.xp_lang.tests.resolve.NumberResolveTest
    */
   class OctalNode extends NaturalNode {
     
