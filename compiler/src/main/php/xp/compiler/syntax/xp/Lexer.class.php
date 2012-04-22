@@ -277,9 +277,9 @@
             $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
             $this->value= $token.$ahead.$decimal;
           } else {
-            $this->pushBack($ahead);
-            $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
+            $p= TRUE;
             if (1 === $length) {
+              $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
               $this->value= $token;
             } else if ('0' === $token[0] && ('x' === $token[1] || 'X' === $token[1])) {
               if ($length !== strspn($token, '0123456789ABCDEFXabcdefx')) {
@@ -291,16 +291,28 @@
               if ($length !== strspn($token, '01234567')) {
                 $this->raise('lang.FormatException', 'Illegal octal number <'.$token.'>');
               }
+              $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
               $this->value= base_convert($token, 8, 10);
-            } else {
+            } else if ($length !== strcspn($token, 'eE')) {
               if ($length !== strspn($token, '0123456789eE')) {
                 $this->raise('lang.FormatException', 'Illegal number <'.$token.'>');
               }
-              if ($length !== strcspn($token, 'eE')) {
-                $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
+              if ('+' === $ahead{0} || '-' === $ahead{0}) {
+                $exponent= $ahead.$this->nextToken();
+                $p= FALSE;
+              } else {
+                $exponent= '';
               }
+              $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
+              $this->value= $token.$exponent;
+            } else {
+              if ($length !== strspn($token, '0123456789')) {
+                $this->raise('lang.FormatException', 'Illegal number <'.$token.'>');
+              }
+              $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
               $this->value= $token;
             }
+            $p && $this->pushBack($ahead);
           }
         } else if ('0' === $token{0} && ('x' === @$token{1} || 'X' === @$token{1})) {
           if (!ctype_xdigit(substr($token, 2))) {

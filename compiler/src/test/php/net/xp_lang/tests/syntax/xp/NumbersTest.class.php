@@ -300,5 +300,23 @@
     public function decimal_fraction_exponent_uppercase() {
       $this->assertEquals(array(new DecimalNode('1.5e4')), $this->parse('1.5e4;'));
     }
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test]
+    public function decimal_exponent_plus() {
+      $this->assertEquals(array(new DecimalNode('1e+4')), $this->parse('1e+4;'));
+    }
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test]
+    public function decimal_exponent_minus() {
+      $this->assertEquals(array(new DecimalNode('1e-4')), $this->parse('1e-4;'));
+    }
   }
 ?>
