@@ -132,7 +132,7 @@
     }
 
     /**
-     * Test hex
+     * Test octal
      *
      */
     #[@test]
