@@ -68,6 +68,7 @@
    */
   class xp·compiler·emit·source·Emitter extends Emitter {
     protected 
+      $temp         = array(NULL),
       $method       = array(NULL),
       $finalizers   = array(NULL),
       $metadata     = array(NULL),
@@ -75,6 +76,15 @@
       $inits        = array(NULL),
       $local        = array(NULL),
       $types        = array(NULL);
+
+    /**
+     * Returns a new temporary variable
+     *
+     * @return  string
+     */
+    protected function tempVar() {
+      return '$T'.($this->temp[0]++);
+    }
     
     /**
      * Check whether a node is writeable - that is: can be the left-hand
@@ -459,24 +469,34 @@
 
       // Manually verify as we can then rely on call target type being available
       if (!$this->checks->verify($call, $this->scope[0], $this, TRUE)) return;
-      
-      // Rewrite for unsupported syntax
-      // - new Date().toString() to create(new Date()).toString()
-      // - (<expr>).toString to create(<expr>).toString()
-      if (
-        !$call->target instanceof ArrayAccessNode && 
-        !$call->target instanceof MethodCallNode &&
-        !$call->target instanceof MemberAccessNode &&
-        !$call->target instanceof VariableNode &&
-        !$call->target instanceof StaticMemberAccessNode &&
-        !$call->target instanceof StaticMethodCallNode
-      ) {
-        $b->insert('create(', $mark);
-        $b->append(')');
-      }
 
-      $b->append('->'.$call->name);
-      $this->emitInvocationArguments($b, (array)$call->arguments);
+      if ($call->nav) {
+        $var= $this->tempVar();
+        $b->insert('(NULL === ('.$var.'=', $mark);
+        $b->append(') ? NULL : ')->append($var)->append('->');
+        $b->append($call->name);
+        $this->emitInvocationArguments($b, (array)$call->arguments);
+        $b->append(')');
+      } else {
+
+        // Rewrite for unsupported syntax
+        // - new Date().toString() to create(new Date()).toString()
+        // - (<expr>).toString to create(<expr>).toString()
+        if (
+          !$call->target instanceof ArrayAccessNode && 
+          !$call->target instanceof MethodCallNode &&
+          !$call->target instanceof MemberAccessNode &&
+          !$call->target instanceof VariableNode &&
+          !$call->target instanceof StaticMemberAccessNode &&
+          !$call->target instanceof StaticMethodCallNode
+        ) {
+          $b->insert('create(', $mark);
+          $b->append(')');
+        }
+
+        $b->append('->'.$call->name);
+        $this->emitInvocationArguments($b, (array)$call->arguments);
+      }
 
       // Record type
       $this->scope[0]->setType($call, $ptr->hasMethod($call->name) ? $ptr->getMethod($call->name)->returns : TypeName::$VAR);
@@ -519,22 +539,32 @@
       // Manually verify as we can then rely on call target type being available
       if (!$this->checks->verify($access, $this->scope[0], $this, TRUE)) return;
 
-      // Rewrite for unsupported syntax
-      // - new Person().name to create(new Person()).name
-      // - (<expr>).name to create(<expr>).name
-      if (
-        !$access->target instanceof ArrayAccessNode && 
-        !$access->target instanceof MethodCallNode &&
-        !$access->target instanceof MemberAccessNode &&
-        !$access->target instanceof VariableNode &&
-        !$access->target instanceof StaticMemberAccessNode &&
-        !$access->target instanceof StaticMethodCallNode
-      ) {
-        $b->insert('create(', $mark);
+      // Navigation operator
+      if ($access->nav) {
+        $var= $this->tempVar();
+        $b->insert('(NULL === ('.$var.'=', $mark);
+        $b->append(') ? NULL : ')->append($var)->append('->');
+        $b->append($access->name);
         $b->append(')');
-      }
+      } else {
 
-      $b->append('->'.$access->name);
+        // Rewrite for unsupported syntax
+        // - new Person().name to create(new Person()).name
+        // - (<expr>).name to create(<expr>).name
+        if (
+          !$access->target instanceof ArrayAccessNode && 
+          !$access->target instanceof MethodCallNode &&
+          !$access->target instanceof MemberAccessNode &&
+          !$access->target instanceof VariableNode &&
+          !$access->target instanceof StaticMemberAccessNode &&
+          !$access->target instanceof StaticMethodCallNode
+        ) {
+          $b->insert('create(', $mark);
+          $b->append(')');
+        }
+
+        $b->append('->'.$access->name);
+      }
       
       // Record type
       $ptr= new TypeInstance($this->resolveType($type));
@@ -2415,6 +2445,7 @@
       $bytes= new xp·compiler·emit·Buffer('', 1);
       
       array_unshift($this->local, array());
+      array_unshift($this->temp, 0);
       array_unshift($this->scope, $scope->enter(new CompilationUnitScope()));
       $this->scope[0]->importer= new xp·compiler·emit·source·NativeImporter();
       $this->scope[0]->declarations= array($tree->declaration);
