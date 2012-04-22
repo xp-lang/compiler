@@ -132,6 +132,15 @@
     }
 
     /**
+     * Test hex
+     *
+     */
+    #[@test]
+    public function octalLiteral() {
+      $this->assertEquals(array(new OctalNode('00')), $this->parse('00;'));
+    }
+
+    /**
      * Test decimal
      *
      */

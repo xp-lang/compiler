@@ -306,8 +306,8 @@
               if ($length !== strspn($token, '01234567')) {
                 $this->raise('lang.FormatException', 'Illegal octal number <'.$token.'>');
               }
-              $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
-              $this->value= base_convert($token, 8, 10);
+              $this->token= xp搾ompiler新yntax暖p感arser::T_OCTAL;
+              $this->value= $token;
             } else if ($length !== strcspn($token, 'eE')) {
               if ('+' === $ahead{0} || '-' === $ahead{0}) {
                 $exponent= $ahead.$this->nextToken();

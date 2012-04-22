@@ -152,7 +152,7 @@
      */
     #[@test]
     public function octal_zero() {
-      $this->assertEquals(array(new IntegerNode('0')), $this->parse('00;'));
+      $this->assertEquals(array(new OctalNode('00')), $this->parse('00;'));
     }
 
     /**
@@ -161,7 +161,7 @@
      */
     #[@test]
     public function octal_0000() {
-      $this->assertEquals(array(new IntegerNode('0')), $this->parse('0000;'));
+      $this->assertEquals(array(new OctalNode('0000')), $this->parse('0000;'));
     }
 
     /**
@@ -170,7 +170,7 @@
      */
     #[@test]
     public function octal_0777() {
-      $this->assertEquals(array(new IntegerNode('511')), $this->parse('0777;'));
+      $this->assertEquals(array(new OctalNode('0777')), $this->parse('0777;'));
     }
 
     /**
@@ -353,6 +353,24 @@
     #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
     public function exponent_double() {
       $this->parse('1EE2;');
+    }
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
+    public function exponent_missing_plus() {
+      $this->parse('1E+;');
+    }
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
+    public function exponent_missing_minus() {
+      $this->parse('1E-;');
     }
 
     /**

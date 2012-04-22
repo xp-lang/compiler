@@ -46,6 +46,7 @@
     'xp.compiler.ast.ClassAccessNode',
     'xp.compiler.ast.IntegerNode',
     'xp.compiler.ast.HexNode',
+    'xp.compiler.ast.OctalNode',
     'xp.compiler.ast.DecimalNode',
     'xp.compiler.ast.StringNode',
     'xp.compiler.ast.BooleanNode',
@@ -453,11 +454,20 @@
     }
 
     /**
-     * Visit an hex literal
+     * Visit a hex literal
      *
      * @param   xp.compiler.ast.Node node
      */
     protected function visitHex(HexNode $node) {
+      return $node;
+    }
+
+    /**
+     * Visit an octal literal
+     *
+     * @param   xp.compiler.ast.Node node
+     */
+    protected function visitOctal(OctalNode $node) {
       return $node;
     }
 
