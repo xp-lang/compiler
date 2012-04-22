@@ -267,9 +267,9 @@
         } else if (FALSE !== strpos(self::DELIMITERS, $token) && 1 === $length) {
           $this->token= ord($token);
           $this->value= $token;
-        } else if (0 === strcspn($token, '0123456789')) {
+        } else if (0 === strcspn($token, '0123456789')) {     // Numbers, starting with 0..9
           $ahead= $this->nextToken();
-          if ('.' === $ahead{0}) {
+          if ('.' === $ahead{0}) {                            // Decimal numbers, next token starts with "."
             $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
             $decimal= $this->nextToken();
             $length= strlen($decimal);
@@ -290,7 +290,7 @@
                 $this->raise('lang.FormatException', 'Illegal decimal number <'.$token.$ahead.$decimal.'>');
               }
             }
-          } else {
+          } else {                                            // Integers, no "."
             $p= TRUE;
             if (1 === $length) {
               $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
