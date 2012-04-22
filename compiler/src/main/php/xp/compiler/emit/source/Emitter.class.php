@@ -436,13 +436,27 @@
      * @param   xp.compiler.ast.InstanceCallNode call
      */
     public function emitInstanceCall($b, $call) {
-      $b->append('call_user_func(');
-      $this->emitOne($b, $call->target);
-      if ($call->arguments) {
-        $b->append(', ');
-        $this->emitInvocationArguments($b, $call->arguments, FALSE);
+
+      // Navigation operator
+      if ($call->nav) {
+        $var= $this->tempVar();
+        $b->append('(NULL === ('.$var.'=');
+        $this->emitOne($b, $call->target);
+        $b->append(') ? NULL : call_user_func(')->append($var);
+        if ($call->arguments) {
+          $b->append(', ');
+          $this->emitInvocationArguments($b, $call->arguments, FALSE);
+        }
+        $b->append('))');
+      } else {
+        $b->append('call_user_func(');
+        $this->emitOne($b, $call->target);
+        if ($call->arguments) {
+          $b->append(', ');
+          $this->emitInvocationArguments($b, $call->arguments, FALSE);
+        }
+        $b->append(')');
       }
-      $b->append(')');
     }
 
     /**

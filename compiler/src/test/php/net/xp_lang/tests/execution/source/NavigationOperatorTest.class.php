@@ -67,5 +67,23 @@
     public function method_call_on_member() {
       $this->assertEquals(1, $this->run('$i= new self() { lang.types.Integer $member= new lang.types.Integer(1); }; return $i?.member?.intValue();'));
     }
+
+    /**
+     * Test invocation
+     *
+     */
+    #[@test]
+    public function invocation_on_null() {
+      $this->assertNull($this->run('$i= null; return $i?.(true);'));
+    }
+
+    /**
+     * Test member access
+     *
+     */
+    #[@test]
+    public function invocation_on_lambda() {
+      $this->assertTrue($this->run('$i= #{ $a -> $a }; return $i?.(true);'));
+    }
   }
 ?>
