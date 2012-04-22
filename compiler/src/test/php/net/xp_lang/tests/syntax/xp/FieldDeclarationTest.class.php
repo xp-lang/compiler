@@ -160,5 +160,22 @@
         }
       }'));
     }
+
+    /**
+     * Test field declaration
+     *
+     */
+    #[@test]
+    public function initializedFieldWithoutType() {
+      $this->assertEquals(array(new FieldNode(array(
+        'modifiers'  => MODIFIER_PUBLIC,
+        'annotations'=> NULL,
+        'name'       => 'name',
+        'type'       => TypeName::$VAR,
+        'initialization' => new StringNode(''),
+      ))), $this->parse('class Person { 
+        public $name = "";
+      }'));
+    }
   }
 ?>

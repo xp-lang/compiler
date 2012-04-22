@@ -323,6 +323,13 @@ field:
       $$->name= $3;
       $$->initialization= $4;
     }
+  | decorations T_VARIABLE initialization ';' { $$= $yyLex->create(new FieldNode());
+      $$->modifiers= $1[0];
+      $$->annotations= $1[1];
+      $$->type= TypeName::$VAR;
+      $$->name= $2;
+      $$->initialization= $3;
+    }
   | decorations typeref property '{' getsets '}' {
       $3->modifiers= $1[0];
       $3->annotations= $1[1];
@@ -352,7 +359,11 @@ getset:
 
 initialization_opt:
     /* empty */    { $$= NULL; }
-  | '=' expression { $$= $2; }
+  | initialization
+;
+
+initialization:
+    '=' expression { $$= $2; }
 ;
 // }}}
 
