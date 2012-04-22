@@ -54,6 +54,7 @@
    * @test     xp://net.xp_lang.tests.execution.source.MethodOverloadingTest
    * @test     xp://net.xp_lang.tests.execution.source.MultiCatchTest
    * @test     xp://net.xp_lang.tests.execution.source.NativeClassUsageTest
+   * @test     xp://net.xp_lang.tests.execution.source.NavigationOperatorTest
    * @test     xp://net.xp_lang.tests.execution.source.OperatorOverloadingTest
    * @test     xp://net.xp_lang.tests.execution.source.OperatorTest
    * @test     xp://net.xp_lang.tests.execution.source.PropertiesTest
