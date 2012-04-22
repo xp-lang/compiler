@@ -211,6 +211,15 @@
     }
 
     /**
+     * Test integer numbers
+     *
+     */
+    #[@test]
+    public function integer_huge() {
+      $this->assertEquals(array(new IntegerNode('58635272821786587286382824657568871098287278276543219876543')), $this->parse('58635272821786587286382824657568871098287278276543219876543;'));
+    }
+
+    /**
      * Test hex numbers
      *
      */
@@ -256,7 +265,6 @@
       $this->assertEquals(array(new DecimalNode('0.0')), $this->parse('0.0;'));
     }
 
-
     /**
      * Test decimal numbers
      *
@@ -264,6 +272,33 @@
     #[@test]
     public function decimal() {
       $this->assertEquals(array(new DecimalNode('6.100')), $this->parse('6.100;'));
+    }
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test]
+    public function decimal_exponent_lowercase() {
+      $this->assertEquals(array(new DecimalNode('1e4')), $this->parse('1e4;'));
+    }
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test]
+    public function decimal_exponent_uppercase() {
+      $this->assertEquals(array(new DecimalNode('1E4')), $this->parse('1E4;'));
+    }
+
+    /**
+     * Test decimal numbers
+     *
+     */
+    #[@test]
+    public function decimal_fraction_exponent_uppercase() {
+      $this->assertEquals(array(new DecimalNode('1.5e4')), $this->parse('1.5e4;'));
     }
   }
 ?>

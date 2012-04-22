@@ -271,7 +271,7 @@
           $ahead= $this->nextToken();
           if ('.' === $ahead{0}) {
             $decimal= $this->nextToken();
-            if (!ctype_digit($decimal)) {
+            if (strlen($decimal) !== strspn($decimal, '0123456789eE')) {
               $this->raise('lang.FormatException', 'Illegal decimal number <'.$token.$ahead.$decimal.'>');
             }
             $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
@@ -293,8 +293,11 @@
               }
               $this->value= base_convert($token, 8, 10);
             } else {
-              if ($length !== strspn($token, '0123456789')) {
+              if ($length !== strspn($token, '0123456789eE')) {
                 $this->raise('lang.FormatException', 'Illegal number <'.$token.'>');
+              }
+              if ($length !== strcspn($token, 'eE')) {
+                $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
               }
               $this->value= $token;
             }
