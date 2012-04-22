@@ -328,12 +328,6 @@
             }
             $p && $this->pushBack($ahead);
           }
-        } else if ('0' === $token{0} && ('x' === @$token{1} || 'X' === @$token{1})) {
-          if (!ctype_xdigit(substr($token, 2))) {
-            $this->raise('lang.FormatException', 'Illegal hex number <'.$token.'>');
-          }
-          $this->token= xp搾ompiler新yntax暖p感arser::T_HEX;
-          $this->value= $token;
         } else {
           $this->token= xp搾ompiler新yntax暖p感arser::T_WORD;
           $this->value= $token;
