@@ -19,16 +19,19 @@
   class InstanceCallNode extends xp·compiler·ast·Node {
     public $target= NULL;
     public $arguments= array();
+    public $nav= FALSE;
     
     /**
      * Creates a new InstanceCallNode object
      *
      * @param   xp.compiler.ast.Node target
      * @param   xp.compiler.ast.Node[] arguments
+     * @param   bool nav
      */
-    public function __construct($target= NULL, $arguments= NULL) {
+    public function __construct($target= NULL, $arguments= NULL, $nav= FALSE) {
       $this->target= $target;
       $this->arguments= $arguments;
+      $this->nav= $nav;
     }
   }
 ?>
