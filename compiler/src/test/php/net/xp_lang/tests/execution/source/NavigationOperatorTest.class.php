@@ -49,5 +49,23 @@
     public function method_call_on_self() {
       $this->assertEquals('OK', $this->run('$i= new self() { string toString() { return "OK"; } }; return $i?.toString();'));
     }
+
+    /**
+     * Test method call
+     *
+     */
+    #[@test]
+    public function method_call_on_null_member() {
+      $this->assertNull($this->run('$i= new self() { lang.types.Integer $member= null; }; return $i?.member?.intValue();'));
+    }
+
+    /**
+     * Test method call
+     *
+     */
+    #[@test]
+    public function method_call_on_member() {
+      $this->assertEquals(1, $this->run('$i= new self() { lang.types.Integer $member= new lang.types.Integer(1); }; return $i?.member?.intValue();'));
+    }
   }
 ?>
