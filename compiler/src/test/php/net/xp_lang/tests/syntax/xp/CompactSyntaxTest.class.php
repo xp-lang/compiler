@@ -9,6 +9,7 @@
   /**
    * TestCase
    *
+   * @see   https://github.com/xp-framework/rfc/issues/240
    * @see   https://github.com/xp-framework/rfc/issues/241
    */
   class CompactSyntaxTest extends ParserTestCase {
