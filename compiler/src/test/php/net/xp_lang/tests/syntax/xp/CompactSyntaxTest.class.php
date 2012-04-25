@@ -39,16 +39,16 @@
       $this->assertEquals(array(new MethodNode(array(
         'modifiers'  => MODIFIER_PUBLIC,
         'annotations'=> NULL,
-        'name'       => 'toString',
+        'name'       => 'getName',
         'returns'    => new TypeName('string'),
         'parameters' => NULL,
         'throws'     => NULL,
         'body'       => array(
-          new ReturnNode(new StringNode('null'))
+          new ReturnNode(new MemberAccessNode(new VariableNode('this'), 'name'))
         ),
         'extension'  => NULL
       ))), $this->parse('class Null { 
-        public string toString() -> "null";
+        public string getName() -> $this.name;
       }'));
     }
   }
