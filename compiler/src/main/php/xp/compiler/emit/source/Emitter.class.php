@@ -1323,11 +1323,16 @@
       $genericParams= '';
       foreach ($parameters as $i => $param) {
         if (isset($param['assign'])) {
-          $b->append('$')->append($param['assign']);
+          if (NULL === ($field= $this->resolveType(new TypeName('self'))->getField($param['assign']))) {
+            $this->error('F404', 'Method assignment parameter $this.'.$param['assign'].' references non-existant field');
+            $t= TypeName::$VAR;
+          } else {
+            $t= $field->type;
+          }
+          $ptr= $this->resolveType($t);
+          $param['name']= $param['assign'];
           $defer[]= '$this->'.$param['assign'].'= $'.$param['assign'].';';
-          continue;
-        }
-        if (!$param['type']) {
+        } else if (!$param['type']) {
           $t= TypeName::$VAR;
           $ptr= new TypeReference($t);
         } else {
