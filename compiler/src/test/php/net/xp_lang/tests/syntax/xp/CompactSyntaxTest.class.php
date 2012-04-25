@@ -11,6 +11,7 @@
    *
    * @see   https://github.com/xp-framework/rfc/issues/240
    * @see   https://github.com/xp-framework/rfc/issues/241
+   * @see   https://github.com/xp-framework/rfc/issues/252
    */
   class CompactSyntaxTest extends ParserTestCase {
 
