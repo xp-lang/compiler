@@ -30,7 +30,6 @@
 
           public string getName() -> $this.name;
           public void setName($this.name) { }
-          // public this withName($this.name) { }
         }');
       } catch (Throwable $e) {
         throw new PrerequisitesNotMetError($e->getMessage(), $e);
