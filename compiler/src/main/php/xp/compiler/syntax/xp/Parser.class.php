@@ -2012,7 +2012,7 @@
     { $yyVal= array_merge(array('name' => $yyVals[-1+$yyTop]), $yyVals[-2+$yyTop]); $yyVals[0+$yyTop] && $yyVal['default']= $yyVals[0+$yyTop]; } break;
 
     case 89:  #line 481 "grammar/xp.jay"
-    { $yyVal= array(array_merge(array('name' => $yyVals[0+$yyTop], 'vararg' => TRUE), $yyVals[-3+$yyTop]), NULL); } break;
+    { $yyVal= array_merge(array('name' => $yyVals[0+$yyTop], 'vararg' => TRUE), $yyVals[-3+$yyTop]); } break;
 
     case 90:  #line 482 "grammar/xp.jay"
     { $yyVal= array('assign' => $yyVals[0+$yyTop]); } break;
