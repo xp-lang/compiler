@@ -51,5 +51,29 @@
         public string getName() -> $this.name;
       }'));
     }
+
+    /**
+     * Test compact assignment
+     *
+     */
+    #[@test]
+    public function compact_assignment() {
+      $this->assertEquals(array(new MethodNode(array(
+        'modifiers'  => MODIFIER_PUBLIC,
+        'annotations'=> NULL,
+        'name'       => 'setName',
+        'returns'    => TypeName::$VOID,
+        'parameters' => array(
+          array(
+            'assign' => 'name',
+          )
+        ),
+        'throws'     => NULL,
+        'body'       => array(),
+        'extension'  => NULL
+      ))), $this->parse('class Null { 
+        public void setName($this.name) { }
+      }'));
+    }
   }
 ?>

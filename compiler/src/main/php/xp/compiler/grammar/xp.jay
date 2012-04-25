@@ -467,7 +467,8 @@ parameters:
 
 parameter:
 	paramtyperef T_VARIABLE initialization_opt { $$= array_merge(array('name' => $2), $1); $3 && $$['default']= $3; }
-  | paramtyperef T_DOTS '.' T_VARIABLE { $$= array_merge(array('name' => $4, 'vararg' => TRUE), $1); }
+  | paramtyperef T_DOTS '.' T_VARIABLE { $$= array(array_merge(array('name' => $4, 'vararg' => TRUE), $1), NULL); }
+  | T_VARIABLE '.' T_WORD { $$= array('assign' => $3); }
 ;
 
 paramtyperef:
