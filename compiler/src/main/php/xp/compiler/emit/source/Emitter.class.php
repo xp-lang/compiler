@@ -1322,6 +1322,11 @@
       $usesGenerics= FALSE;
       $genericParams= '';
       foreach ($parameters as $i => $param) {
+        if (isset($param['assign'])) {
+          $b->append('$')->append($param['assign']);
+          $defer[]= '$this->'.$param['assign'].'= $'.$param['assign'].';';
+          continue;
+        }
         if (!$param['type']) {
           $t= TypeName::$VAR;
           $ptr= new TypeReference($t);
