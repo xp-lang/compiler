@@ -76,5 +76,29 @@
         public void setName($this.name) { }
       }'));
     }
+
+    /**
+     * Test compact fluent interface
+     *
+     */
+    #[@test]
+    public function compact_fluent_return_this() {
+      $this->assertEquals(array(new MethodNode(array(
+        'modifiers'  => MODIFIER_PUBLIC,
+        'annotations'=> NULL,
+        'name'       => 'withName',
+        'returns'    => new TypeName('self'),
+        'parameters' => array(
+          array(
+            'assign' => 'name',
+          )
+        ),
+        'throws'     => NULL,
+        'body'       => array(),
+        'extension'  => NULL
+      ))), $this->parse('class Null { 
+        public this withName($this.name) { }
+      }'));
+    }
   }
 ?>

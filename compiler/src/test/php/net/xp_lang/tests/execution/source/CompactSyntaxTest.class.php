@@ -30,6 +30,7 @@
 
           public string getName() -> $this.name;
           public void setName($this.name) { }
+          public this withName($this.name) { }
         }');
       } catch (Throwable $e) {
         throw new PrerequisitesNotMetError($e->getMessage(), $e);
@@ -54,6 +55,18 @@
       $name= 'Roundtrip Test';
       $fixture= self::$fixture->newInstance();
       $fixture->setName($name);
+      $this->assertEquals($name, $fixture->getName());
+    }
+
+    /**
+     * Test withName()
+     *
+     */
+    #[@test]
+    public function withFixtureName() {
+      $name= 'Roundtrip Test';
+      $fixture= self::$fixture->newInstance();
+      $this->assertEquals($fixture, $fixture->withName($name));
       $this->assertEquals($name, $fixture->getName());
     }
   }

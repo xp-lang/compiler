@@ -369,6 +369,17 @@ method:
       $4->extension= $6[1];
       $$= $4;
     }
+  | decorations T_THIS T_WORD '(' { $4= $yyLex->create(new MethodNode(), TRUE); } extension_parameters_opt ')' throws_opt methodbody {
+      $4->modifiers= $1[0];
+      $4->annotations= $1[1];
+      $4->returns= new TypeName('self');
+      $4->name= $3;
+      $4->parameters= $6[0];
+      $4->throws= $8;
+      $4->body= array_merge((array)$9, array(new ReturnNode(new VariableNode($2))));
+      $4->extension= $6[1];
+      $$= $4;
+    }
   | decorations T_WORD '(' { $p= $yyLex->position; } parameters_opt ')' throws_opt methodbody {
       // Assert only certain methods are allowed here. This could be done by making
       // __construct and friends keywords - or this way!
