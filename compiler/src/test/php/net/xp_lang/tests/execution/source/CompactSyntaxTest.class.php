@@ -31,6 +31,7 @@
           public string getName() -> $this.name;
           public void setName($this.name) { }
           public this withName($this.name) { }
+          public this useName($this.name= "Default");
         }');
       } catch (Throwable $e) {
         throw new PrerequisitesNotMetError($e->getMessage(), $e);
@@ -68,6 +69,25 @@
       $fixture= self::$fixture->newInstance();
       $this->assertEquals($fixture, $fixture->withName($name));
       $this->assertEquals($name, $fixture->getName());
+    }
+
+    /**
+     * Test useName()
+     *
+     */
+    #[@test]
+    public function useFixtureNameDefaultOmitted() {
+      $this->assertEquals('Default', self::$fixture->newInstance()->useName()->getName());
+    }
+
+    /**
+     * Test useName()
+     *
+     */
+    #[@test]
+    public function useFixtureName() {
+      $name= 'Roundtrip Test';
+      $this->assertEquals($name, self::$fixture->newInstance()->useName($name)->getName());
     }
   }
 ?>
