@@ -79,6 +79,28 @@
     }
 
     /**
+     * Test compact assignment
+     *
+     */
+    #[@test]
+    public function compact_assignment_with_default() {
+      $this->assertEquals(array(new ConstructorNode(array(
+        'modifiers'  => MODIFIER_PUBLIC,
+        'annotations'=> NULL,
+        'parameters' => array(
+          array(
+            'assign'  => 'name',
+            'default' => new NullNode()
+          )
+        ),
+        'throws'     => NULL,
+        'body'       => array()
+      ))), $this->parse('class Null { 
+        public __construct($this.name= null) { }
+      }'));
+    }
+
+    /**
      * Test compact fluent interface
      *
      */
