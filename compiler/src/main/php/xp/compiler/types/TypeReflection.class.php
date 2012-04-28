@@ -230,6 +230,7 @@
           ) $r[$type][]= $this->getMethod($method->getName());
         }
       }
+      Console::writeLine($r);
       unset(xp::$registry['ext'][0]);
       return $r;
     }
