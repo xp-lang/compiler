@@ -126,12 +126,12 @@
     }
 
     /**
-     * Gets a list of extension methods
+     * Gets a list of extension methods this type provides
      *
      * @return  [:xp.compiler.types.Method[]]
      */
     public function getExtensions() {
-      return array();       // FIXME
+      return array();
     }
 
     /**
