@@ -204,6 +204,24 @@
     }
 
     /**
+     * Returns a typename for a given literal
+     *
+     * @param  string literal
+     * @return string name
+     */
+    protected function typeName($literal) {
+      if ('þ' === $literal[0]) {           // Primitives
+        return substr($literal, 1);
+      } else if ('¦' === $literal[0]) {    // Arrays
+        return $this->nameOf(substr($literal, 1)).'[]';
+      } else if ('»' === $literal[0]) {    // Maps
+        return '[:'.$this->nameOf(substr($literal, 1)).']';
+      } else {                             // Classes, enums, interfaces
+        return xp::nameOf($literal);
+      }
+    }
+
+    /**
      * Gets a list of extension methods
      *
      * @return  [:xp.compiler.types.Method[]]
@@ -220,7 +238,7 @@
       $methods= $this->class->getMethods();
       $r= array();
       foreach (xp::$registry['ext'][0] as $type => $name) {
-        $type= xp::nameOf($type);
+        $type= $this->typeName($type);
         $r[$type]= array();
         foreach ($methods as $method) {
           if (
@@ -230,7 +248,6 @@
           ) $r[$type][]= $this->getMethod($method->getName());
         }
       }
-      Console::writeLine($r);
       unset(xp::$registry['ext'][0]);
       return $r;
     }
