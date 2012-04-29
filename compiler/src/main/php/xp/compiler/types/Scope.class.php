@@ -24,6 +24,7 @@
     'xp.compiler.types.TypeReflection', 
     'xp.compiler.types.TypeDeclaration',
     'xp.compiler.types.GenericType',
+    'xp.compiler.types.PrimitiveTypeOf',
     'xp.compiler.types.ArrayTypeOf',
     'xp.compiler.types.MapTypeOf'
   );
@@ -226,7 +227,7 @@
       } else if ($name->isMap()) {
         return new MapTypeOf($this->resolveType($name->mapComponentType(), $register));
       } else if (!$name->isClass()) {
-        return new TypeReference($name, Types::PRIMITIVE_KIND);
+        return new PrimitiveTypeOf($name);
       } else if ($name->isGeneric()) {
         return new GenericType($this->resolveType(new TypeName($name->name), $register), $name->components);
       }
