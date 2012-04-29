@@ -105,7 +105,16 @@
     public function hexType() {
       $this->assertEquals(new TypeName('int'), $this->fixture->typeOf(new HexNode('')));
     }
-    
+
+    /**
+     * Test typeOf() method
+     *
+     */
+    #[@test]
+    public function octalType() {
+      $this->assertEquals(new TypeName('int'), $this->fixture->typeOf(new OctalNode('')));
+    }
+
     /**
      * Test typeOf() method
      *

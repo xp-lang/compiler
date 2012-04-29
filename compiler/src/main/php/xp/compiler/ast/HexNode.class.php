@@ -10,6 +10,7 @@
    * Represents a hex literal
    *
    * @see   xp://xp.compiler.ast.NaturalNode
+   * @test  xp://net.xp_lang.tests.resolve.NumberResolveTest
    */
   class HexNode extends NaturalNode {
     

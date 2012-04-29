@@ -43,6 +43,7 @@
     'xp.compiler.ast.ClassAccessNode',
     'xp.compiler.ast.IntegerNode',
     'xp.compiler.ast.HexNode',
+    'xp.compiler.ast.OctalNode',
     'xp.compiler.ast.DecimalNode',
     'xp.compiler.ast.StringNode',
     'xp.compiler.ast.BooleanNode',
@@ -95,6 +96,7 @@
 %token T_NUMBER 262
 %token T_DECIMAL 263
 %token T_HEX 264
+%token T_OCTAL 265
 
 %token T_PUBLIC 280
 %token T_PRIVATE 281
@@ -654,6 +656,7 @@ scalar:
     }}
   | T_NUMBER { $$= $yyLex->create(new IntegerNode($1)); }
   | T_HEX { $$= $yyLex->create(new HexNode($1)); }
+  | T_OCTAL { $$= $yyLex->create(new OctalNode($1)); }
   | T_DECIMAL { $$= $yyLex->create(new DecimalNode($1)); }
   | T_STRING { $$= $yyLex->create(new StringNode($1)); }
 ;
