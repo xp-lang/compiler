@@ -9,6 +9,7 @@
   /**
    * Source buffer
    *
+   * @test  xp://net.xp_lang.tests.BufferTest
    */
   class xp·compiler·emit·Buffer extends Object {
     protected $source= '';
