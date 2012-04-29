@@ -217,6 +217,14 @@
     protected abstract function emitHex($b, $num);
 
     /**
+     * Emit octal numbers
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.OctalNode num
+     */
+    protected abstract function emitOctal($b, $num);
+
+    /**
      * Emit a variable
      *
      * @param   xp.compiler.emit.Buffer b
