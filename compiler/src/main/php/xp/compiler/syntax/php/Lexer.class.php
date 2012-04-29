@@ -187,11 +187,10 @@
       while ($hasMore= $this->tokenizer->hasMoreTokens()) {
         $this->position= $this->forward;
         $token= $this->nextToken();
-        
-        // Check for whitespace-only
-        if (FALSE !== strpos(" \n\r\t", $token)) {
-          continue;
-        } else if ("'" === $token{0} || '"' === $token{0}) {
+        if (FALSE !== strpos(" \n\r\t", $token)) continue;    // Check for whitespace-only
+
+        $length= strlen($token);
+        if ("'" === $token{0} || '"' === $token{0}) {
           $this->token= xp搾ompiler新yntax搆hp感arser::T_STRING;
           $this->value= '';
           do {
@@ -265,30 +264,75 @@
         } else if (FALSE !== strpos(self::DELIMITERS, $token) && 1 == strlen($token)) {
           $this->token= ord($token);
           $this->value= $token;
-        } else if (ctype_digit($token)) {
+        } else if (0 === strcspn($token, '0123456789')) {     // Numbers, starting with 0..9
           $ahead= $this->nextToken();
-          if ('.' === $ahead{0}) {
+          if ('.' === $ahead{0}) {                            // Decimal numbers, next token starts with "."
+            $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
             $decimal= $this->nextToken();
-            if (!ctype_digit($decimal)) {
-              $this->raise('lang.FormatException', 'Illegal decimal number <'.$token.$ahead.$decimal.'>');
-            }
-            $this->token= xp搾ompiler新yntax搆hp感arser::T_DECIMAL;
+            $length= strlen($decimal);
             $this->value= $token.$ahead.$decimal;
-          } else {
-            $this->token= xp搾ompiler新yntax搆hp感arser::T_NUMBER;
-            $this->value= $token;
-            $this->pushBack($ahead);
+            if ($length !== strcspn($decimal, 'eE')) {
+              $ahead= $this->nextToken();
+              if ('+' === $ahead{0} || '-' === $ahead{0}) {
+                $this->value.= $ahead.$this->nextToken();
+                $format= '%d.%d%*1[eE]'.$ahead.'%*d';
+              } else {
+                $format= '%d.%d%*1[eE]%*d';
+                $this->pushBack($ahead);
+              }
+              if (4 !== sscanf($this->value, $format, $n, $f)) {
+                $this->raise('lang.FormatException', 'Illegal decimal number <'.$this->value.'>');
+              }
+            } else {
+              if ($length !== strspn($decimal, '0123456789')) {
+                $this->raise('lang.FormatException', 'Illegal decimal number <'.$token.$ahead.$decimal.'>');
+              }
+            }
+          } else {                                            // Integers, no "."
+            $p= TRUE;
+            if (1 === $length) {
+              $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
+              $this->value= $token;
+            } else if ('0' === $token[0] && ('x' === $token[1] || 'X' === $token[1])) {
+              if ($length !== strspn($token, '0123456789ABCDEFXabcdefx')) {
+                $this->raise('lang.FormatException', 'Illegal hex number <'.$token.'>');
+              }
+              $this->token= xp搾ompiler新yntax暖p感arser::T_HEX;
+              $this->value= $token;
+            } else if ('0' === $token[0]) {
+              if ($length !== strspn($token, '01234567')) {
+                $this->raise('lang.FormatException', 'Illegal octal number <'.$token.'>');
+              }
+              $this->token= xp搾ompiler新yntax暖p感arser::T_OCTAL;
+              $this->value= $token;
+            } else if ($length !== strcspn($token, 'eE')) {
+              if ('+' === $ahead{0} || '-' === $ahead{0}) {
+                $exponent= $ahead.$this->nextToken();
+                $format= '%d%*1[eE]'.$ahead.'%*d';
+                $p= FALSE;
+              } else {
+                $format= '%d%*1[eE]%*d';
+                $exponent= '';
+              }
+              $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
+              $this->value= $token.$exponent;
+              if (3 !== sscanf($this->value, $format, $n)) {
+                $this->raise('lang.FormatException', 'Illegal decimal number <'.$this->value.'>');
+              }
+            } else {
+              if ($length !== strspn($token, '0123456789')) {
+                $this->raise('lang.FormatException', 'Illegal number <'.$token.'>');
+              }
+              $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
+              $this->value= $token;
+            }
+            $p && $this->pushBack($ahead);
           }
-        } else if ('0' === $token{0} && 'x' === @$token{1}) {
-          if (!ctype_xdigit(substr($token, 2))) {
-            $this->raise('lang.FormatException', 'Illegal hex number <'.$token.'>');
-          }
-          $this->token= xp搾ompiler新yntax搆hp感arser::T_HEX;
-          $this->value= $token;
         } else {
-          $this->token= xp搾ompiler新yntax搆hp感arser::T_WORD;
+          $this->token= xp搾ompiler新yntax暖p感arser::T_WORD;
           $this->value= $token;
         }
+
         
         break;
       }

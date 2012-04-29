@@ -387,6 +387,16 @@
     protected function emitHex($b, $num) {
       $b->append($num->resolve());
     }
+
+    /**
+     * Emit octal numbers
+     *
+     * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.ast.OctalNode num
+     */
+    protected function emitOctal($b, $num) {
+      $b->append($num->resolve());
+    }
     
     /**
      * Emit a variable

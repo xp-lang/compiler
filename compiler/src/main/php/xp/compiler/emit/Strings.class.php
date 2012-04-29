@@ -50,6 +50,12 @@
           $out.= "\011";
         } else if ('f' === $in{$offset}) {
           $out.= "\014";
+        } else if ('x' === $in{$offset} && ($p= strspn($in, '0123456789ABCDEFabcdef', $offset+ 1))) {
+          if (($n= hexdec(substr($in, $offset+ 1, $p))) > 0xFF) {
+            throw new FormatException('Hex number out of range (\x00 .. \xFF) in '.$in);
+          }
+          $out.= chr($n);
+          $offset+= $p;
         } else if ($p= strspn($in, '01234567', $offset)) {
           if (($n= octdec(substr($in, $offset, $p))) > 0xFF) {
             throw new FormatException('Octal number out of range (\0 .. \377) in '.$in);
