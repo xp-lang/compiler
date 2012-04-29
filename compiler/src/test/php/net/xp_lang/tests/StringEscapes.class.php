@@ -102,12 +102,66 @@
     }
 
     /**
+     * Test "\00"
+     *
+     */
+    #[@test]
+    public function octalNulTwo() {
+      $this->assertEquals("Hello\000World", Strings::expandEscapesIn('Hello\00World'));
+    }
+
+    /**
+     * Test "\000"
+     *
+     */
+    #[@test]
+    public function octalNulThree() {
+      $this->assertEquals("Hello\000World", Strings::expandEscapesIn('Hello\000World'));
+    }
+
+    /**
+     * Test "\x0"
+     *
+     */
+    #[@test]
+    public function hexNulOne() {
+      $this->assertEquals("Hello\000World", Strings::expandEscapesIn('Hello\x0World'));
+    }
+
+    /**
+     * Test "\x00"
+     *
+     */
+    #[@test]
+    public function hexNulTwo() {
+      $this->assertEquals("Hello\000World", Strings::expandEscapesIn('Hello\x00World'));
+    }
+
+    /**
      * Test "\377" octal escape (0xFF)
      *
      */
     #[@test]
-    public function ff() {
+    public function octalFF() {
       $this->assertEquals("Hello\377World", Strings::expandEscapesIn('Hello\377World'));
+    }
+
+    /**
+     * Test "\xff" octal escape (0xFF)
+     *
+     */
+    #[@test]
+    public function hexFFLowercase() {
+      $this->assertEquals("Hello\377World", Strings::expandEscapesIn('Hello\xffWorld'));
+    }
+
+    /**
+     * Test "\xff" octal escape (0xFF)
+     *
+     */
+    #[@test]
+    public function hexFFUppercasecase() {
+      $this->assertEquals("Hello\377World", Strings::expandEscapesIn('Hello\xFFWorld'));
     }
 
     /**
@@ -117,6 +171,15 @@
     #[@test, @expect('lang.FormatException')]
     public function octalNumberOutOfRange() {
       Strings::expandEscapesIn('Hello\400World');
+    }
+
+    /**
+     * Test "\xFFFF" hex escape is out of range
+     *
+     */
+    #[@test, @expect('lang.FormatException')]
+    public function hexNumberOutOfRange() {
+      Strings::expandEscapesIn('Hello\xFFFFWorld');
     }
 
     /**
