@@ -480,6 +480,10 @@ throws_opt:
     /* empty */ { $$= NULL; }
   | T_THROWS name_list   { $$= $2; }
 ;
+
+arguments:
+  expressionlist_opt
+;
 // }}}
 
 // {{{ Overloadable operators
@@ -681,7 +685,7 @@ expression_opt:
 ;
 
 instancecreation:
-    typename '(' expressionlist_opt ')' classbody_opt {
+    typename '(' arguments ')' classbody_opt {
       $$= new InstanceCreationNode();
       $$->type= $1;
       $$->parameters= $3;
@@ -703,7 +707,7 @@ staticmember:
     T_VARIABLE { 
       $$= new StaticMemberAccessNode(NULL, $1); 
     }
-  | T_WORD '(' expressionlist_opt ')' { 
+  | T_WORD '(' arguments ')' { 
       $$= new StaticMethodCallNode(NULL, $1, $3); 
     }
   | T_WORD {
@@ -746,7 +750,7 @@ expression:
         $$= $4;
       }
     } 
-  | T_WORD '(' { $2= $yyLex->create(new InvocationNode($1)); } expressionlist_opt ')' chain_opt { 
+  | T_WORD '(' { $2= $yyLex->create(new InvocationNode($1)); } arguments ')' chain_opt { 
       $2->arguments= $4;
       if ($6) {
         $$= $6[0];
@@ -956,10 +960,10 @@ chain:
   | '.' member {
       $$= $yyLex->create(new MemberAccessNode(NULL, $2)); 
     }
-  | '.' member '(' { $1= $yyLex->create(new MethodCallNode(NULL, $2)); } expressionlist_opt ')' { 
+  | '.' member '(' { $1= $yyLex->create(new MethodCallNode(NULL, $2)); } arguments ')' { 
       $1->arguments= $5;
     }
-  | '.' '(' { $1= $yyLex->create(new InstanceCallNode(NULL)); } expressionlist_opt ')' { 
+  | '.' '(' { $1= $yyLex->create(new InstanceCallNode(NULL)); } arguments ')' { 
       $1->arguments= $4;
     }
 ;
