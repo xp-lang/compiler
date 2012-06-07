@@ -187,9 +187,10 @@
     protected function emitInvocationArguments($b, array $params, $brackets= TRUE) {
       $brackets && $b->append('(');
       $s= sizeof($params)- 1;
-      foreach ($params as $i => $param) {
+      $i= 0;
+      foreach ($params as $param) {
         $this->emitOne($b, $param);
-        $i < $s && $b->append(',');
+        $i++ < $s && $b->append(',');
       }
       $brackets && $b->append(')');
       return sizeof($params);
