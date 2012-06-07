@@ -482,7 +482,13 @@ throws_opt:
 ;
 
 arguments:
-  expressionlist_opt
+    expressionlist_opt
+  | mapliteral_opt {
+      $$= array();
+      foreach ($1 as $pair) {
+        $$[$pair[0]->value]= $pair[1];
+      }
+    }
 ;
 // }}}
 
