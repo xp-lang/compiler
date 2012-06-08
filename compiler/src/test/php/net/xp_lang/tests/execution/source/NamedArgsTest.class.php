@@ -50,6 +50,18 @@
      *
      */
     #[@test]
+    public function pass_first_without_name() {
+      $this->assertEquals(
+        array('url' => '/', 'params' => array(), 'headers' => array()),
+        $this->pass('"/"')
+      );
+    }
+
+    /**
+     * Test 
+     *
+     */
+    #[@test]
     public function pass_all_with_names() {
       $this->assertEquals(
         array('url' => '/', 'params' => array('a' => 'b'), 'headers' => array('X' => 'Y')),
@@ -66,6 +78,30 @@
       $this->assertEquals(
         array('url' => '/', 'params' => array('a' => 'b'), 'headers' => array('X' => 'Y')),
         $this->pass('url: "/", headers: [ X: "Y"], params: [ a: "b" ]')
+      );
+    }
+
+    /**
+     * Test 
+     *
+     */
+    #[@test]
+    public function pass_first_with_name() {
+      $this->assertEquals(
+        array('url' => '/', 'params' => array(), 'headers' => array()),
+        $this->pass('url: "/"')
+      );
+    }
+
+    /**
+     * Test 
+     *
+     */
+    #[@test]
+    public function pass_first_two_with_names() {
+      $this->assertEquals(
+        array('url' => '/', 'params' => array('a' => 'b'), 'headers' => array()),
+        $this->pass('url: "/", params: [ a: "b" ]')
       );
     }
   }

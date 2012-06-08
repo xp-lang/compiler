@@ -190,9 +190,11 @@
       $s= sizeof($params)- 1;
       $i= 0;
       if (is_string(key($params))) {    // Named
+        $p= sizeof($ptr->parameters)- 1;
         foreach ($ptr->parameters as $name => $param) {
           isset($params[$name]) ? $this->emitOne($b, $params[$name]) : $b->append('NULL');
-          $i++ < $s && $b->append(',');
+          if ($i >= $s) break;
+          $i++ < $p && $b->append(',');
         }
       } else {                          // Ordered
         foreach ($params as $param) {
