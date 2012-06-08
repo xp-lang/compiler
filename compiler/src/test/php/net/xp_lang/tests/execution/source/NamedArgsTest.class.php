@@ -99,6 +99,18 @@
      *
      */
     #[@test]
+    public function pass_first_with_quoted_name() {
+      $this->assertEquals(
+        array('url' => '/', 'params' => array(), 'headers' => array()),
+        $this->pass('"url": "/"')
+      );
+    }
+
+    /**
+     * Test 
+     *
+     */
+    #[@test]
     public function pass_first_two_with_names() {
       $this->assertEquals(
         array('url' => '/', 'params' => array('a' => 'b'), 'headers' => array()),
