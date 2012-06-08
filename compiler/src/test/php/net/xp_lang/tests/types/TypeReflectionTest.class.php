@@ -146,7 +146,7 @@
       $method= create(new TypeReflection(XPClass::forName('lang.types.String')))->getMethod('substring');
       $this->assertEquals(new TypeName('lang.types.String'), $method->returns);
       $this->assertEquals('substring', $method->name);
-      $this->assertEquals(array(new TypeName('int'), new TypeName('int')), $method->parameters);
+      $this->assertEquals(array('start' => new TypeName('int'), 'length' => new TypeName('int')), $method->parameters);
       $this->assertEquals(MODIFIER_PUBLIC, $method->modifiers);
     }
 
