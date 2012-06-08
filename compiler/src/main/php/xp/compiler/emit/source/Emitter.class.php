@@ -180,17 +180,25 @@
      * Emit parameters
      *
      * @param   xp.compiler.emit.Buffer b
+     * @param   xp.compiler.types.Types
      * @param   xp.compiler.ast.Node[] params
      * @param   bool brackets
      * @return  int
      */
-    protected function emitInvocationArguments($b, array $params, $brackets= TRUE) {
+    protected function emitInvocationArguments($b, $ptr, array $params, $brackets= TRUE) {
       $brackets && $b->append('(');
       $s= sizeof($params)- 1;
       $i= 0;
-      foreach ($params as $param) {
-        $this->emitOne($b, $param);
-        $i++ < $s && $b->append(',');
+      if (is_string(key($params))) {    // Named
+        foreach ($ptr->parameters as $name => $param) {
+          isset($params[$name]) ? $this->emitOne($b, $params[$name]) : $b->append('NULL');
+          $i++ < $s && $b->append(',');
+        }
+      } else {                          // Ordered
+        foreach ($params as $param) {
+          $this->emitOne($b, $param);
+          $i++ < $s && $b->append(',');
+        }
       }
       $brackets && $b->append(')');
       return sizeof($params);
@@ -215,11 +223,11 @@
       // Static method call vs. function call
       if (TRUE === $ptr) {
         $b->append($inv->name);
-        $this->emitInvocationArguments($b, (array)$inv->arguments);
+        $this->emitInvocationArguments($b, NULL, (array)$inv->arguments);
         $this->scope[0]->setType($inv, TypeName::$VAR);
       } else {
         $b->append($ptr->holder->literal().'::'.$ptr->name());
-        $this->emitInvocationArguments($b, (array)$inv->arguments);
+        $this->emitInvocationArguments($b, $ptr, (array)$inv->arguments);
         $this->scope[0]->setType($inv, $ptr->returns);
       }
     }
@@ -423,7 +431,7 @@
     public function emitStaticMethodCall($b, $call) {
       $ptr= $this->resolveType($call->type);
       $b->append($ptr->literal().'::'.$call->name);
-      $this->emitInvocationArguments($b, (array)$call->arguments);
+      $this->emitInvocationArguments($b, $ptr->getMethod($call->name), (array)$call->arguments);
 
       // Record type
       $this->scope[0]->setType($call, $ptr->hasMethod($call->name) ? $ptr->getMethod($call->name)->returns : TypeName::$VAR);
@@ -440,7 +448,7 @@
       $this->emitOne($b, $call->target);
       if ($call->arguments) {
         $b->append(', ');
-        $this->emitInvocationArguments($b, $call->arguments, FALSE);
+        $this->emitInvocationArguments($b, NULL, $call->arguments, FALSE);
       }
       $b->append(')');
     }
@@ -461,7 +469,7 @@
         $b->insert($ext->holder->literal().'::'.$call->name.'(', $mark);
         if ($call->arguments) {
           $b->append(', ');
-          $this->emitInvocationArguments($b, $call->arguments, FALSE);
+          $this->emitInvocationArguments($b, $ext, $call->arguments, FALSE);
         }
         $b->append(')');
         $this->scope[0]->setType($call, $ext->returns);
@@ -487,7 +495,7 @@
       }
 
       $b->append('->'.$call->name);
-      $this->emitInvocationArguments($b, (array)$call->arguments);
+      $this->emitInvocationArguments($b, $ptr->getMethod($call->name), (array)$call->arguments);
 
       // Record type
       $this->scope[0]->setType($call, $ptr->hasMethod($call->name) ? $ptr->getMethod($call->name)->returns : TypeName::$VAR);
@@ -1129,7 +1137,7 @@
      */
     protected function emitDynamicInstanceCreation($b, $new) {
       $b->append('new ')->append('$')->append($new->variable);
-      $this->emitInvocationArguments($b, (array)$new->parameters);
+      $this->emitInvocationArguments($b, NULL, (array)$new->parameters);
       
       $this->scope[0]->setType($new, new TypeName('lang.Object'));
     }
@@ -1198,12 +1206,12 @@
         $b->append('>\'');
         if ($new->parameters) {
           $b->append(',');
-          $this->emitInvocationArguments($b, (array)$new->parameters, FALSE);
+          $this->emitInvocationArguments($b, $ptr->getConstructor(), (array)$new->parameters, FALSE);
         }
         $b->append(')');
       } else {
         $b->append('new '.$ptr->literal());
-        $this->emitInvocationArguments($b, (array)$new->parameters);
+        $this->emitInvocationArguments($b, $ptr->getConstructor(), (array)$new->parameters);
       }
     }
     

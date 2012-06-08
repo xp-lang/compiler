@@ -56,5 +56,17 @@
         $this->pass('url: "/", params: [ a: "b" ], headers: [ X: "Y"]')
       );
     }
+
+    /**
+     * Test 
+     *
+     */
+    #[@test]
+    public function pass_all_with_names_divergent_order() {
+      $this->assertEquals(
+        array('url' => '/', 'params' => array('a' => 'b'), 'headers' => array('X' => 'Y')),
+        $this->pass('url: "/", headers: [ X: "Y"], params: [ a: "b" ]')
+      );
+    }
   }
 ?>
