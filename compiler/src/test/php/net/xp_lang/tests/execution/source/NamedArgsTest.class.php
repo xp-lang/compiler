@@ -11,6 +11,7 @@
   /**
    * Tests named arguments
    *
+   * @see   https://github.com/xp-framework/rfc/issues/251
    */
   class net·xp_lang·tests·execution·source·NamedArgsTest extends ExecutionTest {
 
