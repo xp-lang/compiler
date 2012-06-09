@@ -192,7 +192,13 @@
       if (is_string(key($params))) {    // Named
         $p= sizeof($ptr->parameters)- 1;
         foreach ($ptr->parameters as $name => $param) {
-          isset($params[$name]) ? $this->emitOne($b, $params[$name]) : $b->append('NULL');
+          if (isset($params[$name])) {
+            $this->emitOne($b, $params[$name]);
+          } else if ($param['default']) {
+            $this->emitOne($b, $param['default']);
+          } else {
+            $this->error('P404', 'Cannot omit '.$ptr->name.'()\'s parameter "'.$name.'"');
+          }
           if ($i >= $s) break;
           $i++ < $p && $b->append(',');
         }
@@ -2213,8 +2219,8 @@
         $arguments= array();
         $parameters= array();
         if ($parentType->hasConstructor()) {
-          foreach ($parentType->getConstructor()->parameters as $i => $type) {
-            $parameters[]= array('name' => '··a'.$i, 'type' => $type);    // TODO: default
+          foreach ($parentType->getConstructor()->parameters as $i => $param) {
+            $parameters[]= array('name' => '··a'.$i, 'type' => $param['type']);    // TODO: default
             $arguments[]= new VariableNode('··a'.$i);
           }
           $body= array(new StaticMethodCallNode(new TypeName('parent'), '__construct', $arguments));

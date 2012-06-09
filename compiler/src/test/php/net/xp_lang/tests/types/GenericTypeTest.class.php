@@ -185,7 +185,10 @@
      */
     #[@test]
     public function hashTableGetMethodParameters() {
-      $this->assertEquals(array(new TypeName('string')), $this->newGenericHashTableType()->getMethod('get')->parameters);
+      $this->assertEquals(
+        array('key' => array('type' => new TypeName('string'), 'default' => NULL)),
+        $this->newGenericHashTableType()->getMethod('get')->parameters
+      );
     }
 
     /**
@@ -230,7 +233,10 @@
      */
     #[@test]
     public function vectorGetMethodParameters() {
-      $this->assertEquals(array(new TypeName('int')), $this->newGenericVectorType()->getMethod('get')->parameters);
+      $this->assertEquals(
+        array('index' => array('type' => new TypeName('int'), 'default' => NULL)),
+        $this->newGenericVectorType()->getMethod('get')->parameters
+      );
     }
   }
 ?>

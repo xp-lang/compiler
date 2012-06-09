@@ -163,7 +163,10 @@
         $c->modifiers= $constructor->getModifiers();
         $c->parameters= array();
         foreach ($constructor->getParameters() as $p) {
-          $c->parameters[$p->getName()]= $this->typeNameOf($p->getTypeName());
+          $c->parameters[$p->getName()]= array(
+            'type'    => $this->typeNameOf($p->getTypeName()), 
+            'default' => NULL
+          );
         }
         $c->holder= $this;  
         return $c;
@@ -196,7 +199,10 @@
         $m->modifiers= $method->getModifiers();
         $m->parameters= array();
         foreach ($method->getParameters() as $p) {
-          $m->parameters[$p->getName()]= $this->typeNameOf($p->getTypeName());
+          $m->parameters[$p->getName()]= array(
+            'type'    => $this->typeNameOf($p->getTypeName()), 
+            'default' => NULL
+          );
         }
         $m->holder= $this;
         return $m;
@@ -287,7 +293,10 @@
         $m->modifiers= $method->getModifiers();
         $m->parameters= array();
         foreach ($method->getParameters() as $p) {
-          $m->parameters[]= $this->typeNameOf($p->getTypeName());
+          $m->parameters[$p->getName()]= array(
+            'type'    => $this->typeNameOf($p->getTypeName()), 
+            'default' => NULL
+          );
         }
         $m->holder= $this;
         return $m;

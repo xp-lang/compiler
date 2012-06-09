@@ -134,7 +134,7 @@
           $c= new xp·compiler·types·Constructor();
           $c->modifiers= $member->modifiers;
           foreach ($member->parameters as $p) {
-            $c->parameters[$p['name']]= $p['type'];
+            $c->parameters[$p['name']]= array('type' => $p['type'], 'default' => NULL);
           }
           $c->holder= $this;
           return $c;
@@ -170,7 +170,7 @@
           $m->returns= $member->returns;
           $m->modifiers= $member->modifiers;
           foreach ((array)$member->parameters as $p) {
-            $m->parameters[$p['name']]= $p['type'];
+            $m->parameters[$p['name']]=  array('type' => $p['type'], 'default' => NULL);
           }
           $m->holder= $this;
           return $m;
@@ -195,7 +195,7 @@
           $m->returns= $member->returns;
           $m->modifiers= $member->modifiers;
           foreach ((array)$member->parameters as $p) {
-            $m->parameters[]= $p['type'];
+            $m->parameters[$p['name']]=  array('type' => $p['type'], 'default' => NULL);
           }
           $m->holder= $this;
 

@@ -306,7 +306,13 @@
       $method= $this->stringClass()->getMethod('substring');
       $this->assertEquals(new TypeName('lang.types.String'), $method->returns);
       $this->assertEquals('substring', $method->name);
-      $this->assertEquals(array('start' => new TypeName('int'), 'end' => new TypeName('int')), $method->parameters);
+      $this->assertEquals(
+        array(
+          'start'  => array('type' => new TypeName('int'), 'default' => NULL), 
+          'end'    => array('type' => new TypeName('int'), 'default' => NULL)
+        ), 
+        $method->parameters
+      );
       $this->assertEquals(MODIFIER_PUBLIC, $method->modifiers);
     }
 

@@ -186,7 +186,12 @@
      * @return  xp.compiler.types.Constructor
      */
     public function getConstructor() {
-      return $this->definition->getConstructor();
+      if (NULL === ($constructor= $this->definition->getConstructor())) return NULL;
+
+      foreach ($constructor->parameters as $name => $param) {
+        $param['type'] && $constructor->parameters[$name]['type']= $this->rewrite($param['type']);
+      }
+      return $constructor;
     }
 
     /**
@@ -222,12 +227,13 @@
      * @return  xp.compiler.types.Method
      */
     public function getMethod($name) {
-      if (NULL !== ($method= $this->definition->getMethod($name))) {
-        $method->returns= $method->returns ? $this->rewrite($method->returns) : NULL;
-        $method->parameters= $this->rewriteAll($method->parameters);
-        return $method;
+      if (NULL === ($method= $this->definition->getMethod($name))) return NULL;
+
+      $method->returns= $method->returns ? $this->rewrite($method->returns) : NULL;
+      foreach ($method->parameters as $name => $param) {
+        $param['type'] && $method->parameters[$name]['type']= $this->rewrite($param['type']);
       }
-      return NULL;
+      return $method;
     }
 
     /**

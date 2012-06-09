@@ -117,5 +117,17 @@
         $this->pass('url: "/", params: [ a: "b" ]')
       );
     }
+
+    /**
+     * Test 
+     *
+     */
+    #[@test]
+    public function omit_one_in_the_middle_with_names() {
+      $this->assertEquals(
+        array('url' => '/', 'params' => array(), 'headers' => array('X' => 'Y')),
+        $this->pass('url: "/", headers: [ X: "Y"]')
+      );
+    }
   }
 ?>
