@@ -167,7 +167,7 @@
      * @return  xp.compiler.ast.Node
      * @throws  lang.IllegalArgumentException
      */
-    protected function nodeOfDefaultValue($value) {
+    protected function nodeOf($value) {
 
       // Primitives
       if (NULL === $value) {
@@ -187,13 +187,13 @@
       if ($type instanceof ArrayType) {
         $r= new ArrayNode();
         foreach ($value as $element) {
-          $r->values[]= $this->nodeOfDefaultValue($element);
+          $r->values[]= $this->nodeOf($element);
         }
         return $r;
       } else if ($type instanceof MapType) {
         $r= new MapNode();
         foreach ($value as $key => $member) {
-          $r->elements[]= array($this->nodeOfDefaultValue($key), $this->nodeOfDefaultValue($member));
+          $r->elements[]= array($this->nodeOf($key), $this->nodeOf($member));
         }
         return $r;
       }
@@ -217,7 +217,7 @@
         foreach ($constructor->getParameters() as $p) {
           $c->parameters[$p->getName()]= array(
             'type'    => $this->typeNameOf($p->getTypeName()), 
-            'default' => $p->isOptional() ? $this->nodeOfDefaultValue($p->getDefaultValue()) : NULL
+            'default' => $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : NULL
           );
         }
         $c->holder= $this;  
@@ -253,7 +253,7 @@
         foreach ($method->getParameters() as $p) {
           $m->parameters[$p->getName()]= array(
             'type'    => $this->typeNameOf($p->getTypeName()), 
-            'default' => $p->isOptional() ? $this->nodeOfDefaultValue($p->getDefaultValue()) : NULL
+            'default' => $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : NULL
           );
         }
         $m->holder= $this;
@@ -347,7 +347,7 @@
         foreach ($method->getParameters() as $p) {
           $m->parameters[$p->getName()]= array(
             'type'    => $this->typeNameOf($p->getTypeName()), 
-            'default' => $p->isOptional() ? $this->nodeOfDefaultValue($p->getDefaultValue()) : NULL
+            'default' => $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : NULL
           );
         }
         $m->holder= $this;
