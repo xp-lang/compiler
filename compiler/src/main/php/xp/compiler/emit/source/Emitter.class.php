@@ -181,35 +181,34 @@
      *
      * @param   xp.compiler.emit.Buffer b
      * @param   xp.compiler.types.Types
-     * @param   xp.compiler.ast.Node[] params
+     * @param   xp.compiler.ast.Node[] arguments
      * @param   bool brackets
      * @return  int
      */
-    protected function emitInvocationArguments($b, $ptr, array $params, $brackets= TRUE) {
+    protected function emitInvocationArguments($b, $ptr, array $arguments, $brackets= TRUE) {
       $brackets && $b->append('(');
-      $s= sizeof($params)- 1;
+      $s= sizeof($arguments)- 1;
       $i= 0;
-      if (is_string(key($params))) {    // Named
+      if (is_string(key($arguments))) {    // Named
         $p= sizeof($ptr->parameters)- 1;
         foreach ($ptr->parameters as $name => $param) {
-          if (isset($params[$name])) {
-            $this->emitOne($b, $params[$name]);
+          if (isset($arguments[$name])) {
+            $this->emitOne($b, $arguments[$name]);
           } else if ($param['default']) {
             $this->emitOne($b, $param['default']);
           } else {
             $this->error('P404', 'Cannot omit '.$ptr->name.'()\'s parameter "'.$name.'"');
           }
-          if ($i >= $s) break;
           $i++ < $p && $b->append(',');
         }
       } else {                          // Ordered
-        foreach ($params as $param) {
+        foreach ($arguments as $param) {
           $this->emitOne($b, $param);
           $i++ < $s && $b->append(',');
         }
       }
       $brackets && $b->append(')');
-      return sizeof($params);
+      return sizeof($arguments);
     }
     
     /**
