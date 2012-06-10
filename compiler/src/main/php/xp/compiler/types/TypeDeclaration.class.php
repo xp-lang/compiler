@@ -120,7 +120,7 @@
       foreach ($this->tree->declaration->body as $member) {
         if ($member instanceof ConstructorNode) return TRUE;
       }
-      return $this->parent ? $this->parent->hasMethod($name) : FALSE;
+      return $this->parent ? $this->parent->hasConstructor() : FALSE;
     }
 
     /**
@@ -140,7 +140,7 @@
           return $c;
         }
       }
-      return $this->parent ? $this->parent->getMethod($name) : NULL;
+      return $this->parent ? $this->parent->getConstructor() : NULL;
     }
     
     /**

@@ -217,6 +217,26 @@
     }
 
     /**
+     * Returns a type declaration for the SecureString class
+     *
+     * @return  xp.compiler.emit.TypeDeclaration
+     */
+    protected function secureStringClass() {
+      return new TypeDeclaration(
+        new ParseTree(new TypeName('security'), array(), new ClassNode(
+          MODIFIER_PUBLIC, 
+          NULL,
+          new TypeName('SecureString'),
+          new TypeName('lang.types.String'),
+          NULL,
+          array(
+          )
+        )),
+        $this->stringClass()
+      );
+    }
+
+    /**
      * Test hasConstructor() method
      *
      */
@@ -247,6 +267,16 @@
     }
 
     /**
+     * Test hasConstructor() method
+     *
+     */
+    #[@test]
+    public function secureStringClassHasConstructor() {
+      $decl= $this->secureStringClass();
+      $this->assertTrue($decl->hasConstructor());
+    }
+
+    /**
      * Test getConstructor() method
      *
      */
@@ -254,6 +284,26 @@
     public function stringClassConstructor() {
       $decl= $this->stringClass();
       $this->assertInstanceOf('xp.compiler.types.Constructor', $decl->getConstructor());
+    }
+
+    /**
+     * Test getConstructor() method
+     *
+     */
+    #[@test]
+    public function secureStringClassConstructor() {
+      $decl= $this->secureStringClass();
+      $this->assertEquals($this->stringClass(), $decl->getConstructor()->holder);
+    }
+
+    /**
+     * Test getConstructor() method
+     *
+     */
+    #[@test]
+    public function secureStringClassConstructorsHolderIsStringClass() {
+      $decl= $this->secureStringClass();
+      $this->assertEquals('lang.types.String', $decl->getConstructor()->holder->name());
     }
 
     /**
