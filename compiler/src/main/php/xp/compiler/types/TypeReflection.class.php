@@ -149,6 +149,40 @@
     public function hasConstructor() {
       return $this->class->hasConstructor();
     }
+
+    /**
+     * Maps default values
+     * 
+     * @param   var value
+     * @return  xp.compiler.ast.Node
+     * @throws  lang.IllegalArgumentException
+     */
+    protected function nodeOfDefaultValue($value) {
+
+      // Primitives
+      if (NULL === $value) {
+        return new NullNode();
+      } else if (Primitive::$STRING->isInstance($value)) {
+        return new StringNode($value);
+      } else if (Primitive::$INT->isInstance($value)) {
+        return new IntegerNode($value);
+      } else if (Primitive::$DOUBLE->isInstance($value)) {
+        return new DecimalNode($value);
+      } else if (Primitive::$BOOL->isInstance($value)) {
+        return new BooleanNode($value);
+      }
+
+      // Arrays and maps
+      $type= typeof($value);
+      if ($type instanceof ArrayType) {
+        return new ArrayNode($value);
+      } else if ($type instanceof MapType) {
+        return new MapType($value);
+      }
+
+      // Other types of default values shouldn't appear here
+      throw new IllegalArgumentException('Cannot map '.$type->toString().' to a creation node');
+    }
     
     /**
      * Returns the constructor
@@ -165,7 +199,7 @@
         foreach ($constructor->getParameters() as $p) {
           $c->parameters[$p->getName()]= array(
             'type'    => $this->typeNameOf($p->getTypeName()), 
-            'default' => NULL
+            'default' => $p->isOptional() ? $this->nodeOfDefaultValue($p->getDefaultValue()) : NULL
           );
         }
         $c->holder= $this;  
@@ -201,7 +235,7 @@
         foreach ($method->getParameters() as $p) {
           $m->parameters[$p->getName()]= array(
             'type'    => $this->typeNameOf($p->getTypeName()), 
-            'default' => NULL
+            'default' => $p->isOptional() ? $this->nodeOfDefaultValue($p->getDefaultValue()) : NULL
           );
         }
         $m->holder= $this;
@@ -295,7 +329,7 @@
         foreach ($method->getParameters() as $p) {
           $m->parameters[$p->getName()]= array(
             'type'    => $this->typeNameOf($p->getTypeName()), 
-            'default' => NULL
+            'default' => $p->isOptional() ? $this->nodeOfDefaultValue($p->getDefaultValue()) : NULL
           );
         }
         $m->holder= $this;

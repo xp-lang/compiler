@@ -149,7 +149,7 @@
       $this->assertEquals(
         array(
           'start'  => array('type' => new TypeName('int'), 'default' => NULL), 
-          'length' => array('type' => new TypeName('int'), 'default' => NULL)
+          'length' => array('type' => new TypeName('int'), 'default' => new IntegerNode(0))
         ), 
         $method->parameters
       );
