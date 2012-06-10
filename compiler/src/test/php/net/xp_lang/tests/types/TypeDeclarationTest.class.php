@@ -375,7 +375,7 @@
     }
 
     /**
-     * Test hasOperator() method
+     * Test getOperator() method
      *
      */
     #[@test]
@@ -395,7 +395,7 @@
     }
 
     /**
-     * Test hasOperator() method
+     * Test getOperator() method
      *
      */
     #[@test]
@@ -415,13 +415,23 @@
     }
 
     /**
-     * Test hasOperator() method
+     * Test getOperator() method
      *
      */
     #[@test]
     public function secureStringClassConcatOperator() {
       $decl= $this->secureStringClass();
       $this->assertInstanceOf('xp.compiler.types.Operator', $decl->getOperator('~'));
+    }
+
+    /**
+     * Test getOperator() method
+     *
+     */
+    #[@test]
+    public function secureStringClassConcatOperatorsHolderIsString() {
+      $decl= $this->secureStringClass();
+      $this->assertEquals('lang.types.String', $decl->getOperator('~')->holder->name());
     }
 
     /**
