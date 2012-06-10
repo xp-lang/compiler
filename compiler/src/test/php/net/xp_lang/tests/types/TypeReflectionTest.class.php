@@ -295,5 +295,117 @@
       $this->assertEquals('lang.types.ArrayList', key($extensions));
       $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
     }
+
+    /**
+     * Test default arguments reflection
+     *
+     */
+    #[@test]
+    public function argumentNullDefault() {
+      $fixture= new TypeReflection(ClassLoader::defineClass($this->name.'Fixture', 'lang.Object', array(), '{
+        public function fixture($a= NULL) {}
+      }'));
+      $this->assertEquals(
+        new NullNode(),
+        $fixture->getMethod('fixture')->parameters['a']['default']
+      );
+    }
+
+    /**
+     * Test default arguments reflection
+     *
+     */
+    #[@test]
+    public function argumentStringDefault() {
+      $fixture= new TypeReflection(ClassLoader::defineClass($this->name.'Fixture', 'lang.Object', array(), '{
+        public function fixture($a= "a") {}
+      }'));
+      $this->assertEquals(
+        new StringNode('a'),
+        $fixture->getMethod('fixture')->parameters['a']['default']
+      );
+    }
+
+    /**
+     * Test default arguments reflection
+     *
+     */
+    #[@test]
+    public function argumentIntegerDefault() {
+      $fixture= new TypeReflection(ClassLoader::defineClass($this->name.'Fixture', 'lang.Object', array(), '{
+        public function fixture($a= 0) {}
+      }'));
+      $this->assertEquals(
+        new IntegerNode(0),
+        $fixture->getMethod('fixture')->parameters['a']['default']
+      );
+    }
+
+    /**
+     * Test default arguments reflection
+     *
+     */
+    #[@test]
+    public function argumentDoubleDefault() {
+      $fixture= new TypeReflection(ClassLoader::defineClass($this->name.'Fixture', 'lang.Object', array(), '{
+        public function fixture($a= 0.5) {}
+      }'));
+      $this->assertEquals(
+        new DecimalNode(0.5),
+        $fixture->getMethod('fixture')->parameters['a']['default']
+      );
+    }
+
+    /**
+     * Test default arguments reflection
+     *
+     */
+    #[@test]
+    public function argumentBooleanDefault() {
+      $fixture= new TypeReflection(ClassLoader::defineClass($this->name.'Fixture', 'lang.Object', array(), '{
+        public function fixture($a= TRUE) {}
+      }'));
+      $this->assertEquals(
+        new BooleanNode(TRUE),
+        $fixture->getMethod('fixture')->parameters['a']['default']
+      );
+    }
+
+    /**
+     * Test default arguments reflection
+     *
+     */
+    #[@test]
+    public function argumentNonEmptyArrayDefault() {
+      $fixture= new TypeReflection(ClassLoader::defineClass($this->name.'Fixture', 'lang.Object', array(), '{
+        public function fixture($a= array("a", "b", "c")) {}
+      }'));
+      $this->assertEquals(
+        new ArrayNode(array(
+          new StringNode('a'), 
+          new StringNode('b'), 
+          new StringNode('c')
+        )),
+        $fixture->getMethod('fixture')->parameters['a']['default']
+      );
+    }
+
+    /**
+     * Test default arguments reflection
+     *
+     */
+    #[@test]
+    public function argumentNonEmptyMapDefault() {
+      $fixture= new TypeReflection(ClassLoader::defineClass($this->name.'Fixture', 'lang.Object', array(), '{
+        public function fixture($a= array("a" => "b", "c" => "d")) {}
+      }'));
+      $this->assertEquals(
+        new MapNode(array(
+          array(new StringNode('a'), new StringNode('b')),  // a => b
+          array(new StringNode('c'), new StringNode('d')),  // c => d
+        )),
+        $fixture->getMethod('fixture')->parameters['a']['default']
+      );
+    }
   }
 ?>
