@@ -134,7 +134,10 @@
           $c= new xp·compiler·types·Constructor();
           $c->modifiers= $member->modifiers;
           foreach ($member->parameters as $p) {
-            $c->parameters[$p['name']]= array('type' => $p['type'], 'default' => NULL);
+            $c->parameters[$p['name']]= array(
+              'type'    => $p['type'], 
+              'default' => isset($p['default']) ? $p['default'] : NULL
+            );
           }
           $c->holder= $this;
           return $c;
@@ -169,9 +172,11 @@
           $m->name= $member->name;
           $m->returns= $member->returns;
           $m->modifiers= $member->modifiers;
-          Console::writeLine($p);
           foreach ((array)$member->parameters as $p) {
-            $m->parameters[$p['name']]=  array('type' => $p['type'], 'default' => NULL);
+            $m->parameters[$p['name']]= array(
+              'type'    => $p['type'], 
+              'default' => isset($p['default']) ? $p['default'] : NULL
+            );
           }
           $m->holder= $this;
           return $m;
@@ -196,7 +201,10 @@
           $m->returns= $member->returns;
           $m->modifiers= $member->modifiers;
           foreach ((array)$member->parameters as $p) {
-            $m->parameters[$p['name']]=  array('type' => $p['type'], 'default' => NULL);
+            $m->parameters[$p['name']]= array(
+              'type'    => $p['type'], 
+              'default' => isset($p['default']) ? $p['default'] : NULL
+            );
           }
           $m->holder= $this;
 

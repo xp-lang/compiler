@@ -142,14 +142,15 @@
               'modifiers'   => MODIFIER_PUBLIC,
               'parameters'  => array(
                 array(
-                  'name'  => 'start',
-                  'type'  => new TypeName('int'),
-                  'check' => TRUE
+                  'name'    => 'start',
+                  'type'    => new TypeName('int'),
+                  'check'   => TRUE
                 ), 
                 array(
-                  'name'  => 'end',
-                  'type'  => new TypeName('int'),
-                  'check' => TRUE
+                  'name'    => 'end',
+                  'type'    => new TypeName('int'),
+                  'check'   => TRUE,
+                  'default' => new IntegerNode(0)
                 )
               )
             )),
@@ -309,7 +310,7 @@
       $this->assertEquals(
         array(
           'start'  => array('type' => new TypeName('int'), 'default' => NULL), 
-          'end'    => array('type' => new TypeName('int'), 'default' => NULL)
+          'end'    => array('type' => new TypeName('int'), 'default' => new IntegerNode(0))
         ), 
         $method->parameters
       );
