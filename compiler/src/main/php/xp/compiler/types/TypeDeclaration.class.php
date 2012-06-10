@@ -347,7 +347,7 @@
           return $c;
         }
       }
-      return $this->parent ? $this->parent->getConstant($name) : FALSE;
+      return $this->parent ? $this->parent->getConstant($name) : NULL;
     }
 
     /**

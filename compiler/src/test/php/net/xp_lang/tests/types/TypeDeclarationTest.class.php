@@ -614,6 +614,15 @@
      *
      */
     #[@test]
+    public function stringClassGetConstant() {
+      $this->assertNull($this->objectClass()->getConstant('STATUS_OK'));
+    }
+
+    /**
+     * Test getConstant() method
+     *
+     */
+    #[@test]
     public function stringClassConstant() {
       $const= $this->stringClass()->getConstant('ENCODING');
       $this->assertEquals(new TypeName('string'), $const->type);
