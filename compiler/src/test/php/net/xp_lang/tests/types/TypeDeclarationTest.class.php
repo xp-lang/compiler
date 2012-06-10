@@ -10,6 +10,7 @@
     'xp.compiler.ast.ClassConstantNode',
     'xp.compiler.ast.FieldNode',
     'xp.compiler.ast.MethodNode',
+    'xp.compiler.ast.OperatorNode',
     'xp.compiler.ast.ConstructorNode',
     'xp.compiler.ast.IndexerNode',
     'xp.compiler.ast.PropertyNode',
@@ -155,6 +156,9 @@
             )),
             new FieldNode(array(
               'name' => 'length'
+            )),
+            new OperatorNode(array(
+              'symbol' => '~'
             )),
             new IndexerNode(array(
               'type'       => new TypeName('string'),
@@ -358,6 +362,66 @@
       $this->assertEquals('substring', $method->name);
       $this->assertEquals(array(new TypeName('int'), new TypeName('int')), $method->parameters);
       $this->assertEquals(MODIFIER_PUBLIC, $method->modifiers);
+    }
+
+    /**
+     * Test hasOperator() method
+     *
+     */
+    #[@test]
+    public function objectClassDoesNotHaveOperator() {
+      $decl= $this->objectClass();
+      $this->assertFalse($decl->hasOperator('~'));
+    }
+
+    /**
+     * Test hasOperator() method
+     *
+     */
+    #[@test]
+    public function objectClassNoOperator() {
+      $decl= $this->objectClass();
+      $this->assertNull($decl->getOperator('~'));
+    }
+
+    /**
+     * Test hasOperator() method
+     *
+     */
+    #[@test]
+    public function stringClassHasConcatOperator() {
+      $decl= $this->stringClass();
+      $this->assertTrue($decl->hasOperator('~'));
+    }
+
+    /**
+     * Test hasOperator() method
+     *
+     */
+    #[@test]
+    public function stringClassConcatOperator() {
+      $decl= $this->stringClass();
+      $this->assertInstanceOf('xp.compiler.types.Operator', $decl->getOperator('~'));
+    }
+
+    /**
+     * Test hasOperator() method
+     *
+     */
+    #[@test]
+    public function secureStringClassHasConcatOperator() {
+      $decl= $this->secureStringClass();
+      $this->assertTrue($decl->hasOperator('~'));
+    }
+
+    /**
+     * Test hasOperator() method
+     *
+     */
+    #[@test]
+    public function secureStringClassConcatOperator() {
+      $decl= $this->secureStringClass();
+      $this->assertInstanceOf('xp.compiler.types.Operator', $decl->getOperator('~'));
     }
 
     /**

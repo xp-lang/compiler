@@ -216,7 +216,7 @@
       foreach ($this->tree->declaration->body as $member) {
         if ($member instanceof OperatorNode && $member->symbol === $symbol) return TRUE;
       }
-      return $this->parent ? $this->parent->hasOperator($name) : FALSE;
+      return $this->parent ? $this->parent->hasOperator($symbol) : FALSE;
     }
     
     /**
@@ -228,8 +228,7 @@
     public function getOperator($symbol) {
       foreach ($this->tree->declaration->body as $member) {
         if ($member instanceof OperatorNode && $member->symbol === $symbol) {
-          $m= new xp·compiler·types·Method();
-          $m->name= $member->symbol;
+          $m= new xp·compiler·types·Operator($member->symbol);
           $m->returns= $member->returns;
           $m->modifiers= $member->modifiers;
           foreach ($member->parameters as $p) {
@@ -239,7 +238,7 @@
           return $m;
         }
       }
-      return $this->parent ? $this->parent->getOperator($name) : NULL;
+      return $this->parent ? $this->parent->getOperator($symbol) : NULL;
     }
 
     /**
