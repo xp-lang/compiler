@@ -4,7 +4,17 @@
  * $Id$ 
  */
 
-  uses('xp.compiler.types.Types', 'xp.compiler.types.TypeName');
+  uses(
+    'xp.compiler.types.Types', 
+    'xp.compiler.types.TypeName',
+    'xp.compiler.ast.StringNode',
+    'xp.compiler.ast.IntegerNode',
+    'xp.compiler.ast.DecimalNode',
+    'xp.compiler.ast.BooleanNode',
+    'xp.compiler.ast.NullNode',
+    'xp.compiler.ast.ArrayNode',
+    'xp.compiler.ast.MapNode'
+  );
 
   /**
    * Represents a reflected type
