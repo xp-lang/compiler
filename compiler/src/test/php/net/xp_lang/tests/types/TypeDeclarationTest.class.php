@@ -10,6 +10,7 @@
     'xp.compiler.ast.ClassConstantNode',
     'xp.compiler.ast.FieldNode',
     'xp.compiler.ast.MethodNode',
+    'xp.compiler.ast.OperatorNode',
     'xp.compiler.ast.ConstructorNode',
     'xp.compiler.ast.IndexerNode',
     'xp.compiler.ast.PropertyNode',
@@ -157,6 +158,12 @@
             new FieldNode(array(
               'name' => 'length'
             )),
+            new PropertyNode(array(
+              'name' => 'chars'
+            )),
+            new OperatorNode(array(
+              'symbol' => '~'
+            )),
             new IndexerNode(array(
               'type'       => new TypeName('string'),
               'parameter'  => array(
@@ -218,6 +225,26 @@
     }
 
     /**
+     * Returns a type declaration for the SecureString class
+     *
+     * @return  xp.compiler.emit.TypeDeclaration
+     */
+    protected function secureStringClass() {
+      return new TypeDeclaration(
+        new ParseTree(new TypeName('security'), array(), new ClassNode(
+          MODIFIER_PUBLIC, 
+          NULL,
+          new TypeName('SecureString'),
+          new TypeName('lang.types.String'),
+          NULL,
+          array(
+          )
+        )),
+        $this->stringClass()
+      );
+    }
+
+    /**
      * Test hasConstructor() method
      *
      */
@@ -248,6 +275,16 @@
     }
 
     /**
+     * Test hasConstructor() method
+     *
+     */
+    #[@test]
+    public function secureStringClassHasConstructor() {
+      $decl= $this->secureStringClass();
+      $this->assertTrue($decl->hasConstructor());
+    }
+
+    /**
      * Test getConstructor() method
      *
      */
@@ -255,6 +292,26 @@
     public function stringClassConstructor() {
       $decl= $this->stringClass();
       $this->assertInstanceOf('xp.compiler.types.Constructor', $decl->getConstructor());
+    }
+
+    /**
+     * Test getConstructor() method
+     *
+     */
+    #[@test]
+    public function secureStringClassConstructor() {
+      $decl= $this->secureStringClass();
+      $this->assertEquals($this->stringClass(), $decl->getConstructor()->holder);
+    }
+
+    /**
+     * Test getConstructor() method
+     *
+     */
+    #[@test]
+    public function secureStringClassConstructorsHolderIsStringClass() {
+      $decl= $this->secureStringClass();
+      $this->assertEquals('lang.types.String', $decl->getConstructor()->holder->name());
     }
 
     /**
@@ -318,6 +375,146 @@
     }
 
     /**
+     * Test hasOperator() method
+     *
+     */
+    #[@test]
+    public function objectClassDoesNotHaveOperator() {
+      $decl= $this->objectClass();
+      $this->assertFalse($decl->hasOperator('~'));
+    }
+
+    /**
+     * Test getOperator() method
+     *
+     */
+    #[@test]
+    public function objectClassNoOperator() {
+      $decl= $this->objectClass();
+      $this->assertNull($decl->getOperator('~'));
+    }
+
+    /**
+     * Test hasOperator() method
+     *
+     */
+    #[@test]
+    public function stringClassHasConcatOperator() {
+      $decl= $this->stringClass();
+      $this->assertTrue($decl->hasOperator('~'));
+    }
+
+    /**
+     * Test getOperator() method
+     *
+     */
+    #[@test]
+    public function stringClassConcatOperator() {
+      $decl= $this->stringClass();
+      $this->assertInstanceOf('xp.compiler.types.Operator', $decl->getOperator('~'));
+    }
+
+    /**
+     * Test hasOperator() method
+     *
+     */
+    #[@test]
+    public function secureStringClassHasConcatOperator() {
+      $decl= $this->secureStringClass();
+      $this->assertTrue($decl->hasOperator('~'));
+    }
+
+    /**
+     * Test getOperator() method
+     *
+     */
+    #[@test]
+    public function secureStringClassConcatOperator() {
+      $decl= $this->secureStringClass();
+      $this->assertInstanceOf('xp.compiler.types.Operator', $decl->getOperator('~'));
+    }
+
+    /**
+     * Test getOperator() method
+     *
+     */
+    #[@test]
+    public function secureStringClassConcatOperatorsHolderIsString() {
+      $decl= $this->secureStringClass();
+      $this->assertEquals('lang.types.String', $decl->getOperator('~')->holder->name());
+    }
+
+    /**
+     * Test hasProperty() method
+     *
+     */
+    #[@test]
+    public function objectClassDoesNotHaveProperty() {
+      $decl= $this->objectClass();
+      $this->assertFalse($decl->hasProperty('chars'));
+    }
+
+    /**
+     * Test getProperty() method
+     *
+     */
+    #[@test]
+    public function objectClassNoProperty() {
+      $decl= $this->objectClass();
+      $this->assertNull($decl->getProperty('chars'));
+    }
+
+    /**
+     * Test hasProperty() method
+     *
+     */
+    #[@test]
+    public function stringClassHasConcatProperty() {
+      $decl= $this->stringClass();
+      $this->assertTrue($decl->hasProperty('chars'));
+    }
+
+    /**
+     * Test getProperty() method
+     *
+     */
+    #[@test]
+    public function stringClassConcatProperty() {
+      $decl= $this->stringClass();
+      $this->assertInstanceOf('xp.compiler.types.Property', $decl->getProperty('chars'));
+    }
+
+    /**
+     * Test hasProperty() method
+     *
+     */
+    #[@test]
+    public function secureStringClassHasConcatProperty() {
+      $decl= $this->secureStringClass();
+      $this->assertTrue($decl->hasProperty('chars'));
+    }
+
+    /**
+     * Test getProperty() method
+     *
+     */
+    #[@test]
+    public function secureStringClassConcatProperty() {
+      $decl= $this->secureStringClass();
+      $this->assertInstanceOf('xp.compiler.types.Property', $decl->getProperty('chars'));
+    }
+
+    /**
+     * Test getProperty() method
+     *
+     */
+    #[@test]
+    public function secureStringClassConcatPropertysHolderIsString() {
+      $decl= $this->secureStringClass();
+      $this->assertEquals('lang.types.String', $decl->getProperty('chars')->holder->name());
+    }
+
+    /**
      * Test hasField() method for instance fields
      *
      */
@@ -352,6 +549,16 @@
      *
      */
     #[@test]
+    public function secureStringClassHasIndexer() {
+      $decl= $this->secureStringClass();
+      $this->assertTrue($decl->hasIndexer());
+    }
+
+    /**
+     * Test hasIndexer() method
+     *
+     */
+    #[@test]
     public function objectClassDoesNotHaveIndexer() {
       $decl= $this->objectClass();
       $this->assertFalse($decl->hasIndexer());
@@ -364,6 +571,17 @@
     #[@test]
     public function stringClassIndexer() {
       $indexer= $this->stringClass()->getIndexer();
+      $this->assertEquals(new TypeName('string'), $indexer->type);
+      $this->assertEquals(new TypeName('int'), $indexer->parameter);
+    }
+
+    /**
+     * Test getIndexer() method
+     *
+     */
+    #[@test]
+    public function secureStringClassIndexer() {
+      $indexer= $this->secureStringClass()->getIndexer();
       $this->assertEquals(new TypeName('string'), $indexer->type);
       $this->assertEquals(new TypeName('int'), $indexer->parameter);
     }
@@ -396,6 +614,15 @@
     public function stringClassHasConstant() {
       $decl= $this->stringClass();
       $this->assertTrue($decl->hasConstant('ENCODING'));
+    }
+
+    /**
+     * Test getConstant() method
+     *
+     */
+    #[@test]
+    public function stringClassGetConstant() {
+      $this->assertNull($this->objectClass()->getConstant('STATUS_OK'));
     }
 
     /**
