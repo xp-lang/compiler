@@ -314,7 +314,7 @@
           return $p;
         }
       }
-      return $this->parent ? $this->parent->hasProperty($name) : FALSE;
+      return $this->parent ? $this->parent->getProperty($name) : NULL;
     }
 
     /**

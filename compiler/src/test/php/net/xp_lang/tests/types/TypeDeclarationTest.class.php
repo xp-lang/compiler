@@ -157,6 +157,9 @@
             new FieldNode(array(
               'name' => 'length'
             )),
+            new PropertyNode(array(
+              'name' => 'chars'
+            )),
             new OperatorNode(array(
               'symbol' => '~'
             )),
@@ -432,6 +435,76 @@
     public function secureStringClassConcatOperatorsHolderIsString() {
       $decl= $this->secureStringClass();
       $this->assertEquals('lang.types.String', $decl->getOperator('~')->holder->name());
+    }
+
+    /**
+     * Test hasProperty() method
+     *
+     */
+    #[@test]
+    public function objectClassDoesNotHaveProperty() {
+      $decl= $this->objectClass();
+      $this->assertFalse($decl->hasProperty('chars'));
+    }
+
+    /**
+     * Test getProperty() method
+     *
+     */
+    #[@test]
+    public function objectClassNoProperty() {
+      $decl= $this->objectClass();
+      $this->assertNull($decl->getProperty('chars'));
+    }
+
+    /**
+     * Test hasProperty() method
+     *
+     */
+    #[@test]
+    public function stringClassHasConcatProperty() {
+      $decl= $this->stringClass();
+      $this->assertTrue($decl->hasProperty('chars'));
+    }
+
+    /**
+     * Test getProperty() method
+     *
+     */
+    #[@test]
+    public function stringClassConcatProperty() {
+      $decl= $this->stringClass();
+      $this->assertInstanceOf('xp.compiler.types.Property', $decl->getProperty('chars'));
+    }
+
+    /**
+     * Test hasProperty() method
+     *
+     */
+    #[@test]
+    public function secureStringClassHasConcatProperty() {
+      $decl= $this->secureStringClass();
+      $this->assertTrue($decl->hasProperty('chars'));
+    }
+
+    /**
+     * Test getProperty() method
+     *
+     */
+    #[@test]
+    public function secureStringClassConcatProperty() {
+      $decl= $this->secureStringClass();
+      $this->assertInstanceOf('xp.compiler.types.Property', $decl->getProperty('chars'));
+    }
+
+    /**
+     * Test getProperty() method
+     *
+     */
+    #[@test]
+    public function secureStringClassConcatPropertysHolderIsString() {
+      $decl= $this->secureStringClass();
+      $this->assertEquals('lang.types.String', $decl->getProperty('chars')->holder->name());
     }
 
     /**
