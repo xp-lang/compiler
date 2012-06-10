@@ -381,11 +381,11 @@
         public function fixture($a= array("a", "b", "c")) {}
       }'));
       $this->assertEquals(
-        new ArrayNode(array(
+        new ArrayNode(array('values' => array(
           new StringNode('a'), 
           new StringNode('b'), 
           new StringNode('c')
-        )),
+        ))),
         $fixture->getMethod('fixture')->parameters['a']['default']
       );
     }
@@ -400,10 +400,10 @@
         public function fixture($a= array("a" => "b", "c" => "d")) {}
       }'));
       $this->assertEquals(
-        new MapNode(array(
+        new MapNode(array('elements' => array(
           array(new StringNode('a'), new StringNode('b')),  // a => b
           array(new StringNode('c'), new StringNode('d')),  // c => d
-        )),
+        ))),
         $fixture->getMethod('fixture')->parameters['a']['default']
       );
     }

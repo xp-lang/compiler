@@ -185,9 +185,17 @@
       // Arrays and maps
       $type= typeof($value);
       if ($type instanceof ArrayType) {
-        return new ArrayNode($value);
+        $r= new ArrayNode();
+        foreach ($value as $element) {
+          $r->values[]= $this->nodeOfDefaultValue($element);
+        }
+        return $r;
       } else if ($type instanceof MapType) {
-        return new MapType($value);
+        $r= new MapNode();
+        foreach ($value as $key => $member) {
+          $r->elements[]= array($this->nodeOfDefaultValue($key), $this->nodeOfDefaultValue($member));
+        }
+        return $r;
       }
 
       // Other types of default values shouldn't appear here
