@@ -542,6 +542,16 @@
      *
      */
     #[@test]
+    public function secureStringClassHasIndexer() {
+      $decl= $this->secureStringClass();
+      $this->assertTrue($decl->hasIndexer());
+    }
+
+    /**
+     * Test hasIndexer() method
+     *
+     */
+    #[@test]
     public function objectClassDoesNotHaveIndexer() {
       $decl= $this->objectClass();
       $this->assertFalse($decl->hasIndexer());
@@ -554,6 +564,17 @@
     #[@test]
     public function stringClassIndexer() {
       $indexer= $this->stringClass()->getIndexer();
+      $this->assertEquals(new TypeName('string'), $indexer->type);
+      $this->assertEquals(new TypeName('int'), $indexer->parameter);
+    }
+
+    /**
+     * Test getIndexer() method
+     *
+     */
+    #[@test]
+    public function secureStringClassIndexer() {
+      $indexer= $this->secureStringClass()->getIndexer();
       $this->assertEquals(new TypeName('string'), $indexer->type);
       $this->assertEquals(new TypeName('int'), $indexer->parameter);
     }

@@ -359,7 +359,7 @@
       foreach ($this->tree->declaration->body as $member) {
         if ($member instanceof IndexerNode) return TRUE;
       }
-      return FALSE;
+      return $this->parent ? $this->parent->hasIndexer() : FALSE;
     }
 
     /**
@@ -376,7 +376,7 @@
         $i->holder= $this;
         return $i;
       }
-      return NULL;
+      return $this->parent ? $this->parent->getIndexer() : NULL;
     }
 
     /**
