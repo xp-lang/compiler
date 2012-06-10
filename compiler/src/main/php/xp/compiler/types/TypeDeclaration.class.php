@@ -169,6 +169,7 @@
           $m->name= $member->name;
           $m->returns= $member->returns;
           $m->modifiers= $member->modifiers;
+          Console::writeLine($p);
           foreach ((array)$member->parameters as $p) {
             $m->parameters[$p['name']]=  array('type' => $p['type'], 'default' => NULL);
           }
