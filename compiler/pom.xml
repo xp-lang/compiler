@@ -1,0 +1,95 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>net.xp-framework</groupId>
+    <artifactId>pom</artifactId>
+    <version>5.8.5</version>
+  </parent>
+
+  <!-- The Basics -->
+  <artifactId>language</artifactId>
+  <packaging>xar</packaging>
+
+  <!-- More Project Information -->
+  <name>XP-Language</name>
+  <description>XP-Language is a feature-rich, typed and compiled programming language, based on the popular PHP language and designed to syntactically support features of the XP Framework</description>
+  <url>https://github.com/xp-framework/xp-language</url>
+
+  <!-- Copy resources (not in the default Maven layout) -->
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.5</version>
+        <executions>
+
+          <!-- Copy profiles -->
+          <execution>
+            <id>copy-profiles</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.outputDirectory}/xp/compiler</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/php/xp/compiler</directory>
+                  <includes>
+                    <include>*.xcp.ini</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+          <!-- Copy grammar -->
+          <execution>
+            <id>copy-grammar</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.outputDirectory}/xp/compiler/grammar</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/php/xp/compiler/grammar</directory>
+                  <includes>
+                    <include>*.jay</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+          <!-- Copy unittest ini files -->
+          <execution>
+            <id>copy-test-resources</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.testOutputDirectory}/etc/unittest</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/resources/unittest</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- Source code management -->
+  <scm>
+    <connection>scm:git:git://github.com/xp-framework/xp-language.git</connection>
+    <developerConnection>scm:git:git@github.com:xp-framework/xp-language.git</developerConnection>
+    <url>https://github.com/xp-framework/xp-language</url>
+  </scm>
+</project>
