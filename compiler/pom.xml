@@ -2,72 +2,83 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>net.xp-framework</groupId>
-    <artifactId>pom</artifactId>
-    <version>5.8.5</version>
-  </parent>
-
   <!-- The Basics -->
+  <groupId>net.xp-framework</groupId>
   <artifactId>language</artifactId>
+  <version>5.8.7</version>
   <packaging>xar</packaging>
 
   <!-- More Project Information -->
   <name>XP-Language</name>
   <description>XP-Language is a feature-rich, typed and compiled programming language, based on the popular PHP language and designed to syntactically support features of the XP Framework</description>
   <url>https://github.com/xp-framework/xp-language</url>
+  <inceptionYear>2001</inceptionYear>
+  <organization>
+    <name>XP-Framework Team</name>
+    <url>http://xp-framework.net/</url>
+  </organization>
+  <developers>
+    <developer>
+      <id>xp-framework</id>
+      <name>XP-Framework Team</name>
+      <email>devs@xp-framework.net</email>
+      <url>http://xp-framework.net</url>
+    </developer>
+  </developers>
+  <licenses>
+    <license>
+      <name>BSD</name>
+      <url>http://www.opensource.org/licenses/BSD-3-Clause</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <!-- Properties -->
+  <properties>
+    <project.build.sourceEncoding>ISO-8859-15</project.build.sourceEncoding>
+
+    <!-- Resources are inside [src/main/php] and not inside [src/main/resources] -->
+    <xp.compile.phpIncludePattern>**/*.*</xp.compile.phpIncludePattern>
+
+    <!-- Test resources are inside [src/test/php] and not inside [src/test/resources] -->
+    <xp.compile.testPhpIncludePattern>**/*.*</xp.compile.testPhpIncludePattern>
+  </properties>
+
+  <!-- Dependencies -->
+  <dependencies>
+    <dependency>
+      <groupId>net.xp-framework</groupId>
+      <artifactId>core</artifactId>
+      <version>${project.version}</version>
+      <type>xar</type>
+      <optional>false</optional>
+   </dependency>
+   <dependency>
+     <groupId>net.xp-framework</groupId>
+     <artifactId>tools</artifactId>
+     <version>${project.version}</version>
+     <type>xar</type>
+     <optional>false</optional>
+   </dependency>
+  </dependencies>
 
   <!-- Copy resources (not in the default Maven layout) -->
   <build>
     <plugins>
       <plugin>
+        <groupId>net.xp-forge.maven.plugins</groupId>
+        <artifactId>xp-maven-plugin</artifactId>
+        <version>3.1.1</version>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <version>2.5</version>
         <executions>
 
-          <!-- Copy profiles -->
-          <execution>
-            <id>copy-profiles</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.outputDirectory}/xp/compiler</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>src/main/php/xp/compiler</directory>
-                  <includes>
-                    <include>*.xcp.ini</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-
-          <!-- Copy grammar -->
-          <execution>
-            <id>copy-grammar</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.outputDirectory}/xp/compiler/grammar</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>src/main/php/xp/compiler/grammar</directory>
-                  <includes>
-                    <include>*.jay</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-
           <!-- Copy unittest ini files -->
           <execution>
-            <id>copy-test-resources</id>
+            <id>copy-test-ini</id>
             <phase>process-test-resources</phase>
             <goals>
               <goal>copy-resources</goal>
