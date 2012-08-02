@@ -120,7 +120,7 @@
       foreach ($this->tree->declaration->body as $member) {
         if ($member instanceof ConstructorNode) return TRUE;
       }
-      return $this->parent ? $this->parent->hasMethod($name) : FALSE;
+      return $this->parent ? $this->parent->hasConstructor() : FALSE;
     }
 
     /**
@@ -140,7 +140,7 @@
           return $c;
         }
       }
-      return $this->parent ? $this->parent->getMethod($name) : NULL;
+      return $this->parent ? $this->parent->getConstructor() : NULL;
     }
     
     /**
@@ -216,7 +216,7 @@
       foreach ($this->tree->declaration->body as $member) {
         if ($member instanceof OperatorNode && $member->symbol === $symbol) return TRUE;
       }
-      return $this->parent ? $this->parent->hasOperator($name) : FALSE;
+      return $this->parent ? $this->parent->hasOperator($symbol) : FALSE;
     }
     
     /**
@@ -228,8 +228,7 @@
     public function getOperator($symbol) {
       foreach ($this->tree->declaration->body as $member) {
         if ($member instanceof OperatorNode && $member->symbol === $symbol) {
-          $m= new xp·compiler·types·Method();
-          $m->name= $member->symbol;
+          $m= new xp·compiler·types·Operator($member->symbol);
           $m->returns= $member->returns;
           $m->modifiers= $member->modifiers;
           foreach ($member->parameters as $p) {
@@ -239,7 +238,7 @@
           return $m;
         }
       }
-      return $this->parent ? $this->parent->getOperator($name) : NULL;
+      return $this->parent ? $this->parent->getOperator($symbol) : NULL;
     }
 
     /**
@@ -315,7 +314,7 @@
           return $p;
         }
       }
-      return $this->parent ? $this->parent->hasProperty($name) : FALSE;
+      return $this->parent ? $this->parent->getProperty($name) : NULL;
     }
 
     /**
@@ -348,7 +347,7 @@
           return $c;
         }
       }
-      return $this->parent ? $this->parent->getConstant($name) : FALSE;
+      return $this->parent ? $this->parent->getConstant($name) : NULL;
     }
 
     /**
@@ -360,7 +359,7 @@
       foreach ($this->tree->declaration->body as $member) {
         if ($member instanceof IndexerNode) return TRUE;
       }
-      return FALSE;
+      return $this->parent ? $this->parent->hasIndexer() : FALSE;
     }
 
     /**
@@ -377,7 +376,7 @@
         $i->holder= $this;
         return $i;
       }
-      return NULL;
+      return $this->parent ? $this->parent->getIndexer() : NULL;
     }
 
     /**
