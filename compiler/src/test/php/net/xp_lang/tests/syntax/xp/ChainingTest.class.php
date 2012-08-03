@@ -29,6 +29,18 @@
      *
      */
     #[@test]
+    public function chainedFieldAccess() {
+      $this->assertEquals(
+        array(new MemberAccessNode(new MemberAccessNode(new VariableNode('m'), 'member'), 'data')),
+        $this->parse('$m.member.data;')
+      );
+    }
+
+    /**
+     * Test field access
+     *
+     */
+    #[@test]
     public function fieldNamedClassAccess() {
       $this->assertEquals(
         array(new MemberAccessNode(new VariableNode('m'), 'class')),
@@ -45,6 +57,18 @@
       $this->assertEquals(
         array(new MethodCallNode(new VariableNode('m'), 'invoke', array(new VariableNode('args')))),
         $this->parse('$m.invoke($args);')
+      );
+    }
+
+    /**
+     * Test simple method call on chained fields
+     *
+     */
+    #[@test]
+    public function methodCallOnChainedFields() {
+      $this->assertEquals(
+        array(new MethodCallNode(new MemberAccessNode(new MemberAccessNode(new VariableNode('m'), 'member'), 'data'), 'invoke', array(new VariableNode('args')))),
+        $this->parse('$m.member.data.invoke($args);')
       );
     }
 
