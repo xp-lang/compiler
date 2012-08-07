@@ -4,7 +4,7 @@
 
   <!-- The Basics -->
   <groupId>net.xp-framework</groupId>
-  <artifactId>language</artifactId>
+  <artifactId>compiler</artifactId>
   <version>5.8.7</version>
   <packaging>xar</packaging>
 
@@ -12,7 +12,7 @@
   <name>XP-Language</name>
   <description>XP-Language is a feature-rich, typed and compiled programming language, based on the popular PHP language and designed to syntactically support features of the XP Framework</description>
   <url>https://github.com/xp-framework/xp-language</url>
-  <inceptionYear>2001</inceptionYear>
+  <inceptionYear>2010</inceptionYear>
   <organization>
     <name>XP-Framework Team</name>
     <url>http://xp-framework.net/</url>
