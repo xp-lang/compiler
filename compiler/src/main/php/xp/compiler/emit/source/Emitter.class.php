@@ -297,17 +297,12 @@
      * @param   xp.compiler.ast.ConstantNode const
      */
     protected function emitConstant($b, $const) {
-      if ($constant= $this->scope[0]->resolveConstant($const->value)) {
+      if ($constant= $this->scope[0]->resolveConstant($const->name)) {
         $b->append(var_export($constant->value, TRUE));
         return;
       }
 
-      try {
-        $b->append(var_export($const->resolve(), TRUE));
-      } catch (IllegalStateException $e) {
-        $this->warn('T201', 'Constant lookup for '.$const->value.' deferred until runtime: '.$e->getMessage(), $const);
-        $b->append($const->value);
-      }
+      $b->append($const->name);
     }
 
     /**
@@ -1834,11 +1829,10 @@
       $b->append(';');
       
       // Register type information. 
-      // Value can safely be resolved as only resolveable values are allowed
       $c= new xp·compiler·types·Constant();
       $c->type= new TypeName($this->resolveType($const->type)->name());
       $c->name= $const->name;
-      $c->value= $const->value->resolve();
+      $c->value= $const->value instanceof Resolveable ? $const->value->resolve() : $const->value;
       $this->types[0]->addConstant($c);
     }
     
