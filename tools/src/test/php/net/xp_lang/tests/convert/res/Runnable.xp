@@ -1,0 +1,20 @@
+/* This class is part of the XP framework
+ *
+ * $Id$ 
+ */
+
+package lang;
+
+
+/**
+ * Runnable class
+ *
+ */
+public interface Runnable {
+
+  /**
+   * Run
+   *
+   */
+  public void run();
+}
