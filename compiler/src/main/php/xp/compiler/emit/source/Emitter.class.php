@@ -1289,7 +1289,8 @@
           ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($operator->comment, 4, strpos($operator->comment, '* @')- 2)))
           : NULL
         ,
-        DETAIL_ANNOTATIONS  => array()
+        DETAIL_ANNOTATIONS  => array(),
+        DETAIL_TARGET_ANNO  => array()
       );
       array_unshift($this->method, $name);
       $this->emitAnnotations($this->metadata[0][1][$name], (array)$operator->annotations);
@@ -1445,13 +1446,20 @@
         }
       }
 
+      // Sort out where annotations should go
+      if (isset($annotation->target)) {
+        $ptr= &$meta[DETAIL_TARGET_ANNO][$annotation->target];
+      } else {
+        $ptr= &$meta[DETAIL_ANNOTATIONS];
+      }
+
       // Set annotation value
       if (!$annotation->parameters) {
-        $meta[DETAIL_ANNOTATIONS][$annotation->type]= NULL;
+        $ptr[$annotation->type]= NULL;
       } else if (isset($annotation->parameters['default'])) {
-        $meta[DETAIL_ANNOTATIONS][$annotation->type]= $params['default'];
+        $ptr[$annotation->type]= $params['default'];
       } else {
-        $meta[DETAIL_ANNOTATIONS][$annotation->type]= $params;
+        $ptr[$annotation->type]= $params;
       }
     }
     
@@ -1541,7 +1549,8 @@
           ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($method->comment, 4, strpos($method->comment, '* @')- 2)))
           : NULL
         ,
-        DETAIL_ANNOTATIONS  => array()
+        DETAIL_ANNOTATIONS  => array(),
+        DETAIL_TARGET_ANNO  => array()
       );
       array_unshift($this->method, $method->name);
       $this->emitAnnotations($this->metadata[0][1][$method->name], (array)$method->annotations);
@@ -1612,7 +1621,8 @@
         DETAIL_RETURNS      => NULL,
         DETAIL_THROWS       => array(),
         DETAIL_COMMENT      => preg_replace('/\n\s+\* ?/', "\n  ", "\n ".$constructor->comment),
-        DETAIL_ANNOTATIONS  => array()
+        DETAIL_ANNOTATIONS  => array(),
+        DETAIL_TARGET_ANNO  => array()
       );
 
       array_unshift($this->method, '__construct');
