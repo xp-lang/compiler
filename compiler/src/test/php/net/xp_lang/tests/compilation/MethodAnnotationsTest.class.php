@@ -67,6 +67,8 @@
      */
     #[@test]
     public function parameterAnnotation() {
+      if (!XPClass::forName('lang.reflect.Parameter')->hasMethod('getAnnotations')) return;
+
       $type= $this->compile('class %s { [@$conn: inject(name= "db")] void fixture(rdbms.DBConnection $conn) { } }');
       $this->assertEquals(
         array('inject' => array('name' => 'db')), 
