@@ -4,22 +4,23 @@
  * $Id$
  */
 
-  uses('xp.compiler.ast.NumberNode');
+  uses('xp.compiler.ast.NaturalNode');
 
   /**
-   * Represents a decimal literal
+   * Represents an octal literal
    *
+   * @see   xp://xp.compiler.ast.NaturalNode
    * @test  xp://net.xp_lang.tests.resolve.NumberResolveTest
    */
-  class DecimalNode extends NumberNode {
-
+  class OctalNode extends NaturalNode {
+    
     /**
      * Resolve this node's value.
      *
      * @return  var
      */
     public function resolve() {
-      return (double)$this->value;
+      return octdec($this->value);
     }
   }
 ?>

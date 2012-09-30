@@ -6,14 +6,13 @@
 
   $package= 'xp.compiler.emit.source';
   
-  uses('io.streams.OutputStream', 'io.streams.Streams');
+  uses('xp.compiler.emit.EmitterResult', 'io.streams.OutputStream', 'io.streams.Streams');
 
   /**
    * Compilation result from source emitter
    *
-   * @ext   oel
    */
-  class xp搾ompiler搪mit新ource愛esult extends Object {
+  class xp搾ompiler搪mit新ource愛esult extends Object implements EmitterResult {
     protected $source= NULL;
     protected $type= NULL;
     
@@ -46,6 +45,15 @@
      */
     public function type() {
       return $this->type;
+    }
+
+    /**
+     * Return file extension including the leading dot
+     *
+     * @return  string
+     */
+    public function extension() {
+      return xp::CLASS_FILE_EXT;
     }
 
     /**

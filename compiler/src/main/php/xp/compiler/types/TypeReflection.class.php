@@ -9,7 +9,7 @@
   /**
    * Represents a reflected type
    *
-   * @test    xp://tests.types.TypeReflectionTest
+   * @test    xp://net.xp_lang.tests.tests.types.TypeReflectionTest
    */
   class TypeReflection extends Types {
     protected $class= NULL;
@@ -201,6 +201,55 @@
         $m->holder= $this;
         return $m;
       }
+    }
+
+    /**
+     * Returns a typename for a given literal
+     *
+     * @param  string literal
+     * @return string name
+     */
+    protected function typeName($literal) {
+      if ('ş' === $literal[0]) {           // Primitives
+        return substr($literal, 1);
+      } else if ('¦' === $literal[0]) {    // Arrays
+        return $this->nameOf(substr($literal, 1)).'[]';
+      } else if ('»' === $literal[0]) {    // Maps
+        return '[:'.$this->nameOf(substr($literal, 1)).']';
+      } else {                             // Classes, enums, interfaces
+        return xp::nameOf($literal);
+      }
+    }
+
+    /**
+     * Gets a list of extension methods
+     *
+     * @return  [:xp.compiler.types.Method[]]
+     */
+    public function getExtensions() {
+      $name= $this->literal();
+
+      // Extension methods are registered via __import()
+      if (!method_exists($name, '__import')) return array();
+      call_user_func(array($name, '__import'), 0);
+      if (!isset(xp::$registry['ext'][0])) return array();
+
+      // Found extension methods imported into the 0-scope
+      $methods= $this->class->getMethods();
+      $r= array();
+      foreach (xp::$registry['ext'][0] as $type => $name) {
+        $type= $this->typeName($type);
+        $r[$type]= array();
+        foreach ($methods as $method) {
+          if (
+            ($method->getModifiers() & MODIFIER_STATIC) &&
+            ($method->numParameters() > 0) &&
+            ($type === $method->getParameter(0)->getTypeName())
+          ) $r[$type][]= $this->getMethod($method->getName());
+        }
+      }
+      unset(xp::$registry['ext'][0]);
+      return $r;
     }
 
     public static $ovl= array(

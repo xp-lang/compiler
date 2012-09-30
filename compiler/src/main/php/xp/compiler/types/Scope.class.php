@@ -24,6 +24,7 @@
     'xp.compiler.types.TypeReflection', 
     'xp.compiler.types.TypeDeclaration',
     'xp.compiler.types.GenericType',
+    'xp.compiler.types.PrimitiveTypeOf',
     'xp.compiler.types.ArrayTypeOf',
     'xp.compiler.types.MapTypeOf'
   );
@@ -112,16 +113,11 @@
       $p= strrpos($import, '.');
       $this->imports[substr($import, $p+ 1)]= $import;
       $ptr= $this->resolveType(new TypeName($import));
-      $qualified= $ptr->name();
 
-      // Check if this import created extension methods
-      // FIXME: Use $this->resolved[$qualified]->getExtensions()
-      foreach (xp::$registry as $k => $value) {
-        if ($value instanceof ReflectionMethod && $qualified === xp::nameOf($value->class)) {
-          $this->addExtension(
-            $this->resolveType(new TypeName(substr($k, 0, strpos($k, '::')))), 
-            $ptr->getMethod($value->name)
-          );
+      // Register extension methods ([:xp.compiler.types.Method[]])
+      foreach ($ptr->getExtensions() as $type => $methods) {
+        foreach ($methods as $method) {
+          $this->addExtension($this->resolveType(new TypeName($type)), $method);
         }
       }
     }
@@ -231,7 +227,7 @@
       } else if ($name->isMap()) {
         return new MapTypeOf($this->resolveType($name->mapComponentType(), $register));
       } else if (!$name->isClass()) {
-        return new TypeReference($name, Types::PRIMITIVE_KIND);
+        return new PrimitiveTypeOf($name);
       } else if ($name->isGeneric()) {
         return new GenericType($this->resolveType(new TypeName($name->name), $register), $name->components);
       }
