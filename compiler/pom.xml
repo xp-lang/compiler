@@ -5,11 +5,11 @@
   <!-- The Basics -->
   <groupId>net.xp-framework</groupId>
   <artifactId>compiler</artifactId>
-  <version>5.8.7</version>
+  <version>5.8.10</version>
   <packaging>xar</packaging>
 
   <!-- More Project Information -->
-  <name>XP-Language</name>
+  <name>XP-Compiler</name>
   <description>XP-Language is a feature-rich, typed and compiled programming language, based on the popular PHP language and designed to syntactically support features of the XP Framework</description>
   <url>https://github.com/xp-framework/xp-language</url>
   <inceptionYear>2010</inceptionYear>
@@ -42,6 +42,9 @@
 
     <!-- Test resources are inside [src/test/php] and not inside [src/test/resources] -->
     <xp.compile.testPhpIncludePattern>**/*.*</xp.compile.testPhpIncludePattern>
+
+    <!-- Unittest ini files location -->
+    <xp.test.iniDirectory>${basedir}/src/test/resources</xp.test.iniDirectory>
   </properties>
 
   <!-- Dependencies -->
@@ -68,31 +71,8 @@
       <plugin>
         <groupId>net.xp-forge.maven.plugins</groupId>
         <artifactId>xp-maven-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>3.1.6</version>
         <extensions>true</extensions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.5</version>
-        <executions>
-
-          <!-- Copy unittest ini files -->
-          <execution>
-            <id>copy-test-ini</id>
-            <phase>process-test-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.testOutputDirectory}/etc/unittest</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>src/resources/unittest</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
