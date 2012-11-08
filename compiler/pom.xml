@@ -71,7 +71,7 @@
       <plugin>
         <groupId>net.xp-forge.maven.plugins</groupId>
         <artifactId>xp-maven-plugin</artifactId>
-        <version>3.1.6</version>
+        <version>3.1.8</version>
         <extensions>true</extensions>
       </plugin>
     </plugins>
@@ -83,4 +83,10 @@
     <developerConnection>scm:git:git@github.com:xp-framework/xp-language.git</developerConnection>
     <url>https://github.com/xp-framework/xp-language</url>
   </scm>
+
+  <!-- Issue Management -->
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/xp-framework/xp-language/issues</url>
+  </issueManagement>
 </project>
