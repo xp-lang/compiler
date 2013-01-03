@@ -1,0 +1,140 @@
+XP Compiler ChangeLog
+========================================================================
+$Id$
+
+Version ?.?.?, released ????-??-??
+----------------------------------
+Git commit: ?????
+
+Heads up!
+~~~~~~~~~
+- Version now detached from framework - XP compiler v1.9.0 will be the 
+  correct version for XP Framework v5.9.0
+  (friebe)
+
+RFCs
+~~~~
+- RFC #0260: XP 5.9 as default branch
+  (friebe)
+
+
+Version 1.1.3, released 2012-09-30
+----------------------------------
+Git commit: 27e33c1b3a01127a4398f2e9a3884b6426bf4cff
+
+Bugfixes
+~~~~~~~~
+- Refrain from resolving constants. Fixes issue #20 "the hard way" - the 
+  optimization is removed all the way
+  (friebe)
+
+Features
+~~~~~~~~
+- Splitted compiler.ini and reorganize into src/test/resources
+  # See xp-framework/xp-framework#160
+  (friebe)
+
+
+Version 1.1.2, released 2012-07-09
+----------------------------------
+Git commit: cb0de5af90e454a579ce2b92987f0de1dfaf6713
+
+Bugfixes
+~~~~~~~~
+- Fixed indexers and operators inheritance
+  (friebe)
+
+Features
+~~~~~~~~
+- Added Maven pom
+  (mrosoiu)
+
+
+Version 1.1.1, released 2012-06-08
+----------------------------------
+Git commit: f8a8a1ba97b68757117781bc0df6365af0940f20
+
+Features
+~~~~~~~~
+- Added tests for hex addition oddities
+  http://me.veekun.com/blog/2012/04/09/php-a-fractal-of-bad-design/#numbers
+  See also PHP Bug #61095 and PHP Bug #61095
+  (friebe)
+- Added support for hexadecimal escape sequences
+  # \x   hex-digit   hex-digitopt   hex-digitopt   hex-digitopt
+  (friebe)
+- Added support for exponent and octal number notation
+  (friebe)
+
+Version 1.1.0, released 2012-02-26
+----------------------------------
+Git commit: 63f95caf93989d287ca357bb1af89dbf5b19e48f
+
+RFCs
+~~~~
+- RFC #0218: Added syntactical support for annotations with target
+  (friebe)
+
+Bugfixes
+~~~~~~~~
+- Fixed interface methods check. The following was disallowed but shouldn't
+  public interface Test { void testIt(); }
+  (friebe)
+- Fixed extension methods
+  (friebe)
+
+Features
+~~~~~~~~
+- Refactored so that uses() will be emitted once at the top of the file
+  and include all dependencies merged together.
+  (friebe)
+- Added logic to exclude bootstrap classes from being listed in uses(),
+  they are globally available. Increases generated code's loading
+  performance.
+  (friebe)
+
+Version 1.0.2, released 2011-12-08
+----------------------------------
+Git commit: e42f8de9ea37971a1307ff3ffbfe4d57db2939a7
+
+Bugfixes
+~~~~~~~~
+- Fixed arrays of array, map and generic types not being supported
+  (friebe)
+
+Features
+~~~~~~~~
+- Added field annotations
+  (mrosoiu)
+
+
+Version 1.0.1, released 2011-09-07
+----------------------------------
+Git commit: 42e1ebef0570b447ddc28e4b09563e684d1e6d22
+
+Bugfixes
+~~~~~~~~
+- Fixed weird bug with compiled types being overwritten
+  (friebe)
+
+Features
+~~~~~~~~
+- Migrated repository to github.com (for the records)
+  (friebe, ilankin, kiesel, rene)
+
+
+Version 1.0.0, released 2011-01-11
+----------------------------------
+SVN version: 15183 
+
+RFCs
+~~~~
+- Implemented RFC #0052 - Make XP its own (compiled) language
+  (friebe)
+
+Features
+~~~~~~~~
+- Implemented ARM blocks in XP language, supported by lang.Closeable 
+  interface in framework.
+  http://news.planet-xp.net/article/397/2010/12/31/
+  (friebe)
