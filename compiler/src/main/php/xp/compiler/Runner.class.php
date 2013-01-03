@@ -26,7 +26,8 @@
   );
 
   /**
-   * XP Compiler
+   * XP Compiler, version {{VERSION}}
+   * Copyright (c) 2008-2013 the XP group
    *
    * Usage:
    * <pre>
@@ -69,8 +70,6 @@
    *     Same as above, but not performed recursively
    *   </li>
    * </ul>
-   *
-   * @purpose  Runner
    */
   class xp·compiler·Runner extends Object {
     protected static $line;
@@ -98,7 +97,10 @@
      *
      */
     protected static function showUsage() {
-      Console::$err->writeLine(self::textOf(XPClass::forName(xp::nameOf(__CLASS__))->getComment()));
+      $class= new XPClass(__CLASS__);
+      Console::$err->writeLine(strtr(self::textOf($class->getComment()), array(
+        '{{VERSION}}' => $class->getClassLoader()->getResource('VERSION')
+      )));
       
       // List supported syntaxes
       Console::$err->writeLine(self::$line);
