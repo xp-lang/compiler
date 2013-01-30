@@ -1,0 +1,13 @@
+<?php
+/* This file is part of the XP Framework
+ *
+ * $Id$
+ */
+
+ /**
+  * The XP Compiler
+  */
+  module xp-framework/compiler.test(1.9.0-dev) {
+
+  }
+?>
