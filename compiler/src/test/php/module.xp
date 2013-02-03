@@ -5,9 +5,9 @@
  */
 
  /**
-  * The XP Compiler
+  * The XP Compiler's unittests
   */
-  module xp-framework/compiler.test(1.9.0-dev) {
+  module tests extends xp-framework/compiler provides net.xp_lang.tests {
 
   }
 ?>
