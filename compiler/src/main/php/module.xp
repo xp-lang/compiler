@@ -7,7 +7,7 @@
  /**
   * The XP Compiler
   */
-  module xp-framework/compiler(1.9.0-dev) {
+  module xp-framework/compiler(1.9.0-dev) provides xp.compiler {
 
   }
 ?>
