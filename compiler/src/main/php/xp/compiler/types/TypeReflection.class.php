@@ -135,6 +135,8 @@
     protected function typeNameOf($t) {
       if ('mixed' === $t || '*' === $t || NULL === $t || 'resource' === $t) {
         return TypeName::$VAR;
+      } else if ('self' === $t) {
+        return new TypeName($this->class->getName());
       } else if (0 == strncmp($t, 'array', 5)) {
         return new TypeName('var[]');
       }

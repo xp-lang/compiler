@@ -17,6 +17,11 @@ RFCs
 - Implemented RFC #0260: XP 5.9 as default branch
   (friebe)
 
+Features
+~~~~~~~~
+- Added support for "self" keyword in parameters and return types
+  (friebe)
+
 
 Version 1.2.0, released 2012-09-30
 ----------------------------------
