@@ -148,7 +148,7 @@
       
       $compiler= new Compiler();
       $manager= new FileManager();
-      $manager->setSourcePaths(xp::$registry['classpath']);
+      $manager->setSourcePaths(xp::$classpath);
       $profiles= array('default');
       $emitter= 'source';
       
