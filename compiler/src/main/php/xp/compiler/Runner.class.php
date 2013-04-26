@@ -52,7 +52,7 @@
    *     Use compiler profiles (defaults to ["default"]) - xp/compiler/{profile}.xcp.ini
    *   </li>
    *   <li>-o [outputdir]: 
-   *     Writed compiled files to outputdir (will be created if not existant)
+   *     Write compiled files to outputdir (will be created if not existant)
    *   </li>
    *   <li>-t [level[,level[...]]]:
    *     Set trace level (all, none, info, warn, error, debug)
