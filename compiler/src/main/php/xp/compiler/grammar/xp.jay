@@ -371,6 +371,17 @@ method:
       $4->extension= $6[1];
       $$= $4;
     }
+  | decorations T_THIS T_WORD '(' { $4= $yyLex->create(new MethodNode(), TRUE); } extension_parameters_opt ')' throws_opt methodbody {
+      $4->modifiers= $1[0];
+      $4->annotations= $1[1];
+      $4->returns= new TypeName('self');
+      $4->name= $3;
+      $4->parameters= $6[0];
+      $4->throws= $8;
+      $4->body= array_merge((array)$9, array(new ReturnNode(new VariableNode($2))));
+      $4->extension= $6[1];
+      $$= $4;
+    }
   | decorations T_WORD '(' { $p= $yyLex->position; } parameters_opt ')' throws_opt methodbody {
       // Assert only certain methods are allowed here. This could be done by making
       // __construct and friends keywords - or this way!
@@ -462,6 +473,7 @@ annotationmember:
 methodbody:
     ';' { $$= NULL; }
   | '{' statements_opt '}' { $$= (array)$2; }
+  | T_ARROW expression ';' { $$= array($yyLex->create(new ReturnNode($2))); }
 ;
 
 extension_parameters_opt:
@@ -483,6 +495,7 @@ parameters:
 parameter:
 	paramtyperef T_VARIABLE initialization_opt { $$= array_merge(array('name' => $2), $1); $3 && $$['default']= $3; }
   | paramtyperef T_DOTS '.' T_VARIABLE { $$= array_merge(array('name' => $4, 'vararg' => TRUE), $1); }
+  | T_VARIABLE '.' T_WORD initialization_opt { $$= array('assign' => $3); $4 && $$['default']= $4; }
 ;
 
 paramtyperef:
