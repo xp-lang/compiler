@@ -6,8 +6,16 @@ Version ?.?.?, released ????-??-??
 ----------------------------------
 Git commit: ?????
 
+Version 1.9.0, released 2013-05-05
+----------------------------------
+Git commit: 65096ad05a313d905186dae1966ca07057bd0a82
+
 Heads up!
 ~~~~~~~~~
+- Gave the GitHub repository's homepage a makeover, adding installation,
+  usage and contribution overviews and a small sourcecode example. See
+  https://github.com/xp-framework/xp-language
+  (friebe)
 - Changed code no longer to use xp::$registry but instead the flattened
   version. This bumps the minimum XP Framework version to XP 5.9.0.
   See also https://github.com/xp-framework/xp-framework/pull/270
@@ -23,6 +31,9 @@ RFCs
 
 Features
 ~~~~~~~~
+- Added Travis-CI configuration and setup commit hook accordingly
+  http://news.planet-xp.net/article/520/2013/05/05/
+  (friebe)
 - Added support for "self" keyword in parameters and return types
   (friebe)
 
