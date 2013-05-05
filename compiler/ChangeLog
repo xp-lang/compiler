@@ -15,6 +15,11 @@ RFCs
 - Implemented RFC #0240: Compact assignment syntax
   (friebe)
 
+Features
+~~~~~~~~
+- Implemented the navigation operator `?.` - see pull request #13
+  (friebe)
+
 
 Version 1.9.0, released 2013-05-05
 ----------------------------------
