@@ -320,8 +320,9 @@
         $f->name= $field->getName();
         $f->modifiers= $field->getModifiers();
         if ($this->class->isEnum() && ($f->modifiers & (MODIFIER_PUBLIC | MODIFIER_STATIC))) {
-          if ($this->class->isInstance($field->get(NULL))) {
-            $f->type= $this->typeNameOf($this->class->getName());
+          $member= $field->get(NULL);
+          if ($this->class->isInstance($member)) {
+            $f->type= $this->typeNameOf(xp::typeOf($member));
           } else {
             $f->type= $this->typeNameOf($field->getTypeName());
           }

@@ -318,14 +318,40 @@
 
     /**
      * Test enum member type
-     *
      */
     #[@test]
     public function enumMemberType() {
-      $enum= create(new TypeReflection(XPClass::forName('lang.CommandLine')));
+      $cl= ClassLoader::defineClass('TypeReflectionTest_Enum', 'lang.Enum', array(), '{
+        public static $a= 0, $b;
+      }');
       $this->assertEquals(
-        new TypeName('lang.CommandLine'),
-        $enum->getField('WINDOWS')->type
+        new TypeName($cl->getField('b')->get(NULL)->getClassName()),
+        create(new TypeReflection($cl))->getField('b')->type
+      );
+    }
+
+    /**
+     * Test enum member type
+     */
+    #[@test]
+    public function abstractEnumMemberType() {
+      $cl= ClassLoader::defineClass('TypeReflectionTest_AbstractEnum', 'lang.Enum', array(), '{
+        public static $a, $b;
+
+        static function __static() {
+          self::$a= newinstance(__CLASS__, array(0, "a"), "{
+            static function __static() { }
+            public function code() { return 97; }
+          }");
+          self::$a= newinstance(__CLASS__, array(1, "b"), "{
+            static function __static() { }
+            public function code() { return 98; }
+          }");
+        }
+      }');
+      $this->assertEquals(
+        new TypeName($cl->getField('a')->get(NULL)->getClassName()),
+        create(new TypeReflection($cl))->getField('a')->type
       );
     }
   }
