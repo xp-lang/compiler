@@ -1529,7 +1529,7 @@
           $type= $this->resolveType($method->extension),
           $this->resolveType(new TypeName('self'))->getMethod($method->name)
         );
-        $this->metadata[0]['EXT'][$method->name]= $type->literal();   // HACK, this should be accessible in scope
+        $this->metadata[0]['EXT'][$method->name]= xp::reflect($type->name());   // HACK, this should be accessible in scope
       }
       $b->append(implode(' ', Modifiers::namesOf($method->modifiers)));
       $b->append(' function '.$method->name);
