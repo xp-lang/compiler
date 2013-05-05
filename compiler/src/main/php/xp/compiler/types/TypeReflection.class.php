@@ -319,7 +319,15 @@
         $f= new xp·compiler·types·Field();
         $f->name= $field->getName();
         $f->modifiers= $field->getModifiers();
-        $f->type= $this->typeNameOf($field->getTypeName());
+        if ($this->class->isEnum() && ($f->modifiers & (MODIFIER_PUBLIC | MODIFIER_STATIC))) {
+          if ($this->class->isInstance($field->get(NULL))) {
+            $f->type= $this->typeNameOf($this->class->getName());
+          } else {
+            $f->type= $this->typeNameOf($field->getTypeName());
+          }
+        } else {
+          $f->type= $this->typeNameOf($field->getTypeName());
+        }
         $f->holder= $this;
         return $f;
       }

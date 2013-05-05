@@ -315,5 +315,18 @@
         $builder->getMethod('create')->parameters[0]
       );
     }
+
+    /**
+     * Test enum member type
+     *
+     */
+    #[@test]
+    public function enumMemberType() {
+      $enum= create(new TypeReflection(XPClass::forName('lang.CommandLine')));
+      $this->assertEquals(
+        new TypeName('lang.CommandLine'),
+        $enum->getField('WINDOWS')->type
+      );
+    }
   }
 ?>
