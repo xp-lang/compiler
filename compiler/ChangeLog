@@ -8,7 +8,7 @@ Git commit: ?????
 
 Version 1.9.0, released 2013-05-05
 ----------------------------------
-Git commit: 65096ad05a313d905186dae1966ca07057bd0a82
+Git commit: 3dbbcbe2bdda440d35221ec17d98a025a2b42b54
 
 Heads up!
 ~~~~~~~~~
@@ -27,6 +27,12 @@ Heads up!
 RFCs
 ~~~~
 - Implemented RFC #0260: XP 5.9 as default branch
+  (friebe)
+
+Bugfixes
+~~~~~~~~
+- Work around uniqid() no longer generating unique ids.
+  See https://github.com/xp-framework/xp-framework/issues/260
   (friebe)
 
 Features
