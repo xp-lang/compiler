@@ -33,7 +33,7 @@
     #[@test]
     public function literal() {
       $decl= new TypeReflection(XPClass::forName('unittest.TestCase'));
-      $this->assertEquals('TestCase', $decl->literal());
+      $this->assertEquals('\\unittest\\TestCase', $decl->literal());
     }
 
     /**
