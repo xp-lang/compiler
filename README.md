@@ -13,14 +13,6 @@ $ cd [path]
 $ git clone git://github.com/xp-framework/xp-language.git
 ```
 
-Then add that path to your `use` setting inside your `xp.ini`, e.g.:
-
-```ini
-use=~/devel/xp-framework/core:~/devel/xp-language/compiler
-```
-
-*On Windows systems, use `;` as separator*
-
 ### Directory structure
 ```
 [path]/xp-language
@@ -35,16 +27,17 @@ use=~/devel/xp-framework/core:~/devel/xp-language/compiler
          `- config      # Unittest configuration
 ```
 
-Using it
---------
-To use the the XP Compiler append the following to the "use" key of your 
-xp.ini file:
+### Using it
+Add that path to your `use` setting inside your `xp.ini`, e.g.:
 
-	# Windows
-	;[root]/compiler
+```ini
+use=~/devel/xp-framework/core:~/devel/xp-language/compiler
+```
 
-	# Un*x
-	:[root]/compiler
+*On Windows systems, use `;` as separator*
 
+**Enjoy!**
 
-Enjoy!
+Contributing
+------------
+To contribute, use the GitHub way - fork, hack, and submit a pull request!
