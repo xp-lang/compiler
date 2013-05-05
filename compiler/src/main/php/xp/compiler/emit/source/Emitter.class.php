@@ -297,17 +297,12 @@
      * @param   xp.compiler.ast.ConstantNode const
      */
     protected function emitConstant($b, $const) {
-      if ($constant= $this->scope[0]->resolveConstant($const->value)) {
+      if ($constant= $this->scope[0]->resolveConstant($const->name)) {
         $b->append(var_export($constant->value, TRUE));
         return;
       }
 
-      try {
-        $b->append(var_export($const->resolve(), TRUE));
-      } catch (IllegalStateException $e) {
-        $this->warn('T201', 'Constant lookup for '.$const->value.' deferred until runtime: '.$e->getMessage(), $const);
-        $b->append($const->value);
-      }
+      $b->append($const->name);
     }
 
     /**
@@ -1294,7 +1289,8 @@
           ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($operator->comment, 4, strpos($operator->comment, '* @')- 2)))
           : NULL
         ,
-        DETAIL_ANNOTATIONS  => array()
+        DETAIL_ANNOTATIONS  => array(),
+        DETAIL_TARGET_ANNO  => array()
       );
       array_unshift($this->method, $name);
       $this->emitAnnotations($this->metadata[0][1][$name], (array)$operator->annotations);
@@ -1460,13 +1456,20 @@
         }
       }
 
+      // Sort out where annotations should go
+      if (isset($annotation->target)) {
+        $ptr= &$meta[DETAIL_TARGET_ANNO][$annotation->target];
+      } else {
+        $ptr= &$meta[DETAIL_ANNOTATIONS];
+      }
+
       // Set annotation value
       if (!$annotation->parameters) {
-        $meta[DETAIL_ANNOTATIONS][$annotation->type]= NULL;
+        $ptr[$annotation->type]= NULL;
       } else if (isset($annotation->parameters['default'])) {
-        $meta[DETAIL_ANNOTATIONS][$annotation->type]= $params['default'];
+        $ptr[$annotation->type]= $params['default'];
       } else {
-        $meta[DETAIL_ANNOTATIONS][$annotation->type]= $params;
+        $ptr[$annotation->type]= $params;
       }
     }
     
@@ -1556,7 +1559,8 @@
           ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($method->comment, 4, strpos($method->comment, '* @')- 2)))
           : NULL
         ,
-        DETAIL_ANNOTATIONS  => array()
+        DETAIL_ANNOTATIONS  => array(),
+        DETAIL_TARGET_ANNO  => array()
       );
       array_unshift($this->method, $method->name);
       $this->emitAnnotations($this->metadata[0][1][$method->name], (array)$method->annotations);
@@ -1627,7 +1631,8 @@
         DETAIL_RETURNS      => NULL,
         DETAIL_THROWS       => array(),
         DETAIL_COMMENT      => preg_replace('/\n\s+\* ?/', "\n  ", "\n ".$constructor->comment),
-        DETAIL_ANNOTATIONS  => array()
+        DETAIL_ANNOTATIONS  => array(),
+        DETAIL_TARGET_ANNO  => array()
       );
 
       array_unshift($this->method, '__construct');
@@ -1663,8 +1668,8 @@
      * Emits class registration
      *
      * <code>
-     *   xp::$registry['class.'.$name]= $qualified;
-     *   xp::$registry['details.'.$qualified]= $meta;
+     *   xp::$cn['class.'.$name]= $qualified;
+     *   xp::$meta['details.'.$qualified]= $meta;
      * </code>
      *
      * @param   xp.compiler.emit.Buffer b
@@ -1683,8 +1688,8 @@
       // Copy annotations
       $this->emitAnnotations($this->metadata[0]['class'], (array)$declaration->annotations);
 
-      $b->append('xp::$registry[\'class.'.$declaration->literal.'\']= \''.$qualified.'\';');
-      $b->append('xp::$registry[\'details.'.$qualified.'\']= '.var_export($this->metadata[0], TRUE).';');
+      $b->append('xp::$cn[\''.$declaration->literal.'\']= \''.$qualified.'\';');
+      $b->append('xp::$meta[\''.$qualified.'\']= '.var_export($this->metadata[0], TRUE).';');
       
       // Run static initializer if existant on synthetic types
       if ($declaration->synthetic && $this->inits[0][2]) {
@@ -1844,11 +1849,10 @@
       $b->append(';');
       
       // Register type information. 
-      // Value can safely be resolved as only resolveable values are allowed
       $c= new xp·compiler·types·Constant();
       $c->type= new TypeName($this->resolveType($const->type)->name());
       $c->name= $const->name;
-      $c->value= $const->value->resolve();
+      $c->value= $const->value instanceof Resolveable ? $const->value->resolve() : $const->value;
       $this->types[0]->addConstant($c);
     }
     
@@ -2240,7 +2244,7 @@
       if (isset($this->metadata[0]['EXT'])) {
         $b->append('static function __import($scope) {');
         foreach ($this->metadata[0]['EXT'] as $method => $type) {
-          $b->append('xp::$registry["ext"][$scope]["')->append($type)->append('"]= "')->append($thisType->literal())->append('";');
+          $b->append('xp::$ext[$scope]["')->append($type)->append('"]= "')->append($thisType->literal())->append('";');
         }
         $b->append('}');
       }

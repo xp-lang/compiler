@@ -1,0 +1,25 @@
+/* This class is part of the XP framework
+ *
+ * $Id$ 
+ */
+
+package demo;
+
+
+/**
+ * Application
+ *
+ */
+public class Application {
+
+  /**
+   * Entry point
+   *
+   * @param   string[] args
+   */
+  public static void main(string[] $args) {
+    $begin= new util.Date();
+    $end= util.Date::now();
+    $help= new Help();
+  }
+}

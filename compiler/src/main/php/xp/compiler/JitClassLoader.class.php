@@ -149,5 +149,14 @@
     public function toString() {
       return $this->getClassName().'<@classpath>';
     }
+
+    /**
+     * Returns instance ID
+     *
+     * @return  string
+     */
+    public function instanceId() {
+      return 'jit';
+    }
   }
 ?>

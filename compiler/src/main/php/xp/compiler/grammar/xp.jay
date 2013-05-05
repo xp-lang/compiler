@@ -430,19 +430,33 @@ annotations:
 ;
 
 annotation:
-    '@' qualifiedname { 
-      $$= $yyLex->create(new AnnotationNode()); 
-      $$->type= $2; 
+    '@' annotation_target {
+      $$= $2;
     }
-  | '@' qualifiedname '(' literal ')' { 
-      $$= $yyLex->create(new AnnotationNode()); 
-      $$->type= $2; 
-      $4 && $$->parameters= array('default' => $4);
+  | '@' annotation_target '(' literal ')' { 
+      $4 && $2->parameters= array('default' => $4);
+      $$= $2;
     }
-  | '@' qualifiedname '(' annotationmembers ')' { 
+  | '@' annotation_target '(' annotationmembers ')' { 
+      $2->parameters= $4;
+      $$= $2;
+    }
+;
+
+annotation_target:
+    T_WORD ':' qualifiedname { 
       $$= $yyLex->create(new AnnotationNode()); 
-      $$->type= $2; 
-      $$->parameters= $4;
+      $$->target= $1; 
+      $$->type= $3; 
+    }
+  | T_VARIABLE ':' qualifiedname { 
+      $$= $yyLex->create(new AnnotationNode()); 
+      $$->target= '$'.$1; 
+      $$->type= $3; 
+    }
+  | qualifiedname { 
+      $$= $yyLex->create(new AnnotationNode()); 
+      $$->type= $1; 
     }
 ;
 

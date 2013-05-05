@@ -164,7 +164,7 @@
      */
     #[@test]
     public function staticMemberArrayAccess() {
-      $this->assertFalse($this->run('return isset(xp::$registry["errors"][__FILE__]);'));
+      $this->assertFalse($this->run('return isset(xp::$errors[__FILE__]);'));
     }
 
     /**

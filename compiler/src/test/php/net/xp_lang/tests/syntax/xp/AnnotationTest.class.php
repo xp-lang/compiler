@@ -211,5 +211,17 @@
         new AnnotationNode(array('type' => 'Deprecated')),
       ), $this->parseMethodWithAnnotations('[@WebMethod, @Deprecated]'));
     }
+
+    /**
+     * Test target annotations
+     *
+     */
+    #[@test]
+    public function targetAnnotations() {
+      $this->assertEquals(
+        array(new AnnotationNode(array('type' => 'Inject', 'target' => '$conn'))),
+        $this->parseMethodWithAnnotations('[@$conn: Inject]')
+      );
+    }
   }
 ?>

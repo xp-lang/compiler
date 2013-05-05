@@ -1,0 +1,14 @@
+# Dependency: XP 5.9.0
+
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+
+before_script:
+  - wget 'http://xp-framework.net/setup/5.9.0' -O - | php -- -d .
+
+script:
+  - cd compiler && ../unittest src/test/config/*ini
