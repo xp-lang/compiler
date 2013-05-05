@@ -23,7 +23,7 @@
     protected $messages= array();
 
     static function __static() {
-      self::$check= newinstance('xp.compiler.check.Check', array(), '{
+      self::$check= newinstance('xp.compiler.checks.Check', array(), '{
         public function node() { 
           return XPClass::forName("xp.compiler.ast.StringNode"); 
         }
