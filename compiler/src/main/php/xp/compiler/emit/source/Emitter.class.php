@@ -124,67 +124,12 @@
      * @param   [:bool] types
      */
     protected function emitUses($b, array $types) {
-      static $bootstrap= array(
-        'lang.Object' => TRUE,
-        'lang.StackTraceElement' => TRUE,
-        'lang.Throwable' => TRUE,
-        'lang.Error' => TRUE,
-        'lang.XPException' => TRUE,
-        'lang.Type' => TRUE,
-        'lang.Primitive' => TRUE,
-        'lang.types.Character' => TRUE,
-        'lang.types.Number' => TRUE,
-        'lang.types.Byte' => TRUE,
-        'lang.types.Bytes' => TRUE,
-        'lang.types.String' => TRUE,
-        'lang.types.Integer' => TRUE,
-        'lang.types.Double' => TRUE,
-        'lang.types.Boolean' => TRUE,
-        'lang.types.ArrayListIterator' => TRUE,
-        'lang.types.ArrayList' => TRUE,
-        'lang.ArrayType' => TRUE,
-        'lang.MapType' => TRUE,
-        'lang.reflect.Routine' => TRUE,
-        'lang.reflect.Parameter' => TRUE,
-        'lang.reflect.TargetInvocationException' => TRUE,
-        'lang.reflect.Method' => TRUE,
-        'lang.reflect.Field' => TRUE,
-        'lang.reflect.Constructor' => TRUE,
-        'lang.reflect.Modifiers' => TRUE,
-        'lang.reflect.Package' => TRUE,
-        'lang.XPClass' => TRUE,
-        'lang.NullPointerException' => TRUE,
-        'lang.IllegalAccessException' => TRUE,
-        'lang.IllegalArgumentException' => TRUE,
-        'lang.IllegalStateException' => TRUE,
-        'lang.FormatException' => TRUE,
-        'lang.ClassNotFoundException' => TRUE,
-        'lang.AbstractClassLoader' => TRUE,
-        'lang.FileSystemClassLoader' => TRUE,
-        'lang.DynamicClassLoader' => TRUE,
-        'lang.archive.ArchiveClassLoader' => TRUE,
-        'lang.ClassLoader' => TRUE,
-      );
-
-      // Do not add uses() entries for:
-      // * Types emitted inside the same sourcefile
-      // * Native classes
-      // * Bootstrap classes
-      $this->cat && $this->cat->debug('uses(', $types, ')');
-      $uses= array();
-      foreach ($types as $type => $used) {
-        if (isset($this->local[0][$type]) ||  'php.' === substr($type, 0, 4) ||  isset($bootstrap[$type])) continue;
-
-        // TODO: Find out why this would make a difference, $type should already be fully-qualified
-        // @net.xp_lang.tests.execution.source.PropertiesOverloadingTest
-        // @net.xp_lang.tests.integration.CircularDependencyTest
-        try {
-          $uses[]= $this->resolveType(new TypeName($type), FALSE)->name();
-        } catch (Throwable $e) {
-          $this->error('0424', $e->toString());
-        }
+      if ($this->scope[0]->package) {
+        $b->insert('namespace '.strtr($this->scope[0]->package->name, '.', '\\').';', 0);
       }
-      $uses && $b->insert('uses(\''.implode("', '", $uses).'\');', 0);
+
+      // Nothing more to be done, we always use fully qualified form of
+      // class' names, and autoloading takes care of everything at runtime
     }
     
     /**
@@ -228,6 +173,7 @@
         $this->emitInvocationArguments($b, (array)$inv->arguments);
         $this->scope[0]->setType($inv, TypeName::$VAR);
       } else {
+        var_dump($ptr->holder());
         $b->append($ptr->holder->literal().'::'.$ptr->name());
         $this->emitInvocationArguments($b, (array)$inv->arguments);
         $this->scope[0]->setType($inv, $ptr->returns);
@@ -1212,7 +1158,7 @@
           $p= array('parent' => $new->type, 'implements' => NULL);
         }
         
-        $unique= new TypeName($parent->literal().'··'.uniqid());
+        $unique= new TypeName(strtr($parent->name().'..'.uniqid('', TRUE), '.', '·'));
         $decl= new ClassNode(0, NULL, $unique, $p['parent'], $p['implements'], $new->body);
         $decl->synthetic= TRUE;
         $generic && $decl->generic= $generic;
@@ -1713,7 +1659,6 @@
      * Emits class registration
      *
      * <code>
-     *   xp::$cn['class.'.$name]= $qualified;
      *   xp::$meta['details.'.$qualified]= $meta;
      * </code>
      *
@@ -1733,8 +1678,7 @@
       // Copy annotations
       $this->emitAnnotations($this->metadata[0]['class'], (array)$declaration->annotations);
 
-      $b->append('xp::$cn[\''.$declaration->literal.'\']= \''.$qualified.'\';');
-      $b->append('xp::$meta[\''.$qualified.'\']= '.var_export($this->metadata[0], TRUE).';');
+      $b->append('\xp::$meta[\''.$qualified.'\']= '.var_export($this->metadata[0], TRUE).';');
       
       // Run static initializer if existant on synthetic types
       if ($declaration->synthetic && $this->inits[0][2]) {
@@ -2289,7 +2233,7 @@
       if (isset($this->metadata[0]['EXT'])) {
         $b->append('static function __import($scope) {');
         foreach ($this->metadata[0]['EXT'] as $method => $type) {
-          $b->append('xp::$ext[$scope]["')->append($type)->append('"]= "')->append($thisType->literal())->append('";');
+          $b->append('\xp::$ext[$scope]["')->append($type)->append('"]= "')->append(xp::reflect($thisType->name()))->append('";');
         }
         $b->append('}');
       }
@@ -2527,7 +2471,7 @@
         $t || $t= $this->types[0];
       }
 
-      // Load used classes
+      // Namespace and imports
       $this->emitUses($bytes, $this->scope[0]->used);
 
       // Leave scope

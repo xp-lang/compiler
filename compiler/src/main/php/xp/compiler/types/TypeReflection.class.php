@@ -50,7 +50,12 @@
      * @return  string
      */
     public function literal() {
-      return xp::reflect($this->class->getName());
+      $name= $this->class->getName();
+      if (0 === strncmp('php.', $name, 4)) {
+        return '\\'.substr($name, 4);
+      } else {
+        return '\\'.strtr($name, '.', '\\');
+      }
     }
     
     /**
