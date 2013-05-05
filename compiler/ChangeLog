@@ -15,6 +15,12 @@ RFCs
 - Implemented RFC #0240: Compact assignment syntax
   (friebe)
 
+Bugfixes
+~~~~~~~~
+- Changed TypeReflection to determine enum member type correctly
+  See pull request #23
+  (friebe)
+
 Features
 ~~~~~~~~
 - Implemented the navigation operator `?.` - see pull request #13
