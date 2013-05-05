@@ -1927,14 +1927,7 @@
      */
     protected function emitTypeName($b, $type, TypeDeclarationNode $declaration) {
       $this->metadata[0]['class']= array();
-
-      // Check whether class needs to be fully qualified
-      if ($declaration->modifiers & MODIFIER_PACKAGE) {
-        $b->append('$package= \'')->append($this->scope[0]->package->name)->append("';");
-        $declaration->literal= strtr($this->scope[0]->package->name, '.', '·').'·'.$declaration->name->name;
-      } else {
-        $declaration->literal= $declaration->name->name;
-      }
+      $declaration->literal= $declaration->name->name;
       
       // Emit abstract and final modifiers
       if (Modifiers::isAbstract($declaration->modifiers)) {

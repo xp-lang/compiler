@@ -132,11 +132,11 @@
      * Test declaring a class
      *
      */
-    #[@test]
+    #[@testm]
     public function classInsidePackage() {
       $class= $this->define('class', 'ClassInPackage', NULL, '{ }', array('package demo;'));
       $this->assertEquals('demo.SourceClassInPackage', $class->getName());
-      $this->assertEquals('SourceClassInPackage', xp::reflect($class->getName()));
+      $this->assertEquals('demo\\SourceClassInPackage', xp::reflect($class->getName()));
     }
 
     /**
@@ -147,7 +147,7 @@
     public function packageClassInsidePackage() {
       $class= $this->define('package class', 'PackageClassInPackage', NULL, '{ }', array('package demo;'));
       $this->assertEquals('demo.SourcePackageClassInPackage', $class->getName());
-      $this->assertEquals('demo·SourcePackageClassInPackage', xp::reflect($class->getName()));
+      $this->assertEquals('demo\\SourcePackageClassInPackage', xp::reflect($class->getName()));
     }
 
     /**
