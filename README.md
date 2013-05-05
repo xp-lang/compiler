@@ -17,7 +17,7 @@ $ xpi add xp-framework/xp-language
 
 Getting started
 ---------------
-Create a file called `HelloWorld.xp` with the following contents:
+Like in the XP framework, the entry point is always a class. In their most simple form, these classes have a static main() method. To try it out, create a file called `HelloWorld.xp` with the following contents:
 
 ```groovy
 public class HelloWorld {
@@ -31,13 +31,43 @@ Then compile and run it!
 
 ```sh
 $ xcc HelloWorld.xp
+...
+
 $ xp HelloWorld
 Hello World!
 ```
 
+### Differences
+The things you will have noticed are:
+
+* Classes may also have modifiers.
+* The `extends Object` is optional and added by the compiler if omitted.
+* The keyword `function` is gone and replaced by the return type. Because the main() method does not return anything, we use void.
+* An array type is written as component[]
+* Variables still have dollar signs. This makes it easy to spot them, that's why we've decided to keep this!
+* Fully qualified classnames are written with dots.
+* The object operator is also a dot (at the same time, the string concatenation operator is now the tilde, `~`).
+
+### Features
+The XP Language features - among others - support for the following:
+
+* Namespaces (which are called packages)
+* Imports, static imports and "on-demand" imports (`import util.*;`)
+* Varargs syntax
+* Distinguishable types for arrays and maps
+* Class literal `::class`, and `finally` - also for PHP < 5.5!
+* Properties with `get` and `set`, and Indexers
+* Syntactic support for the following XP Framework features: Typesafe enumerations, Annotations, Generics, the `with` statement and a throws clause
+
+### Further reading
+To get an overview of XP Language's features, these are good reads:
+
+* [RFC #0052: Make XP its own (compiled) language](https://github.com/xp-framework/rfc/issues/52)
+* [XP Blog: Language](http://news.planet-xp.net/category/17/Language/)
+
 Developing
 ----------
-Clone this repository, e.g. using Git Read-Only:
+In order to change XP Language and/or the Compiler **itself**, you need to clone this repository, e.g. using Git Read-Only:
 
 ```sh
 $ cd [path]
