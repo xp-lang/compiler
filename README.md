@@ -10,7 +10,11 @@ Use the XP Installer to add this module as follows:
 
 ```sh
 $ cd ~/.xp
+# First installation
 $ xpi add xp-framework/xp-language
+
+# Later on
+$ xpi upgrade xp-framework/xp-language
 ```
 
 *Note: It is assumed you are using `~./xp` as path for your globally available XP modules, and have this path inside your xp.ini's `use` statement.*
