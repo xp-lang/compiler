@@ -173,7 +173,6 @@
         $this->emitInvocationArguments($b, (array)$inv->arguments);
         $this->scope[0]->setType($inv, TypeName::$VAR);
       } else {
-        var_dump($ptr->holder());
         $b->append($ptr->holder->literal().'::'.$ptr->name());
         $this->emitInvocationArguments($b, (array)$inv->arguments);
         $this->scope[0]->setType($inv, $ptr->returns);
