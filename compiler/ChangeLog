@@ -6,6 +6,16 @@ Version ?.?.?, released ????-??-??
 ----------------------------------
 Git commit: ?????
 
+RFCs
+~~~~
+- Implemented RFC #0252: Fluent interface compact syntax
+  (friebe)
+- Implemented RFC #0241: Compact method syntax
+  (friebe)
+- Implemented RFC #0240: Compact assignment syntax
+  (friebe)
+
+
 Version 1.9.0, released 2013-05-05
 ----------------------------------
 Git commit: 3dbbcbe2bdda440d35221ec17d98a025a2b42b54
