@@ -31,7 +31,8 @@ $ git clone git://github.com/xp-framework/xp-language.git
 Add that path to your `use` setting inside your `xp.ini`, e.g.:
 
 ```ini
-use=~/devel/xp-framework/core:~/devel/xp-language/compiler
+use=~/devel/xp-framework/core:.:~/devel/xp-language/compiler
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
 *On Windows systems, use `;` as separator*
