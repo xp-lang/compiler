@@ -1,5 +1,4 @@
-# This provides an initial configuration to
-# test xp-language on http://travis-ci.org/
+# Dependency: XP 5.9.0
 
 language: php
 
