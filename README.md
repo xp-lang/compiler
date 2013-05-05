@@ -10,6 +10,7 @@ Use the XP Installer to add this module as follows:
 
 ```sh
 $ cd ~/.xp
+
 # First installation
 $ xpi add xp-framework/xp-language
 
