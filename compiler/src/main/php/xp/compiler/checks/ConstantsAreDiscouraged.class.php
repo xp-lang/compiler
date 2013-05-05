@@ -39,7 +39,7 @@
      * @return  bool
      */
     public function verify(xp·compiler·ast·Node $node, Scope $scope) {
-      return array('T203', 'Global constants ('.cast($node, 'xp.compiler.ast.ConstantNode')->value.') are discouraged');
+      return array('T203', 'Global constants ('.cast($node, 'xp.compiler.ast.ConstantNode')->name.') are discouraged');
     }
   }
 ?>

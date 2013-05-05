@@ -289,5 +289,31 @@
       $this->assertEquals('lang.types.ArrayList', key($extensions));
       $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
     }
+
+    /**
+     * Test "self" used in return type
+     *
+     */
+    #[@test]
+    public function selfReturnType() {
+      $builder= create(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.Builder')));
+      $this->assertEquals(
+        new TypeName('net.xp_lang.tests.types.Builder'),
+        $builder->getMethod('create')->returns
+      );
+    }
+
+    /**
+     * Test "self" used in parameter type
+     *
+     */
+    #[@test]
+    public function selfParameterType() {
+      $builder= create(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.Builder')));
+      $this->assertEquals(
+        new TypeName('net.xp_lang.tests.types.Builder'),
+        $builder->getMethod('create')->parameters[0]
+      );
+    }
   }
 ?>

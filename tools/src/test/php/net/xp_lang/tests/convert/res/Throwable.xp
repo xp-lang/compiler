@@ -1,0 +1,15 @@
+/* This class is part of the XP framework
+ *
+ * $Id$ 
+ */
+
+package lang;
+
+
+/**
+ * Throwable class
+ *
+ */
+public class Throwable {
+
+}

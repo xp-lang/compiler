@@ -372,6 +372,17 @@ method:
       $4->extension= $6[1];
       $$= $4;
     }
+  | decorations T_THIS T_WORD '(' { $4= $yyLex->create(new MethodNode(), TRUE); } extension_parameters_opt ')' throws_opt methodbody {
+      $4->modifiers= $1[0];
+      $4->annotations= $1[1];
+      $4->returns= new TypeName('self');
+      $4->name= $3;
+      $4->parameters= $6[0];
+      $4->throws= $8;
+      $4->body= array_merge((array)$9, array(new ReturnNode(new VariableNode($2))));
+      $4->extension= $6[1];
+      $$= $4;
+    }
   | decorations T_WORD '(' { $p= $yyLex->position; } parameters_opt ')' throws_opt methodbody {
       // Assert only certain methods are allowed here. This could be done by making
       // __construct and friends keywords - or this way!
@@ -420,19 +431,33 @@ annotations:
 ;
 
 annotation:
-    '@' qualifiedname { 
-      $$= $yyLex->create(new AnnotationNode()); 
-      $$->type= $2; 
+    '@' annotation_target {
+      $$= $2;
     }
-  | '@' qualifiedname '(' literal ')' { 
-      $$= $yyLex->create(new AnnotationNode()); 
-      $$->type= $2; 
-      $4 && $$->parameters= array('default' => $4);
+  | '@' annotation_target '(' literal ')' { 
+      $4 && $2->parameters= array('default' => $4);
+      $$= $2;
     }
-  | '@' qualifiedname '(' annotationmembers ')' { 
+  | '@' annotation_target '(' annotationmembers ')' { 
+      $2->parameters= $4;
+      $$= $2;
+    }
+;
+
+annotation_target:
+    T_WORD ':' qualifiedname { 
       $$= $yyLex->create(new AnnotationNode()); 
-      $$->type= $2; 
-      $$->parameters= $4;
+      $$->target= $1; 
+      $$->type= $3; 
+    }
+  | T_VARIABLE ':' qualifiedname { 
+      $$= $yyLex->create(new AnnotationNode()); 
+      $$->target= '$'.$1; 
+      $$->type= $3; 
+    }
+  | qualifiedname { 
+      $$= $yyLex->create(new AnnotationNode()); 
+      $$->type= $1; 
     }
 ;
 
@@ -449,6 +474,7 @@ annotationmember:
 methodbody:
     ';' { $$= NULL; }
   | '{' statements_opt '}' { $$= (array)$2; }
+  | T_ARROW expression ';' { $$= array($yyLex->create(new ReturnNode($2))); }
 ;
 
 extension_parameters_opt:

@@ -26,7 +26,8 @@
   );
 
   /**
-   * XP Compiler
+   * XP Compiler, version {{VERSION}}
+   * Copyright (c) 2008-2013 the XP group
    *
    * Usage:
    * <pre>
@@ -51,7 +52,7 @@
    *     Use compiler profiles (defaults to ["default"]) - xp/compiler/{profile}.xcp.ini
    *   </li>
    *   <li>-o [outputdir]: 
-   *     Writed compiled files to outputdir (will be created if not existant)
+   *     Write compiled files to outputdir (will be created if not existant)
    *   </li>
    *   <li>-t [level[,level[...]]]:
    *     Set trace level (all, none, info, warn, error, debug)
@@ -69,8 +70,6 @@
    *     Same as above, but not performed recursively
    *   </li>
    * </ul>
-   *
-   * @purpose  Runner
    */
   class xp·compiler·Runner extends Object {
     protected static $line;
@@ -98,7 +97,10 @@
      *
      */
     protected static function showUsage() {
-      Console::$err->writeLine(self::textOf(XPClass::forName(xp::nameOf(__CLASS__))->getComment()));
+      $class= new XPClass(__CLASS__);
+      Console::$err->writeLine(strtr(self::textOf($class->getComment()), array(
+        '{{VERSION}}' => $class->getClassLoader()->getResource('VERSION')
+      )));
       
       // List supported syntaxes
       Console::$err->writeLine(self::$line);
@@ -146,7 +148,7 @@
       
       $compiler= new Compiler();
       $manager= new FileManager();
-      $manager->setSourcePaths(xp::$registry['classpath']);
+      $manager->setSourcePaths(xp::$classpath);
       $profiles= array('default');
       $emitter= 'source';
       

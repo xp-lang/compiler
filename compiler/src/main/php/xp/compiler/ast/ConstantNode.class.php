@@ -4,13 +4,23 @@
  * $Id$
  */
 
-  uses('xp.compiler.ast.ConstantValueNode');
+  uses('xp.compiler.ast.Node');
 
   /**
    * Represents a constant
    *
    */
-  class ConstantNode extends ConstantValueNode {
+  class ConstantNode extends xp·compiler·ast·Node {
+    public $name= NULL;
+
+    /**
+     * Creates a new constant value node with a given name
+     *
+     * @param   string name
+     */
+    public function __construct($name= NULL) {
+      $this->name= $name;
+    }
   
     /**
      * Returns a hashcode
@@ -18,23 +28,7 @@
      * @return  string
      */
     public function hashCode() {
-      return $this->value;
-    }
-
-    /**
-     * Resolve this node's value.
-     *
-     * @return  var
-     */
-    public function resolve() {
-      if (!defined($this->value)) {
-        throw new IllegalStateException('Undefined constant '.$this->value);
-      }
-      $resolved= constant($this->value);
-      if (is_resource($resolved) || is_object($resolved)) {
-        throw new IllegalStateException('Constant '.$this->value.' resolves to non-primitive type '.xp::typeOf($resolved));
-      }
-      return $resolved;
+      return $this->name;
     }
   }
 ?>
