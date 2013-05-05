@@ -8,6 +8,10 @@ Git commit: ?????
 
 Heads up!
 ~~~~~~~~~
+- Changed code no longer to use xp::$registry but instead the flattened
+  version. This bumps the minimum XP Framework version to XP 5.9.0.
+  See also https://github.com/xp-framework/xp-framework/pull/270
+  (friebe)
 - Version now detached from framework - XP compiler v1.9.0 will be the 
   correct version for XP Framework v5.9.0
   (friebe)

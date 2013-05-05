@@ -1658,8 +1658,8 @@
      * Emits class registration
      *
      * <code>
-     *   xp::$registry['class.'.$name]= $qualified;
-     *   xp::$registry['details.'.$qualified]= $meta;
+     *   xp::$cn['class.'.$name]= $qualified;
+     *   xp::$meta['details.'.$qualified]= $meta;
      * </code>
      *
      * @param   xp.compiler.emit.Buffer b
@@ -1678,8 +1678,8 @@
       // Copy annotations
       $this->emitAnnotations($this->metadata[0]['class'], (array)$declaration->annotations);
 
-      $b->append('xp::$registry[\'class.'.$declaration->literal.'\']= \''.$qualified.'\';');
-      $b->append('xp::$registry[\'details.'.$qualified.'\']= '.var_export($this->metadata[0], TRUE).';');
+      $b->append('xp::$cn[\''.$declaration->literal.'\']= \''.$qualified.'\';');
+      $b->append('xp::$meta[\''.$qualified.'\']= '.var_export($this->metadata[0], TRUE).';');
       
       // Run static initializer if existant on synthetic types
       if ($declaration->synthetic && $this->inits[0][2]) {
@@ -2234,7 +2234,7 @@
       if (isset($this->metadata[0]['EXT'])) {
         $b->append('static function __import($scope) {');
         foreach ($this->metadata[0]['EXT'] as $method => $type) {
-          $b->append('xp::$registry["ext"][$scope]["')->append($type)->append('"]= "')->append($thisType->literal())->append('";');
+          $b->append('xp::$ext[$scope]["')->append($type)->append('"]= "')->append($thisType->literal())->append('";');
         }
         $b->append('}');
       }

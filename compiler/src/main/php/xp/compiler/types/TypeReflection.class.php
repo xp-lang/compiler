@@ -234,12 +234,12 @@
       // Extension methods are registered via __import()
       if (!method_exists($name, '__import')) return array();
       call_user_func(array($name, '__import'), 0);
-      if (!isset(xp::$registry['ext'][0])) return array();
+      if (!isset(xp::$ext[0])) return array();
 
       // Found extension methods imported into the 0-scope
       $methods= $this->class->getMethods();
       $r= array();
-      foreach (xp::$registry['ext'][0] as $type => $name) {
+      foreach (xp::$ext[0] as $type => $name) {
         $type= $this->typeName($type);
         $r[$type]= array();
         foreach ($methods as $method) {
@@ -250,7 +250,7 @@
           ) $r[$type][]= $this->getMethod($method->getName());
         }
       }
-      unset(xp::$registry['ext'][0]);
+      unset(xp::$ext[0]);
       return $r;
     }
 
