@@ -29,6 +29,12 @@ RFCs
 - Implemented RFC #0260: XP 5.9 as default branch
   (friebe)
 
+Bugfixes
+~~~~~~~~
+- Work around uniqid() no longer generating unique ids.
+  See https://github.com/xp-framework/xp-framework/issues/260
+  (friebe)
+
 Features
 ~~~~~~~~
 - Added Travis-CI configuration and setup commit hook accordingly

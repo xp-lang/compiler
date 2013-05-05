@@ -1471,7 +1471,7 @@
      * @see     http://cr.openjdk.java.net/~mcimadamore/lambda_trans.pdf
      */
     protected function emitLambda($b, $lambda) {
-      $unique= new TypeName('Lambda··'.uniqid());
+      $unique= new TypeName('Lambda··'.strtr(uniqid('', TRUE), '.', '·'));
       
       // Visit all statements, promoting local variable used within tp members
       $promoter= new LocalsToMemberPromoter();
