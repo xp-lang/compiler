@@ -104,7 +104,7 @@
      */
     #[@test]
     public function packageLiteralInsidePackage() {
-      $this->assertEquals('demo·Person', $this->compile('package demo; package class Person { }')->literal());
+      $this->assertEquals('Person', $this->compile('package demo; package class Person { }')->literal());
     }
 
     /**
