@@ -16,16 +16,19 @@
   class MemberAccessNode extends xp·compiler·ast·Node {
     public $target= NULL;
     public $name= '';
-    
+    public $nav= FALSE;
+
     /**
      * Constructor
      *
      * @param   xp.compiler.ast.Node target
      * @param   string name
+     * @param   bool nav
      */
-    public function __construct($target= NULL, $name= '') {
+    public function __construct($target= NULL, $name= '', $nav= FALSE) {
       $this->target= $target;
       $this->name= $name;
+      $this->nav= $nav;
     }
 
     /**

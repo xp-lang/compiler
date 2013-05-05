@@ -77,7 +77,7 @@
 
     protected static
       $lookahead= array(
-        '.' => array('..' => xp搾ompiler新yntax暖p感arser::T_DOTS),
+        '.' => array('...' => xp搾ompiler新yntax暖p感arser::T_DOTS),
         '-' => array('-=' => xp搾ompiler新yntax暖p感arser::T_SUB_EQUAL, '--' => xp搾ompiler新yntax暖p感arser::T_DEC, '->' => xp搾ompiler新yntax暖p感arser::T_ARROW),
         '>' => array('>=' => xp搾ompiler新yntax暖p感arser::T_GE),
         '<' => array('<=' => xp搾ompiler新yntax暖p感arser::T_SE),
@@ -91,6 +91,7 @@
         '|' => array('||' => xp搾ompiler新yntax暖p感arser::T_BOOLEAN_OR, '|=' => xp搾ompiler新yntax暖p感arser::T_OR_EQUAL),
         '&' => array('&&' => xp搾ompiler新yntax暖p感arser::T_BOOLEAN_AND, '&=' => xp搾ompiler新yntax暖p感arser::T_AND_EQUAL),
         '^' => array('^=' => xp搾ompiler新yntax暖p感arser::T_XOR_EQUAL),
+        '?' => array('?..' => 0, '?.' => xp搾ompiler新yntax暖p感arser::T_NAV),    // "T?..." = non-checked vararg of T
       );
 
     const 
@@ -254,15 +255,26 @@
             $this->pushBack($ahead);
           }
         } else if (isset(self::$lookahead[$token])) {
-          $ahead= $this->nextToken();
-          $combined= $token.$ahead;
-          if (isset(self::$lookahead[$token][$combined])) {
-            $this->token= self::$lookahead[$token][$combined];
-            $this->value= $combined;
-          } else {
+          $ahead= $token;
+          $p= TRUE;
+          foreach (self::$lookahead[$token] as $candidate => $id) {
+            $l= strlen($candidate);
+            while (strlen($ahead) < $l) {
+              $ahead.= $this->nextToken();
+            }
+            if (0 === strncmp($candidate, $ahead, $l)) {
+              if (0 === $id) break;
+              $this->token= $id;
+              $this->value= $candidate;
+              $this->pushBack(substr($ahead, $l));
+              $p= FALSE;
+              break;
+            }
+          }
+          if ($p) {
+            $this->pushBack(substr($ahead, 1));
             $this->token= ord($token);
             $this->value= $token;
-            $this->pushBack($ahead);
           }
         } else if (FALSE !== strpos(self::DELIMITERS, $token) && 1 === $length) {
           $this->token= ord($token);
