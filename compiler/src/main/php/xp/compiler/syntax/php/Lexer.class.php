@@ -267,7 +267,7 @@
         } else if (0 === strcspn($token, '0123456789')) {     // Numbers, starting with 0..9
           $ahead= $this->nextToken();
           if ('.' === $ahead{0}) {                            // Decimal numbers, next token starts with "."
-            $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
+            $this->token= xp搾ompiler新yntax搆hp感arser::T_DECIMAL;
             $decimal= $this->nextToken();
             $length= strlen($decimal);
             $this->value= $token.$ahead.$decimal;
@@ -291,19 +291,19 @@
           } else {                                            // Integers, no "."
             $p= TRUE;
             if (1 === $length) {
-              $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
+              $this->token= xp搾ompiler新yntax搆hp感arser::T_NUMBER;
               $this->value= $token;
             } else if ('0' === $token[0] && ('x' === $token[1] || 'X' === $token[1])) {
               if ($length !== strspn($token, '0123456789ABCDEFXabcdefx')) {
                 $this->raise('lang.FormatException', 'Illegal hex number <'.$token.'>');
               }
-              $this->token= xp搾ompiler新yntax暖p感arser::T_HEX;
+              $this->token= xp搾ompiler新yntax搆hp感arser::T_HEX;
               $this->value= $token;
             } else if ('0' === $token[0]) {
               if ($length !== strspn($token, '01234567')) {
                 $this->raise('lang.FormatException', 'Illegal octal number <'.$token.'>');
               }
-              $this->token= xp搾ompiler新yntax暖p感arser::T_OCTAL;
+              $this->token= xp搾ompiler新yntax搆hp感arser::T_OCTAL;
               $this->value= $token;
             } else if ($length !== strcspn($token, 'eE')) {
               if ('+' === $ahead{0} || '-' === $ahead{0}) {
@@ -314,7 +314,7 @@
                 $format= '%d%*1[eE]%*d';
                 $exponent= '';
               }
-              $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
+              $this->token= xp搾ompiler新yntax搆hp感arser::T_DECIMAL;
               $this->value= $token.$exponent;
               if (3 !== sscanf($this->value, $format, $n)) {
                 $this->raise('lang.FormatException', 'Illegal decimal number <'.$this->value.'>');
@@ -323,13 +323,13 @@
               if ($length !== strspn($token, '0123456789')) {
                 $this->raise('lang.FormatException', 'Illegal number <'.$token.'>');
               }
-              $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
+              $this->token= xp搾ompiler新yntax搆hp感arser::T_NUMBER;
               $this->value= $token;
             }
             $p && $this->pushBack($ahead);
           }
         } else {
-          $this->token= xp搾ompiler新yntax暖p感arser::T_WORD;
+          $this->token= xp搾ompiler新yntax搆hp感arser::T_WORD;
           $this->value= $token;
         }
 
