@@ -7,13 +7,15 @@ use xp\compiler\ast\ImportNode;
 
 /**
  * Test namespaces
+ *
+ * @see  php://namespaces
  */
 class NamespaceTest extends ParserTestCase {
 
   /**
-   * Parse method source and return statements inside this method.
+   * Parse source and return AST
    *
-   * @param   string src
+   * @param   string $src
    * @return  xp.compiler.ast.ParseTree
    */
   protected function parse($src) {
