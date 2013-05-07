@@ -13,8 +13,7 @@ use xp\compiler\ast\ArrayNode;
 use xp\compiler\ast\MapNode;
 
 /**
- * TestCase
- *
+ * TestCase for annotations
  */
 class AnnotationTest extends ParserTestCase {
 
@@ -33,7 +32,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test no annotation
-   *
    */
   #[@test]
   public function noAnnotation() {
@@ -42,7 +40,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test simple annotation (Test)
-   *
    */
   #[@test]
   public function simpleAnnotation() {
@@ -53,7 +50,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test simple annotation (Test)
-   *
    */
   #[@test, @expect('text.parser.generic.ParseException')]
   public function simpleAnnotationWithBrackets() {
@@ -62,7 +58,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test annotation with default value (Expect("lang.IllegalArgumentException"))
-   *
    */
   #[@test]
   public function annotationWithStringValue() {
@@ -74,7 +69,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test annotation with default value (Limit(5)))
-   *
    */
   #[@test]
   public function annotationWithIntegerValue() {
@@ -86,7 +80,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test annotation with default value (Limit(0x5)))
-   *
    */
   #[@test]
   public function annotationWithHexValue() {
@@ -98,7 +91,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test annotation with default value (Limit(5.0)))
-   *
    */
   #[@test]
   public function annotationWithDecimalValue() {
@@ -110,7 +102,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test annotation with default value (Limit(null)))
-   *
    */
   #[@test]
   public function annotationWithnullValue() {
@@ -122,7 +113,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test annotation with default value (Limit(true)))
-   *
    */
   #[@test]
   public function annotationWithtrueValue() {
@@ -134,7 +124,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test annotation with default value (Limit(false)))
-   *
    */
   #[@test]
   public function annotationWithfalseValue() {
@@ -146,7 +135,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test annotation with default value (Restrict(["Admin", "Root"]))
-   *
    */
   #[@test]
   public function annotationWithArrayValue() {
@@ -164,7 +152,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test annotation with default value (Restrict(["Role" : "Root"]))
-   *
    */
   #[@test]
   public function annotationWithMapValue() {
@@ -182,7 +169,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test annotation with key/value pairs (Expect(class es = [...], code = 503))
-   *
    */
   #[@test]
   public function annotationWithValues() {
@@ -206,7 +192,6 @@ class AnnotationTest extends ParserTestCase {
 
   /**
    * Test multiple annotations (WebMethod, Deprecated)
-   *
    */
   #[@test]
   public function multipleAnnotations() {
