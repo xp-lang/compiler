@@ -38,7 +38,7 @@ class NamespaceTest extends ParserTestCase {
   public function simple_namespace_declaration() {
     $this->assertEquals(
       new PackageNode(array('name' => 'demo')),
-      $this->parse('<?php namespace demo; class A { } ?>')->package
+      $this->parse('<?php namespace demo; class A { }')->package
     );
   }
 
@@ -46,7 +46,7 @@ class NamespaceTest extends ParserTestCase {
   public function sub_namespace_declaration() {
     $this->assertEquals(
       new PackageNode(array('name' => 'demo.sub')),
-      $this->parse('<?php namespace demo\\sub; class A { } ?>')->package
+      $this->parse('<?php namespace demo\\sub; class A { }')->package
     );
   }
 
@@ -54,8 +54,13 @@ class NamespaceTest extends ParserTestCase {
   public function sub_sub_namespace_declaration() {
     $this->assertEquals(
       new PackageNode(array('name' => 'demo.sub.child')),
-      $this->parse('<?php namespace demo\\sub\\child; class A { } ?>')->package
+      $this->parse('<?php namespace demo\\sub\\child; class A { }')->package
     );
+  }
+
+  #[@test, @expect('text.parser.generic.ParseException')]
+  public function absolute_namespace_not_allowed() {
+    $this->parse('<?php namespace \\demo; class A { }');
   }
 
   #[@test]
@@ -92,5 +97,10 @@ class NamespaceTest extends ParserTestCase {
         class A { }
       '))
     );
+  }
+
+  #[@test, @expect('text.parser.generic.ParseException')]
+  public function absolute_use_not_allowed() {
+    $this->parse('<?php namespace demo; use \\lang\\Object; class A { }');
   }
 }
