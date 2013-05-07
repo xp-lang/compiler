@@ -1,27 +1,18 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace net\xp_lang\tests\syntax\php;
+
+/**
+ * Tests the lexer tokenizing a stream
  *
- * $Id$ 
  */
-
-  $package= 'net.xp_lang.tests.syntax.php';
-
-  uses('net.xp_lang.tests.syntax.php.LexerTest', 'io.streams.MemoryInputStream');
+class StreamLexerTest extends LexerTest {
 
   /**
-   * Tests the lexer tokenizing a stream
+   * Creates a lexer instance
    *
+   * @param   string $in
+   * @return  xp.compiler.syntax.php.Lexer
    */
-  class net·xp_lang·tests·syntax·php·StreamLexerTest extends net·xp_lang·tests·syntax·php·LexerTest {
-
-    /**
-     * Creates a lexer instance
-     *
-     * @param   string in
-     * @return  xp.compiler.syntax.php.Lexer
-     */
-    protected function newLexer($in) {
-      return new xp·compiler·syntax·php·Lexer(new MemoryInputStream($in), $this->name);
-    }
+  protected function newLexer($in) {
+    return new \xp\compiler\syntax\php\Lexer(new \io\streams\MemoryInputStream($in), $this->name);
   }
-?>
+}

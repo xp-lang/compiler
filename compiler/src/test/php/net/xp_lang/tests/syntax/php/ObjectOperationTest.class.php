@@ -1,18 +1,17 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace net\xp_lang\tests\syntax\php;
 
-  $package= 'net.xp_lang.tests.syntax.php';
+use xp\compiler\ast\InstanceCreationNode;
+use xp\compiler\ast\CloneNode;
+use xp\compiler\ast\InstanceOfNode;
+use xp\compiler\ast\VariableNode;
+use xp\compiler\types\TypeName;
 
-  uses('net.xp_lang.tests.syntax.php.ParserTestCase');
 
   /**
    * TestCase
    *
    */
-  class net·xp_lang·tests·syntax·php·ObjectOperationTest extends net·xp_lang·tests·syntax·php·ParserTestCase {
+  class ObjectOperationTest extends ParserTestCase {
 
     /**
      * Test new

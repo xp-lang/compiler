@@ -1,4 +1,4 @@
-<?php namespace net\xp_lang\tests\syntax\php;
+<?php namespace net\xp_lang\tests\syntax\php; namespace net\xp_lang\tests\syntax\php;
 
 use xp\compiler\syntax\php\Parser;
 use xp\compiler\syntax\php\Lexer;
@@ -61,6 +61,11 @@ class NamespaceTest extends ParserTestCase {
   #[@test, @expect('text.parser.generic.ParseException')]
   public function absolute_namespace_not_allowed() {
     $this->parse('<?php namespace \\demo; class A { }');
+  }
+
+  #[@test, @expect('text.parser.generic.ParseException')]
+  public function double_namespace_declaration_not_allowed() {
+    $this->parse('<?php namespace demo; namespace illegal; class A { }');
   }
 
   #[@test]
