@@ -42,7 +42,7 @@ class ArraySyntaxTest extends ParserTestCase {
   #[@test]
   public function noOffset() {
     $this->assertEquals(
-      array(new ArrayAccessNode(new VariableNode('b'), NULL)),
+      array(new ArrayAccessNode(new VariableNode('b'), null)),
       $this->parse('$b[];')
     );
   }

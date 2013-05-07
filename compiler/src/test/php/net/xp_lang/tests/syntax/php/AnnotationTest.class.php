@@ -37,7 +37,7 @@ class AnnotationTest extends ParserTestCase {
    */
   #[@test]
   public function noAnnotation() {
-    $this->assertEquals(NULL, $this->parseMethodWithAnnotations(''));
+    $this->assertNull($this->parseMethodWithAnnotations(''));
   }
 
   /**
@@ -113,7 +113,7 @@ class AnnotationTest extends ParserTestCase {
    *
    */
   #[@test]
-  public function annotationWithNullValue() {
+  public function annotationWithnullValue() {
     $this->assertEquals(array(new AnnotationNode(array(
       'type'          => 'Limit',
       'parameters'    => array('default' => new NullNode())
@@ -125,10 +125,10 @@ class AnnotationTest extends ParserTestCase {
    *
    */
   #[@test]
-  public function annotationWithTrueValue() {
+  public function annotationWithtrueValue() {
     $this->assertEquals(array(new AnnotationNode(array(
       'type'          => 'Limit',
-      'parameters'    => array('default' => new BooleanNode(TRUE))
+      'parameters'    => array('default' => new BooleanNode(true))
     ))), $this->parseMethodWithAnnotations('#[@Limit(true)]'));
   }
 
@@ -137,10 +137,10 @@ class AnnotationTest extends ParserTestCase {
    *
    */
   #[@test]
-  public function annotationWithFalseValue() {
+  public function annotationWithfalseValue() {
     $this->assertEquals(array(new AnnotationNode(array(
       'type'          => 'Limit',
-      'parameters'    => array('default' => new BooleanNode(FALSE))
+      'parameters'    => array('default' => new BooleanNode(false))
     ))), $this->parseMethodWithAnnotations('#[@Limit(false)]'));
   }
 
@@ -157,7 +157,7 @@ class AnnotationTest extends ParserTestCase {
           new StringNode('Admin'),
           new StringNode('Root'),
         ),
-        'type'          => NULL
+        'type'          => null
       )))
     ))), $this->parseMethodWithAnnotations('#[@Restrict(array("Admin", "Root"))]'));
   }
@@ -175,7 +175,7 @@ class AnnotationTest extends ParserTestCase {
           new StringNode('Role'),
           new StringNode('Root'),
         )),
-        'type'          => NULL
+        'type'          => null
       )))
     ))), $this->parseMethodWithAnnotations('#[@Restrict(array("Role" => "Root"))]'));
   }
@@ -194,7 +194,7 @@ class AnnotationTest extends ParserTestCase {
             new StringNode('lang.IllegalArgumentException'),
             new StringNode('lang.IllegalAccessException'),
           ),
-          'type'          => NULL
+          'type'          => null
         )),
         'code'    => new IntegerNode('503'),
       )))

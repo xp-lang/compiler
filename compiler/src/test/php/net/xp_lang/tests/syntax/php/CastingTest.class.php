@@ -102,8 +102,8 @@ class CastingTest extends ParserTestCase {
   #[@test]
   public function invocationWithConstantArg() {
     $this->assertEquals(
-      array(new InvocationNode('init', array(new BooleanNode(TRUE)))),
-      $this->parse('init(TRUE);')
+      array(new InvocationNode('init', array(new BooleanNode(true)))),
+      $this->parse('init(true);')
     );
   }
 

@@ -193,7 +193,7 @@ class AssignmentTest extends ParserTestCase {
   #[@test]
   public function appendToArray() {
     $this->assertEquals(array(new AssignmentNode(array(
-      'variable'      => new ArrayAccessNode(new VariableNode('i'), NULL),
+      'variable'      => new ArrayAccessNode(new VariableNode('i'), null),
       'expression'    => new IntegerNode('0'),
       'op'            => '='
     ))), $this->parse('$i[]= 0;'));
@@ -236,7 +236,7 @@ class AssignmentTest extends ParserTestCase {
         new MethodCallNode(
           new StaticMemberAccessNode(new TypeName('self'), 'instance'),
           'addAppender',
-          NULL
+          null
         ),
         'flags'
       ),

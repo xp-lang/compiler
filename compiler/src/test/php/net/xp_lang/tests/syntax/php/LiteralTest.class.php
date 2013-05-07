@@ -150,9 +150,9 @@ class LiteralTest extends ParserTestCase {
    *
    */
   #[@test]
-  public function booleanTrueLiteral() {
+  public function booleantrueLiteral() {
     $this->assertEquals(
-      array(new BooleanNode(TRUE)),
+      array(new BooleanNode(true)),
       $this->parse('true;')
     );
   }
@@ -162,9 +162,9 @@ class LiteralTest extends ParserTestCase {
    *
    */
   #[@test, @ignore('Recognized as cast')]
-  public function booleanTrueLiteralInBraces() {
+  public function booleantrueLiteralInBraces() {
     $this->assertEquals(
-      array(new BracedExpressionNode(new BooleanNode(TRUE))),
+      array(new BracedExpressionNode(new BooleanNode(true))),
       $this->parse('(true);')
     );
   }
@@ -174,9 +174,9 @@ class LiteralTest extends ParserTestCase {
    *
    */
   #[@test]
-  public function booleanFalseLiteral() {
+  public function booleanfalseLiteral() {
     $this->assertEquals(
-      array(new BooleanNode(FALSE)),
+      array(new BooleanNode(false)),
       $this->parse('false;')
     );
   }
@@ -204,7 +204,7 @@ class LiteralTest extends ParserTestCase {
         new IntegerNode('1'),
         new IntegerNode('2'),
       ),
-      'type'          => NULL
+      'type'          => null
     ))), $this->parse("
       array(1, 2);
     "));
@@ -221,7 +221,7 @@ class LiteralTest extends ParserTestCase {
         new StringNode('one'),
         new IntegerNode('1')
       )),
-      'type'          => NULL
+      'type'          => null
     ))), $this->parse("
       array('one' => 1);
     "));

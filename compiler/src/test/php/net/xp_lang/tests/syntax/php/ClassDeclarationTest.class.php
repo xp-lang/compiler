@@ -35,11 +35,11 @@ class ClassDeclarationTest extends ParserTestCase {
     $this->assertEquals(
       new ClassNode(
         0,                          // Modifiers
-        NULL,                       // Annotations
+        null,                       // Annotations
         new TypeName('Empty'),      // Name
-        NULL,                       // Parent
+        null,                       // Parent
         array(),                    // Implements
-        NULL                        // Body
+        null                        // Body
       ), 
       $this->parse('<?php namespace net\xp_lang\tests\syntax\php; class Empty { } ?>')
     );
@@ -89,19 +89,19 @@ class ClassDeclarationTest extends ParserTestCase {
   public function methodAndField() {
     $this->assertEquals(array(new FieldNode(array(
       'modifiers'       => MODIFIER_PRIVATE | MODIFIER_STATIC,
-      'annotations'     => NULL,
+      'annotations'     => null,
       'name'            => 'instance',
       'type'            => new TypeName('var'),
       'initialization'  => new NullNode()
     )), new MethodNode(array(
       'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
-      'annotations' => NULL,
+      'annotations' => null,
       'name'        => 'getInstance',
       'returns'     => new TypeName('var'),
-      'parameters'  => NULL, 
-      'throws'      => NULL,
+      'parameters'  => null, 
+      'throws'      => null,
       'body'        => array(),
-      'extension'   => NULL
+      'extension'   => null
     ))), $this->parse('<?php namespace net\xp_lang\tests\syntax\php; class Logger { 
       private static $instance= null;
       public static function getInstance() { /* ... */ }

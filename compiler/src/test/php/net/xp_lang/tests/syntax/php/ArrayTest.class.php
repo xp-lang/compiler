@@ -16,8 +16,8 @@ class ArrayTest extends ParserTestCase {
   #[@test]
   public function emptyUntypedArray() {
     $this->assertEquals(array(new ArrayNode(array(
-      'values'        => NULL,
-      'type'          => NULL,
+      'values'        => null,
+      'type'          => null,
     ))), $this->parse('
       array();
     '));
@@ -35,7 +35,7 @@ class ArrayTest extends ParserTestCase {
         new IntegerNode('2'),
         new IntegerNode('3'),
       ),
-      'type'          => NULL,
+      'type'          => null,
     ))), $this->parse('
       array(1, 2, 3);
     '));
@@ -53,7 +53,7 @@ class ArrayTest extends ParserTestCase {
         new IntegerNode('2'),
         new IntegerNode('3'),
       ),
-      'type'          => NULL,
+      'type'          => null,
     ))), $this->parse('
       array(1, 2, 3, );
     '));

@@ -34,7 +34,7 @@ abstract class LexerTest extends \unittest\TestCase {
         }
       } catch (\lang\Throwable $e) {
         $tokens[]= array($e->getClassName(), $e->getMessage());
-        $r= FALSE;
+        $r= false;
       }
     } while ($r);
     return $tokens;

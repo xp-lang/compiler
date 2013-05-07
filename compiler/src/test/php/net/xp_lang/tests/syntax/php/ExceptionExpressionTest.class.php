@@ -48,7 +48,7 @@ class ExceptionExpressionTest extends ParserTestCase {
     $this->assertEquals(array(new ThrowNode(array(
       'expression' => new InstanceCreationNode(array(
         'type'       => new TypeName('IllegalStateException'),
-        'parameters' => NULL
+        'parameters' => null
       ))
     ))), $this->parse('
       throw new IllegalStateException();
@@ -65,14 +65,14 @@ class ExceptionExpressionTest extends ParserTestCase {
       'statements' => array(
         new ReturnNode(new InstanceCreationNode(array(
           'type'       => new TypeName('HashTable'),
-          'parameters' => NULL
+          'parameters' => null
         )))
       ), 
       'handling'   => array(
         new CatchNode(array(
           'type'       => new TypeName('IllegalArgumentException'),
           'variable'   => 'e',
-          'statements' => NULL, 
+          'statements' => null, 
         )),
         new CatchNode(array(
           'type'       => new TypeName('SecurityException'),
@@ -84,7 +84,7 @@ class ExceptionExpressionTest extends ParserTestCase {
         new CatchNode(array(
           'type'       => new TypeName('Exception'),
           'variable'   => 'e',
-          'statements' => NULL, 
+          'statements' => null, 
         ))
       )
     ))), $this->parse('

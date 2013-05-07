@@ -65,7 +65,7 @@ class BitOperatorsTest extends ParserTestCase {
   public function bitwiseNot() {
     $this->assertEquals(array(new UnaryOpNode(array(
       'expression'    => new IntegerNode('1'),
-      'postfix'       => FALSE,
+      'postfix'       => false,
       'op'            => '~'
     ))), $this->parse('
       ~1;

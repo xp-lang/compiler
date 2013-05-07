@@ -22,7 +22,7 @@ use xp\compiler\types\TypeName;
       $this->assertEquals(
         array(new InstanceCreationNode(array(
           'type'       => new TypeName('XPClass'),
-          'parameters' => NULL
+          'parameters' => null
         ))),
         $this->parse('new XPClass();')
       );

@@ -38,9 +38,9 @@ class ChainingTest extends ParserTestCase {
   public function chainedMethodCalls() {
     $this->assertEquals(
       array(new MethodCallNode(
-        new MethodCallNode(new VariableNode('l'), 'withAppender', NULL),
+        new MethodCallNode(new VariableNode('l'), 'withAppender', null),
         'debug',
-        NULL
+        null
       )),
       $this->parse('$l->withAppender()->debug();')
     );
@@ -56,10 +56,10 @@ class ChainingTest extends ParserTestCase {
       array(new MethodCallNode(
         new InstanceCreationNode(array(
           'type'           => new TypeName('Date'),
-          'parameters'     => NULL,
+          'parameters'     => null,
         )),
         'toString',
-        NULL
+        null
       )), 
       $this->parse('new Date()->toString();')
     );
@@ -74,7 +74,7 @@ class ChainingTest extends ParserTestCase {
     $this->assertEquals(
       array(new MemberAccessNode(
         new ArrayAccessNode(
-          new MethodCallNode(new VariableNode('l'), 'elements', NULL),
+          new MethodCallNode(new VariableNode('l'), 'elements', null),
           new IntegerNode('0')
         ),
         'name'

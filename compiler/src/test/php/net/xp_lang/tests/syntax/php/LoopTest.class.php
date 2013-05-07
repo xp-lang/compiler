@@ -36,9 +36,9 @@ class LoopTest extends ParserTestCase {
       'loop'           => array(new UnaryOpNode(array(
         'expression'    => new VariableNode('i'),
         'op'            => '++',
-        'postfix'       => TRUE
+        'postfix'       => true
       ))),
-      'statements'     => NULL, 
+      'statements'     => null, 
     ))), $this->parse('
       for ($i= 0; $i < 1000; $i++) { }
     '));
@@ -53,7 +53,7 @@ class LoopTest extends ParserTestCase {
     $this->assertEquals(array(new ForeachNode(array(
       'expression'    => new VariableNode('list'),
       'assignment'    => array('value' => 'value'),
-      'statements'    => NULL, 
+      'statements'    => null, 
     ))), $this->parse('
       foreach ($list as $value) { }
     '));
@@ -68,7 +68,7 @@ class LoopTest extends ParserTestCase {
     $this->assertEquals(array(new ForeachNode(array(
       'expression'    => new VariableNode('list'),
       'assignment'    => array('key' => 'key', 'value' => 'value'),
-      'statements'    => NULL, 
+      'statements'    => null, 
     ))), $this->parse('
       foreach ($list as $key => $value) { }
     '));
@@ -85,7 +85,7 @@ class LoopTest extends ParserTestCase {
         'lhs'           => new UnaryOpNode(array(
           'expression'    => new VariableNode('i'),
           'op'            => '++',
-          'postfix'       => TRUE
+          'postfix'       => true
         )),
         'rhs'           => new IntegerNode('10000'),
         'op'            => '<'
@@ -93,7 +93,7 @@ class LoopTest extends ParserTestCase {
       array(new UnaryOpNode(array(
         'expression'    => new VariableNode('i'),
         'op'            => '++',
-        'postfix'       => TRUE
+        'postfix'       => true
       )))
     )), $this->parse('
       while ($i++ < 10000) { $i++; }
@@ -111,7 +111,7 @@ class LoopTest extends ParserTestCase {
         'lhs'           => new UnaryOpNode(array(
           'expression'    => new VariableNode('i'),
           'op'            => '++',
-          'postfix'       => TRUE
+          'postfix'       => true
         )),
         'rhs'           => new IntegerNode('10000'),
         'op'            => '<'
@@ -119,7 +119,7 @@ class LoopTest extends ParserTestCase {
       array(new UnaryOpNode(array(
         'expression'    => new VariableNode('i'),
         'op'            => '++',
-        'postfix'       => TRUE
+        'postfix'       => true
       )))
     )), $this->parse('
       do { $i++; } while ($i++ < 10000);

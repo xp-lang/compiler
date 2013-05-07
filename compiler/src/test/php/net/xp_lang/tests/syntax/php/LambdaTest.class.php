@@ -22,9 +22,9 @@ class LambdaTest extends ParserTestCase {
     $this->assertEquals(
       array(new LambdaNode(
         array(),
-        array(new ReturnNode(new BooleanNode(TRUE)))
+        array(new ReturnNode(new BooleanNode(true)))
       )), 
-      $this->parse('function() { return TRUE; };')
+      $this->parse('function() { return true; };')
     );
   }
 

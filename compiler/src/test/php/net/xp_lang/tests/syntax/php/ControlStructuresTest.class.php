@@ -27,8 +27,8 @@ class ControlStructuresTest extends ParserTestCase {
   public function ifStatement() {
     $this->assertEquals(array(new IfNode(array(
       'condition'      => new VariableNode('i'),
-      'statements'     => NULL,
-      'otherwise'      => NULL, 
+      'statements'     => null,
+      'otherwise'      => null, 
     ))), $this->parse('
       if ($i) { }
     '));
@@ -42,8 +42,8 @@ class ControlStructuresTest extends ParserTestCase {
   public function ifStatementWithOutCurlies() {
     $this->assertEquals(array(new IfNode(array(
       'condition'      => new VariableNode('i'),
-      'statements'     => array(new ReturnNode(new BooleanNode(TRUE))),
-      'otherwise'      => NULL, 
+      'statements'     => array(new ReturnNode(new BooleanNode(true))),
+      'otherwise'      => null, 
     ))), $this->parse('
       if ($i) return true;
     '));
@@ -57,9 +57,9 @@ class ControlStructuresTest extends ParserTestCase {
   public function ifElseStatement() {
     $this->assertEquals(array(new IfNode(array(
       'condition'      => new VariableNode('i'),
-      'statements'     => NULL, 
+      'statements'     => null, 
       'otherwise'      => new ElseNode(array(
-        'statements'     => NULL,
+        'statements'     => null,
       )), 
     ))), $this->parse('
       if ($i) { } else { }
@@ -78,7 +78,7 @@ class ControlStructuresTest extends ParserTestCase {
         'rhs'            => new IntegerNode('3'),
         'op'             => '%'
       )),
-      'statements'     => NULL, 
+      'statements'     => null, 
       'otherwise'      => new ElseNode(array(
         'statements'     => array(new IfNode(array(
           'condition'      => new BinaryOpNode(array(
@@ -86,9 +86,9 @@ class ControlStructuresTest extends ParserTestCase {
             'rhs'            => new IntegerNode('2'),
             'op'             => '%'
           )),
-          'statements'     => NULL, 
+          'statements'     => null, 
           'otherwise'      => new ElseNode(array(
-            'statements'     => NULL,
+            'statements'     => null,
           )), 
         ))),
       )), 
@@ -105,7 +105,7 @@ class ControlStructuresTest extends ParserTestCase {
   public function emptySwitchStatement() {
     $this->assertEquals(array(new SwitchNode(array(
       'expression'     => new VariableNode('i'),
-      'cases'          => NULL,
+      'cases'          => null,
     ))), $this->parse('
       switch ($i) { }
     '));

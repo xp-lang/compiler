@@ -30,10 +30,10 @@ class FieldDeclarationTest extends ParserTestCase {
   public function publicField() {
     $this->assertEquals(array(new FieldNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
-      'annotations'=> NULL,
+      'annotations'=> null,
       'name'       => 'name',
       'type'       => TypeName::$VAR,
-      'initialization' => NULL,
+      'initialization' => null,
     ))), $this->parse('class Person { 
       public $name;
     }'));
@@ -47,7 +47,7 @@ class FieldDeclarationTest extends ParserTestCase {
   public function privateStaticField() {
     $this->assertEquals(array(new FieldNode(array(
       'modifiers'       => MODIFIER_PRIVATE | MODIFIER_STATIC,
-      'annotations'     => NULL,
+      'annotations'     => null,
       'name'            => 'instance',
       'type'            => TypeName::$VAR,
       'initialization'  => new NullNode()

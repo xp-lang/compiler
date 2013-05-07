@@ -30,14 +30,14 @@ class MethodDeclarationTest extends ParserTestCase {
   public function toStringMethod() {
     $this->assertEquals(array(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
-      'annotations'=> NULL,
+      'annotations'=> null,
       'name'       => 'toString',
       'returns'    => new TypeName('var'),
-      'parameters' => NULL,
-      'throws'     => NULL,
+      'parameters' => null,
+      'throws'     => null,
       'body'       => array(),
-      'extension'  => NULL
-    ))), $this->parse('class Null { 
+      'extension'  => null
+    ))), $this->parse('class null { 
       public function toString() { }
     }'));
   }
@@ -50,14 +50,14 @@ class MethodDeclarationTest extends ParserTestCase {
   public function toStringMethodWithReturnType() {
     $this->assertEquals(array(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
-      'annotations'=> NULL,
+      'annotations'=> null,
       'name'       => 'toString',
       'returns'    => new TypeName('string'),
-      'parameters' => NULL,
-      'throws'     => NULL,
+      'parameters' => null,
+      'throws'     => null,
       'body'       => array(),
-      'extension'  => NULL
-    ))), $this->parse('class Null { 
+      'extension'  => null
+    ))), $this->parse('class null { 
       public function toString() : string { }
     }'));
   }
@@ -70,18 +70,18 @@ class MethodDeclarationTest extends ParserTestCase {
   public function equalsMethod() {
     $this->assertEquals(array(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
-      'annotations'=> NULL,
+      'annotations'=> null,
       'name'       => 'equals',
       'returns'    => new TypeName('var'),
       'parameters' => array(array(
         'name'  => 'cmp',
         'type'  => new TypeName('Object'),
-        'check' => TRUE
+        'check' => true
       )),
-      'throws'     => NULL,
+      'throws'     => null,
       'body'       => array(),
-      'extension'  => NULL
-    ))), $this->parse('class Null { 
+      'extension'  => null
+    ))), $this->parse('class null { 
       public function equals(Object $cmp) { }
     }'));
   }
@@ -94,18 +94,18 @@ class MethodDeclarationTest extends ParserTestCase {
   public function abstractMethod() {
     $this->assertEquals(array(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC | MODIFIER_ABSTRACT,
-      'annotations'=> NULL,
+      'annotations'=> null,
       'name'       => 'setTrace',
       'returns'    => new TypeName('var'),
       'parameters' => array(array(
         'name'  => 'cat',
         'type'  => new TypeName('LogCategory'),
-        'check' => TRUE
+        'check' => true
       )),
-      'throws'     => NULL,
-      'body'       => NULL,
-      'extension'  => NULL
-    ))), $this->parse('class Null { 
+      'throws'     => null,
+      'body'       => null,
+      'extension'  => null
+    ))), $this->parse('class null { 
       public abstract function setTrace(LogCategory $cat);
     }'));
   }
@@ -118,17 +118,17 @@ class MethodDeclarationTest extends ParserTestCase {
   public function interfaceMethod() {
     $this->assertEquals(array(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
-      'annotations'=> NULL,
+      'annotations'=> null,
       'name'       => 'compareTo',
       'returns'    => new TypeName('var'),
       'parameters' => array(array(
         'name'  => 'other',
         'type'  => new TypeName('Object'),
-        'check' => TRUE
+        'check' => true
       )),
-      'throws'     => NULL,
-      'body'       => NULL,
-      'extension'  => NULL
+      'throws'     => null,
+      'body'       => null,
+      'extension'  => null
     ))), $this->parse('interface Comparable { 
       public function compareTo(Object $other);
     }'));
@@ -142,17 +142,17 @@ class MethodDeclarationTest extends ParserTestCase {
   public function addAllMethod() {
     $this->assertEquals(array(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
-      'annotations'=> NULL,
+      'annotations'=> null,
       'name'       => 'addAll',
       'returns'    => new TypeName('var'),
       'parameters' => array(array(
         'name'   => 'elements',
         'type'   => new TypeName('var[]'),
-        'check'  => TRUE      
+        'check'  => true      
       )), 
-      'throws'     => NULL,
+      'throws'     => null,
       'body'       => array(),
-      'extension'  => NULL
+      'extension'  => null
     ))), $this->parse('class List { 
       public function addAll(array $elements) { }
     }'));
@@ -175,17 +175,17 @@ class MethodDeclarationTest extends ParserTestCase {
   public function noRuntimeTypeCheck() {
     $this->assertEquals(array(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
-      'annotations'=> NULL,
+      'annotations'=> null,
       'name'       => 'equals',
       'returns'    => new TypeName('var'),
       'parameters' => array(array(
         'name'  => 'cmp',
         'type'  => new TypeName('var'),
-        'check' => FALSE
+        'check' => false
       )),
-      'throws'     => NULL,
+      'throws'     => null,
       'body'       => array(),
-      'extension'  => NULL
+      'extension'  => null
     ))), $this->parse('class Test { 
       public function equals($cmp) { }
     }'));
@@ -208,9 +208,9 @@ class MethodDeclarationTest extends ParserTestCase {
       'name'       => 'map',
       'returns'    => new TypeName('var'),
       'parameters' => array(), 
-      'throws'     => NULL,
+      'throws'     => null,
       'body'       => array(),
-      'extension'  => NULL
+      'extension'  => null
     ))), $this->parse('class Any { 
       #[@test]
       function map() { }

@@ -32,7 +32,7 @@ class MapTest extends ParserTestCase {
             new StringNode('three'),
           ),
         ),
-        'type'          => NULL,
+        'type'          => null,
       ))), 
       $this->parse('array(1 => "one", 2 => "two", 3 => "three");')
     );
@@ -60,7 +60,7 @@ class MapTest extends ParserTestCase {
             new StringNode('three'),
           ),
         ),
-        'type'          => NULL,
+        'type'          => null,
       ))), 
       $this->parse('array(1 => "one", 2 => "two", 3 => "three", );')
     );

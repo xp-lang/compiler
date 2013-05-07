@@ -50,7 +50,7 @@ class TernaryTest extends ParserTestCase {
   public function withoutExpression() {
     $this->assertEquals(array(new TernaryNode(array(
       'condition'     => new VariableNode('i'),
-      'expression'    => NULL,
+      'expression'    => null,
       'conditional'   => new IntegerNode('2'),
     ))), $this->parse('
       $i ?: 2;
@@ -64,7 +64,7 @@ class TernaryTest extends ParserTestCase {
   public function nested() {
     $this->assertEquals(array(new TernaryNode(array(
       'condition'     => new VariableNode('i'),
-      'expression'    => NULL,
+      'expression'    => null,
       'conditional'   => new BracedExpressionNode(new TernaryNode(array(
         'condition'     => new VariableNode('f'),
         'expression'    => new IntegerNode('1'),
