@@ -183,7 +183,7 @@ start:
 // {{{ Packages, imports
 package_opt:
     /* empty */
-  | T_NAMESPACE { $1= $yyLex->create(new PackageNode()); } qualifiedname ';' {
+  | T_NAMESPACE { $1= $yyLex->create(new PackageNode()); } namedeclaration ';' {
       $1->name= $3;
     }
 ;
@@ -199,14 +199,19 @@ uses:
 ;
 
 use:
-    T_USE qualifiedname ';' {
+    T_USE namedeclaration ';' {
       $$= $yyLex->create(new ImportNode(array('name' => $2))); 
     }
 ;
 
+namedeclaration:
+    T_WORD
+  | T_WORD '\\' namedeclaration { $$= $1.'.'.$3; }
+;
+
 qualifiedname:
     T_WORD
-  | T_WORD '\\' qualifiedname { $$= $1.'.'.$3; }
+  | '\\' namedeclaration { $$= $2; }
 ;
 // }}}
 

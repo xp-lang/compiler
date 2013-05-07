@@ -17,6 +17,8 @@ RFCs
 
 Bugfixes
 ~~~~~~~~
+- Fixed PHP 5.3 namespaces fully qualified class names
+  (friebe)
 - Changed TypeReflection to determine enum member type correctly
   See pull request #23
   (friebe)
