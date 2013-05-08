@@ -1,717 +1,716 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace net\xp_lang\tests\types;
 
-  uses(
-    'unittest.TestCase',
-    'xp.compiler.types.TypeDeclaration',
-    'xp.compiler.ast.ClassConstantNode',
-    'xp.compiler.ast.FieldNode',
-    'xp.compiler.ast.MethodNode',
-    'xp.compiler.ast.OperatorNode',
-    'xp.compiler.ast.ConstructorNode',
-    'xp.compiler.ast.IndexerNode',
-    'xp.compiler.ast.PropertyNode',
-    'xp.compiler.ast.StringNode',
-    'xp.compiler.ast.IntegerNode'
-  );
+use xp\compiler\types\TypeDeclaration;
+use xp\compiler\types\TypeName;
+use xp\compiler\types\Types;
+use xp\compiler\ast\ParseTree;
+use xp\compiler\ast\ClassNode;
+use xp\compiler\ast\InterfaceNode;
+use xp\compiler\ast\EnumNode;
+use xp\compiler\ast\EnumMemberNode;
+use xp\compiler\ast\FieldNode;
+use xp\compiler\ast\MethodNode;
+use xp\compiler\ast\ClassConstantNode;
+use xp\compiler\ast\StringNode;
+use xp\compiler\ast\ConstructorNode;
+use xp\compiler\ast\PropertyNode;
+use xp\compiler\ast\OperatorNode;
+use xp\compiler\ast\IndexerNode;
+use xp\compiler\ast\IntegerNode;
+
+/**
+ * TestCase
+ *
+ * @see      xp://xp.compiler.types.TypeDeclaration
+ */
+class TypeDeclarationTest extends \unittest\TestCase {
 
   /**
-   * TestCase
+   * Test name() method
    *
-   * @see      xp://xp.compiler.types.TypeDeclaration
    */
-  class TypeDeclarationTest extends TestCase {
+  #[@test]
+  public function nameWithoutPackage() {
+    $decl= new TypeDeclaration(new ParseTree(NULL, array(), new ClassNode(
+      MODIFIER_PUBLIC, 
+      NULL,
+      new TypeName('TestCase')
+    )));
+    $this->assertEquals('TestCase', $decl->name());
+  }
+
+  /**
+   * Test name() method
+   *
+   */
+  #[@test]
+  public function nameWithPackage() {
+    $decl= new TypeDeclaration(new ParseTree(new TypeName('unittest.web'), array(), new ClassNode(
+      MODIFIER_PUBLIC, 
+      NULL,
+      new TypeName('WebTestCase')
+    )));
+    $this->assertEquals('unittest.web.WebTestCase', $decl->name());
+  }
+
+  /**
+   * Test literal() method
+   *
+   */
+  #[@test]
+  public function literalWithoutPackage() {
+    $decl= new TypeDeclaration(new ParseTree(NULL, array(), new ClassNode(
+      MODIFIER_PUBLIC, 
+      NULL,
+      new TypeName('TestCase')
+    )));
+    $this->assertEquals('TestCase', $decl->literal());
+  }
+
+  /**
+   * Test literal() method
+   *
+   */
+  #[@test]
+  public function literalWithPackage() {
+    $decl= new TypeDeclaration(new ParseTree(new TypeName('unittest.web'), array(), new ClassNode(
+      MODIFIER_PUBLIC, 
+      NULL,
+      new TypeName('WebTestCase')
+    )));
+    $this->assertEquals('WebTestCase', $decl->literal());
+  }
+
+  /**
+   * Test kind() method
+   *
+   */
+  #[@test]
+  public function classKind() {
+    $decl= new TypeDeclaration(new ParseTree(NULL, array(), new ClassNode(
+      MODIFIER_PUBLIC, 
+      NULL,
+      new TypeName('TestCase')
+    )));
+    $this->assertEquals(Types::CLASS_KIND, $decl->kind());
+  }
+
+  /**
+   * Test kind() method
+   *
+   */
+  #[@test]
+  public function interfaceKind() {
+    $decl= new TypeDeclaration(new ParseTree(NULL, array(), new InterfaceNode(array(
+      'name' => new TypeName('Resolveable')
+    ))));
+    $this->assertEquals(Types::INTERFACE_KIND, $decl->kind());
+  }
+
+  /**
+   * Test kind() method
+   *
+   */
+  #[@test]
+  public function enumKind() {
+    $decl= new TypeDeclaration(new ParseTree(NULL, array(), new EnumNode(array(
+      'name' => new TypeName('Operation')
+    ))));
+    $this->assertEquals(Types::ENUM_KIND, $decl->kind());
+  }
   
-    /**
-     * Test name() method
-     *
-     */
-    #[@test]
-    public function nameWithoutPackage() {
-      $decl= new TypeDeclaration(new ParseTree(NULL, array(), new ClassNode(
+
+  /**
+   * Returns a type declaration for the string class
+   *
+   * @return  xp.compiler.emit.TypeDeclaration
+   */
+  protected function stringClass() {
+    return new TypeDeclaration(
+      new ParseTree(new TypeName('lang.types'), array(), new ClassNode(
         MODIFIER_PUBLIC, 
         NULL,
-        new TypeName('TestCase')
-      )));
-      $this->assertEquals('TestCase', $decl->name());
-    }
-
-    /**
-     * Test name() method
-     *
-     */
-    #[@test]
-    public function nameWithPackage() {
-      $decl= new TypeDeclaration(new ParseTree(new TypeName('unittest.web'), array(), new ClassNode(
-        MODIFIER_PUBLIC, 
+        new TypeName('String'),
+        new TypeName('lang.Object'),
         NULL,
-        new TypeName('WebTestCase')
-      )));
-      $this->assertEquals('unittest.web.WebTestCase', $decl->name());
-    }
-
-    /**
-     * Test literal() method
-     *
-     */
-    #[@test]
-    public function literalWithoutPackage() {
-      $decl= new TypeDeclaration(new ParseTree(NULL, array(), new ClassNode(
-        MODIFIER_PUBLIC, 
-        NULL,
-        new TypeName('TestCase')
-      )));
-      $this->assertEquals('TestCase', $decl->literal());
-    }
-
-    /**
-     * Test literal() method
-     *
-     */
-    #[@test]
-    public function literalWithPackage() {
-      $decl= new TypeDeclaration(new ParseTree(new TypeName('unittest.web'), array(), new ClassNode(
-        MODIFIER_PUBLIC, 
-        NULL,
-        new TypeName('WebTestCase')
-      )));
-      $this->assertEquals('WebTestCase', $decl->literal());
-    }
-
-    /**
-     * Test kind() method
-     *
-     */
-    #[@test]
-    public function classKind() {
-      $decl= new TypeDeclaration(new ParseTree(NULL, array(), new ClassNode(
-        MODIFIER_PUBLIC, 
-        NULL,
-        new TypeName('TestCase')
-      )));
-      $this->assertEquals(Types::CLASS_KIND, $decl->kind());
-    }
-
-    /**
-     * Test kind() method
-     *
-     */
-    #[@test]
-    public function interfaceKind() {
-      $decl= new TypeDeclaration(new ParseTree(NULL, array(), new InterfaceNode(array(
-        'name' => new TypeName('Resolveable')
-      ))));
-      $this->assertEquals(Types::INTERFACE_KIND, $decl->kind());
-    }
-
-    /**
-     * Test kind() method
-     *
-     */
-    #[@test]
-    public function enumKind() {
-      $decl= new TypeDeclaration(new ParseTree(NULL, array(), new EnumNode(array(
-        'name' => new TypeName('Operation')
-      ))));
-      $this->assertEquals(Types::ENUM_KIND, $decl->kind());
-    }
-    
-
-    /**
-     * Returns a type declaration for the string class
-     *
-     * @return  xp.compiler.emit.TypeDeclaration
-     */
-    protected function stringClass() {
-      return new TypeDeclaration(
-        new ParseTree(new TypeName('lang.types'), array(), new ClassNode(
-          MODIFIER_PUBLIC, 
-          NULL,
-          new TypeName('String'),
-          new TypeName('lang.Object'),
-          NULL,
-          array(
-            new ClassConstantNode('ENCODING', new TypeName('string'), new StringNode('utf-8')),
-            new ConstructorNode(array(
-            )),
-            new MethodNode(array(
-              'name'        => 'substring',
-              'returns'     => new TypeName('lang.types.String'),
-              'modifiers'   => MODIFIER_PUBLIC,
-              'parameters'  => array(
-                array(
-                  'name'  => 'start',
-                  'type'  => new TypeName('int'),
-                  'check' => TRUE
-                ), 
-                array(
-                  'name'  => 'end',
-                  'type'  => new TypeName('int'),
-                  'check' => TRUE
-                )
-              )
-            )),
-            new FieldNode(array(
-              'name' => 'length'
-            )),
-            new PropertyNode(array(
-              'name' => 'chars'
-            )),
-            new OperatorNode(array(
-              'symbol' => '~'
-            )),
-            new IndexerNode(array(
-              'type'       => new TypeName('string'),
-              'parameter'  => array(
-                'name'  => 'offset',
+        array(
+          new ClassConstantNode('ENCODING', new TypeName('string'), new StringNode('utf-8')),
+          new ConstructorNode(array(
+          )),
+          new MethodNode(array(
+            'name'        => 'substring',
+            'returns'     => new TypeName('lang.types.String'),
+            'modifiers'   => MODIFIER_PUBLIC,
+            'parameters'  => array(
+              array(
+                'name'  => 'start',
+                'type'  => new TypeName('int'),
+                'check' => TRUE
+              ), 
+              array(
+                'name'  => 'end',
                 'type'  => new TypeName('int'),
                 'check' => TRUE
               )
-            ))
-          )
-        )),
-        $this->objectClass()
-      );
-    }
-
-    /**
-     * Returns a type declaration for the coin enum
-     *
-     * @return  xp.compiler.emit.TypeDeclaration
-     */
-    protected function coinEnum() {
-      return new TypeDeclaration(
-        new ParseTree(new TypeName('util.money'), array(), new ClassNode(
-          MODIFIER_PUBLIC, 
-          NULL,
-          new TypeName('Coin'),
-          new TypeName('lang.Enum'),
-          NULL,
-          array(
-            new EnumMemberNode(array('name' => 'penny', 'value' => new IntegerNode('1'), 'body' => NULL)),
-            new EnumMemberNode(array('name' => 'nickel', 'value' => new IntegerNode('2'), 'body' => NULL)),
-            new EnumMemberNode(array('name' => 'dime', 'value' => new IntegerNode('10'), 'body' => NULL)),
-            new EnumMemberNode(array('name' => 'quarter', 'value' => new IntegerNode('25'), 'body' => NULL)),
-          )
-        )),
-        $this->objectClass()
-      );
-    }
-
-    /**
-     * Returns a type declaration for the object class
-     *
-     * @return  xp.compiler.emit.TypeDeclaration
-     */
-    protected function objectClass() {
-      return new TypeDeclaration(
-        new ParseTree(new TypeName('lang'), array(), new ClassNode(
-          MODIFIER_PUBLIC, 
-          NULL,
-          new TypeName('Object'),
-          NULL,
-          NULL,
-          array(
-            new MethodNode(array(
-              'name' => 'equals'
-            ))
-          )
-        ))
-      );
-    }
-
-    /**
-     * Returns a type declaration for the SecureString class
-     *
-     * @return  xp.compiler.emit.TypeDeclaration
-     */
-    protected function secureStringClass() {
-      return new TypeDeclaration(
-        new ParseTree(new TypeName('security'), array(), new ClassNode(
-          MODIFIER_PUBLIC, 
-          NULL,
-          new TypeName('SecureString'),
-          new TypeName('lang.types.String'),
-          NULL,
-          array(
-          )
-        )),
-        $this->stringClass()
-      );
-    }
-
-    /**
-     * Test hasConstructor() method
-     *
-     */
-    #[@test]
-    public function objectClassHasNoConstructor() {
-      $decl= $this->objectClass();
-      $this->assertFalse($decl->hasConstructor());
-    }
-
-    /**
-     * Test getConstructor() method
-     *
-     */
-    #[@test]
-    public function objectClassNoConstructor() {
-      $decl= $this->objectClass();
-      $this->assertNull($decl->getConstructor());
-    }
-
-    /**
-     * Test hasConstructor() method
-     *
-     */
-    #[@test]
-    public function stringClassHasConstructor() {
-      $decl= $this->stringClass();
-      $this->assertTrue($decl->hasConstructor());
-    }
-
-    /**
-     * Test hasConstructor() method
-     *
-     */
-    #[@test]
-    public function secureStringClassHasConstructor() {
-      $decl= $this->secureStringClass();
-      $this->assertTrue($decl->hasConstructor());
-    }
-
-    /**
-     * Test getConstructor() method
-     *
-     */
-    #[@test]
-    public function stringClassConstructor() {
-      $decl= $this->stringClass();
-      $this->assertInstanceOf('xp.compiler.types.Constructor', $decl->getConstructor());
-    }
-
-    /**
-     * Test getConstructor() method
-     *
-     */
-    #[@test]
-    public function secureStringClassConstructor() {
-      $decl= $this->secureStringClass();
-      $this->assertEquals($this->stringClass(), $decl->getConstructor()->holder);
-    }
-
-    /**
-     * Test getConstructor() method
-     *
-     */
-    #[@test]
-    public function secureStringClassConstructorsHolderIsStringClass() {
-      $decl= $this->secureStringClass();
-      $this->assertEquals('lang.types.String', $decl->getConstructor()->holder->name());
-    }
-
-    /**
-     * Test hasMethod() method
-     *
-     */
-    #[@test]
-    public function objectClassHasMethod() {
-      $decl= $this->objectClass();
-      $this->assertTrue($decl->hasMethod('equals'), 'equals');
-      $this->assertFalse($decl->hasMethod('getName'), 'getName');
-    }
-
-    /**
-     * Test hasMethod() method for inherited methods
-     *
-     */
-    #[@test]
-    public function stringClassHasEqualsMethod() {
-      $decl= $this->stringClass();
-      $this->assertTrue($decl->hasMethod('equals'));
-    }
-
-    /**
-     * Test hasMethod() method for instance methods
-     *
-     */
-    #[@test]
-    public function stringClassHasSubstringMethod() {
-      $decl= $this->stringClass();
-      $this->assertTrue($decl->hasMethod('substring'));
-    }
-
-    /**
-     * Test hasMethod() method for nonexistant methods
-     *
-     */
-    #[@test]
-    public function stringClassDoesNotHaveGetNameMethod() {
-      $decl= $this->stringClass();
-      $this->assertFalse($decl->hasMethod('getName'));
-    }
-
-    /**
-     * Test getMethod()
-     *
-     */
-    #[@test]
-    public function stringClassSubstringMethod() {
-      $method= $this->stringClass()->getMethod('substring');
-      $this->assertEquals(new TypeName('lang.types.String'), $method->returns);
-      $this->assertEquals('substring', $method->name);
-      $this->assertEquals(array(new TypeName('int'), new TypeName('int')), $method->parameters);
-      $this->assertEquals(MODIFIER_PUBLIC, $method->modifiers);
-    }
-
-    /**
-     * Test hasOperator() method
-     *
-     */
-    #[@test]
-    public function objectClassDoesNotHaveOperator() {
-      $decl= $this->objectClass();
-      $this->assertFalse($decl->hasOperator('~'));
-    }
-
-    /**
-     * Test getOperator() method
-     *
-     */
-    #[@test]
-    public function objectClassNoOperator() {
-      $decl= $this->objectClass();
-      $this->assertNull($decl->getOperator('~'));
-    }
-
-    /**
-     * Test hasOperator() method
-     *
-     */
-    #[@test]
-    public function stringClassHasConcatOperator() {
-      $decl= $this->stringClass();
-      $this->assertTrue($decl->hasOperator('~'));
-    }
-
-    /**
-     * Test getOperator() method
-     *
-     */
-    #[@test]
-    public function stringClassConcatOperator() {
-      $decl= $this->stringClass();
-      $this->assertInstanceOf('xp.compiler.types.Operator', $decl->getOperator('~'));
-    }
-
-    /**
-     * Test hasOperator() method
-     *
-     */
-    #[@test]
-    public function secureStringClassHasConcatOperator() {
-      $decl= $this->secureStringClass();
-      $this->assertTrue($decl->hasOperator('~'));
-    }
-
-    /**
-     * Test getOperator() method
-     *
-     */
-    #[@test]
-    public function secureStringClassConcatOperator() {
-      $decl= $this->secureStringClass();
-      $this->assertInstanceOf('xp.compiler.types.Operator', $decl->getOperator('~'));
-    }
-
-    /**
-     * Test getOperator() method
-     *
-     */
-    #[@test]
-    public function secureStringClassConcatOperatorsHolderIsString() {
-      $decl= $this->secureStringClass();
-      $this->assertEquals('lang.types.String', $decl->getOperator('~')->holder->name());
-    }
-
-    /**
-     * Test hasProperty() method
-     *
-     */
-    #[@test]
-    public function objectClassDoesNotHaveProperty() {
-      $decl= $this->objectClass();
-      $this->assertFalse($decl->hasProperty('chars'));
-    }
-
-    /**
-     * Test getProperty() method
-     *
-     */
-    #[@test]
-    public function objectClassNoProperty() {
-      $decl= $this->objectClass();
-      $this->assertNull($decl->getProperty('chars'));
-    }
-
-    /**
-     * Test hasProperty() method
-     *
-     */
-    #[@test]
-    public function stringClassHasConcatProperty() {
-      $decl= $this->stringClass();
-      $this->assertTrue($decl->hasProperty('chars'));
-    }
-
-    /**
-     * Test getProperty() method
-     *
-     */
-    #[@test]
-    public function stringClassConcatProperty() {
-      $decl= $this->stringClass();
-      $this->assertInstanceOf('xp.compiler.types.Property', $decl->getProperty('chars'));
-    }
-
-    /**
-     * Test hasProperty() method
-     *
-     */
-    #[@test]
-    public function secureStringClassHasConcatProperty() {
-      $decl= $this->secureStringClass();
-      $this->assertTrue($decl->hasProperty('chars'));
-    }
-
-    /**
-     * Test getProperty() method
-     *
-     */
-    #[@test]
-    public function secureStringClassConcatProperty() {
-      $decl= $this->secureStringClass();
-      $this->assertInstanceOf('xp.compiler.types.Property', $decl->getProperty('chars'));
-    }
-
-    /**
-     * Test getProperty() method
-     *
-     */
-    #[@test]
-    public function secureStringClassConcatPropertysHolderIsString() {
-      $decl= $this->secureStringClass();
-      $this->assertEquals('lang.types.String', $decl->getProperty('chars')->holder->name());
-    }
-
-    /**
-     * Test hasField() method for instance fields
-     *
-     */
-    #[@test]
-    public function stringClassHasLengthField() {
-      $decl= $this->stringClass();
-      $this->assertTrue($decl->hasField('length'));
-    }
-
-    /**
-     * Test hasField() method for nonexistant fields
-     *
-     */
-    #[@test]
-    public function stringClassDoesNotHaveCharsField() {
-      $decl= $this->stringClass();
-      $this->assertFalse($decl->hasField('chars'));
-    }
-
-    /**
-     * Test hasIndexer() method
-     *
-     */
-    #[@test]
-    public function stringClassHasIndexer() {
-      $decl= $this->stringClass();
-      $this->assertTrue($decl->hasIndexer());
-    }
-
-    /**
-     * Test hasIndexer() method
-     *
-     */
-    #[@test]
-    public function secureStringClassHasIndexer() {
-      $decl= $this->secureStringClass();
-      $this->assertTrue($decl->hasIndexer());
-    }
-
-    /**
-     * Test hasIndexer() method
-     *
-     */
-    #[@test]
-    public function objectClassDoesNotHaveIndexer() {
-      $decl= $this->objectClass();
-      $this->assertFalse($decl->hasIndexer());
-    }
-
-    /**
-     * Test getIndexer() method
-     *
-     */
-    #[@test]
-    public function stringClassIndexer() {
-      $indexer= $this->stringClass()->getIndexer();
-      $this->assertEquals(new TypeName('string'), $indexer->type);
-      $this->assertEquals(new TypeName('int'), $indexer->parameter);
-    }
-
-    /**
-     * Test getIndexer() method
-     *
-     */
-    #[@test]
-    public function secureStringClassIndexer() {
-      $indexer= $this->secureStringClass()->getIndexer();
-      $this->assertEquals(new TypeName('string'), $indexer->type);
-      $this->assertEquals(new TypeName('int'), $indexer->parameter);
-    }
-
-    /**
-     * Test isEnumerable() method
-     *
-     */
-    #[@test]
-    public function objectClassIsNotEnumerable() {
-      $decl= $this->objectClass();
-      $this->assertFalse($decl->isEnumerable());
-    }
-
-    /**
-     * Test hasConstant() method
-     *
-     */
-    #[@test]
-    public function objectClassDoesNotHaveConstant() {
-      $decl= $this->objectClass();
-      $this->assertFalse($decl->hasConstant('STATUS_OK'));
-    }
-
-    /**
-     * Test hasConstant() method
-     *
-     */
-    #[@test]
-    public function stringClassHasConstant() {
-      $decl= $this->stringClass();
-      $this->assertTrue($decl->hasConstant('ENCODING'));
-    }
-
-    /**
-     * Test getConstant() method
-     *
-     */
-    #[@test]
-    public function stringClassGetConstant() {
-      $this->assertNull($this->objectClass()->getConstant('STATUS_OK'));
-    }
-
-    /**
-     * Test getConstant() method
-     *
-     */
-    #[@test]
-    public function stringClassConstant() {
-      $const= $this->stringClass()->getConstant('ENCODING');
-      $this->assertEquals(new TypeName('string'), $const->type);
-      $this->assertEquals('utf-8', $const->value);
-    }
-
-    /**
-     * Test isSubclassOf() method
-     *
-     */
-    #[@test]
-    public function stringClassSubclassOfObject() {
-      $this->assertTrue($this->stringClass()->isSubclassOf($this->objectClass()));
-    }
-
-    /**
-     * Test isSubclassOf() method
-     *
-     */
-    #[@test]
-    public function extendedStringClassSubclassOfObject() {
-      $decl= new TypeDeclaration(
-        new ParseTree(new TypeName('lang.types'), array(), new ClassNode(
-          MODIFIER_PUBLIC, 
-          NULL,
-          new TypeName('ExtendedString'),
-          new TypeName('lang.types.String'),
-          NULL,
-          array()
-        )),
-        $this->stringClass()
-      );
-      $this->assertTrue($decl->isSubclassOf($this->objectClass()));
-    }
-
-    /**
-     * Test hasField() method
-     *
-     */
-    #[@test]
-    public function coinEnumHasMemberField() {
-      $this->assertTrue($this->coinEnum()->hasField('penny'));
-    }
-
-    /**
-     * Test getExtensions() method
-     *
-     */
-    #[@test]
-    public function getExtensionsFromStringClass() {
-      $this->assertEquals(array(), $this->stringClass()->getExtensions());
-    }
-
-    /**
-     * Test getExtensions() method
-     *
-     */
-    #[@test]
-    public function getExtensionsFromArrayListExtensionsClass() {
-      $decl= new TypeDeclaration(
-        new ParseTree(new TypeName('lang.types'), array(), new ClassNode(
-          MODIFIER_PUBLIC, 
-          NULL,
-          new TypeName('ArraySortingExtensions'),
-          new TypeName('lang.Object'),
-          NULL,
-          array(
-            new MethodNode(array(
-              'name'        => 'sorted',
-              'returns'     => new TypeName('lang.types.ArrayList'),
-              'extension'   => new TypeName('lang.types.ArrayList'),
-              'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
-              'parameters'  => array(
-                array(
-                  'name'  => 'self',
-                  'type'  => new TypeName('lang.types.ArrayList'),
-                  'check' => TRUE
-                ), 
-              )
-            )),
-          )
-        )),
-        $this->objectClass()
-      );
-      $extensions= $decl->getExtensions();
-
-      $this->assertEquals(1, sizeof($extensions));
-      $this->assertEquals('lang.types.ArrayList', key($extensions));
-      $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
-    }
+            )
+          )),
+          new FieldNode(array(
+            'name' => 'length'
+          )),
+          new PropertyNode(array(
+            'name' => 'chars'
+          )),
+          new OperatorNode(array(
+            'symbol' => '~'
+          )),
+          new IndexerNode(array(
+            'type'       => new TypeName('string'),
+            'parameter'  => array(
+              'name'  => 'offset',
+              'type'  => new TypeName('int'),
+              'check' => TRUE
+            )
+          ))
+        )
+      )),
+      $this->objectClass()
+    );
   }
-?>
+
+  /**
+   * Returns a type declaration for the coin enum
+   *
+   * @return  xp.compiler.emit.TypeDeclaration
+   */
+  protected function coinEnum() {
+    return new TypeDeclaration(
+      new ParseTree(new TypeName('util.money'), array(), new ClassNode(
+        MODIFIER_PUBLIC, 
+        NULL,
+        new TypeName('Coin'),
+        new TypeName('lang.Enum'),
+        NULL,
+        array(
+          new EnumMemberNode(array('name' => 'penny', 'value' => new IntegerNode('1'), 'body' => NULL)),
+          new EnumMemberNode(array('name' => 'nickel', 'value' => new IntegerNode('2'), 'body' => NULL)),
+          new EnumMemberNode(array('name' => 'dime', 'value' => new IntegerNode('10'), 'body' => NULL)),
+          new EnumMemberNode(array('name' => 'quarter', 'value' => new IntegerNode('25'), 'body' => NULL)),
+        )
+      )),
+      $this->objectClass()
+    );
+  }
+
+  /**
+   * Returns a type declaration for the object class
+   *
+   * @return  xp.compiler.emit.TypeDeclaration
+   */
+  protected function objectClass() {
+    return new TypeDeclaration(
+      new ParseTree(new TypeName('lang'), array(), new ClassNode(
+        MODIFIER_PUBLIC, 
+        NULL,
+        new TypeName('Object'),
+        NULL,
+        NULL,
+        array(
+          new MethodNode(array(
+            'name' => 'equals'
+          ))
+        )
+      ))
+    );
+  }
+
+  /**
+   * Returns a type declaration for the SecureString class
+   *
+   * @return  xp.compiler.emit.TypeDeclaration
+   */
+  protected function secureStringClass() {
+    return new TypeDeclaration(
+      new ParseTree(new TypeName('security'), array(), new ClassNode(
+        MODIFIER_PUBLIC, 
+        NULL,
+        new TypeName('SecureString'),
+        new TypeName('lang.types.String'),
+        NULL,
+        array(
+        )
+      )),
+      $this->stringClass()
+    );
+  }
+
+  /**
+   * Test hasConstructor() method
+   *
+   */
+  #[@test]
+  public function objectClassHasNoConstructor() {
+    $decl= $this->objectClass();
+    $this->assertFalse($decl->hasConstructor());
+  }
+
+  /**
+   * Test getConstructor() method
+   *
+   */
+  #[@test]
+  public function objectClassNoConstructor() {
+    $decl= $this->objectClass();
+    $this->assertNull($decl->getConstructor());
+  }
+
+  /**
+   * Test hasConstructor() method
+   *
+   */
+  #[@test]
+  public function stringClassHasConstructor() {
+    $decl= $this->stringClass();
+    $this->assertTrue($decl->hasConstructor());
+  }
+
+  /**
+   * Test hasConstructor() method
+   *
+   */
+  #[@test]
+  public function secureStringClassHasConstructor() {
+    $decl= $this->secureStringClass();
+    $this->assertTrue($decl->hasConstructor());
+  }
+
+  /**
+   * Test getConstructor() method
+   *
+   */
+  #[@test]
+  public function stringClassConstructor() {
+    $decl= $this->stringClass();
+    $this->assertInstanceOf('xp.compiler.types.Constructor', $decl->getConstructor());
+  }
+
+  /**
+   * Test getConstructor() method
+   *
+   */
+  #[@test]
+  public function secureStringClassConstructor() {
+    $decl= $this->secureStringClass();
+    $this->assertEquals($this->stringClass(), $decl->getConstructor()->holder);
+  }
+
+  /**
+   * Test getConstructor() method
+   *
+   */
+  #[@test]
+  public function secureStringClassConstructorsHolderIsStringClass() {
+    $decl= $this->secureStringClass();
+    $this->assertEquals('lang.types.String', $decl->getConstructor()->holder->name());
+  }
+
+  /**
+   * Test hasMethod() method
+   *
+   */
+  #[@test]
+  public function objectClassHasMethod() {
+    $decl= $this->objectClass();
+    $this->assertTrue($decl->hasMethod('equals'), 'equals');
+    $this->assertFalse($decl->hasMethod('getName'), 'getName');
+  }
+
+  /**
+   * Test hasMethod() method for inherited methods
+   *
+   */
+  #[@test]
+  public function stringClassHasEqualsMethod() {
+    $decl= $this->stringClass();
+    $this->assertTrue($decl->hasMethod('equals'));
+  }
+
+  /**
+   * Test hasMethod() method for instance methods
+   *
+   */
+  #[@test]
+  public function stringClassHasSubstringMethod() {
+    $decl= $this->stringClass();
+    $this->assertTrue($decl->hasMethod('substring'));
+  }
+
+  /**
+   * Test hasMethod() method for nonexistant methods
+   *
+   */
+  #[@test]
+  public function stringClassDoesNotHaveGetNameMethod() {
+    $decl= $this->stringClass();
+    $this->assertFalse($decl->hasMethod('getName'));
+  }
+
+  /**
+   * Test getMethod()
+   *
+   */
+  #[@test]
+  public function stringClassSubstringMethod() {
+    $method= $this->stringClass()->getMethod('substring');
+    $this->assertEquals(new TypeName('lang.types.String'), $method->returns);
+    $this->assertEquals('substring', $method->name);
+    $this->assertEquals(array(new TypeName('int'), new TypeName('int')), $method->parameters);
+    $this->assertEquals(MODIFIER_PUBLIC, $method->modifiers);
+  }
+
+  /**
+   * Test hasOperator() method
+   *
+   */
+  #[@test]
+  public function objectClassDoesNotHaveOperator() {
+    $decl= $this->objectClass();
+    $this->assertFalse($decl->hasOperator('~'));
+  }
+
+  /**
+   * Test getOperator() method
+   *
+   */
+  #[@test]
+  public function objectClassNoOperator() {
+    $decl= $this->objectClass();
+    $this->assertNull($decl->getOperator('~'));
+  }
+
+  /**
+   * Test hasOperator() method
+   *
+   */
+  #[@test]
+  public function stringClassHasConcatOperator() {
+    $decl= $this->stringClass();
+    $this->assertTrue($decl->hasOperator('~'));
+  }
+
+  /**
+   * Test getOperator() method
+   *
+   */
+  #[@test]
+  public function stringClassConcatOperator() {
+    $decl= $this->stringClass();
+    $this->assertInstanceOf('xp.compiler.types.Operator', $decl->getOperator('~'));
+  }
+
+  /**
+   * Test hasOperator() method
+   *
+   */
+  #[@test]
+  public function secureStringClassHasConcatOperator() {
+    $decl= $this->secureStringClass();
+    $this->assertTrue($decl->hasOperator('~'));
+  }
+
+  /**
+   * Test getOperator() method
+   *
+   */
+  #[@test]
+  public function secureStringClassConcatOperator() {
+    $decl= $this->secureStringClass();
+    $this->assertInstanceOf('xp.compiler.types.Operator', $decl->getOperator('~'));
+  }
+
+  /**
+   * Test getOperator() method
+   *
+   */
+  #[@test]
+  public function secureStringClassConcatOperatorsHolderIsString() {
+    $decl= $this->secureStringClass();
+    $this->assertEquals('lang.types.String', $decl->getOperator('~')->holder->name());
+  }
+
+  /**
+   * Test hasProperty() method
+   *
+   */
+  #[@test]
+  public function objectClassDoesNotHaveProperty() {
+    $decl= $this->objectClass();
+    $this->assertFalse($decl->hasProperty('chars'));
+  }
+
+  /**
+   * Test getProperty() method
+   *
+   */
+  #[@test]
+  public function objectClassNoProperty() {
+    $decl= $this->objectClass();
+    $this->assertNull($decl->getProperty('chars'));
+  }
+
+  /**
+   * Test hasProperty() method
+   *
+   */
+  #[@test]
+  public function stringClassHasConcatProperty() {
+    $decl= $this->stringClass();
+    $this->assertTrue($decl->hasProperty('chars'));
+  }
+
+  /**
+   * Test getProperty() method
+   *
+   */
+  #[@test]
+  public function stringClassConcatProperty() {
+    $decl= $this->stringClass();
+    $this->assertInstanceOf('xp.compiler.types.Property', $decl->getProperty('chars'));
+  }
+
+  /**
+   * Test hasProperty() method
+   *
+   */
+  #[@test]
+  public function secureStringClassHasConcatProperty() {
+    $decl= $this->secureStringClass();
+    $this->assertTrue($decl->hasProperty('chars'));
+  }
+
+  /**
+   * Test getProperty() method
+   *
+   */
+  #[@test]
+  public function secureStringClassConcatProperty() {
+    $decl= $this->secureStringClass();
+    $this->assertInstanceOf('xp.compiler.types.Property', $decl->getProperty('chars'));
+  }
+
+  /**
+   * Test getProperty() method
+   *
+   */
+  #[@test]
+  public function secureStringClassConcatPropertysHolderIsString() {
+    $decl= $this->secureStringClass();
+    $this->assertEquals('lang.types.String', $decl->getProperty('chars')->holder->name());
+  }
+
+  /**
+   * Test hasField() method for instance fields
+   *
+   */
+  #[@test]
+  public function stringClassHasLengthField() {
+    $decl= $this->stringClass();
+    $this->assertTrue($decl->hasField('length'));
+  }
+
+  /**
+   * Test hasField() method for nonexistant fields
+   *
+   */
+  #[@test]
+  public function stringClassDoesNotHaveCharsField() {
+    $decl= $this->stringClass();
+    $this->assertFalse($decl->hasField('chars'));
+  }
+
+  /**
+   * Test hasIndexer() method
+   *
+   */
+  #[@test]
+  public function stringClassHasIndexer() {
+    $decl= $this->stringClass();
+    $this->assertTrue($decl->hasIndexer());
+  }
+
+  /**
+   * Test hasIndexer() method
+   *
+   */
+  #[@test]
+  public function secureStringClassHasIndexer() {
+    $decl= $this->secureStringClass();
+    $this->assertTrue($decl->hasIndexer());
+  }
+
+  /**
+   * Test hasIndexer() method
+   *
+   */
+  #[@test]
+  public function objectClassDoesNotHaveIndexer() {
+    $decl= $this->objectClass();
+    $this->assertFalse($decl->hasIndexer());
+  }
+
+  /**
+   * Test getIndexer() method
+   *
+   */
+  #[@test]
+  public function stringClassIndexer() {
+    $indexer= $this->stringClass()->getIndexer();
+    $this->assertEquals(new TypeName('string'), $indexer->type);
+    $this->assertEquals(new TypeName('int'), $indexer->parameter);
+  }
+
+  /**
+   * Test getIndexer() method
+   *
+   */
+  #[@test]
+  public function secureStringClassIndexer() {
+    $indexer= $this->secureStringClass()->getIndexer();
+    $this->assertEquals(new TypeName('string'), $indexer->type);
+    $this->assertEquals(new TypeName('int'), $indexer->parameter);
+  }
+
+  /**
+   * Test isEnumerable() method
+   *
+   */
+  #[@test]
+  public function objectClassIsNotEnumerable() {
+    $decl= $this->objectClass();
+    $this->assertFalse($decl->isEnumerable());
+  }
+
+  /**
+   * Test hasConstant() method
+   *
+   */
+  #[@test]
+  public function objectClassDoesNotHaveConstant() {
+    $decl= $this->objectClass();
+    $this->assertFalse($decl->hasConstant('STATUS_OK'));
+  }
+
+  /**
+   * Test hasConstant() method
+   *
+   */
+  #[@test]
+  public function stringClassHasConstant() {
+    $decl= $this->stringClass();
+    $this->assertTrue($decl->hasConstant('ENCODING'));
+  }
+
+  /**
+   * Test getConstant() method
+   *
+   */
+  #[@test]
+  public function stringClassGetConstant() {
+    $this->assertNull($this->objectClass()->getConstant('STATUS_OK'));
+  }
+
+  /**
+   * Test getConstant() method
+   *
+   */
+  #[@test]
+  public function stringClassConstant() {
+    $const= $this->stringClass()->getConstant('ENCODING');
+    $this->assertEquals(new TypeName('string'), $const->type);
+    $this->assertEquals('utf-8', $const->value);
+  }
+
+  /**
+   * Test isSubclassOf() method
+   *
+   */
+  #[@test]
+  public function stringClassSubclassOfObject() {
+    $this->assertTrue($this->stringClass()->isSubclassOf($this->objectClass()));
+  }
+
+  /**
+   * Test isSubclassOf() method
+   *
+   */
+  #[@test]
+  public function extendedStringClassSubclassOfObject() {
+    $decl= new TypeDeclaration(
+      new ParseTree(new TypeName('lang.types'), array(), new ClassNode(
+        MODIFIER_PUBLIC, 
+        NULL,
+        new TypeName('ExtendedString'),
+        new TypeName('lang.types.String'),
+        NULL,
+        array()
+      )),
+      $this->stringClass()
+    );
+    $this->assertTrue($decl->isSubclassOf($this->objectClass()));
+  }
+
+  /**
+   * Test hasField() method
+   *
+   */
+  #[@test]
+  public function coinEnumHasMemberField() {
+    $this->assertTrue($this->coinEnum()->hasField('penny'));
+  }
+
+  /**
+   * Test getExtensions() method
+   *
+   */
+  #[@test]
+  public function getExtensionsFromStringClass() {
+    $this->assertEquals(array(), $this->stringClass()->getExtensions());
+  }
+
+  /**
+   * Test getExtensions() method
+   *
+   */
+  #[@test]
+  public function getExtensionsFromArrayListExtensionsClass() {
+    $decl= new TypeDeclaration(
+      new ParseTree(new TypeName('lang.types'), array(), new ClassNode(
+        MODIFIER_PUBLIC, 
+        NULL,
+        new TypeName('ArraySortingExtensions'),
+        new TypeName('lang.Object'),
+        NULL,
+        array(
+          new MethodNode(array(
+            'name'        => 'sorted',
+            'returns'     => new TypeName('lang.types.ArrayList'),
+            'extension'   => new TypeName('lang.types.ArrayList'),
+            'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
+            'parameters'  => array(
+              array(
+                'name'  => 'self',
+                'type'  => new TypeName('lang.types.ArrayList'),
+                'check' => TRUE
+              ), 
+            )
+          )),
+        )
+      )),
+      $this->objectClass()
+    );
+    $extensions= $decl->getExtensions();
+
+    $this->assertEquals(1, sizeof($extensions));
+    $this->assertEquals('lang.types.ArrayList', key($extensions));
+    $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
+  }
+}

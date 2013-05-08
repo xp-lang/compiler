@@ -1,32 +1,24 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace net\xp_lang\tests\types;
+
+/**
+ * Fixture for testing extension methods reflection
  *
- * $Id$ 
+ * @see   xp://xp.compiler.types.Types#getExtensions
+ * @see   xp://net.xp_lang.tests.types.TypeReflectionTest
  */
-
- $package= 'net.xp_lang.tests.types';
-
-  uses('lang.types.ArrayList');
+class ArraySortingExtensions extends \lang\Object {
+  
+  static function __import($scope) {
+    \xp::extensions(__CLASS__, $scope);
+  }
 
   /**
-   * Fixture for testing extension methods reflection
+   * Returns a sorted array list
    *
-   * @see   xp://xp.compiler.types.Types#getExtensions
-   * @see   xp://net.xp_lang.tests.types.TypeReflectionTest
+   * @param   lang.types.ArrayList self
+   * @return  lang.types.ArrayList
    */
-  class net·xp_lang·tests·types·ArraySortingExtensions extends Object {
-    static function __import($scope) {
-      xp::extensions(__CLASS__, $scope);
-    }
-
-    /**
-     * Returns a sorted array list
-     *
-     * @param   lang.types.ArrayList self
-     * @return  lang.types.ArrayList
-     */
-    public static function sorted(ArrayList $self) {
-      // Implementation here
-    }
+  public static function sorted(\lang\types\ArrayList $self) {
+    // Implementation here
   }
-?>
+}
