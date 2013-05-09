@@ -1,4 +1,4 @@
-<?php namespace xp\compiler\emit\checks;
+<?php namespace xp\compiler\checks;
 
 /**
  * Check for unitialized variables
