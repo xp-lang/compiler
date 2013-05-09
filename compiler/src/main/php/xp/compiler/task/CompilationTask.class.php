@@ -125,7 +125,7 @@ class CompilationTask extends \lang\Object {
    */
   public function run() {
     if (!$this->done->containsKey($this->source)) {
-      $scope= new TaskScope($this);
+      $scope= new \xp\compiler\types\TaskScope($this);
 
       // Start run
       $this->listener->compilationStarted($this->source);

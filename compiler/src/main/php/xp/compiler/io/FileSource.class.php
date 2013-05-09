@@ -28,7 +28,7 @@ class FileSource extends \lang\Object implements Source {
    * @return  io.streams.InputStream
    */
   public function getInputStream() {
-    return new io\streams\FileInputStream($this->file);
+    return new \io\streams\FileInputStream($this->file);
   }
   
   /**
