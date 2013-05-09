@@ -18,7 +18,7 @@ class ChecksTest extends \unittest\TestCase {
   static function __static() {
     self::$check= newinstance('xp.compiler.checks.Check', array(), '{
       public function node() { 
-        return XPClass::forName("xp.compiler.ast.StringNode"); 
+        return \lang\XPClass::forName("xp.compiler.ast.StringNode"); 
       }
 
       public function defer() { 

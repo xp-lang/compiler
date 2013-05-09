@@ -71,6 +71,10 @@ use xp\compiler\ast\WithNode;
 use xp\compiler\ast\ArmNode;
 use xp\compiler\ast\BracedExpressionNode;
 use xp\compiler\ast\SilenceOperatorNode;
+use xp\compiler\ast\DynamicInstanceCreationNode;
+use xp\compiler\ast\DynamicInstanceOfNode;
+use xp\compiler\ast\DynamicVariableReferenceNode;
+use xp\compiler\ast\NoopNode;
 %}
 
 %left ','

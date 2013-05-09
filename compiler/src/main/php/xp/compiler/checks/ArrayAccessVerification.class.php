@@ -35,7 +35,7 @@ class ArrayAccessVerification extends \lang\Object implements Check {
    * @param   xp.compiler.types.Scope scope
    * @return  bool
    */
-  public function verify(Node $node, Scope $scope) {
+  public function verify(\xp\compiler\ast\Node $node, \xp\compiler\types\Scope $scope) {
     $access= \cast($node, 'xp.compiler.ast.ArrayAccessNode');
 
     $type= $scope->typeOf($access->target);

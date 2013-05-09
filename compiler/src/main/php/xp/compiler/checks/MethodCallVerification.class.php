@@ -32,7 +32,7 @@ class MethodCallVerification extends AbstractMethodCallVerification {
    * @param   xp.compiler.types.Scope scope
    * @return  bool
    */
-  public function verify(Node $node, Scope $scope) {
+  public function verify(\xp\compiler\ast\Node $node, \xp\compiler\types\Scope $scope) {
     $call= \cast($node, 'xp.compiler.ast.MethodCallNode');
 
     // Verify type

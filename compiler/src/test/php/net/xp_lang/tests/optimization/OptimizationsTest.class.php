@@ -17,11 +17,11 @@ class OptimizationsTest extends \unittest\TestCase {
   static function __static() {
     self::$optimization= newinstance('xp.compiler.optimize.Optimization', array(), '{
       public function node() { 
-        return XPClass::forName("xp.compiler.ast.StringNode"); 
+        return \lang\XPClass::forName("xp.compiler.ast.StringNode"); 
       }
 
       public function optimize(\xp\compiler\ast\Node $in, \xp\compiler\types\Scope $scope, Optimizations $optimizations) {
-        return new StringNode("Optimized: ".$in->value);
+        return new \xp\compiler\ast\StringNode("Optimized: ".$in->value);
       }
     }');
   }

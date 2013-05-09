@@ -47,7 +47,7 @@ class TypeReflection extends Types {
    * @return  string
    */
   public function literal() {
-    return xp::reflect($this->class->getName());
+    return \xp::reflect($this->class->getName());
   }
   
   /**
@@ -74,7 +74,7 @@ class TypeReflection extends Types {
   public function isSubclassOf(Types $t) {
     try {
       return $this->class->isSubclassOf($t->name());
-    } catch (ClassNotFoundException $e) {
+    } catch (\lang\ClassNotFoundException $e) {
       return false;
     }
   }
@@ -216,7 +216,7 @@ class TypeReflection extends Types {
     } else if ('»' === $literal[0]) {    // Maps
       return '[:'.$this->nameOf(substr($literal, 1)).']';
     } else {                             // Classes, enums, interfaces
-      return xp::nameOf($literal);
+      return \xp::nameOf($literal);
     }
   }
 
@@ -231,12 +231,12 @@ class TypeReflection extends Types {
     // Extension methods are registered via __import()
     if (!method_exists($name, '__import')) return array();
     call_user_func(array($name, '__import'), 0);
-    if (!isset(xp::$ext[0])) return array();
+    if (!isset(\xp::$ext[0])) return array();
 
     // Found extension methods imported into the 0-scope
     $methods= $this->class->getMethods();
     $r= array();
-    foreach (xp::$ext[0] as $type => $name) {
+    foreach (\xp::$ext[0] as $type => $name) {
       $type= $this->typeName($type);
       $r[$type]= array();
       foreach ($methods as $method) {
@@ -247,7 +247,7 @@ class TypeReflection extends Types {
         ) $r[$type][]= $this->getMethod($method->getName());
       }
     }
-    unset(xp::$ext[0]);
+    unset(\xp::$ext[0]);
     return $r;
   }
 
@@ -319,7 +319,7 @@ class TypeReflection extends Types {
       if ($this->class->isEnum() && ($f->modifiers & (MODIFIER_PUBLIC | MODIFIER_STATIC))) {
         $member= $field->get(null);
         if ($this->class->isInstance($member)) {
-          $f->type= $this->typeNameOf(xp::typeOf($member));
+          $f->type= $this->typeNameOf(\xp::typeOf($member));
         } else {
           $f->type= $this->typeNameOf($field->getTypeName());
         }
