@@ -1,12 +1,14 @@
 <?php namespace xp\compiler;
 
 use io\File;
+use io\Folder;
 use io\collections\FileCollection;
 use io\collections\iterate\FilteredIOCollectionIterator;
 use io\collections\iterate\ExtensionEqualsFilter;
 use io\collections\iterate\AnyOfFilter;
 use util\Properties;
 use lang\ResourceProvider;
+use lang\reflect\Package;
 use xp\compiler\emit\source\Emitter;
 use xp\compiler\diagnostic\DefaultDiagnosticListener;
 use xp\compiler\diagnostic\VerboseDiagnosticListener;
@@ -14,6 +16,7 @@ use xp\compiler\io\FileSource;
 use xp\compiler\io\FileManager;
 use util\log\Logger;
 use util\log\ConsoleAppender;
+use util\cmd\Console;
 
 /**
  * XP Compiler, version {{VERSION}}
@@ -66,6 +69,7 @@ class Runner extends \lang\Object {
   
   static function __static() {
     self::$line= str_repeat('=', 72);
+    ResourceProvider::getInstance();      // Register res:// protocol
   }
 
   /**
@@ -138,7 +142,7 @@ class Runner extends \lang\Object {
     
     $compiler= new Compiler();
     $manager= new FileManager();
-    $manager->setSourcePaths(xp::$classpath);
+    $manager->setSourcePaths(\xp::$classpath);
     $profiles= array('default');
     $emitter= 'source';
     

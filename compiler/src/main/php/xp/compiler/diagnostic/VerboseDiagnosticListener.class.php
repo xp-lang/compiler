@@ -18,7 +18,7 @@ class VerboseDiagnosticListener extends \lang\Object implements DiagnosticListen
    */
   public function __construct(\io\streams\OutputStreamWriter $writer) {
     $this->writer= $writer;
-    $this->timer= new \util\profilig\Timer();
+    $this->timer= new \util\profiling\Timer();
   }
 
   /**
