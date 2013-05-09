@@ -63,9 +63,9 @@ class TypeDeclaration extends Types {
    */
   public function kind() {
     switch ($decl= $this->tree->declaration) {
-      case $decl instanceof ClassNode: return parent::CLASS_KIND;
-      case $decl instanceof InterfaceNode: return parent::INTERFACE_KIND;
-      case $decl instanceof EnumNode: return parent::ENUM_KIND;
+      case $decl instanceof \xp\compiler\ast\ClassNode: return parent::CLASS_KIND;
+      case $decl instanceof \xp\compiler\ast\InterfaceNode: return parent::INTERFACE_KIND;
+      case $decl instanceof \xp\compiler\ast\EnumNode: return parent::ENUM_KIND;
       default: return parent::UNKNOWN_KIND;
     }
   }
@@ -108,7 +108,7 @@ class TypeDeclaration extends Types {
    */
   public function hasConstructor() {
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof ConstructorNode) return true;
+      if ($member instanceof \xp\compiler\ast\ConstructorNode) return true;
     }
     return $this->parent ? $this->parent->hasConstructor() : false;
   }
@@ -120,7 +120,7 @@ class TypeDeclaration extends Types {
    */
   public function getConstructor() {
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof ConstructorNode) {
+      if ($member instanceof \xp\compiler\ast\ConstructorNode) {
         $c= new Constructor();
         $c->modifiers= $member->modifiers;
         foreach ($member->parameters as $p) {
@@ -141,7 +141,7 @@ class TypeDeclaration extends Types {
    */
   public function hasMethod($name) {
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof MethodNode && $member->name === $name) return true;
+      if ($member instanceof \xp\compiler\ast\MethodNode && $member->name === $name) return true;
     }
     return $this->parent ? $this->parent->hasMethod($name) : false;
   }
@@ -154,7 +154,7 @@ class TypeDeclaration extends Types {
    */
   public function getMethod($name) {
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof MethodNode && $member->name === $name) {
+      if ($member instanceof \xp\compiler\ast\MethodNode && $member->name === $name) {
         $m= new Method();
         $m->name= $member->name;
         $m->returns= $member->returns;
@@ -177,7 +177,7 @@ class TypeDeclaration extends Types {
   public function getExtensions() {
     $r= array();
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof MethodNode && $member->extension) {
+      if ($member instanceof \xp\compiler\ast\MethodNode && $member->extension) {
         $n= $member->extension->compoundName();
 
         $m= new Method();
@@ -204,7 +204,7 @@ class TypeDeclaration extends Types {
    */
   public function hasOperator($symbol) {
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof OperatorNode && $member->symbol === $symbol) return true;
+      if ($member instanceof \xp\compiler\ast\OperatorNode && $member->symbol === $symbol) return true;
     }
     return $this->parent ? $this->parent->hasOperator($symbol) : false;
   }
@@ -217,7 +217,7 @@ class TypeDeclaration extends Types {
    */
   public function getOperator($symbol) {
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof OperatorNode && $member->symbol === $symbol) {
+      if ($member instanceof \xp\compiler\ast\OperatorNode && $member->symbol === $symbol) {
         $m= new Operator($member->symbol);
         $m->returns= $member->returns;
         $m->modifiers= $member->modifiers;
@@ -240,8 +240,8 @@ class TypeDeclaration extends Types {
   public function hasField($name) {
     foreach ($this->tree->declaration->body as $member) {
       if (
-        ($member instanceof FieldNode && $member->name === $name) ||
-        ($member instanceof EnumMemberNode && $member->name === $name)
+        ($member instanceof \xp\compiler\ast\FieldNode && $member->name === $name) ||
+        ($member instanceof \xp\compiler\ast\EnumMemberNode && $member->name === $name)
       ) return true;
     }
     return $this->parent ? $this->parent->hasField($name) : false;
@@ -255,14 +255,14 @@ class TypeDeclaration extends Types {
    */
   public function getField($name) {
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof FieldNode && $member->name === $name) {
+      if ($member instanceof \xp\compiler\ast\FieldNode && $member->name === $name) {
         $f= new Field();
         $f->name= $member->name;
         $f->modifiers= $member->modifiers;
         $f->type= $member->type;
         $f->holder= $this;
         return $f;
-      } else if ($member instanceof EnumMemberNode) {
+      } else if ($member instanceof \xp\compiler\ast\EnumMemberNode) {
         $f= new Field();
         $f->name= $member->name;
         $f->modifiers= $member->modifiers;
@@ -282,7 +282,7 @@ class TypeDeclaration extends Types {
    */
   public function hasProperty($name) {
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof PropertyNode && $member->name === $name) return true;
+      if ($member instanceof \xp\compiler\ast\PropertyNode && $member->name === $name) return true;
     }
     return $this->parent ? $this->parent->hasProperty($name) : false;
   }
@@ -295,7 +295,7 @@ class TypeDeclaration extends Types {
    */
   public function getProperty($name) {
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof PropertyNode && $member->name === $name) {
+      if ($member instanceof \xp\compiler\ast\PropertyNode && $member->name === $name) {
         $p= new Property();
         $p->name= $member->name;
         $p->modifiers= $member->modifiers;
@@ -315,7 +315,7 @@ class TypeDeclaration extends Types {
    */
   public function hasConstant($name) {
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof ClassConstantNode && $member->name === $name) return true;
+      if ($member instanceof \xp\compiler\ast\ClassConstantNode && $member->name === $name) return true;
     }
     return $this->parent ? $this->parent->hasConstant($name) : false;
   }
@@ -328,7 +328,7 @@ class TypeDeclaration extends Types {
    */
   public function getConstant($name) {
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof ClassConstantNode && $member->name === $name) {
+      if ($member instanceof \xp\compiler\ast\ClassConstantNode && $member->name === $name) {
         $c= new Constant();
         $c->name= $member->name;
         $c->type= $member->type;
@@ -347,7 +347,7 @@ class TypeDeclaration extends Types {
    */
   public function hasIndexer() {
     foreach ($this->tree->declaration->body as $member) {
-      if ($member instanceof IndexerNode) return true;
+      if ($member instanceof \xp\compiler\ast\IndexerNode) return true;
     }
     return $this->parent ? $this->parent->hasIndexer() : false;
   }
@@ -359,7 +359,7 @@ class TypeDeclaration extends Types {
    */
   public function getIndexer() {
     foreach ($this->tree->declaration->body as $member) {
-      if (!$member instanceof IndexerNode) continue;
+      if (!$member instanceof \xp\compiler\ast\IndexerNode) continue;
       $i= new Indexer();
       $i->type= $member->type;
       $i->parameter= $member->parameter['type'];

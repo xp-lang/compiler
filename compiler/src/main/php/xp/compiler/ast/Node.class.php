@@ -68,7 +68,7 @@ abstract class Node extends \lang\Object {
       '__id' !== $name && 'position' !== $name && 'holder' !== $name && $s.= sprintf(
         "  [%-20s] %s\n", 
         $name, 
-        str_replace("\n", "\n  ", xp::stringOf($value))
+        str_replace("\n", "\n  ", \xp::stringOf($value))
       );
     }
     return $s.'}';
