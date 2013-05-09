@@ -20,6 +20,26 @@ use xp\compiler\ast\ParseTree;
 use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\TypeDeclarationNode;
 use xp\compiler\ast\Resolveable;
+use xp\compiler\ast\ArrayAccessNode;
+use xp\compiler\ast\StaticMemberAccessNode;
+use xp\compiler\ast\MethodCallNode;
+use xp\compiler\ast\MemberAccessNode;
+use xp\compiler\ast\StaticMethodCallNode;
+use xp\compiler\ast\FinallyNode;
+use xp\compiler\ast\CatchNode;
+use xp\compiler\ast\ThrowNode;
+use xp\compiler\ast\ClassNode;
+use xp\compiler\ast\AssignmentNode;
+use xp\compiler\ast\ArrayNode;
+use xp\compiler\ast\FieldNode;
+use xp\compiler\ast\ConstructorNode;
+use xp\compiler\ast\MethodNode;
+use xp\compiler\ast\ReturnNode;
+use xp\compiler\ast\StringNode;
+use xp\compiler\ast\EnumMemberNode;
+use xp\compiler\ast\IndexerNode;
+use xp\compiler\ast\StaticInitializerNode;
+use xp\compiler\ast\LocalsToMemberPromoter;
 use xp\compiler\emit\Buffer;
 use lang\reflect\Modifiers;
 use lang\Throwable;
@@ -94,9 +114,9 @@ class Emitter extends \xp\compiler\emit\Emitter {
    * @return  bool
    */
   protected function isWriteable($node) {
-    if ($node instanceof VariableNode || $node instanceof \xp\compiler\ast\ArrayAccessNode) {
+    if ($node instanceof VariableNode || $node instanceof ArrayAccessNode) {
       return true;
-    } else if ($node instanceof \xp\compiler\ast\MemberAccessNode || $node instanceof \xp\compiler\ast\StaticMemberAccessNode) {
+    } else if ($node instanceof MemberAccessNode || $node instanceof StaticMemberAccessNode) {
       return true;    // TODO: Check for private, protected
     }
     return false;
@@ -287,7 +307,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
    * @param   xp.compiler.ast.BooleanNode const
    */
   protected function emitBoolean($b, $const) {
-    $b->append($const->resolve() ? 'true' : 'false');
+    $b->append($const->resolve() ? 'TRUE' : 'FALSE');
   }
 
   /**
@@ -297,7 +317,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
    * @param   xp.compiler.ast.NullNode const
    */
   protected function emitNull($b, $const) {
-    $b->append('null');
+    $b->append('NULL');
   }
   
   /**
@@ -340,7 +360,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
       $b->append('(array)');
       $this->emitOne($b, $cast->expression);
     } else {
-      $b->append('\cast(');
+      $b->append('cast(');
       $this->emitOne($b, $cast->expression);
       $b->append(', \'')->append($this->resolveType($cast->type)->name())->append('\')');
     }
@@ -491,8 +511,8 @@ class Emitter extends \xp\compiler\emit\Emitter {
 
     if ($call->nav) {
       $var= $this->tempVar();
-      $b->insert('(null === ('.$var.'=', $mark);
-      $b->append(') ? null : ')->append($var)->append('->');
+      $b->insert('(NULL === ('.$var.'=', $mark);
+      $b->append(') ? NULL : ')->append($var)->append('->');
       $b->append($call->name);
       $this->emitInvocationArguments($b, (array)$call->arguments);
       $b->append(')');
@@ -502,12 +522,12 @@ class Emitter extends \xp\compiler\emit\Emitter {
       // - new Date().toString() to create(new Date()).toString()
       // - (<expr>).toString to create(<expr>).toString()
       if (
-        !$call->target instanceof \xp\compiler\ast\ArrayAccessNode && 
-        !$call->target instanceof \xp\compiler\ast\MethodCallNode &&
-        !$call->target instanceof \xp\compiler\ast\MemberAccessNode &&
+        !$call->target instanceof ArrayAccessNode && 
+        !$call->target instanceof MethodCallNode &&
+        !$call->target instanceof MemberAccessNode &&
         !$call->target instanceof VariableNode &&
-        !$call->target instanceof \xp\compiler\ast\StaticMemberAccessNode &&
-        !$call->target instanceof \xp\compiler\ast\taticMethodCallNode
+        !$call->target instanceof StaticMemberAccessNode &&
+        !$call->target instanceof StaticMethodCallNode
       ) {
         $b->insert('create(', $mark);
         $b->append(')');
@@ -561,8 +581,8 @@ class Emitter extends \xp\compiler\emit\Emitter {
     // Navigation operator
     if ($access->nav) {
       $var= $this->tempVar();
-      $b->insert('(null === ('.$var.'=', $mark);
-      $b->append(') ? null : ')->append($var)->append('->');
+      $b->insert('(NULL === ('.$var.'=', $mark);
+      $b->append(') ? NULL : ')->append($var)->append('->');
       $b->append($access->name);
       $b->append(')');
     } else {
@@ -571,12 +591,12 @@ class Emitter extends \xp\compiler\emit\Emitter {
       // - new Person().name to create(new Person()).name
       // - (<expr>).name to create(<expr>).name
       if (
-        !$access->target instanceof \xp\compiler\ast\ArrayAccessNode && 
-        !$access->target instanceof \xp\compiler\ast\MethodCallNode &&
-        !$access->target instanceof \xp\compiler\ast\MemberAccessNode &&
+        !$access->target instanceof ArrayAccessNode && 
+        !$access->target instanceof MethodCallNode &&
+        !$access->target instanceof MemberAccessNode &&
         !$access->target instanceof VariableNode &&
-        !$access->target instanceof \xp\compiler\ast\StaticMemberAccessNode &&
-        !$access->target instanceof \xp\compiler\ast\StaticMethodCallNode
+        !$access->target instanceof StaticMemberAccessNode &&
+        !$access->target instanceof StaticMethodCallNode
       ) {
         $b->insert('create(', $mark);
         $b->append(')');
@@ -615,10 +635,10 @@ class Emitter extends \xp\compiler\emit\Emitter {
     // - T::asList()[2] to this(T::asList(), 2)
     // - new int[]{5, 6, 7}[2] to this(array(5, 6, 7), 2)
     if (
-      !$access->target instanceof \xp\compiler\ast\ArrayAccessNode && 
-      !$access->target instanceof \xp\compiler\ast\MemberAccessNode &&
+      !$access->target instanceof ArrayAccessNode && 
+      !$access->target instanceof MemberAccessNode &&
       !$access->target instanceof VariableNode &&
-      !$access->target instanceof \xp\compiler\ast\StaticMemberAccessNode
+      !$access->target instanceof StaticMemberAccessNode
     ) {
       $b->insert('this(', $mark);
       $b->append(',');
@@ -1068,7 +1088,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
     // the underlying runtime does not support this, add statements after
     // the try block and to all catch blocks
     $numHandlers= sizeof($try->handling);
-    if ($try->handling[$numHandlers- 1] instanceof \xp\compiler\ast\FinallyNode) {
+    if ($try->handling[$numHandlers- 1] instanceof FinallyNode) {
       array_unshift($this->finalizers, array_pop($try->handling));
       $numHandlers--;
     } else {
@@ -1078,8 +1098,8 @@ class Emitter extends \xp\compiler\emit\Emitter {
     // If no handlers are left, create a simple catch-all-and-rethrow
     // handler
     if (0 == $numHandlers) {
-      $rethrow= new \xp\compiler\ast\ThrowNode(array('expression' => new VariableNode($mangled)));
-      $first= new \xp\compiler\ast\CatchNode(array(
+      $rethrow= new ThrowNode(array('expression' => new VariableNode($mangled)));
+      $first= new CatchNode(array(
         'type'       => new TypeName('lang.Throwable'),
         'variable'   => $mangled,
         'statements' => $this->finalizers[0] ? array($this->finalizers[0], $rethrow) : array($rethrow)
@@ -1129,7 +1149,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
     // Manually verify as we can then rely on call target type being available
     if (!$this->checks->verify($arm, $this->scope[0], $this, true)) return;
 
-    $b->append('$'.$mangled.'= null; try {');
+    $b->append('$'.$mangled.'= NULL; try {');
     $this->emitAll($b, (array)$arm->statements);
     $b->append('} catch (Exception $'.$mangled.') {}');
     foreach ($arm->variables as $v) {
@@ -1212,7 +1232,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
       }
 
       $unique= new TypeName(strtr($parent->literal(), '\\', '¦').'··'.uniqid());
-      $decl= new \xp\compiler\ast\ClassNode(0, null, $unique, $p['parent'], $p['implements'], $new->body);
+      $decl= new ClassNode(0, null, $unique, $p['parent'], $p['implements'], $new->body);
       $decl->synthetic= true;
       $generic && $decl->generic= $generic;
       $ptr= new TypeDeclaration(new ParseTree(null, array(), $decl), $parent);
@@ -1397,7 +1417,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
           $b->append($ptr->literal())->append(' ');
         } else if ('{' === $delim) {
           $defer[]= create(new Buffer('', $b->line))
-            ->append('if (null !== $')->append($param['name'])->append(' && !is("'.$t->name.'", $')
+            ->append('if (NULL !== $')->append($param['name'])->append(' && !is("'.$t->name.'", $')
             ->append($param['name'])
             ->append(')) throw new IllegalArgumentException("Argument ')
             ->append($i + 1)
@@ -1440,7 +1460,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
           }
         }
         if (!$resolveable) {
-          $b->append('null');
+          $b->append('NULL');
           $init= new Buffer('', $b->line);
           $init->append('if (func_num_args() < ')->append($i + 1)->append(') { ');
           $init->append('$')->append($param['name'])->append('= ');
@@ -1488,11 +1508,11 @@ class Emitter extends \xp\compiler\emit\Emitter {
   protected function emitAnnotation(&$meta, $annotation) {
     $params= array();
     foreach ((array)$annotation->parameters as $name => $value) {
-      if ($value instanceof \xp\compiler\ast\ClassAccessNode) {    // class literal
+      if ($value instanceof ClassAccessNode) {    // class literal
         $params[$name]= $this->resolveType($value->class)->name();
       } else if ($value instanceof Resolveable) {
         $params[$name]= $value->resolve();
-      } else if ($value instanceof \xp\compiler\ast\ArrayNode) {
+      } else if ($value instanceof ArrayNode) {
         $params[$name]= array();
         foreach ($value->values as $element) {
           $element instanceof Resolveable && $params[$name][]= $element->resolve();
@@ -1528,7 +1548,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
     $unique= new TypeName('Lambda··'.strtr(uniqid('', true), '.', '·'));
     
     // Visit all statements, promoting local variable used within tp members
-    $promoter= new \xp\compiler\ast\LocalsToMemberPromoter();
+    $promoter= new LocalsToMemberPromoter();
     $parameters= $replaced= array();
     foreach ($lambda->parameters as $parameter) {
       $parameters[]= array('name' => $parameter->name, 'type' => TypeName::$VAR);
@@ -1540,24 +1560,24 @@ class Emitter extends \xp\compiler\emit\Emitter {
     $cparameters= $cstmt= $fields= array();
     foreach ($promoted['replaced'] as $name => $member) {
       $cparameters[]= array('name' => substr($name, 1), 'type' => TypeName::$VAR);
-      $cstmt[]= new \xp\compiler\ast\AssignmentNode(array(
+      $cstmt[]= new AssignmentNode(array(
         'variable'    => $member, 
         'expression'  => new VariableNode(substr($name, 1)), 
         'op'          => '='
       ));
-      $fields[]= new \xp\compiler\ast\FieldNode(array(
+      $fields[]= new FieldNode(array(
         'name'        => substr($name, 1), 
         'type'        => TypeName::$VAR)
       );
     }
     
     // Generate an anonymous lambda class
-    $decl= new \xp\compiler\ast\ClassNode(0, null, $unique, null, null, array_merge($fields, array(
-      new \xp\compiler\ast\ConstructorNode(array(
+    $decl= new ClassNode(0, null, $unique, null, null, array_merge($fields, array(
+      new ConstructorNode(array(
         'parameters' => $cparameters,
         'body'       => $cstmt
       )),
-      new \xp\compiler\ast\MethodNode(array(
+      new MethodNode(array(
         'name'        => 'invoke', 
         'parameters'  => $parameters,
         'body'        => $promoted['node']->statements,
@@ -1757,7 +1777,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
     );
 
     foreach ($indexer->handlers as $name => $statements) {
-      $this->emitOne($b, new \xp\compiler\ast\MethodNode(array(
+      $this->emitOne($b, new MethodNode(array(
         'modifiers'  => MODIFIER_PUBLIC,
         'annotations'=> null,
         'name'       => $defines[$name][0],
@@ -1923,12 +1943,12 @@ class Emitter extends \xp\compiler\emit\Emitter {
         $init= new Buffer('', $b->line);
         $this->enter(new MethodScope('<init>'));
         if ($static) {
-          $variable= new \xp\compiler\ast\StaticMemberAccessNode(new TypeName('self'), $field->name);
+          $variable= new StaticMemberAccessNode(new TypeName('self'), $field->name);
         } else {
-          $variable= new \xp\compiler\ast\MemberAccessNode(new VariableNode('this'), $field->name);
+          $variable= new MemberAccessNode(new VariableNode('this'), $field->name);
           $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
         }
-        $this->emitOne($init, new \xp\compiler\ast\AssignmentNode(array(
+        $this->emitOne($init, new AssignmentNode(array(
           'variable'   => $variable,
           'expression' => $field->initialization,
           'op'         => '=',
@@ -2079,7 +2099,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
     $b->append(' {');
     
     // public static self[] values() { return parent::membersOf(__CLASS__) }
-    $declaration->body[]= new \xp\compiler\ast\MethodNode(array(
+    $declaration->body[]= new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'annotations'=> null,
       'name'       => 'values',
@@ -2087,10 +2107,10 @@ class Emitter extends \xp\compiler\emit\Emitter {
       'parameters' => null,
       'throws'     => null,
       'body'       => array(
-        new \xp\compiler\ast\ReturnNode(new \xp\compiler\ast\StaticMethodCallNode(
+        new ReturnNode(new StaticMethodCallNode(
           new TypeName('parent'),
           'membersOf', 
-          array(new \xp\compiler\ast\StringNode($thisType->literal()))
+          array(new StringNode($thisType->literal()))
         ))
       ),
       'comment'    => '(Generated)'
@@ -2105,7 +2125,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
     // Initialization
     $b->append('static function __static() {');
     foreach ($declaration->body as $i => $member) {
-      if (!$member instanceof \xp\compiler\ast\EnumMemberNode) continue;
+      if (!$member instanceof EnumMemberNode) continue;
       $b->append('self::$'.$member->name.'= ');
       if ($member->body) {
         if (!$abstract) {
@@ -2114,7 +2134,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
         }
         
         $unique= new TypeName($declaration->name->name.'··'.$member->name);
-        $decl= new \xp\compiler\ast\ClassNode(0, null, $unique, $declaration->name, array(), $member->body);
+        $decl= new ClassNode(0, null, $unique, $declaration->name, array(), $member->body);
         $decl->synthetic= true;
         $ptr= new TypeDeclaration(new ParseTree(null, array(), $decl), $thisType);
         $this->scope[0]->declarations[]= $decl;
@@ -2225,7 +2245,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
 
     // Check if we need to implement ArrayAccess
     foreach ((array)$declaration->body as $node) {
-      if ($node instanceof \xp\compiler\ast\IndexerNode) {
+      if ($node instanceof IndexerNode) {
         $declaration->implements[]= 'ArrayAccess';
       }
     }
@@ -2264,11 +2284,11 @@ class Emitter extends \xp\compiler\emit\Emitter {
           $parameters[]= array('name' => '··a'.$i, 'type' => $type);    // TODO: default
           $arguments[]= new VariableNode('··a'.$i);
         }
-        $body= array(new \xp\compiler\ast\StaticMethodCallNode(new TypeName('parent'), '__construct', $arguments));
+        $body= array(new StaticMethodCallNode(new TypeName('parent'), '__construct', $arguments));
       } else {
         $body= array();
       }
-      $this->emitOne($b, new \xp\compiler\ast\ConstructorNode(array(
+      $this->emitOne($b, new ConstructorNode(array(
         'modifiers'    => MODIFIER_PUBLIC,
         'parameters'   => $parameters,
         'annotations'  => null,
@@ -2281,7 +2301,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
     // Generate a static initializer if initializations are available.
     // They will have already been emitted if a static initializer exists!
     if ($this->inits[0][true]) {
-      $this->emitOne($b, new \xp\compiler\ast\StaticInitializerNode(null));
+      $this->emitOne($b, new StaticInitializerNode(null));
     }
     
     // Create __import
