@@ -1,20 +1,15 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace xp\compiler\ast;
 
+/**
+ * Indicates a node is resolveable at compile-time
+ *
+ */
+interface Resolveable {
+ 
   /**
-   * Indicates a node is resolveable at compile-time
+   * Resolve this node's value.
    *
+   * @return  var
    */
-  interface Resolveable {
-   
-    /**
-     * Resolve this node's value.
-     *
-     * @return  var
-     */
-    public function resolve(); 
-  }
-?>
+  public function resolve(); 
+}

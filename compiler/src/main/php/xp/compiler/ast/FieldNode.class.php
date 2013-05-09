@@ -1,26 +1,19 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.TypeMemberNode');
+/**
+ * Represents a field
+ *
+ */
+class FieldNode extends TypeMemberNode {
+  public $type           = null;
+  public $initialization = null;
 
   /**
-   * Represents a field
+   * Returns this members's hashcode
    *
+   * @return  string
    */
-  class FieldNode extends TypeMemberNode {
-    public $type           = NULL;
-    public $initialization = NULL;
-
-    /**
-     * Returns this members's hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return '$'.$this->getName();
-    }
+  public function hashCode() {
+    return '$'.$this->getName();
   }
-?>
+}

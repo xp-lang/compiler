@@ -1,42 +1,35 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.TypeMemberNode');
+/**
+ * Represents a property
+ *
+ * ```
+ * class T {
+ *   private int $_length= 0;
+ *
+ *   public int length {
+ *     get { return $this._length; }
+ *     set { $this._length= $value; }
+ *   }
+ * }
+ * 
+ * $t= new T();
+ * $length= $t.length;    // Executes get-block
+ * $t.length= 1;          // Executes set-block
+ * ```
+ *
+ * @see   xp://xp.compiler.ast.IndexerNode
+ */
+class PropertyNode extends TypeMemberNode {
+  public $type     = null;
+  public $handlers = array();
 
   /**
-   * Represents a property
+   * Returns this members's hashcode
    *
-   * <code>
-   *   class T {
-   *     private int $_length= 0;
-   *
-   *     public int length {
-   *       get { return $this._length; }
-   *       set { $this._length= $value; }
-   *     }
-   *   }
-   * 
-   *   $t= new T();
-   *   $length= $t.length;    // Executes get-block
-   *   $t.length= 1;          // Executes set-block
-   * </code>
-   *
-   * @see   xp://xp.compiler.ast.IndexerNode
+   * @return  string
    */
-  class PropertyNode extends TypeMemberNode {
-    public $type     = NULL;
-    public $handlers = array();
-
-    /**
-     * Returns this members's hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return '$'.$this->getName();
-    }
+  public function hashCode() {
+    return '$'.$this->getName();
   }
-?>
+}

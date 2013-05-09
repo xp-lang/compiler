@@ -1,19 +1,10 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
+<?php namespace xp\compiler\ast;
+
+/**
+ * The "foreach" loop
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * (Insert class' description here)
-   *
-   * @purpose  purpose
-   */
-  class ForeachNode extends xp·compiler·ast·Node {
-    public $expression = NULL;    
-    public $assignment = NULL;    
-    public $statements = NULL;    
-  }
-?>
+class ForeachNode extends Node {
+  public $expression = null;    
+  public $assignment = null;    
+  public $statements = null;    
+}

@@ -1,26 +1,19 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents a hex literal
  *
- * $Id$
+ * @see   xp://xp.compiler.ast.NaturalNode
+ * @test  xp://net.xp_lang.tests.resolve.NumberResolveTest
  */
-
-  uses('xp.compiler.ast.NaturalNode');
-
+class HexNode extends NaturalNode {
+  
   /**
-   * Represents a hex literal
+   * Resolve this node's value.
    *
-   * @see   xp://xp.compiler.ast.NaturalNode
-   * @test  xp://net.xp_lang.tests.resolve.NumberResolveTest
+   * @return  var
    */
-  class HexNode extends NaturalNode {
-    
-    /**
-     * Resolve this node's value.
-     *
-     * @return  var
-     */
-    public function resolve() {
-      return hexdec($this->value);
-    }
+  public function resolve() {
+    return hexdec($this->value);
   }
-?>
+}

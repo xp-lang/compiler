@@ -1,17 +1,10 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * An else
  *
- * $Id$ 
+ * @see  xp://xp.compiler.IfNode
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * (Insert class' description here)
-   *
-   * @purpose  purpose
-   */
-  class ElseNode extends xp·compiler·ast·Node {
-    public $statements = NULL;
-  }
-?>
+class ElseNode extends Node {
+  public $statements = null;
+}

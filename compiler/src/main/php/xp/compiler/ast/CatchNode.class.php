@@ -1,20 +1,12 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Try: Catch
  *
- * $Id$ 
+ * @see   xp://xp.compiler.ast.TryNode
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * (Insert class' description here)
-   *
-   * @purpose  purpose
-   */
-  class CatchNode extends xp·compiler·ast·Node {
-    public $type       = NULL;
-    public $variable   = NULL;
-    public $statements = NULL;
-    
-  }
-?>
+class CatchNode extends Node {
+  public $type       = null;
+  public $variable   = null;
+  public $statements = null;  
+}

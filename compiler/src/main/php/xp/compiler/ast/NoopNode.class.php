@@ -1,17 +1,8 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace xp\compiler\ast;
+
+/**
+ * A NOOP
  */
+class NoopNode extends Node {
 
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * A NOOP
-   *
-   * @purpose  purpose
-   */
-  class NoopNode extends xp·compiler·ast·Node {
-    
-  }
-?>
+}

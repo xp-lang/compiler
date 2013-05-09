@@ -1,19 +1,10 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace xp\compiler\ast;
+
+/**
+ * Unary operator
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * (Insert class' description here)
-   *
-   * @purpose  purpose
-   */
-  class UnaryOpNode extends xp·compiler·ast·Node {
-    public $postfix = FALSE;
-    public $expression = NULL;
-    public $op = NULL;
-  }
-?>
+class UnaryOpNode extends Node {
+  public $postfix = false;
+  public $expression = null;
+  public $op = null;
+}

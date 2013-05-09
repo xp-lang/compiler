@@ -1,18 +1,9 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace xp\compiler\ast;
+
+/**
+ * Instanceof statement
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * (Insert class' description here)
-   *
-   * @purpose  purpose
-   */
-  class InstanceOfNode extends xp·compiler·ast·Node {
-    public $type = NULL;
-    public $expression = NULL;
-  }
-?>
+class InstanceOfNode extends Node {
+  public $type = null;
+  public $expression = null;
+}

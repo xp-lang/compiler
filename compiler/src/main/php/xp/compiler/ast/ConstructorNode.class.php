@@ -1,27 +1,19 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents a constructor
  */
-
-  uses('xp.compiler.ast.RoutineNode');
-
+class ConstructorNode extends RoutineNode {
+  public
+    $modifiers  = 0,
+    $parameters = array();
+  
   /**
-   * Represents a constructor
+   * Returns this members's name
    *
+   * @return  string
    */
-  class ConstructorNode extends RoutineNode {
-    public
-      $modifiers  = 0,
-      $parameters = array();
-    
-    /**
-     * Returns this members's name
-     *
-     * @return  string
-     */
-    public function getName() {
-      return '__construct';
-    }
+  public function getName() {
+    return '__construct';
   }
-?>
+}

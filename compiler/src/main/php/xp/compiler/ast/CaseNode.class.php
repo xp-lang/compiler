@@ -1,20 +1,12 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Switch statement: Case
  *
- * $Id$
+ * @see  xp://xp.compiler.SwitchNode
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * Switch statement: Case
-   *
-   * @purpose  purpose
-   */
-  class CaseNode extends xp·compiler·ast·Node {
-    public
-      $expression,
-      $statements;
-    
-  }
-?>
+class CaseNode extends Node {
+  public
+    $expression,
+    $statements;
+}

@@ -1,18 +1,9 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents a method
  */
-
-  uses('xp.compiler.ast.RoutineNode');
-
-  /**
-   * Represents a method
-   *
-   */
-  class MethodNode extends RoutineNode {
-    public $returns   = NULL;
-    public $extension = NULL;
-
-  }
-?>
+class MethodNode extends RoutineNode {
+  public $returns   = null;
+  public $extension = null;
+}

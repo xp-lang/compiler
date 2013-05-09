@@ -1,19 +1,9 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
+<?php namespace xp\compiler\ast;
+
+/**
+ * Try
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * (Insert class' description here)
-   *
-   * @purpose  purpose
-   */
-  class TryNode extends xp·compiler·ast·Node {
-    public $statements = NULL;
-    public $handling   = array();
-    
-  }
-?>
+class TryNode extends Node {
+  public $statements = null;
+  public $handling   = array();  
+}

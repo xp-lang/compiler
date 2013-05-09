@@ -1,33 +1,26 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.Node');
+/**
+ * Represents a while-statement
+ *
+ * <code>
+ *   while (...) {
+ *     ...
+ *   }
+ * </code>
+ */
+class WhileNode extends Node {
+  public $statements= null;
+  public $expression= null;
 
   /**
-   * Represents a while-statement
+   * Constructor
    *
-   * <code>
-   *   while (...) {
-   *     ...
-   *   }
-   * </code>
+   * @param   xp.compiler.ast.Node expression
+   * @param   xp.compiler.ast.Node[] statements
    */
-  class WhileNode extends xp·compiler·ast·Node {
-    public $statements= NULL;
-    public $expression= NULL;
-
-    /**
-     * Constructor
-     *
-     * @param   xp.compiler.ast.Node expression
-     * @param   xp.compiler.ast.Node[] statements
-     */
-    public function __construct(xp·compiler·ast·Node $expression= NULL, $statements= array()) {
-      $this->expression= $expression;
-      $this->statements= $statements;
-    }
+  public function __construct(Node $expression= null, $statements= array()) {
+    $this->expression= $expression;
+    $this->statements= $statements;
   }
-?>
+}

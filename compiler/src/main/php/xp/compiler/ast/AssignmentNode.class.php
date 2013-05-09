@@ -1,41 +1,32 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents an assignment
  *
- * $Id$ 
+ * Examples:
+ * ```php
+ * $a= 5;     // variable: a, op: =, expression: 5
+ * $a+= 10;   // variable: a, op: +=, expression: 10
+ * ```
+ *
+ * Operator may be one of:
+ * * `=`   : Assignment
+ * * `+=`  : Addition
+ * * `-=`  : Subtraction
+ * * `*=`  : Multiplication
+ * * `/=`  : Division
+ * * `%=`  : Modulo
+ * * `~=`  : Concatenation
+ * * `|=`  : Or
+ * * `&=`  : And
+ * * `^=`  : XOr
+ * * `>>=` : Shift-Right
+ * * `<<=` : Shift-Left
+ *
+ * @test    xp://net.xp_lang.tests.syntax.xp.AssignmentTest
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * Represents an assignment
-   *
-   * Examples:
-   * <code>
-   *   $a= 5;     // variable: a, op: =, expression: 5
-   *   $a+= 10;   // variable: a, op: +=, expression: 10
-   * </code>
-   *
-   * Operator may be one of:
-   * <ul>
-   *   <li>=   : Assignment</li>
-   *   <li>+=  : Addition</li>
-   *   <li>-=  : Subtraction</li>
-   *   <li>*=  : Multiplication</li>
-   *   <li>/=  : Division</li>
-   *   <li>%=  : Modulo</li>
-   *   <li>~=  : Concatenation</li>
-   *   <li>|=  : Or</li>
-   *   <li>&=  : And</li>
-   *   <li>^=  : XOr</li>
-   *   <li>>>= : Shift-Right</li>
-   *   <li><<= : Shift-Left</li>
-   * </li>
-   *
-   * @test    xp://net.xp_lang.tests.syntax.xp.AssignmentTest
-   */
-  class AssignmentNode extends xp·compiler·ast·Node {
-    public $variable = NULL;
-    public $op = NULL;
-    public $expression = NULL;
-  }
-?>
+class AssignmentNode extends Node {
+  public $variable = null;
+  public $op = null;
+  public $expression = null;
+}

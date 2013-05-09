@@ -1,44 +1,37 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.Node');
+/**
+ * Represents a variable
+ *
+ */
+class VariableNode extends Node {
+  public $name= '';
+  
+  /**
+   * Constructor
+   *
+   * @param   string name
+   */
+  public function __construct($name= '') {
+    $this->name= $name;
+  }
+  
+  /**
+   * Returns a hashcode
+   *
+   * @return  string
+   */
+  public function hashCode() {
+    return '$'.$this->name;
+  }
 
   /**
-   * Represents a variable
+   * Returns whether another object equals this.
    *
+   * @param   lang.Generic cmp
+   * @return  bool
    */
-  class VariableNode extends xp·compiler·ast·Node {
-    public $name= '';
-    
-    /**
-     * Constructor
-     *
-     * @param   string name
-     */
-    public function __construct($name= '') {
-      $this->name= $name;
-    }
-    
-    /**
-     * Returns a hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return '$'.$this->name;
-    }
-
-    /**
-     * Returns whether another object equals this.
-     *
-     * @param   lang.Generic cmp
-     * @return  bool
-     */
-    public function equals($cmp) {
-      return $cmp instanceof self && $this->name === $cmp->name;
-    }
+  public function equals($cmp) {
+    return $cmp instanceof self && $this->name === $cmp->name;
   }
-?>
+}

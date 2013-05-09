@@ -1,18 +1,9 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace xp\compiler\ast;
+
+/**
+ * Switch statement
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * Switch statement
-   *
-   * @purpose  purpose
-   */
-  class SwitchNode extends xp·compiler·ast·Node {
-    public $expression = NULL;
-    public $cases      = array();
-  }
-?>
+class SwitchNode extends Node {
+  public $expression = null;
+  public $cases      = array();
+}

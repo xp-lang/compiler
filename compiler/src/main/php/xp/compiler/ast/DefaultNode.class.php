@@ -1,19 +1,10 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Switch statement: Default
  *
- * $Id$
+ * @see   xp://xp.compiler.ast.SwitchNode
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * Switch statement: Default
-   *
-   * @purpose  purpose
-   */
-  class DefaultNode extends xp·compiler·ast·Node {
-    public
-      $statements;
-    
-  }
-?>
+class DefaultNode extends Node {
+  public $statements;
+}

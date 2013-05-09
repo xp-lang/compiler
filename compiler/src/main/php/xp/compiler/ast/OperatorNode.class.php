@@ -1,28 +1,19 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.RoutineNode');
+/**
+ * Operator overloading
+ */
+class OperatorNode extends RoutineNode {
+  public $symbol      = null;
+  public $returns     = null;
+  public $extension   = false;
 
   /**
-   * (Insert class' description here)
+   * Returns this routine's name
    *
-   * @purpose  purpose
+   * @return  string
    */
-  class OperatorNode extends RoutineNode {
-    public $symbol      = NULL;
-    public $returns     = NULL;
-    public $extension   = FALSE;
-
-    /**
-     * Returns this routine's name
-     *
-     * @return  string
-     */
-    public function getName() {
-      return 'operator'.$this->symbol;
-    }
+  public function getName() {
+    return 'operator'.$this->symbol;
   }
-?>
+}

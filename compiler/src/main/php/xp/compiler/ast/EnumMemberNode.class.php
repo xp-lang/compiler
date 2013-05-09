@@ -1,26 +1,20 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents an enum member
  *
- * $Id$
+ * @see   xp://xp.compiler.EnumNode
  */
-
-  uses('xp.compiler.ast.TypeMemberNode');
-
+class EnumMemberNode extends TypeMemberNode {
+  public $value = null;
+  public $body  = null;
+  
   /**
-   * Represents an enum member
+   * Returns this members's hashcode
    *
+   * @return  string
    */
-  class EnumMemberNode extends TypeMemberNode {
-    public $value = NULL;
-    public $body  = NULL;
-    
-    /**
-     * Returns this members's hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return '$'.$this->getName();
-    }
+  public function hashCode() {
+    return '$'.$this->getName();
   }
-?>
+}

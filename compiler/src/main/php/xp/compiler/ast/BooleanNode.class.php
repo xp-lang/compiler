@@ -1,33 +1,26 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.ConstantValueNode');
+/**
+ * Represents a boolean literal
+ *
+ */
+class BooleanNode extends ConstantValueNode {
 
   /**
-   * Represents a boolean literal
+   * Returns a hashcode
    *
+   * @return  string
    */
-  class BooleanNode extends ConstantValueNode {
-
-    /**
-     * Returns a hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return 'xp.bool:'.xp::stringOf($this->value);
-    }
-
-    /**
-     * Resolve this node's value.
-     *
-     * @return  var
-     */
-    public function resolve() {
-      return (bool)$this->value;
-    }
+  public function hashCode() {
+    return 'xp.bool:'.xp::stringOf($this->value);
   }
-?>
+
+  /**
+   * Resolve this node's value.
+   *
+   * @return  var
+   */
+  public function resolve() {
+    return (bool)$this->value;
+  }
+}

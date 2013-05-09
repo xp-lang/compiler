@@ -1,34 +1,27 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.Node');
+/**
+ * Represents a static method call
+ *
+ * ```php
+ * self::connect();
+ * ```
+ */
+class StaticMethodCallNode extends Node {
+  public $type= null;
+  public $name= '';
+  public $arguments= array();
   
   /**
-   * Represents a static method call
+   * Creates a new InvocationNode object
    *
-   * <code>
-   *   self::connect();
-   * </code>
+   * @param   xp.compiler.types.TypeName type
+   * @param   string name
+   * @param   xp.compiler.ast.Node[] arguments
    */
-  class StaticMethodCallNode extends xp·compiler·ast·Node {
-    public $type= NULL;
-    public $name= '';
-    public $arguments= array();
-    
-    /**
-     * Creates a new InvocationNode object
-     *
-     * @param   xp.compiler.types.TypeName type
-     * @param   string name
-     * @param   xp.compiler.ast.Node[] arguments
-     */
-    public function __construct($type= NULL, $name= '', $arguments= NULL) {
-      $this->type= $type;
-      $this->name= $name;
-      $this->arguments= $arguments;
-    }
+  public function __construct($type= null, $name= '', $arguments= null) {
+    $this->type= $type;
+    $this->name= $name;
+    $this->arguments= $arguments;
   }
-?>
+}

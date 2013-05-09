@@ -1,19 +1,10 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace xp\compiler\ast;
+
+/**
+ * Cast
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * Cast
-   *
-   * @purpose  purpose
-   */
-  class CastNode extends xp·compiler·ast·Node {
-    public $type       = NULL;
-    public $expression = NULL;
-    public $check      = TRUE;
-  }
-?>
+class CastNode extends Node {
+  public $type       = null;
+  public $expression = null;
+  public $check      = true;
+}
