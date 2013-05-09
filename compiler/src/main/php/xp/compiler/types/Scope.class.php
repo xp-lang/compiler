@@ -1,8 +1,6 @@
 <?php namespace xp\compiler\types;
 
 use util\collections\HashTable;
-use xp\compiler\types\Types;
-use xp\compiler\types\TypeName;
 use xp\compiler\ArrayNode;
 use xp\compiler\MapNode;
 use xp\compiler\StringNode;
@@ -129,7 +127,7 @@ abstract class Scope extends \lang\Object {
   public function addPackageImport($import) {
     try {
       $this->packages[]= $this->task->locatePackage($import);
-    } catch (ElementNotFoundException $e) {
+    } catch (\lang\ElementNotFoundException $e) {
       throw new ResolveException('Cannot import non-existant package '.$import, 507, $e);
     }
   }
@@ -178,7 +176,7 @@ abstract class Scope extends \lang\Object {
         return true;
       } else if ($type instanceof Types && $type->hasMethod($name)) {
         $m= $type->getMethod($name);
-        if (Modifiers::isStatic($m->modifiers)) return $m;
+        if (\lang\reflect\Modifiers::isStatic($m->modifiers)) return $m;
       }
     }
     return null;
