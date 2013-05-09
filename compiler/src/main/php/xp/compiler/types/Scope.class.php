@@ -11,6 +11,7 @@ use xp\compiler\ast\BooleanNode;
 use xp\compiler\ast\BracedExpressionNode;
 use xp\compiler\ast\ComparisonNode;
 use xp\compiler\ast\InstanceCreationNode;
+use xp\compiler\ast\AssignmentNode;
 use xp\compiler\ast\Node;
 use lang\XPClass;
 use lang\ClassLoader;
