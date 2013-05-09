@@ -12,7 +12,7 @@ class BooleanNode extends ConstantValueNode {
    * @return  string
    */
   public function hashCode() {
-    return 'xp.bool:'.xp::stringOf($this->value);
+    return 'xp.bool:'.\xp::stringOf($this->value);
   }
 
   /**
