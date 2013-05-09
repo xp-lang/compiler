@@ -693,10 +693,14 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
     );
 
     try {
-      $this->checks->verify($node, $this->scope[0], $this) && call_user_func(array($this, 'emit'.substr(get_class($node), 0, -4)), $b, $node);
-    } catch (Error $e) {
+      $this->checks->verify($node, $this->scope[0], $this) && call_user_func(
+        array($this, 'emit'.substr(get_class($node), strlen('xp\\compiler\\ast\\'), -4)),
+        $b,
+        $node
+      );
+    } catch (\lang\Error $e) {
       $this->error('0422', 'Cannot emit '.$node->getClassName().': '.$e->getMessage(), $node);
-    } catch (Throwable $e) {
+    } catch (\lang\Throwable $e) {
       $this->error('0500', $e->toString(), $node);
     }
   }
