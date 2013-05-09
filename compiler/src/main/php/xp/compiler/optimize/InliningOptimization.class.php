@@ -19,6 +19,7 @@ abstract class InliningOptimization extends \lang\Object implements Optimization
   protected static $rewriter= null;
   
   static function __static() {
+    uses('xp.compiler.ast.Visitor');    // FIXME: ClassLoader::define(*) should load parents & interfaces
     self::$rewriter= \lang\ClassLoader::defineClass('InliningOptimization··Rewriter', 'xp.compiler.ast.Visitor', array(), '{
       protected $replacements;
       protected $protect;
@@ -87,7 +88,10 @@ abstract class InliningOptimization extends \lang\Object implements Optimization
         }
         
         // DEBUG Console::writeLine('Inlining ', $call->name, ' from inside ', $scope->getClassName().'::'.$scope->name);
-        $call= $optimizations->optimize(self::$rewriter->newInstance($replacements, $call->name)->visitOne(clone $member->body[0]->expression), $scope);
+        $call= $optimizations->optimize(
+          self::$rewriter->newInstance($replacements, $call->name)->visitOne(clone $member->body[0]->expression),
+          $scope
+        );
         break;
       }
     }

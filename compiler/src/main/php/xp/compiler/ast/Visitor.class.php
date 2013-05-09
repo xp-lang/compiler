@@ -720,7 +720,7 @@ abstract class Visitor extends \lang\Object {
    * @param   xp.compiler.ast.Node node
    */
   public function visitOne(Node $node) {
-    $target= 'visit'.substr(get_class($node), 0, -strlen('Node'));
+    $target= 'visit'.substr(get_class($node), strlen('xp\\compiler\\ast\\'), -strlen('Node'));
     if (!method_exists($this, $target)) {
       throw new \lang\IllegalArgumentException('Don\'t know how to visit '.$node->getClassName().'s');
     }
