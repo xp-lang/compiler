@@ -109,7 +109,7 @@ class CompilationTask extends \lang\Object {
    * @param   xp.compiler.ast.ParseTree tree
    * @return  xp.compiler.types.Types
    */
-  protected function partialType(ParseTree $tree) {
+  protected function partialType(\xp\compiler\ast\ParseTree $tree) {
     return new TypeReference(
       $tree->package ? new TypeName($tree->package->name.'.'.$tree->declaration->name->name) : $tree->declaration->name,
       Types::PARTIAL_KIND,

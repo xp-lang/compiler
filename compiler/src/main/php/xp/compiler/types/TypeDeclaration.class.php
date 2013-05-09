@@ -1,6 +1,9 @@
 <?php namespace xp\compiler\types;
 
 use xp\compiler\ast\ParseTree;
+use xp\compiler\ast\ClassNode;
+use xp\compiler\ast\InterfaceNode;
+use xp\compiler\ast\EnumNode;
 
 /**
  * Represents a declared type
@@ -63,9 +66,9 @@ class TypeDeclaration extends Types {
    */
   public function kind() {
     switch ($decl= $this->tree->declaration) {
-      case $decl instanceof \xp\compiler\ast\ClassNode: return parent::CLASS_KIND;
-      case $decl instanceof \xp\compiler\ast\InterfaceNode: return parent::INTERFACE_KIND;
-      case $decl instanceof \xp\compiler\ast\EnumNode: return parent::ENUM_KIND;
+      case $decl instanceof ClassNode: return parent::CLASS_KIND;
+      case $decl instanceof InterfaceNode: return parent::INTERFACE_KIND;
+      case $decl instanceof EnumNode: return parent::ENUM_KIND;
       default: return parent::UNKNOWN_KIND;
     }
   }

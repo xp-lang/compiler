@@ -2,6 +2,7 @@
 
 use io\File;
 use io\Folder;
+use xp\compiler\Syntax;
 
 /**
  * File manager takes care of locating and parsing sourcecode and writing
@@ -100,7 +101,7 @@ class FileManager extends \lang\Object {
    * @param   xp.compiler.Syntax s Syntax to use, determined via source file's syntax otherwise
    * @return  xp.compiler.ast.ParseTree
    */
-  public function parseFile(Source $in, \xp\compiler\Syntax $s= null) {
+  public function parseFile(Source $in, Syntax $s= null) {
     if (null === $s) {
       $s= $in->getSyntax();
     }
@@ -118,7 +119,7 @@ class FileManager extends \lang\Object {
     $folder= new Folder($target->getPath());
     $folder->exists() || $folder->create();
     
-    $r->writeTo(new FileOutputStream($target));
+    $r->writeTo(new \io\streams\FileOutputStream($target));
   }
 
   /**
