@@ -53,7 +53,7 @@ abstract class Types extends \lang\Object {
    * @param   self $t
    * @return  bool
    */
-  public abstract function isSubclassOf(self $t);
+  public abstract function isSubclassOf(Types $t);
 
   /**
    * Returns whether this type is enumerable (that is: usable in foreach)

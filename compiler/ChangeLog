@@ -22,6 +22,8 @@ RFCs
 
 Bugfixes
 ~~~~~~~~
+- Fixed issue #24: Fatal error with PHP 5.3.0
+  (friebe)
 - Fixed PHP 5.3 namespaces fully qualified class names
   (friebe)
 - Changed TypeReflection to determine enum member type correctly
