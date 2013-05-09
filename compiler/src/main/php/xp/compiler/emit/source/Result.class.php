@@ -13,7 +13,7 @@ class Result extends \lang\Object implements \xp\compiler\emit\EmitterResult {
    * @param   xp.compiler.types.Types type
    * @param   xp.compiler.emit.source.Buffer source
    */
-  public function __construct(\xp\compiler\Types $type, $source) {
+  public function __construct(\xp\compiler\types\Types $type, $source) {
     $this->type= $type;
     $this->source= $source;
   }
