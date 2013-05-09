@@ -23,7 +23,7 @@ class ClassAnnotationsTest extends AnnotationsTest {
   #[@test]
   public function simpleAnnotation() {
     $this->assertEquals(
-      array('experimental' => NULL), 
+      array('experimental' => null), 
       $this->compile('[@experimental] class %s { }')->getAnnotations()
     );
   }

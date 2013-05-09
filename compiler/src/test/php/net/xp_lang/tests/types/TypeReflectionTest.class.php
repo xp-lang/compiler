@@ -322,7 +322,7 @@ class TypeReflectionTest extends \unittest\TestCase {
       public static $a= 0, $b;
     }');
     $this->assertEquals(
-      new TypeName($cl->getField('b')->get(NULL)->getClassName()),
+      new TypeName($cl->getField('b')->get(null)->getClassName()),
       create(new TypeReflection($cl))->getField('b')->type
     );
   }
@@ -347,7 +347,7 @@ class TypeReflectionTest extends \unittest\TestCase {
       }
     }');
     $this->assertEquals(
-      new TypeName($cl->getField('a')->get(NULL)->getClassName()),
+      new TypeName($cl->getField('a')->get(null)->getClassName()),
       create(new TypeReflection($cl))->getField('a')->type
     );
   }

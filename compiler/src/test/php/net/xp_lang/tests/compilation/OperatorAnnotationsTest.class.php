@@ -23,7 +23,7 @@ class OperatorAnnotationsTest extends AnnotationsTest {
   #[@test]
   public function simpleAnnotation() {
     $this->assertEquals(
-      array('experimental' => NULL), 
+      array('experimental' => null), 
       $this->compile('class %s { [@experimental] static self operator +(self $a, self $b) { } }')->getMethod('operator··plus')->getAnnotations()
     );
   }

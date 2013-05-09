@@ -17,7 +17,7 @@ use lang\XPClass;
  * @see      xp://xp.compiler.types.CompiledType
  */
 class CompiledTypeTest extends \unittest\TestCase {
-  protected $fixture= NULL;
+  protected $fixture= null;
   protected static $objectType;
   
   static function __static() {
@@ -185,7 +185,7 @@ class CompiledTypeTest extends \unittest\TestCase {
    */
   #[@test]
   public function noParentHasMethod() {
-    $this->assertFalse($this->fixtureWithParent(NULL)->hasMethod('getClassName'));
+    $this->assertFalse($this->fixtureWithParent(null)->hasMethod('getClassName'));
   }
 
   /**
@@ -194,7 +194,7 @@ class CompiledTypeTest extends \unittest\TestCase {
    */
   #[@test]
   public function noParentParentMethod() {
-    $this->assertNull($this->fixtureWithParent(NULL)->getMethod('getClassName'));
+    $this->assertNull($this->fixtureWithParent(null)->getMethod('getClassName'));
   }
 
   /**

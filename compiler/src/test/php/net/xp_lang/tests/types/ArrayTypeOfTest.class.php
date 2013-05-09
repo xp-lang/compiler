@@ -10,7 +10,7 @@ use lang\XPClass;
  * @see      xp://xp.compiler.types.ArrayTypeOf
  */
 class ArrayTypeOfTest extends \unittest\TestCase {
-  protected $fixture= NULL;
+  protected $fixture= null;
   
   /**
    * Set up test case - creates fixture

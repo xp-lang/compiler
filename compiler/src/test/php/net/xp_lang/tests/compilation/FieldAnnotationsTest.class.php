@@ -23,7 +23,7 @@ class FieldAnnotationsTest extends AnnotationsTest {
   #[@test]
   public function simpleAnnotation() {
     $this->assertEquals(
-      array('type' => 'var', 'experimental' => NULL), 
+      array('type' => 'var', 'experimental' => null), 
       $this->compile('class %s { [@experimental] var $fixture; }')->getField('fixture')->getAnnotations()
     );
   }

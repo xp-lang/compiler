@@ -6,7 +6,7 @@
  * @see      xp://xp.compiler.emit.source.NativeImporter
  */
 class SourceNativeImporterTest extends \unittest\TestCase {
-  protected $fixture= NULL;
+  protected $fixture= null;
 
   /**
    * Sets up test case
@@ -34,7 +34,7 @@ class SourceNativeImporterTest extends \unittest\TestCase {
   #[@test]
   public function importArray_keys() {
     $this->assertEquals(
-      array('array_keys' => TRUE), 
+      array('array_keys' => true), 
       $this->fixture->import('standard.array_keys')
     );
   }
@@ -46,7 +46,7 @@ class SourceNativeImporterTest extends \unittest\TestCase {
   #[@test]
   public function importPreg_match() {
     $this->assertEquals(
-      array('preg_match' => TRUE), 
+      array('preg_match' => true), 
       $this->fixture->import('pcre.preg_match')
     );
   }
@@ -58,7 +58,7 @@ class SourceNativeImporterTest extends \unittest\TestCase {
   #[@test]
   public function importStrlen() {
     $this->assertEquals(
-      array('strlen' => TRUE), 
+      array('strlen' => true), 
       $this->fixture->import('core.strlen')
     );
   }
@@ -70,7 +70,7 @@ class SourceNativeImporterTest extends \unittest\TestCase {
   #[@test]
   public function importAllFromStandard() {
     $this->assertEquals(
-      array(0 => array('standard' => TRUE)), 
+      array(0 => array('standard' => true)), 
       $this->fixture->import('standard.*')
     );
   }

@@ -12,7 +12,7 @@ use xp\compiler\ast\IntegerNode;
  * @see      xp://xp.compiler.ast.LocalsToMemberPromoter
  */
 class LocalsToMemberPromoterTest extends \unittest\TestCase {
-  protected $fixture= NULL;
+  protected $fixture= null;
 
   /**
    * Creates fixture

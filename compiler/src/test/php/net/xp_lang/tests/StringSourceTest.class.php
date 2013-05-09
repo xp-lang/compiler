@@ -26,7 +26,7 @@ class StringSourceTest extends \unittest\TestCase {
    * @param   string source
    * @return  xp.compiler.io.StringSource
    */
-  protected function newInstance($source= NULL) {
+  protected function newInstance($source= null) {
     return new StringSource($source, self::$syntax, $this->name);
   }
 
@@ -66,7 +66,7 @@ class StringSourceTest extends \unittest\TestCase {
   public function getURIWithNameOmitted() {
     $this->assertEquals(
       'Compiled source #0', 
-      create(new StringSource(NULL, self::$syntax))->getURI()
+      create(new StringSource(null, self::$syntax))->getURI()
     );
   }
 }

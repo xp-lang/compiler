@@ -196,7 +196,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function arrayComponentTypeOfNonArray() {
-    $this->assertEquals(NULL, create(new TypeName('string'))->arrayComponentType());
+    $this->assertEquals(null, create(new TypeName('string'))->arrayComponentType());
   }
 
   /**
@@ -217,7 +217,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function mapComponentTypeOfNonMap() {
-    $this->assertEquals(NULL, create(new TypeName('string'))->mapComponentType());
+    $this->assertEquals(null, create(new TypeName('string'))->mapComponentType());
   }
 
   /**

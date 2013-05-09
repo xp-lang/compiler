@@ -10,7 +10,7 @@ use lang\XPClass;
  * @see      xp://xp.compiler.types.MapTypeOf
  */
 class MapTypeOfTest extends \unittest\TestCase {
-  protected $fixture= NULL;
+  protected $fixture= null;
   
   /**
    * Set up test case - creates fixture

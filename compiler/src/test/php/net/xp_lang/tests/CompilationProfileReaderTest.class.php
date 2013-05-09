@@ -11,7 +11,7 @@ use io\streams\MemoryInputStream;
  * @see   xp://xp.compiler.CompilationProfileReader
  */
 class CompilationProfileReaderTest extends \unittest\TestCase {
-  protected $fixture= NULL;
+  protected $fixture= null;
 
   /**
    * Sets up test case

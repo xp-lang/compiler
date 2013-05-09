@@ -36,7 +36,7 @@ use lang\XPClass;
  * @see      xp://xp.compiler.types.Scope
  */
 class ScopeTest extends \unittest\TestCase {
-  protected $fixture= NULL;
+  protected $fixture= null;
   
   /**
    * Sets up this testcase
@@ -67,7 +67,7 @@ class ScopeTest extends \unittest\TestCase {
   #[@test]
   public function typedArrayType() {
     $this->assertEquals(new TypeName('string[]'), $this->fixture->typeOf(new ArrayNode(array(
-      'values'        => NULL,
+      'values'        => null,
       'type'          => new TypeName('string[]'),
     ))));
   }
@@ -88,7 +88,7 @@ class ScopeTest extends \unittest\TestCase {
   #[@test]
   public function typedMapType() {
     $this->assertEquals(new TypeName('[:string]'), $this->fixture->typeOf(new MapNode(array(
-      'elements'      => NULL,
+      'elements'      => null,
       'type'          => new TypeName('[:string]'),
     ))));
   }
@@ -153,7 +153,7 @@ class ScopeTest extends \unittest\TestCase {
    */
   #[@test]
   public function boolType() {
-    $this->assertEquals(new TypeName('bool'), $this->fixture->typeOf(new BooleanNode(TRUE)));
+    $this->assertEquals(new TypeName('bool'), $this->fixture->typeOf(new BooleanNode(true)));
   }
   
   /**
@@ -171,7 +171,7 @@ class ScopeTest extends \unittest\TestCase {
    */
   #[@test]
   public function typeOfBracedExpressionNode() {
-    $this->assertEquals(new TypeName('bool'), $this->fixture->typeOf(new BracedExpressionNode(new BooleanNode(TRUE))));
+    $this->assertEquals(new TypeName('bool'), $this->fixture->typeOf(new BracedExpressionNode(new BooleanNode(true))));
     $this->assertEquals(new TypeName('string'), $this->fixture->typeOf(new BracedExpressionNode(new StringNode('Hello'))));
   }
 
@@ -411,7 +411,7 @@ class ScopeTest extends \unittest\TestCase {
     $this->fixture->addPackageImport('util.cmd');
     $this->fixture->resolveType(new TypeName('Command'));
     
-    $this->assertEquals(array('util.cmd.Command' => TRUE), $this->fixture->used);
+    $this->assertEquals(array('util.cmd.Command' => true), $this->fixture->used);
   }
 
   /**
@@ -424,7 +424,7 @@ class ScopeTest extends \unittest\TestCase {
     $this->fixture->resolveType(new TypeName('Command'));
     $this->fixture->resolveType(new TypeName('Command'));
     
-    $this->assertEquals(array('util.cmd.Command' => TRUE), $this->fixture->used);
+    $this->assertEquals(array('util.cmd.Command' => true), $this->fixture->used);
   }
 
   /**
@@ -435,7 +435,7 @@ class ScopeTest extends \unittest\TestCase {
   public function usedAfterTypeImport() {
     $this->fixture->addTypeImport('util.cmd.Command');
     
-    $this->assertEquals(array('util.cmd.Command' => TRUE), $this->fixture->used);
+    $this->assertEquals(array('util.cmd.Command' => true), $this->fixture->used);
   }
 
   /**
@@ -447,6 +447,6 @@ class ScopeTest extends \unittest\TestCase {
     $this->fixture->addTypeImport('util.cmd.Command');
     $this->fixture->addTypeImport('util.cmd.Command');
     
-    $this->assertEquals(array('util.cmd.Command' => TRUE), $this->fixture->used);
+    $this->assertEquals(array('util.cmd.Command' => true), $this->fixture->used);
   }
 }

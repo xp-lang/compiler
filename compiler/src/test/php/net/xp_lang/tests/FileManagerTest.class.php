@@ -12,7 +12,7 @@ use io\Folder;
  * @see      xp://xp.compiler.io.FileManager
  */
 class FileManagerTest extends \unittest\TestCase {
-  protected $fixture= NULL;
+  protected $fixture= null;
   protected static $result;
 
   /**
@@ -22,7 +22,7 @@ class FileManagerTest extends \unittest\TestCase {
   #[@beforeClass]
   public static function defineResult() {
     self::$result= \lang\ClassLoader::defineClass('FileManagerTestEmitterResult', 'lang.Object', array('xp.compiler.emit.EmitterResult'), '{
-      protected $type= NULL;
+      protected $type= null;
       public function __construct($name) { $this->type= new TypeReference(new TypeName($name)); }
       public function type() { return $this->type; }
       public function extension() { return ".test"; }
