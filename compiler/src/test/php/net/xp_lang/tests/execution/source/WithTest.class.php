@@ -1,28 +1,19 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace net\xp_lang\tests\execution\source;
+
+/**
+ * Tests with statement
  *
- * $Id$
  */
-
-  $package= 'net.xp_lang.tests.execution.source';
-
-  uses('net.xp_lang.tests.execution.source.ExecutionTest');
-
+class WithTest extends ExecutionTest {
+  
   /**
-   * Tests with statement
+   * Test
    *
    */
-  class net·xp_lang·tests·execution·source·WithTest extends ExecutionTest {
-    
-    /**
-     * Test
-     *
-     */
-    #[@test]
-    public function oneAssignment() {
-      $this->assertEquals('child', $this->run('with ($n= new xml.Node("root").addChild(new xml.Node("child"))) { 
-        return $n.getName(); 
-      }'));
-    }
+  #[@test]
+  public function oneAssignment() {
+    $this->assertEquals('child', $this->run('with ($n= new xml.Node("root").addChild(new xml.Node("child"))) { 
+      return $n.getName(); 
+    }'));
   }
-?>
+}

@@ -16,8 +16,9 @@ use io\streams\MemoryInputStream;
  */
 class VisitorTest extends \unittest\TestCase {
   protected static $visitor;
-  
-  static function __static() {
+
+  #[@beforeClass]
+  public static function defineVisitor() {
     self::$visitor= \lang\ClassLoader::defineClass('VisitorTest··Visitor', 'xp.compiler.ast.Visitor', array(), '{
       public $visited= array();
       public function visitOne($node) {
