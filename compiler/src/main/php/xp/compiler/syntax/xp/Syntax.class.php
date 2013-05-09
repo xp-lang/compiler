@@ -1,4 +1,4 @@
-<?php namespace xp\compiler\xp;
+<?php namespace xp\compiler\syntax\xp;
 
 /**
  * XP Language Syntax

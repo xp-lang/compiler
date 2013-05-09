@@ -1,4 +1,4 @@
-<?php namespace xp\compiler\php;
+<?php namespace xp\compiler\syntax\php;
 
 /**
  * PHP 5.3 Syntax (no alternative syntax)
