@@ -61,7 +61,7 @@ class PropertiesTest extends ExecutionTest {
         'import native standard.substr;',
         'import native standard.implode;',
       ));
-    } catch (Throwable $e) {
+    } catch (\lang\Throwable $e) {
       throw new PrerequisitesNotMetError($e->getMessage(), $e);
     }
   }

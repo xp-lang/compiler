@@ -2223,7 +2223,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
 
     // Check if we need to implement ArrayAccess
     foreach ((array)$declaration->body as $node) {
-      if ($node instanceof IndexerNode) {
+      if ($node instanceof \xp\compiler\ast\IndexerNode) {
         $declaration->implements[]= 'ArrayAccess';
       }
     }
