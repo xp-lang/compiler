@@ -1,5 +1,7 @@
 <?php namespace xp\compiler\ast;
 
+use xp\compiler\types\TypeName;
+
 /**
  * Represents an enum declaration
  *

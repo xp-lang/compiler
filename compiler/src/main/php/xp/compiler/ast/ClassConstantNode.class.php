@@ -30,7 +30,7 @@ class ClassConstantNode extends TypeMemberNode {
    * @param   xp.compiler.ast.Node expression
    * @param   xp.compiler.ast.Node[] statements
    */
-  public function __construct($name, TypeName $type, Node $value) {
+  public function __construct($name, \xp\compiler\types\TypeName $type, Node $value) {
     $this->name= $name;
     $this->type= $type;
     $this->value= $value;
