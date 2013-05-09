@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses('xp.compiler.types.Types');
 
@@ -11,7 +7,7 @@
    *
    */
   class PrimitiveTypeOf extends Types {
-    protected $name= NULL;
+    protected $name= null;
     
     /**
      * Constructor
@@ -37,7 +33,7 @@
      * @return  xp.compiler.types.Types
      */
     public function parent() {
-      return NULL;
+      return null;
     }
 
     /**
@@ -65,7 +61,7 @@
      * @return  bool
      */
     public function isSubclassOf(Types $t) {
-      return FALSE;
+      return false;
     }
 
     /**
@@ -74,17 +70,17 @@
      * @return  bool
      */
     public function isEnumerable() {
-      return FALSE;
+      return false;
     }
 
     /**
-     * Returns the enumerator for this class or NULL if none exists.
+     * Returns the enumerator for this class or null if none exists.
      *
      * @see     php://language.oop5.iterations
      * @return  xp.compiler.types.Enumerator
      */
     public function getEnumerator() {
-      return NULL;
+      return null;
     }
 
     /**
@@ -93,7 +89,7 @@
      * @return  bool
      */
     public function hasConstructor() {
-      return FALSE;
+      return false;
     }
 
     /**
@@ -102,7 +98,7 @@
      * @return  xp.compiler.types.Constructor
      */
     public function getConstructor() {
-      return NULL;
+      return null;
     }
 
     /**
@@ -112,7 +108,7 @@
      * @return  bool
      */
     public function hasMethod($name) {
-      return FALSE;
+      return false;
     }
 
     /**
@@ -122,7 +118,7 @@
      * @return  xp.compiler.types.Method
      */
     public function getMethod($name) {
-      return NULL;
+      return null;
     }
 
     /**
@@ -141,7 +137,7 @@
      * @return  bool
      */
     public function hasOperator($symbol) {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -151,7 +147,7 @@
      * @return  xp.compiler.types.Operator
      */
     public function getOperator($symbol) {
-      return NULL;
+      return null;
     }
 
     /**
@@ -161,7 +157,7 @@
      * @return  bool
      */
     public function hasField($name) {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -171,7 +167,7 @@
      * @return  xp.compiler.types.Field
      */
     public function getField($name) {
-      return NULL;
+      return null;
     }
 
     /**
@@ -181,7 +177,7 @@
      * @return  bool
      */
     public function hasProperty($name) {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -191,7 +187,7 @@
      * @return  xp.compiler.types.Property
      */
     public function getProperty($name) {
-      return NULL;
+      return null;
     }
 
     /**
@@ -201,7 +197,7 @@
      * @return  bool
      */
     public function hasConstant($name) {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -211,7 +207,7 @@
      * @return  xp.compiler.types.Constant
      */
     public function getConstant($name) {
-      return NULL;
+      return null;
     }
 
     /**
@@ -220,7 +216,7 @@
      * @return  bool
      */
     public function hasIndexer() {
-      return FALSE;
+      return false;
     }
 
     /**
@@ -229,7 +225,7 @@
      * @return  xp.compiler.types.Indexer
      */
     public function getIndexer() {
-      return NULL;
+      return null;
     }
 
     /**

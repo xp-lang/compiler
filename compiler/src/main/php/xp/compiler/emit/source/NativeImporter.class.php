@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   $package= 'xp.compiler.emit.source';
   
@@ -14,7 +10,7 @@
    * @test    xp://net.xp_lang.tests.SourceNativeImporterTest
    */
   class xp·compiler·emit·source·NativeImporter extends NativeImporter {
-    protected static $coreExtAvailable= FALSE;
+    protected static $coreExtAvailable= false;
     
     static function __static() {
       self::$coreExtAvailable= extension_loaded('core');
@@ -34,7 +30,7 @@
       } catch (ReflectionException $e) {
         throw new IllegalArgumentException('Extension '.$extension.' does not exist');
       }
-      return array(0 => array($extension => TRUE));
+      return array(0 => array($extension => true));
     }
     
     /**
@@ -52,7 +48,7 @@
         $f= $r->getFunctions(); 
         if (isset($f[$func->getName()])) return $r;
       }
-      return NULL;
+      return null;
     }
 
     /**
@@ -65,7 +61,7 @@
      */
     public function importSelected($extension, $function) {
       if ('core' === $extension && !self::$coreExtAvailable) {
-        $e= NULL;
+        $e= null;
       } else {
         try {
           $e= new ReflectionExtension($extension);
@@ -81,7 +77,7 @@
       if ($e != ($fe= $this->functionsExtension($f))) {
         throw new IllegalArgumentException('Function '.$function.' is not inside extension '.$extension.' (but '.($fe ? $fe->getName() : '(n/a)').')');
       }
-      return array($function => TRUE);
+      return array($function => true);
     }
 
     /**
@@ -98,7 +94,7 @@
       } else if ($list= get_extension_funcs($extension)) {
         return in_array($function, $list);
       } else {
-        return FALSE;
+        return false;
       }
     }
     

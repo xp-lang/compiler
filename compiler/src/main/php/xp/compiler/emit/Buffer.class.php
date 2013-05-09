@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   $package= 'xp.compiler.emit';
 
@@ -11,7 +7,7 @@
    *
    * @test  xp://net.xp_lang.tests.BufferTest
    */
-  class xp·compiler·emit·Buffer extends Object {
+  class xp·compiler·emit·Buffer extends \lang\Object {
     protected $source= '';
     public $line= 1;
     

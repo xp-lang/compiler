@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses('xp.compiler.checks.Check', 'xp.compiler.ast.RoutineNode');
 
@@ -11,7 +7,7 @@
    *
    * @test    xp://net.xp_lang.tests.checks.RoutinesVerificationTest
    */
-  class RoutinesVerification extends Object implements Check {
+  class RoutinesVerification extends \lang\Object implements Check {
 
     /**
      * Return node this check works on
@@ -28,7 +24,7 @@
      * @return  bool
      */
     public function defer() {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -38,11 +34,11 @@
      * @param   xp.compiler.types.Scope scope
      * @return  bool
      */
-    public function verify(xp·compiler·ast·Node $node, Scope $scope) {
+    public function verify(Node $node, Scope $scope) {
       $routine= cast($node, 'xp.compiler.ast.RoutineNode');
 
       $qname= $scope->declarations[0]->name->compoundName().'::'.$routine->getName();
-      $empty= $routine->body === NULL;
+      $empty= $routine->body === null;
       if ($scope->declarations[0] instanceof InterfaceNode) {
         if (!$empty) {
           return array('R403', 'Interface methods may not have a body '.$qname);

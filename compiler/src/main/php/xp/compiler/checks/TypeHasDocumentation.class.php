@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses('xp.compiler.checks.Check', 'xp.compiler.ast.TypeDeclarationNode');
 
@@ -12,7 +8,7 @@
    *
    * @test    xp://tests.checks.TypeHasDocumentationTest
    */
-  class TypeHasDocumentation extends Object implements Check {
+  class TypeHasDocumentation extends \lang\Object implements Check {
 
     /**
      * Return node this check works on
@@ -29,7 +25,7 @@
      * @return  bool
      */
     public function defer() {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -39,7 +35,7 @@
      * @param   xp.compiler.types.Scope scope
      * @return  bool
      */
-    public function verify(xp·compiler·ast·Node $node, Scope $scope) {
+    public function verify(Node $node, Scope $scope) {
       $decl= cast($node, 'xp.compiler.ast.TypeDeclarationNode');
       if (!isset($decl->comment) && !$decl->synthetic) {
         return array('D201', 'No api doc for type '.$decl->name->compoundName());

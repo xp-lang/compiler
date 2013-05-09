@@ -11,7 +11,7 @@
    *
    * @test    xp://tests.checks.MemberRedeclarationCheckTest
    */
-  class MemberRedeclarationCheck extends Object implements Check {
+  class MemberRedeclarationCheck extends \lang\Object implements Check {
 
     /**
      * Return node this check works on
@@ -28,7 +28,7 @@
      * @return  bool
      */
     public function defer() {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -38,7 +38,7 @@
      * @param   xp.compiler.types.Scope scope
      * @return  bool
      */
-    public function verify(xp·compiler·ast·Node $node, Scope $scope) {
+    public function verify(Node $node, Scope $scope) {
       $type= cast($node, 'xp.compiler.ast.TypeDeclarationNode');
       if (!$type->body) return;   // Short-circuit
 
@@ -49,7 +49,7 @@
         if (isset($index[$key])) {
           return array('C409', 'Cannot redeclare '.$qname.'::'.$key);
         }
-        $index[$key]= TRUE;
+        $index[$key]= true;
       }
     }
   }

@@ -15,8 +15,8 @@
    *
    * @see   xp://xp.compiler.diagnostic.DiagnosticListener
    */
-  class VerboseDiagnosticListener extends Object implements DiagnosticListener {
-    protected $writer= NULL;
+  class VerboseDiagnosticListener extends \lang\Object implements DiagnosticListener {
+    protected $writer= null;
 
     /**
      * (Insert method's description here)
@@ -104,8 +104,8 @@
       // Summary
       $this->writer->writeLinef(
         'Memory used: %.2f kB (%.2f kB peak)',
-        memory_get_usage(TRUE) / 1024,
-        memory_get_peak_usage(TRUE) / 1024
+        memory_get_usage(true) / 1024,
+        memory_get_peak_usage(true) / 1024
       );
       $this->writer->writeLinef(
         'Time taken: %.2f seconds (%.3f avg)',

@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses('xp.compiler.types.Types');
 
@@ -12,7 +8,7 @@
    * @test  xp://net.xp_lang.tests.types.GenericTypeTest
    */
   class GenericType extends Types {
-    protected $definition= NULL;
+    protected $definition= null;
     protected $components= array();
     protected $placeholders= array();
     
@@ -69,7 +65,7 @@
     protected function rewriteAll(array $types) {
       $result= array();
       foreach ($types as $type) {
-        $result[]= $type ? $this->rewrite($type) : NULL;
+        $result[]= $type ? $this->rewrite($type) : null;
       }
       return $result;
     }
@@ -122,7 +118,7 @@
      * @param   bool base
      * @return  string
      */
-    public function literal($base= FALSE) {
+    public function literal($base= false) {
       if ($base) {    // Only base type, for e.g. extends and implements
         return $this->definition->literal();
       }
@@ -162,7 +158,7 @@
     }
 
     /**
-     * Returns the enumerator for this class or NULL if none exists.
+     * Returns the enumerator for this class or null if none exists.
      *
      * @see     php://language.oop5.iterations
      * @return  xp.compiler.types.Enumerator
@@ -207,7 +203,7 @@
      * @return  xp.compiler.types.TypeName
      */
     protected function typeNameOf($t) {
-      if ('mixed' === $t || '*' === $t || NULL === $t || 'resource' === $t) {
+      if ('mixed' === $t || '*' === $t || null === $t || 'resource' === $t) {
         return TypeName::$VAR;
       } else if (0 == strncmp($t, 'array', 5)) {
         return new TypeName('var[]');
@@ -222,12 +218,12 @@
      * @return  xp.compiler.types.Method
      */
     public function getMethod($name) {
-      if (NULL !== ($method= $this->definition->getMethod($name))) {
-        $method->returns= $method->returns ? $this->rewrite($method->returns) : NULL;
+      if (null !== ($method= $this->definition->getMethod($name))) {
+        $method->returns= $method->returns ? $this->rewrite($method->returns) : null;
         $method->parameters= $this->rewriteAll($method->parameters);
         return $method;
       }
-      return NULL;
+      return null;
     }
 
     /**
@@ -334,12 +330,12 @@
      * @return  xp.compiler.types.Indexer
      */
     public function getIndexer() {
-      if (NULL !== ($indexer= $this->definition->getIndexer())) {
+      if (null !== ($indexer= $this->definition->getIndexer())) {
         $indexer->type= $this->rewrite($indexer->type);
         $indexer->parameter= $this->rewrite($indexer->parameter);
         return $indexer;
       }
-      return NULL;
+      return null;
     }
 
     /**

@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   /**
    * Imports native functions. Implementations are constructed inside the 
@@ -10,7 +6,7 @@
    *
    * @see   xp://xp.compiler.emit.source.NativeImporter
    */
-  abstract class NativeImporter extends Object {
+  abstract class NativeImporter extends \lang\Object {
     
     /**
      * Import all functions from a given extension

@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   /**
    * String emittance utilities
@@ -21,7 +17,7 @@
    *
    * @see http://java.sun.com/docs/books/jls/third_edition/html/lexical.html#3.10.6
    */
-  class Strings extends Object {
+  class Strings extends \lang\Object {
     
     /**
      * Expand escape sequences inside a given string and return it
@@ -35,7 +31,7 @@
 
       $offset= 0;
       $out= '';
-      while (FALSE !== ($p= strpos($in, '\\', $offset))) {
+      while (false !== ($p= strpos($in, '\\', $offset))) {
         $out.= substr($in, $offset, $p- $offset);
         $offset= $p+ 1;
         if ($offset >= $s || '\\' == $in{$offset}) {

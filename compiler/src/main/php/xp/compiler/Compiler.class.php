@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses(
     'xp.compiler.emit.Emitter',
@@ -17,8 +13,8 @@
    * Compiler
    *
    */
-  class Compiler extends Object implements Traceable {
-    protected $cat= NULL;
+  class Compiler extends \lang\Object implements Traceable {
+    protected $cat= null;
   
     /**
      * Compile a set of files
@@ -27,7 +23,7 @@
      * @param   xp.compiler.diagnostic.DiagnosticListener listener
      * @param   xp.compiler.io.FileManager manager
      * @param   xp.compiler.emit.Emitter emitter
-     * @return  bool success if all files compiled correctly, TRUE, FALSE otherwise
+     * @return  bool success if all files compiled correctly, true, false otherwise
      */
     public function compile(array $sources, DiagnosticListener $listener, FileManager $manager, Emitter $emitter) {
       $emitter->setTrace($this->cat);

@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses(
     'io.streams.OutputStreamWriter', 
@@ -15,13 +11,13 @@
    *
    * @see   xp://xp.compiler.diagnostic.DiagnosticListener
    */
-  class DefaultDiagnosticListener extends Object implements DiagnosticListener {
+  class DefaultDiagnosticListener extends \lang\Object implements DiagnosticListener {
     protected
-      $writer    = NULL,
+      $writer    = null,
       $started   = 0,
       $failed    = 0,
       $succeeded = 0,
-      $timer     = NULL,
+      $timer     = null,
       $messages  = array();
     
     /**
@@ -125,8 +121,8 @@
       $this->writer->writeLinef('Done: %d/%d compiled, %d failed', $this->succeeded, $this->started, $this->failed);
       $this->writer->writeLinef(
         'Memory used: %.2f kB (%.2f kB peak)',
-        memory_get_usage(TRUE) / 1024,
-        memory_get_peak_usage(TRUE) / 1024
+        memory_get_usage(true) / 1024,
+        memory_get_peak_usage(true) / 1024
       );
       $this->writer->writeLinef(
         'Time taken: %.2f seconds (%.3f avg)',

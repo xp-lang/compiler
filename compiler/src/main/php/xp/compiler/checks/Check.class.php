@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses('xp.compiler.ast.Node', 'xp.compiler.types.Scope');
   
@@ -33,6 +29,6 @@
      * @param   xp.compiler.types.Scope scope
      * @return  bool
      */
-    public function verify(xp·compiler·ast·Node $node, Scope $scope);
+    public function verify(Node $node, Scope $scope);
   }
 ?>

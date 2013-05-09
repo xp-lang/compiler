@@ -11,7 +11,7 @@
    *
    * @see   xp://xp.compiler.diagnostic.DiagnosticListener
    */
-  class NullDiagnosticListener extends Object implements DiagnosticListener {
+  class NullDiagnosticListener extends \lang\Object implements DiagnosticListener {
 
     /**
      * Called when compilation starts

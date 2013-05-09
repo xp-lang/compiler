@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   /**
    * A compilation profile defines:
@@ -12,7 +8,7 @@
    *   <li>Optimizations to apply</li>
    * </ul>
    */
-  class CompilationProfile extends Object {
+  class CompilationProfile extends \lang\Object {
     public $warnings= array();
     public $errors= array();
     public $optimizations= array();

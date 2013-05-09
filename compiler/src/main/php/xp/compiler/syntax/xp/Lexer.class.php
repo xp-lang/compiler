@@ -98,11 +98,11 @@
       DELIMITERS = " ^|&?!.:;,@%~=<>(){}[]#+-*/\"'\r\n\t\$`";
 
     public
-      $fileName  = NULL;
+      $fileName  = null;
 
     protected
-      $comment   = NULL,
-      $tokenizer = NULL,
+      $comment   = null,
+      $tokenizer = null,
       $forward   = array();
 
     /**
@@ -113,9 +113,9 @@
      */
     public function __construct($input, $source) {
       if ($input instanceof InputStream) {
-        $this->tokenizer= new StreamTokenizer($input, self::DELIMITERS, TRUE);
+        $this->tokenizer= new StreamTokenizer($input, self::DELIMITERS, true);
       } else {
-        $this->tokenizer= new StringTokenizer($input, self::DELIMITERS, TRUE);
+        $this->tokenizer= new StringTokenizer($input, self::DELIMITERS, true);
       }
       $this->fileName= $source;
       $this->position= $this->forward= array(1, 1);   // Y, X
@@ -125,14 +125,14 @@
      * Create a new node 
      *
      * @param   xp.compiler.ast.Node
-     * @param   bool comment default FALSE whether to pass comment
+     * @param   bool comment default false whether to pass comment
      * @return  xp.compiler.ast.Node
      */
-    public function create($n, $comment= FALSE) {
+    public function create($n, $comment= false) {
       $n->position= $this->position;
       if ($comment && $this->comment) {
         $n->comment= $this->comment;
-        $this->comment= NULL;
+        $this->comment= null;
       }
       return $n;
     }
@@ -191,7 +191,7 @@
       while ($hasMore= $this->tokenizer->hasMoreTokens()) {
         $this->position= $this->forward;
         $token= $this->nextToken();
-        if (FALSE !== strpos(" \n\r\t", $token)) continue;    // Skip whitespace
+        if (false !== strpos(" \n\r\t", $token)) continue;    // Skip whitespace
 
         $length= strlen($token);
         if ("'" === $token{0} || '"' === $token{0}) {
@@ -256,7 +256,7 @@
           }
         } else if (isset(self::$lookahead[$token])) {
           $ahead= $token;
-          $p= TRUE;
+          $p= true;
           foreach (self::$lookahead[$token] as $candidate => $id) {
             $l= strlen($candidate);
             while (strlen($ahead) < $l) {
@@ -267,7 +267,7 @@
               $this->token= $id;
               $this->value= $candidate;
               $this->pushBack(substr($ahead, $l));
-              $p= FALSE;
+              $p= false;
               break;
             }
           }
@@ -276,7 +276,7 @@
             $this->token= ord($token);
             $this->value= $token;
           }
-        } else if (FALSE !== strpos(self::DELIMITERS, $token) && 1 === $length) {
+        } else if (false !== strpos(self::DELIMITERS, $token) && 1 === $length) {
           $this->token= ord($token);
           $this->value= $token;
         } else if (0 === strcspn($token, '0123456789')) {     // Numbers, starting with 0..9
@@ -304,7 +304,7 @@
               }
             }
           } else {                                            // Integers, no "."
-            $p= TRUE;
+            $p= true;
             if (1 === $length) {
               $this->token= xp·compiler·syntax·xp·Parser::T_NUMBER;
               $this->value= $token;
@@ -324,7 +324,7 @@
               if ('+' === $ahead{0} || '-' === $ahead{0}) {
                 $exponent= $ahead.$this->nextToken();
                 $format= '%d%*1[eE]'.$ahead.'%*d';
-                $p= FALSE;
+                $p= false;
               } else {
                 $format= '%d%*1[eE]%*d';
                 $exponent= '';
@@ -352,7 +352,7 @@
       }
       
       // DEBUG fprintf(STDERR, "@ %3d,%3d: %d `%s`\n", $this->position[1], $this->position[0], $this->token, addcslashes($this->value, "\0..\17"));
-      return -1 === $this->token ? FALSE : $hasMore;
+      return -1 === $this->token ? false : $hasMore;
     }
   }
 ?>

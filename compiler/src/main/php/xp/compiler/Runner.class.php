@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   $package= 'xp.compiler';
 
@@ -71,7 +67,7 @@
    *   </li>
    * </ul>
    */
-  class xp·compiler·Runner extends Object {
+  class xp·compiler·Runner extends \lang\Object {
     protected static $line;
     
     static function __static() {
@@ -118,9 +114,9 @@
      * @return  xp.compiler.io.FileSource[]
      */
     protected static function fromFolder($uri, $recursive) {
-      static $filter= NULL;
+      static $filter= null;
 
-      if (NULL === $filter) {
+      if (null === $filter) {
         $filter= new AnyOfFilter();
         foreach (Syntax::available() as $ext => $syntax) {
           $filter->add(new ExtensionEqualsFilter($ext));
@@ -181,9 +177,9 @@
           $folder->exists() || $folder->create();
           $manager->setOutput($folder);
         } else if ('-N' == $args[$i]) {
-          $files= array_merge($files, self::fromFolder($args[++$i], FALSE));
+          $files= array_merge($files, self::fromFolder($args[++$i], false));
         } else if (is_dir($args[$i])) {
-          $files= array_merge($files, self::fromFolder($args[$i], TRUE));
+          $files= array_merge($files, self::fromFolder($args[$i], true));
         } else {
           $files[]= new FileSource(new File($args[$i]));
         }

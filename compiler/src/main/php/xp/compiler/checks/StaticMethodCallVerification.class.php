@@ -28,7 +28,7 @@
      * @return  bool
      */
     public function defer() {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -38,7 +38,7 @@
      * @param   xp.compiler.types.Scope scope
      * @return  bool
      */
-    public function verify(xp·compiler·ast·Node $node, Scope $scope) {
+    public function verify(Node $node, Scope $scope) {
       $call= cast($node, 'xp.compiler.ast.StaticMethodCallNode');
       return $this->verifyMethod($call->type, $call->name, $scope);
     }

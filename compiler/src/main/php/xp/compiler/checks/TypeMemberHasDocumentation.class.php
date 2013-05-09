@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses('xp.compiler.checks.Check', 'xp.compiler.ast.RoutineNode');
 
@@ -11,7 +7,7 @@
    * that is: methods and constructors.
    *
    */
-  class TypeMemberHasDocumentation extends Object implements Check {
+  class TypeMemberHasDocumentation extends \lang\Object implements Check {
 
     /**
      * Return node this check works on
@@ -28,7 +24,7 @@
      * @return  bool
      */
     public function defer() {
-      return FALSE;
+      return false;
     }
    
     /**
@@ -38,7 +34,7 @@
      * @param   xp.compiler.types.Scope scope
      * @return  bool
      */
-    public function verify(xp·compiler·ast·Node $node, Scope $scope) {
+    public function verify(Node $node, Scope $scope) {
       $member= cast($node, 'xp.compiler.ast.RoutineNode');
       if (!isset($member->comment) && !$scope->declarations[0]->synthetic) {
         return array('D201', 'No api doc for member '.$scope->declarations[0]->name->compoundName().'::'.$member->getName());

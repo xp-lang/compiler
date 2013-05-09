@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses('xp.compiler.io.Source', 'io.streams.MemoryInputStream');
 
@@ -11,10 +7,10 @@
    *
    * @test    xp://net.xp_lang.tests.StringSourceTest
    */
-  class StringSource extends Object implements xp·compiler·io·Source {
-    protected $source= NULL;
-    protected $name= NULL;
-    protected $syntax= NULL;
+  class StringSource extends \lang\Object implements xp·compiler·io·Source {
+    protected $source= null;
+    protected $name= null;
+    protected $syntax= null;
     
     /**
      * Constructor
@@ -22,10 +18,10 @@
      * @param   string source
      * @param   xp.compiler.Syntax s Syntax to use
      */
-    public function __construct($source, Syntax $syntax, $name= NULL) {
+    public function __construct($source, Syntax $syntax, $name= null) {
       $this->source= $source;
       $this->syntax= $syntax;
-      $this->name= NULL === $name ? 'Compiled source #'.crc32($source) : $name;
+      $this->name= null === $name ? 'Compiled source #'.crc32($source) : $name;
     }
     
     /**

@@ -11,7 +11,7 @@
    *
    * @test    xp://net.xp_lang.tests.checks.MemberAccessVerificationTest
    */
-  class MemberAccessVerification extends Object implements Check {
+  class MemberAccessVerification extends \lang\Object implements Check {
 
     /**
      * Return node this check works on
@@ -28,7 +28,7 @@
      * @return  bool
      */
     public function defer() {
-      return TRUE;
+      return true;
     }
     
     /**
@@ -38,7 +38,7 @@
      * @param   xp.compiler.types.Scope scope
      * @return  bool
      */
-    public function verify(xp·compiler·ast·Node $node, Scope $scope) {
+    public function verify(Node $node, Scope $scope) {
       $access= cast($node, 'xp.compiler.ast.MemberAccessNode');
 
       // Verify type

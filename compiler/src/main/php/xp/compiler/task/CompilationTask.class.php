@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses(
     'xp.compiler.Syntax',
@@ -22,13 +18,13 @@
    * @see   xp://xp.compiler.Compiler#compile
    * @test  xp://net.xp_lang.tests.integration.CircularDependencyTest
    */
-  class CompilationTask extends Object {
+  class CompilationTask extends \lang\Object {
     protected
-      $source     = NULL,
-      $manager    = NULL,
-      $listener   = NULL,
-      $emitter    = NULL,
-      $done       = NULL;
+      $source     = null,
+      $manager    = null,
+      $listener   = null,
+      $emitter    = null,
+      $done       = null;
 
     /**
      * Constructor
@@ -44,7 +40,7 @@
       DiagnosticListener $listener, 
       FileManager $manager, 
       Emitter $emitter,
-      $done= NULL
+      $done= null
     ) {
       $this->source= $source;
       $this->manager= $manager;

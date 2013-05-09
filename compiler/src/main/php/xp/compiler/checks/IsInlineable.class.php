@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses('xp.compiler.checks.Check', 'xp.compiler.ast.MethodNode', 'xp.compiler.ast.ReturnNode');
 
@@ -12,7 +8,7 @@
    * @see   xp://xp.compiler.optimize.InliningOptimization
    * @test  xp://net.xp_lang.tests.checks.IsInlineableTest
    */
-  class IsInlineable extends Object implements Check {
+  class IsInlineable extends \lang\Object implements Check {
 
     /**
      * Return node this check works on
@@ -29,7 +25,7 @@
      * @return  bool
      */
     public function defer() {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -39,7 +35,7 @@
      * @param   xp.compiler.types.Scope scope
      * @return  bool
      */
-    public function verify(xp·compiler·ast·Node $node, Scope $scope) {
+    public function verify(Node $node, Scope $scope) {
       $m= cast($node, 'xp.compiler.ast.MethodNode');
       if (!($m->modifiers & MODIFIER_INLINE)) return;  // Ignore these
       
@@ -54,7 +50,7 @@
       }
       
       // OK
-      return NULL;
+      return null;
     }
   }
 ?>

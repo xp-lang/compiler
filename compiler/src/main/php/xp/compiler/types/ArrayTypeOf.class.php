@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses('xp.compiler.types.Types');
 
@@ -12,7 +8,7 @@
    * @test  xp://net.xp_lang.tests.types.ArrayTypeOfTest
    */
   class ArrayTypeOf extends Types {
-    protected $component= NULL;
+    protected $component= null;
     
     /**
      * Constructor
@@ -40,7 +36,7 @@
      */
     public function parent() {
       $parent= $this->component->parent();
-      return $parent ? new self($parent) : NULL;
+      return $parent ? new self($parent) : null;
     }
 
     /**
@@ -77,17 +73,17 @@
      * @return  bool
      */
     public function isEnumerable() {
-      return TRUE;
+      return true;
     }
 
     /**
-     * Returns the enumerator for this class or NULL if none exists.
+     * Returns the enumerator for this class or null if none exists.
      *
      * @see     php://language.oop5.iterations
      * @return  xp.compiler.types.Enumerator
      */
     public function getEnumerator() {
-      $e= new xp·compiler·types·Enumerator();
+      $e= new Enumerator();
       $e->key= new TypeName('int');
       $e->value= new TypeName($this->component->name());
       return $e;
@@ -99,7 +95,7 @@
      * @return  bool
      */
     public function hasConstructor() {
-      return FALSE;
+      return false;
     }
 
     /**
@@ -108,7 +104,7 @@
      * @return  xp.compiler.types.Constructor
      */
     public function getConstructor() {
-      return NULL;
+      return null;
     }
 
     /**
@@ -118,7 +114,7 @@
      * @return  bool
      */
     public function hasMethod($name) {
-      return FALSE;
+      return false;
     }
 
     /**
@@ -128,7 +124,7 @@
      * @return  xp.compiler.types.Method
      */
     public function getMethod($name) {
-      return NULL;
+      return null;
     }
 
     /**
@@ -147,7 +143,7 @@
      * @return  bool
      */
     public function hasOperator($symbol) {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -157,7 +153,7 @@
      * @return  xp.compiler.types.Operator
      */
     public function getOperator($symbol) {
-      return NULL;
+      return null;
     }
 
     /**
@@ -167,7 +163,7 @@
      * @return  bool
      */
     public function hasField($name) {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -177,7 +173,7 @@
      * @return  xp.compiler.types.Field
      */
     public function getField($name) {
-      return NULL;
+      return null;
     }
 
     /**
@@ -187,7 +183,7 @@
      * @return  bool
      */
     public function hasProperty($name) {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -197,7 +193,7 @@
      * @return  xp.compiler.types.Property
      */
     public function getProperty($name) {
-      return NULL;
+      return null;
     }
 
     /**
@@ -207,7 +203,7 @@
      * @return  bool
      */
     public function hasConstant($name) {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -217,7 +213,7 @@
      * @return  xp.compiler.types.Constant
      */
     public function getConstant($name) {
-      return NULL;
+      return null;
     }
 
     /**
@@ -226,7 +222,7 @@
      * @return  bool
      */
     public function hasIndexer() {
-      return TRUE;
+      return true;
     }
 
     /**
@@ -235,7 +231,7 @@
      * @return  xp.compiler.types.Indexer
      */
     public function getIndexer() {
-      $i= new xp·compiler·types·Indexer();
+      $i= new Indexer();
       $i->parameter= new TypeName('int');
       $i->type= new TypeName($this->component->name());
       return $i;

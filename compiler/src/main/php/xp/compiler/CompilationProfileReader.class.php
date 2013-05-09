@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses('util.Properties', 'xp.compiler.CompilationProfile');
 
@@ -11,7 +7,7 @@
    *
    * @test    xp://net.xp_lang.tests.CompilationProfileReaderTest
    */
-  class CompilationProfileReader extends Object {
+  class CompilationProfileReader extends \lang\Object {
     protected $sources= array();
     
     /**
@@ -35,7 +31,7 @@
           $profile->addWarning(XPClass::forName($class)->newInstance());
         }
         foreach ($source->readArray('errors', 'class') as $class) {
-          $profile->addError(XPClass::forName($class)->newInstance(), TRUE);
+          $profile->addError(XPClass::forName($class)->newInstance(), true);
         }
         foreach ($source->readArray('optimizations', 'class') as $class) {
           $profile->addOptimization(XPClass::forName($class)->newInstance());

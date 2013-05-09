@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
     uses(
       'lang.IClassLoader',
@@ -17,9 +13,9 @@
    * JIT compiling classloader
    *
    */
-  class JitClassLoader extends Object implements IClassLoader {
-    protected $filemanager= NULL;
-    protected $emitter= NULL;
+  class JitClassLoader extends \lang\Object implements IClassLoader {
+    protected $filemanager= null;
+    protected $emitter= null;
     protected $sources= array();
     
     /**
@@ -39,11 +35,11 @@
      * @return  bool
      */
     public function providesClass($class) {
-      if ('' == $class || NULL === ($source= $this->filemanager->findClass($class))) return FALSE;
+      if ('' == $class || null === ($source= $this->filemanager->findClass($class))) return false;
       
       // Cache information for use in loadClass0()
       $this->sources[$class]= $source;
-      return TRUE;
+      return true;
     }
     
     /**
@@ -53,7 +49,7 @@
      * @return  bool
      */
     public function providesResource($filename) {
-      return FALSE;
+      return false;
     }
 
     /**
@@ -63,7 +59,7 @@
      * @return  bool
      */
     public function providesPackage($package) {
-      return FALSE;
+      return false;
     }
 
     /**

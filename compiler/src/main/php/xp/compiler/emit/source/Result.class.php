@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   $package= 'xp.compiler.emit.source';
   
@@ -12,9 +8,9 @@
    * Compilation result from source emitter
    *
    */
-  class xp搾ompiler搪mit新ource愛esult extends Object implements EmitterResult {
-    protected $source= NULL;
-    protected $type= NULL;
+  class xp搾ompiler搪mit新ource愛esult extends \lang\Object implements EmitterResult {
+    protected $source= null;
+    protected $type= null;
     
     /**
      * Constructor.

@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses('xp.compiler.checks.Check', 'xp.compiler.ast.VariableNode');
 
@@ -10,7 +6,7 @@
    * Check for unitialized variables
    *
    */
-  class UninitializedVariables extends Object implements Check {
+  class UninitializedVariables extends \lang\Object implements Check {
 
     /**
      * Return node this check works on
@@ -27,7 +23,7 @@
      * @return  bool
      */
     public function defer() {
-      return FALSE;
+      return false;
     }
     
     /**
@@ -37,7 +33,7 @@
      * @param   xp.compiler.types.Scope scope
      * @return  bool
      */
-    public function verify(xp·compiler·ast·Node $node, Scope $scope) {
+    public function verify(Node $node, Scope $scope) {
       $v= cast($node, 'xp.compiler.ast.VariableNode');
       if (!$scope->getType($v)) {
         return array('V404', 'Uninitialized variable '.$v->name);

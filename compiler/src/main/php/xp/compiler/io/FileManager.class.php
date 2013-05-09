@@ -1,8 +1,4 @@
 <?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
 
   uses(
     'xp.compiler.Syntax',
@@ -20,8 +16,8 @@
    *
    * @test    xp://net.xp_lang.tests.FileManagerTest
    */
-  class FileManager extends Object {
-    protected $output= NULL;
+  class FileManager extends \lang\Object {
+    protected $output= null;
     protected $sourcePaths= array();
     
     /**
@@ -86,7 +82,7 @@
           return new FileSource(new File($uri), $syntax);   // FIXME: Use class loader / resources
         }
       }
-      return NULL;
+      return null;
     }
 
     /**
@@ -101,7 +97,7 @@
         if (!is_dir($uri= $path.$name)) continue;
         return $qualified;
       }
-      return NULL;
+      return null;
     }
   
     /**
@@ -111,8 +107,8 @@
      * @param   xp.compiler.Syntax s Syntax to use, determined via source file's syntax otherwise
      * @return  xp.compiler.ast.ParseTree
      */
-    public function parseFile(xp·compiler·io·Source $in, Syntax $s= NULL) {
-      if (NULL === $s) {
+    public function parseFile(xp·compiler·io·Source $in, Syntax $s= null) {
+      if (null === $s) {
         $s= $in->getSyntax();
       }
       return $s->parse($in->getInputStream(), $in->getURI());
@@ -160,7 +156,7 @@
      * @param   xp.compiler.io.Source source
      * @return  io.File target
      */
-    public function getTarget($r, xp·compiler·io·Source $source= NULL) {
+    public function getTarget($r, xp·compiler·io·Source $source= null) {
       $mapped= strtr($r->type()->name(), '.', DIRECTORY_SEPARATOR);
       if ($this->output) {
         $base= $this->output;
