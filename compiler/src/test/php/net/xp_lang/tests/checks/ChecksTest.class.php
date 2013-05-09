@@ -25,7 +25,7 @@ class ChecksTest extends \unittest\TestCase {
         return false; 
       }
 
-      public function verify(xp·compiler·ast·Node $in, Scope $scope) {
+      public function verify(\xp\compiler\ast\Node $in, \xp\compiler\types\Scope $scope) {
         return array("C100", "Test");
       }
     }');

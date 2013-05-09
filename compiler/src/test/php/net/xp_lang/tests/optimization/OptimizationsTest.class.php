@@ -20,7 +20,7 @@ class OptimizationsTest extends \unittest\TestCase {
         return XPClass::forName("xp.compiler.ast.StringNode"); 
       }
 
-      public function optimize(xp·compiler·ast·Node $in, Scope $scope, Optimizations $optimizations) {
+      public function optimize(\xp\compiler\ast\Node $in, \xp\compiler\types\Scope $scope, Optimizations $optimizations) {
         return new StringNode("Optimized: ".$in->value);
       }
     }');
