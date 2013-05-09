@@ -1,6 +1,7 @@
 <?php namespace xp\compiler\checks;
+
 /**
- * Verifies routines
+ * Verifies fields
  *
  * @test    xp://net.xp_lang.tests.checks.FieldsVerificationTest
  */
