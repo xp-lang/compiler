@@ -112,7 +112,7 @@ class InstanceCreationTest extends ExecutionTest {
    *
    * @see   xp://net.xp_lang.tests.execution.source.Filter
    */
-  #[@test, @ignore('Syntax error, class created with namespace in declaration')]
+  #[@test]
   public function anonymousGenericInterfaceInstance() {
     $f= $this->run('return new net.xp_lang.tests.execution.source.Filter<string>() {
       public bool accept(string $e) {
