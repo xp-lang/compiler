@@ -1,91 +1,78 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace net\xp_lang\tests\integration;
 
-  uses(
-    'unittest.TestCase',
-    'lang.System',
-    'io.Folder',
-    'xp.compiler.emit.source.Emitter',
-    'xp.compiler.types.TaskScope',
-    'xp.compiler.diagnostic.NullDiagnosticListener',
-    'xp.compiler.io.FileManager',
-    'xp.compiler.task.CompilationTask'
-  );
+use xp\compiler\emit\source\Emitter;
+use xp\compiler\types\TaskScope;
+use xp\compiler\io\FileManager;
+use xp\compiler\io\FileSource;
+use xp\compiler\diagnostic\NullDiagnosticListener;
+use xp\compiler\task\CompilationTask;
+use xp\compiler\Syntax;
+
+/**
+ * TestCase
+ *
+ * @see      xp://xp.compiler.task.CompilationTask
+ */
+class CircularDependencyTest extends \unittest\TestCase {
+  protected $emitter= null;
+  protected $files= null;
+  
+  /**
+   * Sets up test case
+   */
+  public function setUp() {
+    $this->emitter= new Emitter();
+    $this->files= new FileManager();
+    $this->files->addSourcePath(dirname(__FILE__).'/src');    // FIXME: ClassPathManager?
+    $this->files->setOutput(new \io\Folder(\lang\System::tempDir()));
+  }
+  
+  /**
+   * Compile source
+   *
+   * @param   string resource
+   * @return  xp.compiler.types.Types
+   * @throws  xp.compiler.CompilationException
+   */
+  protected function compileSource($resource) {
+    $task= new CompilationTask(
+      new FileSource($this->getClass()->getPackage()->getPackage('src')->getResourceAsStream($resource)),
+      new NullDiagnosticListener(),
+      $this->files,
+      $this->emitter
+    );
+    return $task->run();
+  }
+  
+  /**
+   * Tears down 
+   */
+  public function tearDown() {
+    delete($this->emitter);
+    delete($this->files);
+  }
+  
+  /**
+   * Test class A which requires class B which requires class A
+   */
+  #[@test]
+  public function compileA() {
+    $this->compileSource('A.xp')->name();
+  }
 
   /**
-   * TestCase
-   *
-   * @see      xp://xp.compiler.task.CompilationTask
+   * Test class B which requires class A
    */
-  class CircularDependencyTest extends TestCase {
-    protected $emitter= NULL;
-    protected $files= NULL;
-    
-    /**
-     * Sets up test case
-     *
-     */
-    public function setUp() {
-      $this->emitter= new xp·compiler·emit·source·Emitter();
-      $this->files= new FileManager();
-      $this->files->addSourcePath(dirname(__FILE__).'/src');    // FIXME: ClassPathManager?
-      $this->files->setOutput(new Folder(System::tempDir()));
-    }
-    
-    /**
-     * Compile source
-     *
-     * @param   string resource
-     * @return  xp.compiler.types.Types
-     * @throws  xp.compiler.CompilationException
-     */
-    protected function compileSource($resource) {
-      $task= new CompilationTask(
-        new FileSource($this->getClass()->getPackage()->getPackage('src')->getResourceAsStream($resource)),
-        new NullDiagnosticListener(),
-        $this->files,
-        $this->emitter
-      );
-      return $task->run();
-    }
-    
-    /**
-     * Tears down 
-     *
-     */
-    public function tearDown() {
-      delete($this->emitter);
-      delete($this->files);
-    }
-    
-    /**
-     * Test class A which requires class B which requires class A
-     *
-     */
-    #[@test]
-    public function compileA() {
-      $this->compileSource('A.xp')->name();
-    }
-
-    /**
-     * Test class B which requires class A
-     *
-     */
-    #[@test]
-    public function compileB() {
-      $this->compileSource('B.xp')->name();
-    }
-
-    /**
-     * Test class C which requires class B and class A
-     *
-     */
-    #[@test]
-    public function compileC() {
-      $this->compileSource('C.xp')->name();
-    }
+  #[@test]
+  public function compileB() {
+    $this->compileSource('B.xp')->name();
   }
-?>
+
+  /**
+   * Test class C which requires class B and class A
+   */
+  #[@test]
+  public function compileC() {
+    $this->compileSource('C.xp')->name();
+  }
+}
