@@ -1,17 +1,18 @@
 <?php namespace xp\compiler\types;
 
 use util\collections\HashTable;
-use xp\compiler\ArrayNode;
-use xp\compiler\MapNode;
-use xp\compiler\StringNode;
-use xp\compiler\IntegerNode;
-use xp\compiler\HexNode;
-use xp\compiler\DecimalNode;
-use xp\compiler\NullNode;
-use xp\compiler\BooleanNode;
-use xp\compiler\BracedExpressionNode;
-use xp\compiler\ComparisonNode;
-use xp\compiler\InstanceCreationNode;
+use xp\compiler\ast\ArrayNode;
+use xp\compiler\ast\MapNode;
+use xp\compiler\ast\StringNode;
+use xp\compiler\ast\IntegerNode;
+use xp\compiler\ast\HexNode;
+use xp\compiler\ast\DecimalNode;
+use xp\compiler\ast\NullNode;
+use xp\compiler\ast\BooleanNode;
+use xp\compiler\ast\BracedExpressionNode;
+use xp\compiler\ast\ComparisonNode;
+use xp\compiler\ast\InstanceCreationNode;
+use xp\compiler\ast\Node;
 use lang\XPClass;
 use lang\ClassLoader;
 
