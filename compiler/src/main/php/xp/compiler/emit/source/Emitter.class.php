@@ -1894,7 +1894,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
     $c= new Constant();
     $c->type= new TypeName($this->resolveType($const->type)->name());
     $c->name= $const->name;
-    $c->value= $const->value instanceof Resolveable ? $const->value->resolve() : $const->value;
+    $c->value= $const->value instanceof \xp\compiler\ast\Resolveable ? $const->value->resolve() : $const->value;
     $this->types[0]->addConstant($c);
   }
   
