@@ -1210,7 +1210,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
       }
       
       $unique= new TypeName($parent->literal().'··'.uniqid());
-      $decl= new ClassNode(0, null, $unique, $p['parent'], $p['implements'], $new->body);
+      $decl= new \xp\compiler\ast\ClassNode(0, null, $unique, $p['parent'], $p['implements'], $new->body);
       $decl->synthetic= true;
       $generic && $decl->generic= $generic;
       $ptr= new TypeDeclaration(new ParseTree(null, array(), $decl), $parent);
@@ -1550,7 +1550,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
     }
     
     // Generate an anonymous lambda class
-    $decl= new ClassNode(0, null, $unique, null, null, array_merge($fields, array(
+    $decl= new \xp\compiler\ast\ClassNode(0, null, $unique, null, null, array_merge($fields, array(
       new \xp\compiler\ast\ConstructorNode(array(
         'parameters' => $cparameters,
         'body'       => $cstmt
@@ -2112,7 +2112,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
         }
         
         $unique= new TypeName($declaration->name->name.'··'.$member->name);
-        $decl= new ClassNode(0, null, $unique, $declaration->name, array(), $member->body);
+        $decl= new \xp\compiler\ast\ClassNode(0, null, $unique, $declaration->name, array(), $member->body);
         $decl->synthetic= true;
         $ptr= new TypeDeclaration(new ParseTree(null, array(), $decl), $thisType);
         $this->scope[0]->declarations[]= $decl;
