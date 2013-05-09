@@ -64,7 +64,7 @@ class MemberAccessVerification extends \lang\Object implements Check {
       ) {
         return array('T403', sprintf(
           'Accessing %s %s::$%s from %s',
-          implode(' ', Modifiers::namesOf($member->modifiers)),
+          implode(' ', \lang\reflect\Modifiers::namesOf($member->modifiers)),
           $target->name(),
           $member->name,
           $enclosing->name()
