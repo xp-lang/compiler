@@ -1,6 +1,8 @@
 <?php namespace xp\compiler\types;
 
 use util\collections\HashTable;
+use xp\compiler\types\Types;
+use xp\compiler\types\TypeName;
 use xp\compiler\ArrayNode;
 use xp\compiler\MapNode;
 use xp\compiler\StringNode;
@@ -12,6 +14,8 @@ use xp\compiler\BooleanNode;
 use xp\compiler\BracedExpressionNode;
 use xp\compiler\ComparisonNode;
 use xp\compiler\InstanceCreationNode;
+use lang\XPClass;
+use lang\ClassLoader;
 
 /**
  * Represents the current scope
@@ -249,7 +253,7 @@ abstract class Scope extends \lang\Object {
       ;
       try {
         $qualified= $this->task->locateClass($lookup, $name->name);
-      } catch (ElementNotFoundException $e) {
+      } catch (\lang\ElementNotFoundException $e) {
         throw new ResolveException('Cannot resolve '.$name->toString(), 423, $e);
       }
     }
@@ -260,21 +264,21 @@ abstract class Scope extends \lang\Object {
     // JitClassLoader?
     if (!$this->resolved->containsKey($qualified)) {
       if (
-        class_exists(xp::reflect($qualified), false) || 
-        interface_exists(xp::reflect($qualified), false) || 
+        class_exists(\xp::reflect($qualified), false) || 
+        interface_exists(\xp::reflect($qualified), false) || 
         ClassLoader::getDefault()->providesClass($qualified)
       ) {
         try {
           $this->resolved[$qualified]= new TypeReflection(XPClass::forName($qualified));
-        } catch (Throwable $e) {
+        } catch (\lang\Throwable $e) {
           throw new ResolveException('Class loader error for '.$name->toString().': '.$e->getMessage(), 507, $e);
         }
       } else {
         try {
           $type= $this->task->newSubTask($qualified)->run($this);
-        } catch (CompilationException $e) {
+        } catch (\xp\compiler\CompilationException $e) {
           throw new ResolveException('Cannot resolve '.$name->toString(), 424, $e);
-        } catch (Throwable $e) {
+        } catch (\lang\Throwable $e) {
           throw new ResolveException('Cannot resolve '.$name->toString(), 507, $e);
         }
         $this->resolved[$qualified]= $type;
