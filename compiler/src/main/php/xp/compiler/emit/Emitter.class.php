@@ -735,7 +735,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
       $pos= $context->position;
     } else {                      // Try to determine last context node from backtrace
       $pos= array(0, 0);
-      foreach (create(new Throwable(null))->getStackTrace() as $element) {
+      foreach (create(new \lang\Throwable(null))->getStackTrace() as $element) {
         if (
           'emit' == substr($element->method, 0, 4) &&
           sizeof($element->args) > 1 &&

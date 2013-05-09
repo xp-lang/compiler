@@ -22,6 +22,7 @@ use xp\compiler\ast\TypeDeclarationNode;
 use xp\compiler\ast\Resolveable;
 use xp\compiler\emit\Buffer;
 use lang\reflect\Modifiers;
+use lang\Throwable;
 
 /**
  * Emits sourcecode using PHP sourcecode
@@ -178,7 +179,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
       // @net.xp_lang.tests.integration.CircularDependencyTest
       try {
         $uses[]= $this->resolveType(new TypeName($type), false)->name();
-      } catch (\lang\Throwable $e) {
+      } catch (Throwable $e) {
         $this->error('0424', $e->toString());
       }
     }
