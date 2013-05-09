@@ -6,6 +6,11 @@ Version ?.?.?, released ????-??-??
 ----------------------------------
 Git commit: ?????
 
+Heads up!
+~~~~~~~~~
+- Converted the code base to namespaces
+  (friebe)
+
 RFCs
 ~~~~
 - Implemented RFC #0252: Fluent interface compact syntax
