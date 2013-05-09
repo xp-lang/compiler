@@ -2,7 +2,6 @@
 
 /**
  * Verifies properties
- *
  */
 class PropertiesVerification extends \lang\Object implements Check {
 
@@ -33,7 +32,7 @@ class PropertiesVerification extends \lang\Object implements Check {
    */
   public function verify(\xp\compiler\ast\Node $node, \xp\compiler\types\Scope $scope) {
     $routine= \cast($node, 'xp.compiler.ast.PropertyNode');
-    if ($scope->declarations[0] instanceof InterfaceNode) {
+    if ($scope->declarations[0] instanceof \xp\compiler\ast\InterfaceNode) {
       return array('I403', 'Interfaces may not have properties');
     }
   }
