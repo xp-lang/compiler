@@ -93,7 +93,7 @@ class Lexer extends \text\parser\generic\AbstractLexer {
    * @param   string source
    */
   public function __construct($input, $source) {
-    if ($input instanceof InputStream) {
+    if ($input instanceof \io\streams\InputStream) {
       $this->tokenizer= new StreamTokenizer($input, self::DELIMITERS, true);
     } else {
       $this->tokenizer= new StringTokenizer($input, self::DELIMITERS, true);
@@ -201,7 +201,7 @@ class Lexer extends \text\parser\generic\AbstractLexer {
         if ('"' === $token{0}) {
           try {
             $this->value= Strings::expandEscapesIn($this->value);
-          } catch (FormatException $e) {
+          } catch (\lang\FormatException $e) {
             $this->raise('lang.FormatException', $e->getMessage());
           }
         } else {
