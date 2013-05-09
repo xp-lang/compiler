@@ -19,6 +19,7 @@ use xp\compiler\types\Constant;
 use xp\compiler\ast\ParseTree;
 use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\TypeDeclarationNode;
+use xp\compiler\ast\Resolveable;
 use xp\compiler\emit\Buffer;
 use lang\reflect\Modifiers;
 
@@ -1429,7 +1430,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
       if (isset($param['default'])) {
         $b->append('= ');
         $resolveable= false; 
-        if ($param['default'] instanceof \xp\compiler\ast\Resolveable) {
+        if ($param['default'] instanceof Resolveable) {
           try {
             $init= $param['default']->resolve();
             $b->append(var_export($init, true));
@@ -1488,12 +1489,12 @@ class Emitter extends \xp\compiler\emit\Emitter {
     foreach ((array)$annotation->parameters as $name => $value) {
       if ($value instanceof \xp\compiler\ast\ClassAccessNode) {    // class literal
         $params[$name]= $this->resolveType($value->class)->name();
-      } else if ($value instanceof \xp\compiler\ast\Resolveable) {
+      } else if ($value instanceof Resolveable) {
         $params[$name]= $value->resolve();
       } else if ($value instanceof \xp\compiler\ast\ArrayNode) {
         $params[$name]= array();
         foreach ($value->values as $element) {
-          $element instanceof \xp\compiler\ast\Resolveable && $params[$name][]= $element->resolve();
+          $element instanceof Resolveable && $params[$name][]= $element->resolve();
         }
       }
     }
@@ -1894,7 +1895,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
     $c= new Constant();
     $c->type= new TypeName($this->resolveType($const->type)->name());
     $c->name= $const->name;
-    $c->value= $const->value instanceof \xp\compiler\ast\Resolveable ? $const->value->resolve() : $const->value;
+    $c->value= $const->value instanceof Resolveable ? $const->value->resolve() : $const->value;
     $this->types[0]->addConstant($c);
   }
   
