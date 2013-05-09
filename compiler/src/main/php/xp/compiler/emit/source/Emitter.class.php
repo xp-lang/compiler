@@ -2104,7 +2104,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
     // Initialization
     $b->append('static function __static() {');
     foreach ($declaration->body as $i => $member) {
-      if (!$member instanceof EnumMemberNode) continue;
+      if (!$member instanceof \xp\compiler\ast\EnumMemberNode) continue;
       $b->append('self::$'.$member->name.'= ');
       if ($member->body) {
         if (!$abstract) {
