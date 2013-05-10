@@ -15,6 +15,8 @@ use xp\compiler\diagnostic\VerboseDiagnosticListener;
 use xp\compiler\io\FileSource;
 use xp\compiler\io\FileManager;
 use util\log\Logger;
+use util\log\LogCategory;
+use util\log\LogLevel;
 use util\log\ConsoleAppender;
 use util\cmd\Console;
 
