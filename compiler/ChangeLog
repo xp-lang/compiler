@@ -22,6 +22,10 @@ RFCs
 
 Bugfixes
 ~~~~~~~~
+- Fixed various errors resulting from the conversion of the code base 
+  to namespaces. Most typical: catch (Throwable $e) not catching any-
+  thing, because the name "Throwable" is not present in this namespace.
+  (friebe)
 - Fixed issue #24: Fatal error with PHP 5.3.0
   (friebe)
 - Fixed PHP 5.3 namespaces fully qualified class names
