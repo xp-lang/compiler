@@ -199,13 +199,12 @@ class Runner extends \lang\Object {
         $reader->addSource(new Properties('res://xp/compiler/'.$configuration.'.xcp.ini'));
       }
       $emitter->setProfile($reader->getProfile());
-    } catch (Throwable $e) {
+    } catch (\lang\Throwable $e) {
       Console::$err->writeLine('*** Cannot load profile configuration(s) '.implode(',', $profiles).': '.$e->getMessage());
       return 3;
     }
     
-    // Compile files
-    $success= $compiler->compile($files, $listener, $manager, $emitter);
-    return $success ? 0 : 1;
+    // Compile files. Use 0 exitcode to indicate success, 1 for failure
+    return $compiler->compile($files, $listener, $manager, $emitter) ? 0 : 1;
   }
 }
