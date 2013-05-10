@@ -91,7 +91,7 @@ class Runner extends \lang\Object {
    *
    */
   protected static function showUsage() {
-    $class= new XPClass(__CLASS__);
+    $class= new \lang\XPClass(__CLASS__);
     Console::$err->writeLine(strtr(self::textOf($class->getComment()), array(
       '{{VERSION}}' => $class->getClassLoader()->getResource('VERSION')
     )));
