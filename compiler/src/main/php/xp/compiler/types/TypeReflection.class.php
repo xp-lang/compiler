@@ -319,7 +319,7 @@ class TypeReflection extends Types {
       if ($this->class->isEnum() && ($f->modifiers & (MODIFIER_PUBLIC | MODIFIER_STATIC))) {
         $member= $field->get(null);
         if ($this->class->isInstance($member)) {
-          $f->type= $this->typeNameOf(\xp::typeOf($member));
+          $f->type= $this->typeNameOf($this->class->getName());
         } else {
           $f->type= $this->typeNameOf($field->getTypeName());
         }

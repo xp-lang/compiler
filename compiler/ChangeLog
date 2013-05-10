@@ -22,6 +22,8 @@ RFCs
 
 Bugfixes
 ~~~~~~~~
+- Fixed issue #25: Resolving abstract enum members fails
+  (friebe)
 - Fixed various errors resulting from the conversion of the code base 
   to namespaces. Most typical: catch (Throwable $e) not catching any-
   thing, because the name "Throwable" is not present in this namespace.
