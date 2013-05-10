@@ -52,7 +52,7 @@ class VerboseDiagnosticListener extends \lang\Object implements DiagnosticListen
    * @param   xp.compiler.io.Source src
    * @param   text.parser.generic.ParseException reason
    */
-  public function parsingFailed(Source $src, \text\parser\ParseException $reason) {
+  public function parsingFailed(Source $src, \text\parser\generic\ParseException $reason) {
     $this->writer->writeLine($src, ': ', $reason->compoundMessage());
     $reason->printStackTrace();
   }
