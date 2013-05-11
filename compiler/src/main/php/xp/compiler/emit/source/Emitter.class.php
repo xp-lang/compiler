@@ -2241,12 +2241,14 @@ class Emitter extends \xp\compiler\emit\Emitter {
       $this->emitOne($b, new StaticInitializerNode(null));
     }
     
-    // Create __import
+    // Create __import. FIXME: Namespaces not working correctly, need to
+    // investigate! This could be flattened (currently commented)
     if (isset($this->metadata[0]['EXT'])) {
       $b->append('static function __import($scope) {');
-      foreach ($this->metadata[0]['EXT'] as $method => $type) {
-        $b->append('xp::$ext[$scope]["')->append($type)->append('"]= "')->append($thisType->literal())->append('";');
-      }
+      $b->append('\xp::extensions(__CLASS__, $scope);');
+      // foreach ($this->metadata[0]['EXT'] as $method => $type) {
+      //   $b->append('xp::$ext[$scope]["')->append($type)->append('"]= "')->append($thisType->literal())->append('";');
+      // }
       $b->append('}');
     }
 
