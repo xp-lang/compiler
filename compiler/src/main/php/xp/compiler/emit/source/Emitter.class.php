@@ -145,10 +145,18 @@ class Emitter extends \xp\compiler\emit\Emitter {
   protected function emitUses($b, array $types) {
     if ($this->scope[0]->package) {
       $b->insert('namespace '.strtr($this->scope[0]->package->name, '.', '\\').';', 0);
+      $import= $b->mark();
+    } else {
+      $import= 0;
     }
 
-    // Nothing more to be done, we always use fully qualified form of
-    // class' names, and autoloading takes care of everything at runtime
+    // Emit import statements for classes providing extension methods
+    foreach ($types as $name => $loaded) {
+      $ptr= $this->resolveType(new TypeName($name));
+      if ($ptr->getExtensions()) {
+        $b->insert('new \\import(\''.$ptr->name().'\');', $import);
+      }
+    }
   }
   
   /**

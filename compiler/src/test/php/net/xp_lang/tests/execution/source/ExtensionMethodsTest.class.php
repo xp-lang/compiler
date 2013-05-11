@@ -200,9 +200,9 @@ class ExtensionMethodsTest extends ExecutionTest {
   #[@test]
   public function extensionApplies() {
     $class= $this->define('class', 'ClassFieldExtension2', null, '{
-      public static lang.reflect.Field[] fieldsNamed(this lang.XPClass $class, text.regex.Pattern $pattern) {
+      public static lang.reflect.Field[] fieldsNamed(this lang.XPClass $self, text.regex.Pattern $pattern) {
         $r= new lang.reflect.Field[] { };
-        foreach ($field in $class.getFields()) {
+        foreach ($field in $self.getFields()) {
           if ($pattern.matches($field.getName())) $r[]= $field;
         }
         return $r;
