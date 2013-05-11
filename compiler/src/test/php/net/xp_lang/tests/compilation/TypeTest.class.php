@@ -90,7 +90,7 @@ class TypeTest extends \unittest\TestCase {
    */
   #[@test]
   public function literalInsidePackage() {
-    $this->assertEquals('Person', $this->compile('package demo; class Person { }')->literal());
+    $this->assertEquals('demo\\Person', $this->compile('package demo; class Person { }')->literal());
   }
 
   /**
@@ -99,7 +99,7 @@ class TypeTest extends \unittest\TestCase {
    */
   #[@test]
   public function packageLiteralInsidePackage() {
-    $this->assertEquals('Person', $this->compile('package demo; package class Person { }')->literal());
+    $this->assertEquals('demo\\Person', $this->compile('package demo; package class Person { }')->literal());
   }
 
   /**

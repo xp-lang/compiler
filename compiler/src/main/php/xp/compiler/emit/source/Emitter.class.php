@@ -1947,7 +1947,11 @@ class Emitter extends \xp\compiler\emit\Emitter {
    */
   protected function emitTypeName($b, $type, TypeDeclarationNode $declaration) {
     $this->metadata[0]['class']= array();
-    $declaration->literal= $declaration->name->name;
+    if ($this->scope[0]->package) {
+      $declaration->literal= strtr($this->scope[0]->package->name, '.', '\\').'\\'.$declaration->name->name;
+    } else {
+      $declaration->literal= $declaration->name->name;
+    }
     
     // Emit abstract and final modifiers
     if (Modifiers::isAbstract($declaration->modifiers)) {
@@ -1957,7 +1961,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
     } 
     
     // Emit declaration
-    $b->append(' ')->append($type)->append(' ')->append($declaration->literal);
+    $b->append(' ')->append($type)->append(' ')->append($declaration->name->name);
   }
 
   /**
