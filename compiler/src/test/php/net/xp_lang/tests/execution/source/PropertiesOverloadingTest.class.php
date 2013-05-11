@@ -50,9 +50,9 @@ class PropertiesOverloadingTest extends ExecutionTest {
           set { $this.seconds= $value * 60; }
         }
       }', array('import native standard.floor;'));
-    } catch (Throwable $e) {
+    } catch (\lang\Throwable $e) {
       self::$base= self::$child= null;
-      throw new PrerequisitesNotMetError($e->getMessage(), $e);
+      throw new \unittest\PrerequisitesNotMetError($e->getMessage(), $e);
     }
   }
   
