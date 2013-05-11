@@ -1,29 +1,22 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Dynamic instance creation
  *
- * $Id$ 
+ * Example
+ * ~~~~~~~
+ * ```php
+ * $a= new $type();
+ * ```
+ *
+ * Note
+ * ~~~~
+ * This is only available in PHP syntax!
+ *
+ * @see   xp://xp.compiler.ast.InstanceCreationNode
+ * @see   php://new
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * Dynamic instance creation
-   *
-   * Example
-   * ~~~~~~~
-   * <code>
-   *   $a= new $type();
-   * </code>
-   *
-   * Note
-   * ~~~~
-   * This is only available in PHP syntax!
-   *
-   * @see   xp://xp.compiler.ast.InstanceCreationNode
-   * @see   php://new
-   */
-  class DynamicInstanceCreationNode extends xp·compiler·ast·Node {
-    public $parameters = NULL;
-    public $variable = '';
-  }
-?>
+class DynamicInstanceCreationNode extends Node {
+  public $parameters = null;
+  public $variable = '';
+}

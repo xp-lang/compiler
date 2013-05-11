@@ -1,78 +1,71 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace xp\compiler\io;
 
-  uses('xp.compiler.io.Source', 'io.streams.MemoryInputStream');
+/**
+ * Source implementation
+ *
+ * @test    xp://net.xp_lang.tests.StringSourceTest
+ */
+class StringSource extends \lang\Object implements Source {
+  protected $source= null;
+  protected $name= null;
+  protected $syntax= null;
+  
+  /**
+   * Constructor
+   *
+   * @param   string source
+   * @param   xp.compiler.Syntax s Syntax to use
+   */
+  public function __construct($source, \xp\compiler\Syntax $syntax, $name= null) {
+    $this->source= $source;
+    $this->syntax= $syntax;
+    $this->name= null === $name ? 'Compiled source #'.crc32($source) : $name;
+  }
+  
+  /**
+   * Get input stream
+   *
+   * @return  io.streams.InputStream
+   */
+  public function getInputStream() {
+    return new \io\streams\MemoryInputStream($this->source);
+  }
+  
+  /**
+   * Get syntax
+   *
+   * @return  xp.compiler.Syntax
+   */
+   
+  public function getSyntax() {
+    return $this->syntax;
+  }
 
   /**
-   * Source implementation
+   * Get URI of this source - as source in error messages and
+   * warnings.
    *
-   * @test    xp://net.xp_lang.tests.StringSourceTest
+   * @return  string
    */
-  class StringSource extends Object implements xp·compiler·io·Source {
-    protected $source= NULL;
-    protected $name= NULL;
-    protected $syntax= NULL;
-    
-    /**
-     * Constructor
-     *
-     * @param   string source
-     * @param   xp.compiler.Syntax s Syntax to use
-     */
-    public function __construct($source, Syntax $syntax, $name= NULL) {
-      $this->source= $source;
-      $this->syntax= $syntax;
-      $this->name= NULL === $name ? 'Compiled source #'.crc32($source) : $name;
-    }
-    
-    /**
-     * Get input stream
-     *
-     * @return  io.streams.InputStream
-     */
-    public function getInputStream() {
-      return new MemoryInputStream($this->source);
-    }
-    
-    /**
-     * Get syntax
-     *
-     * @return  xp.compiler.Syntax
-     */
-     
-    public function getSyntax() {
-      return $this->syntax;
-    }
-
-    /**
-     * Get URI of this source - as source in error messages and
-     * warnings.
-     *
-     * @return  string
-     */
-    public function getURI() {
-      return $this->name;
-    }
-
-    /**
-     * Creates a string representation of this object
-     *
-     * @return  string
-     */
-    public function toString() {
-      return $this->getClassName().'<'.$this->name.'>';
-    }
-
-    /**
-     * Creates a hashcode of this object
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return 'S:'.$this->name;
-    }
+  public function getURI() {
+    return $this->name;
   }
-?>
+
+  /**
+   * Creates a string representation of this object
+   *
+   * @return  string
+   */
+  public function toString() {
+    return $this->getClassName().'<'.$this->name.'>';
+  }
+
+  /**
+   * Creates a hashcode of this object
+   *
+   * @return  string
+   */
+  public function hashCode() {
+    return 'S:'.$this->name;
+  }
+}

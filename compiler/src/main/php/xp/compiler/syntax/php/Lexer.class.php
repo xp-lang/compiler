@@ -1,344 +1,332 @@
-<?php
-/* This class is part of the XP framework's experiments
+<?php namespace xp\compiler\syntax\php;
+
+use text\StringTokenizer;
+use text\StreamTokenizer;
+use xp\compiler\emit\Strings;
+use lang\IllegalStateException;
+
+/**
+ * Lexer for PHP
  *
- * $Id$
+ * @see      xp://text.parser.generic.AbstractLexer
+ * @purpose  Lexer
  */
+class Lexer extends \text\parser\generic\AbstractLexer {
+  protected static
+    $keywords  = array(
+      'public'        => Parser::T_PUBLIC,
+      'private'       => Parser::T_PRIVATE,
+      'protected'     => Parser::T_PROTECTED,
+      'static'        => Parser::T_STATIC,
+      'final'         => Parser::T_FINAL,
+      'abstract'      => Parser::T_ABSTRACT,
+      'const'         => Parser::T_CONST,
+      
+      'use'           => Parser::T_USE,
+      'namespace'     => Parser::T_NAMESPACE,
+      'class'         => Parser::T_CLASS,
+      'interface'     => Parser::T_INTERFACE,
+      'extends'       => Parser::T_EXTENDS,
+      'implements'    => Parser::T_IMPLEMENTS,
+      'instanceof'    => Parser::T_INSTANCEOF,
+      'clone'         => Parser::T_CLONE,     
 
-  $package= 'xp.compiler.syntax.php';
+      'throw'         => Parser::T_THROW,
+      'try'           => Parser::T_TRY,
+      'catch'         => Parser::T_CATCH,
+      
+      'return'        => Parser::T_RETURN,
+      'new'           => Parser::T_NEW,
+      'as'            => Parser::T_AS,
+      'array'         => Parser::T_ARRAY,
+      'function'      => Parser::T_FUNCTION,
+      
+      'for'           => Parser::T_FOR,
+      'foreach'       => Parser::T_FOREACH,
+      'in'            => Parser::T_IN,
+      'do'            => Parser::T_DO,
+      'while'         => Parser::T_WHILE,
+      'break'         => Parser::T_BREAK,
+      'continue'      => Parser::T_CONTINUE,
 
-  uses(
-    'text.Tokenizer',
-    'text.StringTokenizer', 
-    'text.StreamTokenizer', 
-    'io.streams.InputStream',
-    'xp.compiler.syntax.php.Parser', 
-    'xp.compiler.emit.Strings', 
-    'text.parser.generic.AbstractLexer'
-  );
+      'if'            => Parser::T_IF,
+      'else'          => Parser::T_ELSE,
+      'switch'        => Parser::T_SWITCH,
+      'case'          => Parser::T_CASE,
+      'default'       => Parser::T_DEFAULT,
+    );
+
+  protected static
+    $lookahead= array(
+      '-' => array('-=' => Parser::T_SUB_EQUAL, '--' => Parser::T_DEC, '->' => Parser::T_OBJECT_OPERATOR),
+      '>' => array('>=' => Parser::T_GE, '>>' => Parser::T_SHR),
+      '<' => array('<=' => Parser::T_SE, '<<' => Parser::T_SHL),
+      '.' => array('.=' => Parser::T_CONCAT_EQUAL),
+      '+' => array('+=' => Parser::T_ADD_EQUAL, '++' => Parser::T_INC),
+      '*' => array('*=' => Parser::T_MUL_EQUAL),
+      '/' => array('/=' => Parser::T_DIV_EQUAL),
+      '%' => array('%=' => Parser::T_MOD_EQUAL),
+      '=' => array('==' => Parser::T_EQUALS, '=>' => Parser::T_DOUBLE_ARROW),
+      '!' => array('!=' => Parser::T_NOT_EQUALS),
+      ':' => array('::' => Parser::T_DOUBLE_COLON),
+      '|' => array('||' => Parser::T_BOOLEAN_OR, '|=' => Parser::T_OR_EQUAL),
+      '&' => array('&&' => Parser::T_BOOLEAN_AND, '&=' => Parser::T_AND_EQUAL),
+      '^' => array('^=' => Parser::T_XOR_EQUAL),
+      '?' => array('?>' => -1)
+    );
+
+  const 
+    DELIMITERS = " |&?!.:;,@%~=<>(){}[]#+-*/\"\\'\r\n\t";
+        
+  public
+    $fileName  = null;
+
+  protected
+    $comment   = null,
+    $tokenizer = null,
+    $forward   = array();
 
   /**
-   * Lexer for XP language
+   * Constructor
    *
-   * @see      xp://text.parser.generic.AbstractLexer
-   * @purpose  Lexer
+   * @param   var input either a string or an InputStream
+   * @param   string source
    */
-  class xp搾ompiler新yntax搆hp微exer extends AbstractLexer {
-    protected static
-      $keywords  = array(
-        'public'        => xp搾ompiler新yntax搆hp感arser::T_PUBLIC,
-        'private'       => xp搾ompiler新yntax搆hp感arser::T_PRIVATE,
-        'protected'     => xp搾ompiler新yntax搆hp感arser::T_PROTECTED,
-        'static'        => xp搾ompiler新yntax搆hp感arser::T_STATIC,
-        'final'         => xp搾ompiler新yntax搆hp感arser::T_FINAL,
-        'abstract'      => xp搾ompiler新yntax搆hp感arser::T_ABSTRACT,
-        'const'         => xp搾ompiler新yntax搆hp感arser::T_CONST,
-        
-        'use'           => xp搾ompiler新yntax搆hp感arser::T_USE,
-        'namespace'     => xp搾ompiler新yntax搆hp感arser::T_NAMESPACE,
-        'class'         => xp搾ompiler新yntax搆hp感arser::T_CLASS,
-        'interface'     => xp搾ompiler新yntax搆hp感arser::T_INTERFACE,
-        'extends'       => xp搾ompiler新yntax搆hp感arser::T_EXTENDS,
-        'implements'    => xp搾ompiler新yntax搆hp感arser::T_IMPLEMENTS,
-        'instanceof'    => xp搾ompiler新yntax搆hp感arser::T_INSTANCEOF,
-        'clone'         => xp搾ompiler新yntax搆hp感arser::T_CLONE,     
-
-        'throw'         => xp搾ompiler新yntax搆hp感arser::T_THROW,
-        'try'           => xp搾ompiler新yntax搆hp感arser::T_TRY,
-        'catch'         => xp搾ompiler新yntax搆hp感arser::T_CATCH,
-        
-        'return'        => xp搾ompiler新yntax搆hp感arser::T_RETURN,
-        'new'           => xp搾ompiler新yntax搆hp感arser::T_NEW,
-        'as'            => xp搾ompiler新yntax搆hp感arser::T_AS,
-        'array'         => xp搾ompiler新yntax搆hp感arser::T_ARRAY,
-        'function'      => xp搾ompiler新yntax搆hp感arser::T_FUNCTION,
-        
-        'for'           => xp搾ompiler新yntax搆hp感arser::T_FOR,
-        'foreach'       => xp搾ompiler新yntax搆hp感arser::T_FOREACH,
-        'in'            => xp搾ompiler新yntax搆hp感arser::T_IN,
-        'do'            => xp搾ompiler新yntax搆hp感arser::T_DO,
-        'while'         => xp搾ompiler新yntax搆hp感arser::T_WHILE,
-        'break'         => xp搾ompiler新yntax搆hp感arser::T_BREAK,
-        'continue'      => xp搾ompiler新yntax搆hp感arser::T_CONTINUE,
-
-        'if'            => xp搾ompiler新yntax搆hp感arser::T_IF,
-        'else'          => xp搾ompiler新yntax搆hp感arser::T_ELSE,
-        'switch'        => xp搾ompiler新yntax搆hp感arser::T_SWITCH,
-        'case'          => xp搾ompiler新yntax搆hp感arser::T_CASE,
-        'default'       => xp搾ompiler新yntax搆hp感arser::T_DEFAULT,
-      );
-
-    protected static
-      $lookahead= array(
-        '-' => array('-=' => xp搾ompiler新yntax搆hp感arser::T_SUB_EQUAL, '--' => xp搾ompiler新yntax搆hp感arser::T_DEC, '->' => xp搾ompiler新yntax搆hp感arser::T_OBJECT_OPERATOR),
-        '>' => array('>=' => xp搾ompiler新yntax搆hp感arser::T_GE, '>>' => xp搾ompiler新yntax搆hp感arser::T_SHR),
-        '<' => array('<=' => xp搾ompiler新yntax搆hp感arser::T_SE, '<<' => xp搾ompiler新yntax搆hp感arser::T_SHL),
-        '.' => array('.=' => xp搾ompiler新yntax搆hp感arser::T_CONCAT_EQUAL),
-        '+' => array('+=' => xp搾ompiler新yntax搆hp感arser::T_ADD_EQUAL, '++' => xp搾ompiler新yntax搆hp感arser::T_INC),
-        '*' => array('*=' => xp搾ompiler新yntax搆hp感arser::T_MUL_EQUAL),
-        '/' => array('/=' => xp搾ompiler新yntax搆hp感arser::T_DIV_EQUAL),
-        '%' => array('%=' => xp搾ompiler新yntax搆hp感arser::T_MOD_EQUAL),
-        '=' => array('==' => xp搾ompiler新yntax搆hp感arser::T_EQUALS, '=>' => xp搾ompiler新yntax搆hp感arser::T_DOUBLE_ARROW),
-        '!' => array('!=' => xp搾ompiler新yntax搆hp感arser::T_NOT_EQUALS),
-        ':' => array('::' => xp搾ompiler新yntax搆hp感arser::T_DOUBLE_COLON),
-        '|' => array('||' => xp搾ompiler新yntax搆hp感arser::T_BOOLEAN_OR, '|=' => xp搾ompiler新yntax搆hp感arser::T_OR_EQUAL),
-        '&' => array('&&' => xp搾ompiler新yntax搆hp感arser::T_BOOLEAN_AND, '&=' => xp搾ompiler新yntax搆hp感arser::T_AND_EQUAL),
-        '^' => array('^=' => xp搾ompiler新yntax搆hp感arser::T_XOR_EQUAL),
-        '?' => array('?>' => -1)
-      );
-
-    const 
-      DELIMITERS = " |&?!.:;,@%~=<>(){}[]#+-*/\"\\'\r\n\t";
-          
-    public
-      $fileName  = NULL;
-
-    protected
-      $comment   = NULL,
-      $tokenizer = NULL,
-      $forward   = array();
-
-    /**
-     * Constructor
-     *
-     * @param   var input either a string or an InputStream
-     * @param   string source
-     */
-    public function __construct($input, $source) {
-      if ($input instanceof InputStream) {
-        $this->tokenizer= new StreamTokenizer($input, self::DELIMITERS, TRUE);
-      } else {
-        $this->tokenizer= new StringTokenizer($input, self::DELIMITERS, TRUE);
-      }
-      $this->fileName= $source;
-      $first= $this->tokenizer->nextToken(" \r\n\t");
-      if ('<?php' !== $first) {
-        throw new IllegalStateException('First token must be "<?php", have "'.$first.'"');
-      }
-      $this->position= $this->forward= array(1, strlen($first));   // Y, X
+  public function __construct($input, $source) {
+    if ($input instanceof \io\streams\InputStream) {
+      $this->tokenizer= new StreamTokenizer($input, self::DELIMITERS, true);
+    } else {
+      $this->tokenizer= new StringTokenizer($input, self::DELIMITERS, true);
     }
+    $this->fileName= $source;
+    $first= $this->tokenizer->nextToken(" \r\n\t");
+    if ('<?php' !== $first) {
+      throw new IllegalStateException('First token must be "<?php", have "'.$first.'"');
+    }
+    $this->position= $this->forward= array(1, strlen($first));   // Y, X
+  }
 
-    /**
-     * Create a new node 
-     *
-     * @param   xp.compiler.ast.Node
-     * @param   bool comment default FALSE whether to pass comment
-     * @return  xp.compiler.ast.Node
-     */
-    public function create($n, $comment= FALSE) {
-      $n->position= $this->position;
-      if ($comment && $this->comment) {
-        $n->comment= $this->comment;
-        $this->comment= NULL;
-      }
-      return $n;
+  /**
+   * Create a new node 
+   *
+   * @param   xp.compiler.ast.Node
+   * @param   bool comment default false whether to pass comment
+   * @return  xp.compiler.ast.Node
+   */
+  public function create($n, $comment= false) {
+    $n->position= $this->position;
+    if ($comment && $this->comment) {
+      $n->comment= $this->comment;
+      $this->comment= null;
     }
+    return $n;
+  }
 
-    /**
-     * Get next token and recalculate position
-     *
-     * @param   string delim default self::DELIMITERS
-     * @return  string token
-     */
-    protected function nextToken($delim= self::DELIMITERS) {
-      $t= $this->tokenizer->nextToken($delim);
-      $l= substr_count($t, "\n");
-      if ($l > 0) {
-        $this->forward[0]+= $l;
-        $this->forward[1]= strlen($t) - strrpos($t, "\n");
-      } else {
-        $this->forward[1]+= strlen($t);
-      }
-      return $t;
+  /**
+   * Get next token and recalculate position
+   *
+   * @param   string delim default self::DELIMITERS
+   * @return  string token
+   */
+  protected function nextToken($delim= self::DELIMITERS) {
+    $t= $this->tokenizer->nextToken($delim);
+    $l= substr_count($t, "\n");
+    if ($l > 0) {
+      $this->forward[0]+= $l;
+      $this->forward[1]= strlen($t) - strrpos($t, "\n");
+    } else {
+      $this->forward[1]+= strlen($t);
     }
-    
-    /**
-     * Push back token and recalculate position
-     *
-     * @param   string token
-     */
-    protected function pushBack($t) {
-      $l= substr_count($t, "\n");
-      if ($l > 0) {
-        $this->forward[0]-= $l;
-        $this->forward[1]= strlen($t) - strrpos($t, "\n");
-      } else {
-        $this->forward[1]-= strlen($t);
-      }
-      $this->tokenizer->pushBack($t);
-    }
-    
-    /**
-     * Throws an error, appending the starting position to the message
-     *
-     * @param   string class
-     * @param   string message
-     * @throws  lang.Throwable
-     */
-    protected function raise($class, $message) {
-      raise($class, $message.' starting at line '.$this->position[0].', offset '.$this->position[1]);
-    }
+    return $t;
+  }
   
-    /**
-     * Advance this 
-     *
-     * @return  bool
-     */
-    public function advance() {
-      while ($hasMore= $this->tokenizer->hasMoreTokens()) {
-        $this->position= $this->forward;
-        $token= $this->nextToken();
-        if (FALSE !== strpos(" \n\r\t", $token)) continue;    // Check for whitespace-only
+  /**
+   * Push back token and recalculate position
+   *
+   * @param   string token
+   */
+  protected function pushBack($t) {
+    $l= substr_count($t, "\n");
+    if ($l > 0) {
+      $this->forward[0]-= $l;
+      $this->forward[1]= strlen($t) - strrpos($t, "\n");
+    } else {
+      $this->forward[1]-= strlen($t);
+    }
+    $this->tokenizer->pushBack($t);
+  }
+  
+  /**
+   * Throws an error, appending the starting position to the message
+   *
+   * @param   string class
+   * @param   string message
+   * @throws  lang.Throwable
+   */
+  protected function raise($class, $message) {
+    raise($class, $message.' starting at line '.$this->position[0].', offset '.$this->position[1]);
+  }
 
-        $length= strlen($token);
-        if ("'" === $token{0} || '"' === $token{0}) {
-          $this->token= xp搾ompiler新yntax搆hp感arser::T_STRING;
-          $this->value= '';
-          do {
-            if ($token{0} === ($t= $this->nextToken($token{0}))) {
-              // Empty string, e.g. "" or ''
-              break;
-            }
-            $this->value.= $t;
-            $l= strlen($this->value);
-            if ($l > 0 && '\\' === $this->value{$l- 1} && !($l > 1 && '\\' === $this->value{$l- 2})) {
-              $this->value= substr($this->value, 0, -1).$this->nextToken($token{0});
-              continue;
-            } 
-            if ($token{0} !== $this->nextToken($token{0})) {
-              $this->raise('lang.IllegalStateException', 'Unterminated string literal');
-            }
+  /**
+   * Advance this 
+   *
+   * @return  bool
+   */
+  public function advance() {
+    while ($hasMore= $this->tokenizer->hasMoreTokens()) {
+      $this->position= $this->forward;
+      $token= $this->nextToken();
+      if (false !== strpos(" \n\r\t", $token)) continue;    // Check for whitespace-only
+
+      $length= strlen($token);
+      if ("'" === $token{0} || '"' === $token{0}) {
+        $this->token= Parser::T_STRING;
+        $this->value= '';
+        do {
+          if ($token{0} === ($t= $this->nextToken($token{0}))) {
+            // Empty string, e.g. "" or ''
             break;
-          } while ($hasMore= $this->tokenizer->hasMoreTokens());
-          if ('"' === $token{0}) {
-            try {
-              $this->value= Strings::expandEscapesIn($this->value);
-            } catch (FormatException $e) {
-              $this->raise('lang.FormatException', $e->getMessage());
-            }
-          } else {
-            $this->value= str_replace('\\\\', '\\', $this->value);
           }
-        } else if ('$' === $token{0}) {
-          $this->token= xp搾ompiler新yntax搆hp感arser::T_VARIABLE;
-          $this->value= substr($token, 1);
-        } else if (isset(self::$keywords[$token])) {
-          $this->token= self::$keywords[$token];
-          $this->value= $token;
-        } else if ('/' === $token{0}) {
-          $ahead= $this->nextToken();
-          if ('/' === $ahead) {           // Single-line comment
-            $this->nextToken("\n");
+          $this->value.= $t;
+          $l= strlen($this->value);
+          if ($l > 0 && '\\' === $this->value{$l- 1} && !($l > 1 && '\\' === $this->value{$l- 2})) {
+            $this->value= substr($this->value, 0, -1).$this->nextToken($token{0});
             continue;
-          } else if ('*' === $ahead) {    // Multi-line comment
-            $comment= '';
-            do { 
-              $t= $this->nextToken('/'); 
-              $comment.= $t;
-            } while ('*' !== $t{strlen($t)- 1});
-            
-            // Copy api doc comments
-            if ($comment && '*' === $comment{0}) {
-              $this->comment= $comment;
-            }
-            $this->nextToken('/');
-            continue;
-          } else if ('=' === $ahead) {
-            $this->token= xp搾ompiler新yntax搆hp感arser::T_DIV_EQUAL;
-            $this->value= '/=';
-          } else {
-            $this->token= ord($token);
-            $this->value= $token;
-            $this->pushBack($ahead);
+          } 
+          if ($token{0} !== $this->nextToken($token{0})) {
+            $this->raise('lang.IllegalStateException', 'Unterminated string literal');
           }
-        } else if (isset(self::$lookahead[$token])) {
-          $ahead= $this->nextToken();
-          $combined= $token.$ahead;
-          if (isset(self::$lookahead[$token][$combined])) {
-            $this->token= self::$lookahead[$token][$combined];
-            $this->value= $combined;
-          } else {
-            $this->token= ord($token);
-            $this->value= $token;
-            $this->pushBack($ahead);
-          }
-        } else if (FALSE !== strpos(self::DELIMITERS, $token) && 1 == strlen($token)) {
-          $this->token= ord($token);
-          $this->value= $token;
-        } else if (0 === strcspn($token, '0123456789')) {     // Numbers, starting with 0..9
-          $ahead= $this->nextToken();
-          if ('.' === $ahead{0}) {                            // Decimal numbers, next token starts with "."
-            $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
-            $decimal= $this->nextToken();
-            $length= strlen($decimal);
-            $this->value= $token.$ahead.$decimal;
-            if ($length !== strcspn($decimal, 'eE')) {
-              $ahead= $this->nextToken();
-              if ('+' === $ahead{0} || '-' === $ahead{0}) {
-                $this->value.= $ahead.$this->nextToken();
-                $format= '%d.%d%*1[eE]'.$ahead.'%*d';
-              } else {
-                $format= '%d.%d%*1[eE]%*d';
-                $this->pushBack($ahead);
-              }
-              if (4 !== sscanf($this->value, $format, $n, $f)) {
-                $this->raise('lang.FormatException', 'Illegal decimal number <'.$this->value.'>');
-              }
-            } else {
-              if ($length !== strspn($decimal, '0123456789')) {
-                $this->raise('lang.FormatException', 'Illegal decimal number <'.$token.$ahead.$decimal.'>');
-              }
-            }
-          } else {                                            // Integers, no "."
-            $p= TRUE;
-            if (1 === $length) {
-              $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
-              $this->value= $token;
-            } else if ('0' === $token[0] && ('x' === $token[1] || 'X' === $token[1])) {
-              if ($length !== strspn($token, '0123456789ABCDEFXabcdefx')) {
-                $this->raise('lang.FormatException', 'Illegal hex number <'.$token.'>');
-              }
-              $this->token= xp搾ompiler新yntax暖p感arser::T_HEX;
-              $this->value= $token;
-            } else if ('0' === $token[0]) {
-              if ($length !== strspn($token, '01234567')) {
-                $this->raise('lang.FormatException', 'Illegal octal number <'.$token.'>');
-              }
-              $this->token= xp搾ompiler新yntax暖p感arser::T_OCTAL;
-              $this->value= $token;
-            } else if ($length !== strcspn($token, 'eE')) {
-              if ('+' === $ahead{0} || '-' === $ahead{0}) {
-                $exponent= $ahead.$this->nextToken();
-                $format= '%d%*1[eE]'.$ahead.'%*d';
-                $p= FALSE;
-              } else {
-                $format= '%d%*1[eE]%*d';
-                $exponent= '';
-              }
-              $this->token= xp搾ompiler新yntax暖p感arser::T_DECIMAL;
-              $this->value= $token.$exponent;
-              if (3 !== sscanf($this->value, $format, $n)) {
-                $this->raise('lang.FormatException', 'Illegal decimal number <'.$this->value.'>');
-              }
-            } else {
-              if ($length !== strspn($token, '0123456789')) {
-                $this->raise('lang.FormatException', 'Illegal number <'.$token.'>');
-              }
-              $this->token= xp搾ompiler新yntax暖p感arser::T_NUMBER;
-              $this->value= $token;
-            }
-            $p && $this->pushBack($ahead);
+          break;
+        } while ($hasMore= $this->tokenizer->hasMoreTokens());
+        if ('"' === $token{0}) {
+          try {
+            $this->value= Strings::expandEscapesIn($this->value);
+          } catch (\lang\FormatException $e) {
+            $this->raise('lang.FormatException', $e->getMessage());
           }
         } else {
-          $this->token= xp搾ompiler新yntax暖p感arser::T_WORD;
-          $this->value= $token;
+          $this->value= str_replace('\\\\', '\\', $this->value);
         }
-
-        
-        break;
+      } else if ('$' === $token{0}) {
+        $this->token= Parser::T_VARIABLE;
+        $this->value= substr($token, 1);
+      } else if (isset(self::$keywords[$token])) {
+        $this->token= self::$keywords[$token];
+        $this->value= $token;
+      } else if ('/' === $token{0}) {
+        $ahead= $this->nextToken();
+        if ('/' === $ahead) {           // Single-line comment
+          $this->nextToken("\n");
+          continue;
+        } else if ('*' === $ahead) {    // Multi-line comment
+          $comment= '';
+          do { 
+            $t= $this->nextToken('/'); 
+            $comment.= $t;
+          } while ('*' !== $t{strlen($t)- 1});
+          
+          // Copy api doc comments
+          if ($comment && '*' === $comment{0}) {
+            $this->comment= $comment;
+          }
+          $this->nextToken('/');
+          continue;
+        } else if ('=' === $ahead) {
+          $this->token= Parser::T_DIV_EQUAL;
+          $this->value= '/=';
+        } else {
+          $this->token= ord($token);
+          $this->value= $token;
+          $this->pushBack($ahead);
+        }
+      } else if (isset(self::$lookahead[$token])) {
+        $ahead= $this->nextToken();
+        $combined= $token.$ahead;
+        if (isset(self::$lookahead[$token][$combined])) {
+          $this->token= self::$lookahead[$token][$combined];
+          $this->value= $combined;
+        } else {
+          $this->token= ord($token);
+          $this->value= $token;
+          $this->pushBack($ahead);
+        }
+      } else if (false !== strpos(self::DELIMITERS, $token) && 1 == strlen($token)) {
+        $this->token= ord($token);
+        $this->value= $token;
+      } else if (0 === strcspn($token, '0123456789')) {     // Numbers, starting with 0..9
+        $ahead= $this->nextToken();
+        if ('.' === $ahead{0}) {                            // Decimal numbers, next token starts with "."
+          $this->token= Parser::T_DECIMAL;
+          $decimal= $this->nextToken();
+          $length= strlen($decimal);
+          $this->value= $token.$ahead.$decimal;
+          if ($length !== strcspn($decimal, 'eE')) {
+            $ahead= $this->nextToken();
+            if ('+' === $ahead{0} || '-' === $ahead{0}) {
+              $this->value.= $ahead.$this->nextToken();
+              $format= '%d.%d%*1[eE]'.$ahead.'%*d';
+            } else {
+              $format= '%d.%d%*1[eE]%*d';
+              $this->pushBack($ahead);
+            }
+            if (4 !== sscanf($this->value, $format, $n, $f)) {
+              $this->raise('lang.FormatException', 'Illegal decimal number <'.$this->value.'>');
+            }
+          } else {
+            if ($length !== strspn($decimal, '0123456789')) {
+              $this->raise('lang.FormatException', 'Illegal decimal number <'.$token.$ahead.$decimal.'>');
+            }
+          }
+        } else {                                            // Integers, no "."
+          $p= true;
+          if (1 === $length) {
+            $this->token= Parser::T_NUMBER;
+            $this->value= $token;
+          } else if ('0' === $token[0] && ('x' === $token[1] || 'X' === $token[1])) {
+            if ($length !== strspn($token, '0123456789ABCDEFXabcdefx')) {
+              $this->raise('lang.FormatException', 'Illegal hex number <'.$token.'>');
+            }
+            $this->token= Parser::T_HEX;
+            $this->value= $token;
+          } else if ('0' === $token[0]) {
+            if ($length !== strspn($token, '01234567')) {
+              $this->raise('lang.FormatException', 'Illegal octal number <'.$token.'>');
+            }
+            $this->token= Parser::T_OCTAL;
+            $this->value= $token;
+          } else if ($length !== strcspn($token, 'eE')) {
+            if ('+' === $ahead{0} || '-' === $ahead{0}) {
+              $exponent= $ahead.$this->nextToken();
+              $format= '%d%*1[eE]'.$ahead.'%*d';
+              $p= false;
+            } else {
+              $format= '%d%*1[eE]%*d';
+              $exponent= '';
+            }
+            $this->token= Parser::T_DECIMAL;
+            $this->value= $token.$exponent;
+            if (3 !== sscanf($this->value, $format, $n)) {
+              $this->raise('lang.FormatException', 'Illegal decimal number <'.$this->value.'>');
+            }
+          } else {
+            if ($length !== strspn($token, '0123456789')) {
+              $this->raise('lang.FormatException', 'Illegal number <'.$token.'>');
+            }
+            $this->token= Parser::T_NUMBER;
+            $this->value= $token;
+          }
+          $p && $this->pushBack($ahead);
+        }
+      } else {
+        $this->token= Parser::T_WORD;
+        $this->value= $token;
       }
+
       
-      // DEBUG fprintf(STDERR, "@ %3d,%3d: %d `%s`\n", $this->position[1], $this->position[0], $this->token, addcslashes($this->value, "\0..\17"));
-      return -1 === $this->token ? FALSE : $hasMore;
+      break;
     }
+    
+    // DEBUG fprintf(STDERR, "@ %3d,%3d: %d `%s`\n", $this->position[1], $this->position[0], $this->token, addcslashes($this->value, "\0..\17"));
+    return -1 === $this->token ? false : $hasMore;
   }
-?>
+}

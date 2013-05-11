@@ -1,54 +1,50 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.Node');
+/**
+ * Represents a member access
+ *
+ * ```php
+ * $this.member;
+ * ```
+ */
+class MemberAccessNode extends Node {
+  public $target= null;
+  public $name= '';
+  public $nav= false;
 
   /**
-   * Represents a member access
+   * Constructor
    *
-   * <code>
-   *   $this.member;
-   * </code>
+   * @param   xp.compiler.ast.Node target
+   * @param   string name
+   * @param   bool nav
    */
-  class MemberAccessNode extends xp·compiler·ast·Node {
-    public $target= NULL;
-    public $name= '';
-    
-    /**
-     * Constructor
-     *
-     * @param   xp.compiler.ast.Node target
-     * @param   string name
-     */
-    public function __construct($target= NULL, $name= '') {
-      $this->target= $target;
-      $this->name= $name;
-    }
-
-    /**
-     * Returns a hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return '$'.$this->target->hashCode().'->'.$this->name;
-    }
-    
-    /**
-     * Returns whether another object equals this.
-     *
-     * @param   lang.Generic cmp
-     * @return  bool
-     */
-    public function equals($cmp) {
-      return 
-        $cmp instanceof self && 
-        $this->target->equals($cmp->target) &&
-        $this->name === $cmp->name
-      ;
-    }
+  public function __construct($target= null, $name= '', $nav= false) {
+    $this->target= $target;
+    $this->name= $name;
+    $this->nav= $nav;
   }
-?>
+
+  /**
+   * Returns a hashcode
+   *
+   * @return  string
+   */
+  public function hashCode() {
+    return '$'.$this->target->hashCode().'->'.$this->name;
+  }
+  
+  /**
+   * Returns whether another object equals this.
+   *
+   * @param   lang.Generic cmp
+   * @return  bool
+   */
+  public function equals($cmp) {
+    return 
+      $cmp instanceof self && 
+      $this->target->equals($cmp->target) &&
+      $this->name === $cmp->name
+    ;
+  }
+}

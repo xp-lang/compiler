@@ -1,19 +1,12 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents a natural number
  *
- * $Id$
+ * @see   xp://xp.compiler.ast.IntegerNode
+ * @see   xp://xp.compiler.ast.HexNode
+ * @see   xp://xp.compiler.ast.OctalNode
  */
+abstract class NaturalNode extends NumberNode {
 
-  uses('xp.compiler.ast.NumberNode');
-
-  /**
-   * Represents a natural number
-   *
-   * @see   xp://xp.compiler.ast.IntegerNode
-   * @see   xp://xp.compiler.ast.HexNode
-   * @see   xp://xp.compiler.ast.OctalNode
-   */
-  abstract class NaturalNode extends NumberNode {
-
-  }
-?>
+}

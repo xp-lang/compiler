@@ -1,34 +1,30 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.Node');
+/**
+ * Represents a method call
+ *
+ * ```php
+ * $this.connect();
+ * ```
+ */
+class MethodCallNode extends Node {
+  public $target= null;
+  public $name= '';
+  public $arguments= array();
+  public $nav= false;
   
   /**
-   * Represents a method call
+   * Creates a new method cal instance
    *
-   * <code>
-   *   $this.connect();
-   * </code>
+   * @param   xp.compiler.ast.Node target
+   * @param   string name
+   * @param   xp.compiler.ast.Node[] arguments
+   * @param   bool nav
    */
-  class MethodCallNode extends xp·compiler·ast·Node {
-    public $target= NULL;
-    public $name= '';
-    public $arguments= array();
-    
-    /**
-     * Creates a new InvocationNode object
-     *
-     * @param   xp.compiler.ast.Node target
-     * @param   string name
-     * @param   xp.compiler.ast.Node[] arguments
-     */
-    public function __construct($target= NULL, $name= '', $arguments= NULL) {
-      $this->target= $target;
-      $this->name= $name;
-      $this->arguments= $arguments;
-    }
+  public function __construct($target= null, $name= '', $arguments= null, $nav= false) {
+    $this->target= $target;
+    $this->name= $name;
+    $this->arguments= $arguments;
+    $this->nav= $nav;
   }
-?>
+}

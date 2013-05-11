@@ -1,28 +1,19 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
+<?php namespace xp\compiler\ast;
+
+/**
+ * The "new" operator
  */
-
-  uses('xp.compiler.ast.Node');
-
+class InstanceCreationNode extends Node {
+  public $type = null;
+  public $parameters = null;
+  public $body = null;
+  
   /**
-   * (Insert class' description here)
+   * Returns a hashcode
    *
-   * @purpose  purpose
+   * @return  string
    */
-  class InstanceCreationNode extends xp·compiler·ast·Node {
-    public $type = NULL;
-    public $parameters = NULL;
-    public $body = NULL;
-    
-    /**
-     * Returns a hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return 'new '.$this->type->name;
-    }
+  public function hashCode() {
+    return 'new '.$this->type->name;
   }
-?>
+}

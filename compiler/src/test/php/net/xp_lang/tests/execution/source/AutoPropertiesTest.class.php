@@ -1,56 +1,34 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace net\xp_lang\tests\execution\source;
+
+/**
+ * Tests automatic properties
  */
+class AutoPropertiesTest extends ExecutionTest {
+  protected static $fixture= null;
 
-  $package= 'net.xp_lang.tests.execution.source';
-
-  uses('net.xp_lang.tests.execution.source.ExecutionTest');
+  #[@beforeClass]
+  public function defineFixtureClass() {
+    self::$fixture= $this->define('class', 'FixtureForAutoPropertiesTest', null, '{
+      public int id { get; set; }
+    }');
+  }
 
   /**
-   * Tests automatic properties
-   *
+   * Test reading the id property
    */
-  class net·xp_lang·tests·execution·source·AutoPropertiesTest extends ExecutionTest {
-    protected static $fixture= NULL;
-
-    /**
-     * Sets up test case
-     *
-     */
-    public function setUp() {
-      parent::setUp();
-      if (NULL !== self::$fixture) return;
-
-      try {
-        self::$fixture= $this->define('class', 'FixtureForAutoPropertiesTest', NULL, '{
-          public int id { get; set; }
-        }');
-      } catch (Throwable $e) {
-        throw new PrerequisitesNotMetError($e->getMessage(), $e);
-      }
-    }
-    
-    /**
-     * Test reading the id property
-     *
-     */
-    #[@test]
-    public function initiallyNull() {
-      $instance= self::$fixture->newInstance();
-      $this->assertEquals(NULL, $instance->id);
-    }
-
-    /**
-     * Test writing and reading the id property
-     *
-     */
-    #[@test]
-    public function roundTrip() {
-      $instance= self::$fixture->newInstance();
-      $instance->id= 1;
-      $this->assertEquals(1, $instance->id);
-    }
+  #[@test]
+  public function initiallyNull() {
+    $instance= self::$fixture->newInstance();
+    $this->assertEquals(null, $instance->id);
   }
-?>
+
+  /**
+   * Test writing and reading the id property
+   */
+  #[@test]
+  public function roundTrip() {
+    $instance= self::$fixture->newInstance();
+    $instance->id= 1;
+    $this->assertEquals(1, $instance->id);
+  }
+}

@@ -1,27 +1,20 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace xp\compiler\types;
 
-  uses('xp.compiler.types.Scope');
+/**
+ * Represents the method scope
+ *
+ * @see     xp://xp.compiler.Scope
+ */
+class MethodScope extends Scope {
+  public $name= null;
 
   /**
-   * Represents the method scope
+   * Constructor
    *
-   * @see     xp://xp.compiler.Scope
+   * @param   string name
    */
-  class MethodScope extends Scope {
-    public $name= NULL;
-  
-    /**
-     * Constructor
-     *
-     * @param   string name
-     */
-    public function __construct($name= NULL) {
-      $this->name= $name;
-      parent::__construct();
-    }
+  public function __construct($name= null) {
+    $this->name= $name;
+    parent::__construct();
   }
-?>
+}

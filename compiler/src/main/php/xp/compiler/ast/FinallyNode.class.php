@@ -1,17 +1,10 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Finally
  *
- * $Id$ 
+ * @see  xp://xp.compiler.ast.TryNode
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * (Insert class' description here)
-   *
-   * @purpose  purpose
-   */
-  class FinallyNode extends xp·compiler·ast·Node {
-    public $statements = NULL;
-  }
-?>
+class FinallyNode extends Node {
+  public $statements = null;
+}

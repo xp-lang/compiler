@@ -1,28 +1,20 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace xp\compiler\ast;
+
+/**
+ * A lambda
  */
-
-  uses('xp.compiler.ast.Node');
-
+class LambdaNode extends Node {
+  public $parameters;
+  public $statements;
+  
   /**
-   * (Insert class' description here)
+   * Constructor
    *
+   * @param   xp.compiler.ast.Node[] parameters
+   * @param   xp.compiler.ast.Node[] statements
    */
-  class LambdaNode extends xp·compiler·ast·Node {
-    public $parameters;
-    public $statements;
-    
-    /**
-     * Constructor
-     *
-     * @param   xp.compiler.ast.Node[] parameters
-     * @param   xp.compiler.ast.Node[] statements
-     */
-    public function __construct(array $parameters, array $statements) {
-      $this->parameters= $parameters;
-      $this->statements= $statements;
-    }
+  public function __construct(array $parameters, array $statements) {
+    $this->parameters= $parameters;
+    $this->statements= $statements;
   }
-?>
+}

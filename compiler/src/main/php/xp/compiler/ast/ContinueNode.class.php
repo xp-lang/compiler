@@ -1,17 +1,8 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace xp\compiler\ast;
+
+/**
+ * Continue
  */
+class ContinueNode extends Node {
 
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * Continue
-   *
-   * @purpose  purpose
-   */
-  class ContinueNode extends xp·compiler·ast·Node {
-    
-  }
-?>
+}

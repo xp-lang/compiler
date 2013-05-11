@@ -1,17 +1,8 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace xp\compiler\ast;
+
+/**
+ * Break
  */
+class BreakNode extends Node {
 
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * Break
-   *
-   * @purpose  purpose
-   */
-  class BreakNode extends xp·compiler·ast·Node {
-    
-  }
-?>
+}

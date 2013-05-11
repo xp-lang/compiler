@@ -1,31 +1,24 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents constant access
  *
- * $Id$ 
+ * ```php
+ * self::SEPARATOR;
+ * ```
  */
-
-  uses('xp.compiler.ast.Node');
-
+class ConstantAccessNode extends Node {
+  public $type= null;
+  public $name= '';
+  
   /**
-   * Represents constant access
+   * Constructor
    *
-   * <code>
-   *   self::SEPARATOR;
-   * </code>
+   * @param   xp.compiler.types.TypeName type
+   * @param   string name
    */
-  class ConstantAccessNode extends xp·compiler·ast·Node {
-    public $type= NULL;
-    public $name= '';
-    
-    /**
-     * Constructor
-     *
-     * @param   xp.compiler.types.TypeName type
-     * @param   string name
-     */
-    public function __construct($type= NULL, $name= '') {
-      $this->type= $type;
-      $this->name= $name;
-    }
+  public function __construct($type= null, $name= '') {
+    $this->type= $type;
+    $this->name= $name;
   }
-?>
+}

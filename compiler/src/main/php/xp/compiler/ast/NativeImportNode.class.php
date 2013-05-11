@@ -1,26 +1,17 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.Node');
+/**
+ * Native import statement
+ */
+class NativeImportNode extends Node {
+  public $name= '';
 
   /**
-   * (Insert class' description here)
+   * Returns a hashcode
    *
-   * @purpose  purpose
+   * @return  string
    */
-  class NativeImportNode extends xp·compiler·ast·Node {
-    public $name= '';
-
-    /**
-     * Returns a hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return 'xp.import.native:'.$this->name;
-    }
+  public function hashCode() {
+    return 'xp.import.native:'.$this->name;
   }
-?>
+}

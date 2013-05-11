@@ -1,25 +1,17 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace net\xp_lang\tests\syntax\xp;
 
-  uses('net.xp_lang.tests.syntax.xp.LexerTest');
+/**
+ * Tests the lexer tokenizing string input
+ */
+class StringLexerTest extends LexerTest {
 
   /**
-   * Tests the lexer tokenizing string input
+   * Creates a lexer instance
    *
+   * @param   string in
+   * @return  xp.compiler.syntax.xp.Lexer
    */
-  class StringLexerTest extends LexerTest {
-
-    /**
-     * Creates a lexer instance
-     *
-     * @param   string in
-     * @return  xp.compiler.syntax.xp.Lexer
-     */
-    protected function newLexer($in) {
-      return new xp·compiler·syntax·xp·Lexer($in, $this->name);
-    }
+  protected function newLexer($in) {
+    return new \xp\compiler\syntax\xp\Lexer($in, $this->name);
   }
-?>
+}

@@ -1,33 +1,25 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.ConstantValueNode');
+/**
+ * Represents a string literal
+ */
+class StringNode extends ConstantValueNode {
 
   /**
-   * Represents a string literal
+   * Returns a hashcode
    *
+   * @return  string
    */
-  class StringNode extends ConstantValueNode {
-
-    /**
-     * Returns a hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return 'xp.string:'.$this->value;
-    }
-
-    /**
-     * Resolve this node's value.
-     *
-     * @return  var
-     */
-    public function resolve() {
-      return (string)$this->value;
-    }
+  public function hashCode() {
+    return 'xp.string:'.$this->value;
   }
-?>
+
+  /**
+   * Resolve this node's value.
+   *
+   * @return  var
+   */
+  public function resolve() {
+    return (string)$this->value;
+  }
+}

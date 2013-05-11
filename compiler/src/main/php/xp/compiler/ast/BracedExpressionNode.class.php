@@ -1,39 +1,32 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents a braced expression:
  *
- * $Id$
+ * ```php
+ * ( 3 + 2 ) * 5
+ * ```
+ * 
+ * Braces are used for precedence.
  */
-
-  uses('xp.compiler.ast.Node');
-
+class BracedExpressionNode extends Node {
+  public $expression= null;
+  
   /**
-   * Represents a braced expression:
+   * Constructor
    *
-   * <code>
-   *   ( 3 + 2 ) * 5
-   * </code>
-   * 
-   * Braces are used for precedence.
+   * @param   xp.compiler.ast.Node expression
    */
-  class BracedExpressionNode extends xp·compiler·ast·Node {
-    public $expression= NULL;
-    
-    /**
-     * Constructor
-     *
-     * @param   xp.compiler.ast.Node expression
-     */
-    public function __construct(xp·compiler·ast·Node $expression) {
-      $this->expression= $expression;
-    }
-    
-    /**
-     * Returns a hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return '('.$this->expression->hashCode().')';
-    }
+  public function __construct(Node $expression) {
+    $this->expression= $expression;
   }
-?>
+  
+  /**
+   * Returns a hashcode
+   *
+   * @return  string
+   */
+  public function hashCode() {
+    return '('.$this->expression->hashCode().')';
+  }
+}

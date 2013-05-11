@@ -1,25 +1,18 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.NaturalNode');
+/**
+ * Represents an integer literal
+ *
+ * @see   xp://xp.compiler.ast.NaturalNode
+ */
+class IntegerNode extends NaturalNode {
 
   /**
-   * Represents an integer literal
+   * Resolve this node's value.
    *
-   * @see   xp://xp.compiler.ast.NaturalNode
+   * @return  var
    */
-  class IntegerNode extends NaturalNode {
-
-    /**
-     * Resolve this node's value.
-     *
-     * @return  var
-     */
-    public function resolve() {
-      return (int)$this->value;
-    }
+  public function resolve() {
+    return (int)$this->value;
   }
-?>
+}

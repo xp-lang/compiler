@@ -1,28 +1,19 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents an annotation
  *
- * $Id$
+ * Example:
+ * ```php
+ * [@Deprecated('Use Type instead')]
+ * ```
+ *
+ * * Deprecated is the type
+ * * Parameters is the a map ("default" : "Use Type instead")
+ *
+ * @test    xp://net.xp_lang.tests.syntax.xp.AnnotationTest
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * Represents an annotation
-   *
-   * Example:
-   * <code>
-   *   [@Deprecated('Use Type instead')]
-   * </code>
-   *
-   * <ul>
-   *   <li>Deprecated is the type</li>
-   *   <li>Parameters is the a map ("default" : "Use Type instead")</li>
-   * </ul>
-   *
-   * @test    xp://net.xp_lang.tests.syntax.xp.AnnotationTest
-   */
-  class AnnotationNode extends xp·compiler·ast·Node {
-    public $type       = NULL;
-    public $parameters = array();
-  }
-?>
+class AnnotationNode extends Node {
+  public $type       = null;
+  public $parameters = array();
+}

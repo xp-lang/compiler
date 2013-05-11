@@ -1,18 +1,8 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
+<?php namespace xp\compiler\ast;
+
+/**
+ * Throw statement
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * (Insert class' description here)
-   *
-   * @purpose  purpose
-   */
-  class ThrowNode extends xp·compiler·ast·Node {
-    public $expression = NULL;
-    
-  }
-?>
+class ThrowNode extends Node {
+  public $expression = null;  
+}

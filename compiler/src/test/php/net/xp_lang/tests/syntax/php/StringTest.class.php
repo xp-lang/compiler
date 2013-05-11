@@ -1,26 +1,24 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace net\xp_lang\tests\syntax\php;
+
+
+/**
+ * TestCase
  */
-
-  $package= 'net.xp_lang.tests.syntax.php';
-
-  uses('net.xp_lang.tests.syntax.php.ParserTestCase');
+class StringTest extends ParserTestCase {
 
   /**
-   * TestCase
-   *
+   * Test unterminated string
    */
-  class net·xp_lang·tests·syntax·php·StringTest extends net·xp_lang·tests·syntax·php·ParserTestCase {
-  
-    /**
-     * Test unterminated string
-     *
-     */
-    #[@test, @expect('lang.IllegalStateException')]
-    public function unterminatedString() {
-      $this->parse("'Hello World");
-    }
+  #[@test, @expect('lang.IllegalStateException')]
+  public function unterminated_dq_tring() {
+    $this->parse('"Hello World');
   }
-?>
+
+  /**
+   * Test unterminated string
+   */
+  #[@test, @expect('lang.IllegalStateException')]
+  public function unterminated_sq_string() {
+    $this->parse("'Hello World");
+  }
+}

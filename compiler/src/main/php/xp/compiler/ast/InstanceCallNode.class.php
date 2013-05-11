@@ -1,34 +1,30 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.Node');
+/**
+ * Represents an instance call
+ *
+ * ```php
+ * $closure.();
+ * $operation.(1, 2);
+ * ```
+ *
+ * @see   php://call_user_func
+ */
+class InstanceCallNode extends Node {
+  public $target= null;
+  public $arguments= array();
+  public $nav= false;
   
   /**
-   * Represents an instance call
+   * Creates a new InstanceCallNode object
    *
-   * <code>
-   *   $closure.();
-   *   $operation.(1, 2);
-   * </code>
-   *
-   * @see   php://call_user_func
+   * @param   xp.compiler.ast.Node target
+   * @param   xp.compiler.ast.Node[] arguments
+   * @param   bool nav
    */
-  class InstanceCallNode extends xp·compiler·ast·Node {
-    public $target= NULL;
-    public $arguments= array();
-    
-    /**
-     * Creates a new InstanceCallNode object
-     *
-     * @param   xp.compiler.ast.Node target
-     * @param   xp.compiler.ast.Node[] arguments
-     */
-    public function __construct($target= NULL, $arguments= NULL) {
-      $this->target= $target;
-      $this->arguments= $arguments;
-    }
+  public function __construct($target= null, $arguments= null, $nav= false) {
+    $this->target= $target;
+    $this->arguments= $arguments;
+    $this->nav= $nav;
   }
-?>
+}

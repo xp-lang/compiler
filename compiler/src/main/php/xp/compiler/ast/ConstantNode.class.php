@@ -1,40 +1,26 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.ConstantValueNode');
+/**
+ * Represents a constant
+ */
+class ConstantNode extends Node {
+  public $name= null;
 
   /**
-   * Represents a constant
+   * Creates a new constant value node with a given name
    *
+   * @param   string name
    */
-  class ConstantNode extends ConstantValueNode {
-  
-    /**
-     * Returns a hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return $this->value;
-    }
-
-    /**
-     * Resolve this node's value.
-     *
-     * @return  var
-     */
-    public function resolve() {
-      if (!defined($this->value)) {
-        throw new IllegalStateException('Undefined constant '.$this->value);
-      }
-      $resolved= constant($this->value);
-      if (is_resource($resolved) || is_object($resolved)) {
-        throw new IllegalStateException('Constant '.$this->value.' resolves to non-primitive type '.xp::typeOf($resolved));
-      }
-      return $resolved;
-    }
+  public function __construct($name= null) {
+    $this->name= $name;
   }
-?>
+
+  /**
+   * Returns a hashcode
+   *
+   * @return  string
+   */
+  public function hashCode() {
+    return $this->name;
+  }
+}
