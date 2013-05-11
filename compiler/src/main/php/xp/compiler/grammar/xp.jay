@@ -207,19 +207,15 @@ imports:
 ;
 
 import:
-    T_IMPORT { $p= $yyLex->position; } importtype T_WORD '.' importname ';' {
-      $3->position= $p;
-      $3->name= $4.'.'.$6;
-      $$= $3;
+    T_IMPORT member '.' importname ';' {
+      $$= $yyLex->create(new ImportNode(array('name' => $2.'.'.$4)));
+    }
+  | T_IMPORT T_NATIVE member '.' importname ';' {
+      $$= $yyLex->create(new NativeImportNode(array('name' => $3.'.'.$5)));
     }
   | T_IMPORT T_STATIC qualifiedname T_DOUBLE_COLON importqualifier ';' {
     $$= $yyLex->create(new StaticImportNode(array('name' => $3.'.'.$5)));
   }
-;
-
-importtype:
-    /* empty */ { $$= new ImportNode(); }
-  | T_NATIVE    { $$= new NativeImportNode(); }
 ;
 
 importqualifier:
@@ -228,9 +224,8 @@ importqualifier:
 ;
 
 importname:
-    T_WORD
-  | '*'
-  | T_WORD '.' importname { $$= $1.'.'.$3; }
+    importqualifier
+  | importname '.' importqualifier { $$= $1.'.'.$3; }
 ;
 
 qualifiedname:
