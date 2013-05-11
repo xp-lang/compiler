@@ -1,26 +1,19 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace net\xp_lang\tests\execution\source;
+
+/**
+ * Generic filter
  *
- * $Id$ 
+ * @see      xp://net.xp_lang.tests.execution.source.InstanceCreationTest
  */
-
-  $package= 'net.xp_lang.tests.execution.source';
-
+#[@generic(self= 'T')]
+interface Filter {
+  
   /**
-   * Generic filter
+   * Returns whether this element should be accepted
    *
-   * @see      xp://net.xp_lang.tests.execution.source.InstanceCreationTest
+   * @param   T element
+   * @return  bool
    */
-  #[@generic(self= 'T')]
-  interface net·xp_lang·tests·execution·source·Filter {
-    
-    /**
-     * Returns whether this element should be accepted
-     *
-     * @param   T element
-     * @return  bool
-     */
-    #[@generic(params= 'T')]
-    public function accept($element);
-  }
-?>
+  #[@generic(params= 'T')]
+  public function accept($element);
+}

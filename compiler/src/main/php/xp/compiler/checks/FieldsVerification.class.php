@@ -1,49 +1,42 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace xp\compiler\checks;
 
-  uses('xp.compiler.checks.Check', 'xp.compiler.ast.RoutineNode');
+/**
+ * Verifies fields
+ *
+ * @test    xp://net.xp_lang.tests.checks.FieldsVerificationTest
+ */
+class FieldsVerification extends \lang\Object implements Check {
 
   /**
-   * Verifies routines
+   * Return node this check works on
    *
-   * @test    xp://net.xp_lang.tests.checks.FieldsVerificationTest
+   * @return  lang.XPClass<? extends xp.compiler.ast.Node>
    */
-  class FieldsVerification extends Object implements Check {
+  public function node() {
+    return \lang\XPClass::forName('xp.compiler.ast.FieldNode');
+  }
 
-    /**
-     * Return node this check works on
-     *
-     * @return  lang.XPClass<? extends xp.compiler.ast.Node>
-     */
-    public function node() {
-      return XPClass::forName('xp.compiler.ast.FieldNode');
-    }
+  /**
+   * Return whether this check is to be run deferred
+   *
+   * @return  bool
+   */
+  public function defer() {
+    return false;
+  }
+  
+  /**
+   * Executes this check
+   *
+   * @param   xp.compiler.ast.Node node
+   * @param   xp.compiler.types.Scope scope
+   * @return  bool
+   */
+  public function verify(\xp\compiler\ast\Node $node, \xp\compiler\types\Scope $scope) {
+    $field= \cast($node, 'xp.compiler.ast.FieldNode');
 
-    /**
-     * Return whether this check is to be run deferred
-     *
-     * @return  bool
-     */
-    public function defer() {
-      return FALSE;
-    }
-    
-    /**
-     * Executes this check
-     *
-     * @param   xp.compiler.ast.Node node
-     * @param   xp.compiler.types.Scope scope
-     * @return  bool
-     */
-    public function verify(xp·compiler·ast·Node $node, Scope $scope) {
-      $field= cast($node, 'xp.compiler.ast.FieldNode');
-
-      if ($scope->declarations[0] instanceof InterfaceNode) {
-        return array('I403', 'Interfaces may not have field declarations');
-      }
+    if ($scope->declarations[0] instanceof \xp\compiler\ast\InterfaceNode) {
+      return array('I403', 'Interfaces may not have field declarations');
     }
   }
-?>
+}

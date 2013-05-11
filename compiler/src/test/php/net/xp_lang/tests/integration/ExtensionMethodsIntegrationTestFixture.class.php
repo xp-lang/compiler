@@ -1,28 +1,23 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
+<?php namespace net\xp_lang\tests\integration;
+
+use util\cmd\Console;
+new \import('StringExtensions');
+
+/**
+ * Test fixture
  */
-
-  uses('lang.types.String', 'StringExtensions');
-
+class ExtensionMethodsIntegrationTestFixture extends \lang\Object {
+  
   /**
-   * (Insert class' description here)
+   * Entry point method
    *
+   * @param   string[] args
    */
-  class ExtensionMethodsIntegrationTestFixture extends Object {
-    
-    /**
-     * Entry point method
-     *
-     * @param   string[] args
-     */
-    public static function main(array $args) {
-      try {
-        Console::$out->writeLine('+', serialize(eval(Console::$in->readLine())));
-      } catch (Throwable $e) {
-        Console::$out->writeLine('-', $e->getMessage());
-      }
+  public static function main(array $args) {
+    try {
+      Console::$out->writeLine('+', serialize(eval(Console::$in->readLine())));
+    } catch (\lang\Throwable $e) {
+      Console::$out->writeLine('-', $e->getMessage());
     }
   }
-?>
+}

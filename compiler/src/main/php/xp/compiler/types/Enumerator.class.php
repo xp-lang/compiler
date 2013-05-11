@@ -1,20 +1,12 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\types;
+
+/**
+ * Represents an enumerator
  *
- * $Id$
+ * @see      xp://xp.compiler.types.Types
  */
-
-  $package= 'xp.compiler.types';
-
-  /**
-   * Represents an enumerator
-   *
-   * @see      xp://xp.compiler.types.Types
-   */
-  class xp·compiler·types·Enumerator extends Object {
-    public
-      $key       = NULL,
-      $value     = NULL;
-
-  }
-?>
+class Enumerator extends \lang\Object {
+  public
+    $key       = null,
+    $value     = null;
+}

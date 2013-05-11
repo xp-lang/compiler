@@ -1,42 +1,35 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents an array access operator
  *
- * $Id$ 
+ * Examples:
+ * ```php
+ * $first= $list[0];
+ * $element= $map[$key];
+ * ```
  */
-
-  uses('xp.compiler.ast.Node');
-
+class ArrayAccessNode extends Node {
+  public $target= null;
+  public $offset= null;
+  
   /**
-   * Represents an array access operator
+   * Constructor
    *
-   * Examples:
-   * <code>
-   *   $first= $list[0];
-   *   $element= $map[$key];
-   * </code>   
+   * @param   xp.compiler.ast.Node target
+   * @param   xp.compiler.ast.Node offset
    */
-  class ArrayAccessNode extends xp·compiler·ast·Node {
-    public $target= NULL;
-    public $offset= NULL;
-    
-    /**
-     * Constructor
-     *
-     * @param   xp.compiler.ast.Node target
-     * @param   xp.compiler.ast.Node offset
-     */
-    public function __construct($target= NULL, xp·compiler·ast·Node $offset= NULL) {
-      $this->target= $target;
-      $this->offset= $offset;
-    }
-    
-    /**
-     * Returns a hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return '['.($this->offset ? $this->offset->hashCode() : '').']';
-    }
+  public function __construct($target= null, Node $offset= null) {
+    $this->target= $target;
+    $this->offset= $offset;
   }
-?>
+  
+  /**
+   * Returns a hashcode
+   *
+   * @return  string
+   */
+  public function hashCode() {
+    return '['.($this->offset ? $this->offset->hashCode() : '').']';
+  }
+}

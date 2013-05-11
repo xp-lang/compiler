@@ -1,29 +1,22 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents a return statement.
  *
- * $Id$ 
+ * ```php
+ * return;
+ * return $a;
+ * ```
  */
-
-  uses('xp.compiler.ast.Node');
-
+class ReturnNode extends Node {
+  public $expression= null;
+  
   /**
-   * Represents a return statement.
+   * Constructor
    *
-   * <code>
-   *   return;
-   *   return $a;
-   * </code>
+   * @param   xp.compiler.ast.Node expression
    */
-  class ReturnNode extends xp·compiler·ast·Node {
-    public $expression= NULL;
-    
-    /**
-     * Constructor
-     *
-     * @param   xp.compiler.ast.Node expression
-     */
-    public function __construct(xp·compiler·ast·Node $expression= NULL) {
-      $this->expression= $expression;
-    }
+  public function __construct(Node $expression= null) {
+    $this->expression= $expression;
   }
-?>
+}

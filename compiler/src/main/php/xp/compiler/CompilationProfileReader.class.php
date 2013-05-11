@@ -1,47 +1,42 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler;
+
+use lang\XPClass;
+
+/**
+ * Reads compilation profiles from one or more property file
  *
- * $Id$ 
+ * @test    xp://net.xp_lang.tests.CompilationProfileReaderTest
  */
-
-  uses('util.Properties', 'xp.compiler.CompilationProfile');
-
+class CompilationProfileReader extends \lang\Object {
+  protected $sources= array();
+  
   /**
-   * Reads compilation profiles from one or more property file
+   * Add source properties
    *
-   * @test    xp://net.xp_lang.tests.CompilationProfileReaderTest
+   * @param   util.Properties source
    */
-  class CompilationProfileReader extends Object {
-    protected $sources= array();
-    
-    /**
-     * Add source properties
-     *
-     * @param   util.Properties source
-     */
-    public function addSource(Properties $source) {
-      $this->sources[]= $source;
-    }
-    
-    /**
-     * Get profile
-     *
-     * @return  xp.compiler.CompilationProfile
-     */
-    public function getProfile() {
-      $profile= new CompilationProfile();
-      foreach ($this->sources as $source) {
-        foreach ($source->readArray('warnings', 'class') as $class) {
-          $profile->addWarning(XPClass::forName($class)->newInstance());
-        }
-        foreach ($source->readArray('errors', 'class') as $class) {
-          $profile->addError(XPClass::forName($class)->newInstance(), TRUE);
-        }
-        foreach ($source->readArray('optimizations', 'class') as $class) {
-          $profile->addOptimization(XPClass::forName($class)->newInstance());
-        }
-      }
-      return $profile;
-    }
+  public function addSource(\util\Properties $source) {
+    $this->sources[]= $source;
   }
-?>
+  
+  /**
+   * Get profile
+   *
+   * @return  xp.compiler.CompilationProfile
+   */
+  public function getProfile() {
+    $profile= new CompilationProfile();
+    foreach ($this->sources as $source) {
+      foreach ($source->readArray('warnings', 'class') as $class) {
+        $profile->addWarning(XPClass::forName($class)->newInstance());
+      }
+      foreach ($source->readArray('errors', 'class') as $class) {
+        $profile->addError(XPClass::forName($class)->newInstance(), true);
+      }
+      foreach ($source->readArray('optimizations', 'class') as $class) {
+        $profile->addOptimization(XPClass::forName($class)->newInstance());
+      }
+    }
+    return $profile;
+  }
+}

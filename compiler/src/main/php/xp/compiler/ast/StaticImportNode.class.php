@@ -1,26 +1,17 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.Node');
+/**
+ * Import static statement
+ */
+class StaticImportNode extends Node {
+  public $name= '';
 
   /**
-   * (Insert class' description here)
+   * Returns a hashcode
    *
-   * @purpose  purpose
+   * @return  string
    */
-  class StaticImportNode extends xp·compiler·ast·Node {
-    public $name= '';
-
-    /**
-     * Returns a hashcode
-     *
-     * @return  string
-     */
-    public function hashCode() {
-      return 'xp.import.static:'.$this->name;
-    }
+  public function hashCode() {
+    return 'xp.import.static:'.$this->name;
   }
-?>
+}

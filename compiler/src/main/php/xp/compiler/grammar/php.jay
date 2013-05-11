@@ -1,74 +1,80 @@
 %{
-  uses(
-    'xp.compiler.types.TypeName',
-    'xp.compiler.ast.ParseTree',
-    'xp.compiler.ast.PackageNode',
-    'xp.compiler.ast.ImportNode',
-    'xp.compiler.ast.StaticImportNode',
-    'xp.compiler.ast.NativeImportNode',
-    'xp.compiler.ast.AnnotationNode',
-    'xp.compiler.ast.BracedExpressionNode',
-    'xp.compiler.ast.DynamicInstanceOfNode',
-    'xp.compiler.ast.DynamicInstanceCreationNode',
-    'xp.compiler.ast.DynamicVariableReferenceNode',
-    'xp.compiler.ast.ClassNode',
-    'xp.compiler.ast.EnumNode',
-    'xp.compiler.ast.EnumMemberNode',
-    'xp.compiler.ast.InterfaceNode',
-    'xp.compiler.ast.FieldNode',
-    'xp.compiler.ast.ConstructorNode',
-    'xp.compiler.ast.MethodNode',
-    'xp.compiler.ast.OperatorNode',
-    'xp.compiler.ast.ReturnNode',
-    'xp.compiler.ast.InstanceCreationNode',
-    'xp.compiler.ast.VariableNode',
-    'xp.compiler.ast.ArrayAccessNode',
-    'xp.compiler.ast.CastNode',
-    'xp.compiler.ast.TryNode',
-    'xp.compiler.ast.CatchNode',
-    'xp.compiler.ast.ThrowNode',
-    'xp.compiler.ast.FinallyNode',
-    'xp.compiler.ast.ForNode',
-    'xp.compiler.ast.ForeachNode',
-    'xp.compiler.ast.DoNode',
-    'xp.compiler.ast.WhileNode',
-    'xp.compiler.ast.AssignmentNode',
-    'xp.compiler.ast.InvocationNode',
-    'xp.compiler.ast.MethodCallNode',
-    'xp.compiler.ast.StaticMethodCallNode',
-    'xp.compiler.ast.MemberAccessNode',
-    'xp.compiler.ast.StaticMemberAccessNode',
-    'xp.compiler.ast.ConstantNode',
-    'xp.compiler.ast.ConstantAccessNode',
-    'xp.compiler.ast.ClassAccessNode',
-    'xp.compiler.ast.IntegerNode',
-    'xp.compiler.ast.HexNode',
-    'xp.compiler.ast.OctalNode',
-    'xp.compiler.ast.DecimalNode',
-    'xp.compiler.ast.StringNode',
-    'xp.compiler.ast.BooleanNode',
-    'xp.compiler.ast.NullNode',
-    'xp.compiler.ast.ArrayNode',
-    'xp.compiler.ast.MapNode',
-    'xp.compiler.ast.ClassConstantNode',
-    'xp.compiler.ast.InstanceOfNode',
-    'xp.compiler.ast.ComparisonNode',
-    'xp.compiler.ast.BinaryOpNode',
-    'xp.compiler.ast.BooleanOpNode',
-    'xp.compiler.ast.UnaryOpNode',
-    'xp.compiler.ast.TernaryNode',
-    'xp.compiler.ast.SwitchNode',
-    'xp.compiler.ast.CaseNode',
-    'xp.compiler.ast.DefaultNode',
-    'xp.compiler.ast.BreakNode',
-    'xp.compiler.ast.ContinueNode',
-    'xp.compiler.ast.CloneNode',
-    'xp.compiler.ast.IfNode',
-    'xp.compiler.ast.ElseNode',
-    'xp.compiler.ast.LambdaNode',
-    'xp.compiler.ast.NoopNode',
-    'xp.compiler.ast.SilenceOperatorNode'
-  );
+namespace xp\compiler\syntax\php;
+
+use xp\compiler\types\TypeName;
+use xp\compiler\ast\ParseTree;
+use xp\compiler\ast\PackageNode;
+use xp\compiler\ast\ImportNode;
+use xp\compiler\ast\StaticImportNode;
+use xp\compiler\ast\NativeImportNode;
+use xp\compiler\ast\AnnotationNode;
+use xp\compiler\ast\ClassNode;
+use xp\compiler\ast\EnumNode;
+use xp\compiler\ast\EnumMemberNode;
+use xp\compiler\ast\InterfaceNode;
+use xp\compiler\ast\FieldNode;
+use xp\compiler\ast\PropertyNode;
+use xp\compiler\ast\IndexerNode;
+use xp\compiler\ast\ConstructorNode;
+use xp\compiler\ast\MethodNode;
+use xp\compiler\ast\OperatorNode;
+use xp\compiler\ast\ReturnNode;
+use xp\compiler\ast\InstanceCreationNode;
+use xp\compiler\ast\VariableNode;
+use xp\compiler\ast\ArrayAccessNode;
+use xp\compiler\ast\CastNode;
+use xp\compiler\ast\TryNode;
+use xp\compiler\ast\CatchNode;
+use xp\compiler\ast\ThrowNode;
+use xp\compiler\ast\FinallyNode;
+use xp\compiler\ast\ForNode;
+use xp\compiler\ast\ForeachNode;
+use xp\compiler\ast\DoNode;
+use xp\compiler\ast\WhileNode;
+use xp\compiler\ast\AssignmentNode;
+use xp\compiler\ast\InvocationNode;
+use xp\compiler\ast\MethodCallNode;
+use xp\compiler\ast\InstanceCallNode;
+use xp\compiler\ast\StaticMethodCallNode;
+use xp\compiler\ast\MemberAccessNode;
+use xp\compiler\ast\StaticMemberAccessNode;
+use xp\compiler\ast\ConstantNode;
+use xp\compiler\ast\ConstantAccessNode;
+use xp\compiler\ast\ClassAccessNode;
+use xp\compiler\ast\IntegerNode;
+use xp\compiler\ast\HexNode;
+use xp\compiler\ast\OctalNode;
+use xp\compiler\ast\DecimalNode;
+use xp\compiler\ast\StringNode;
+use xp\compiler\ast\BooleanNode;
+use xp\compiler\ast\NullNode;
+use xp\compiler\ast\ArrayNode;
+use xp\compiler\ast\MapNode;
+use xp\compiler\ast\ClassConstantNode;
+use xp\compiler\ast\InstanceOfNode;
+use xp\compiler\ast\ComparisonNode;
+use xp\compiler\ast\BinaryOpNode;
+use xp\compiler\ast\BooleanOpNode;
+use xp\compiler\ast\UnaryOpNode;
+use xp\compiler\ast\TernaryNode;
+use xp\compiler\ast\SwitchNode;
+use xp\compiler\ast\CaseNode;
+use xp\compiler\ast\DefaultNode;
+use xp\compiler\ast\BreakNode;
+use xp\compiler\ast\ContinueNode;
+use xp\compiler\ast\CloneNode;
+use xp\compiler\ast\IfNode;
+use xp\compiler\ast\ElseNode;
+use xp\compiler\ast\StaticInitializerNode;
+use xp\compiler\ast\LambdaNode;
+use xp\compiler\ast\WithNode;
+use xp\compiler\ast\ArmNode;
+use xp\compiler\ast\BracedExpressionNode;
+use xp\compiler\ast\SilenceOperatorNode;
+use xp\compiler\ast\DynamicInstanceCreationNode;
+use xp\compiler\ast\DynamicInstanceOfNode;
+use xp\compiler\ast\DynamicVariableReferenceNode;
+use xp\compiler\ast\NoopNode;
 %}
 
 %left ','
@@ -183,7 +189,7 @@ start:
 // {{{ Packages, imports
 package_opt:
     /* empty */
-  | T_NAMESPACE { $1= $yyLex->create(new PackageNode()); } qualifiedname ';' {
+  | T_NAMESPACE { $1= $yyLex->create(new PackageNode()); } namedeclaration ';' {
       $1->name= $3;
     }
 ;
@@ -199,14 +205,19 @@ uses:
 ;
 
 use:
-    T_USE qualifiedname ';' {
+    T_USE namedeclaration ';' {
       $$= $yyLex->create(new ImportNode(array('name' => $2))); 
     }
 ;
 
+namedeclaration:
+    T_WORD
+  | T_WORD '\\' namedeclaration { $$= $1.'.'.$3; }
+;
+
 qualifiedname:
     T_WORD
-  | T_WORD '\\' qualifiedname { $$= $1.'.'.$3; }
+  | '\\' namedeclaration { $$= $2; }
 ;
 // }}}
 

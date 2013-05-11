@@ -1,40 +1,33 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Dynamic variable reference
  *
- * $Id$ 
+ * Example
+ * ~~~~~~~
+ * ```php
+ * $this->$name;
+ * $this->{$name};
+ * $this->{substr($name, 0, -5)};
+ * ```
+ *
+ * Note
+ * ~~~~
+ * This is only available in PHP syntax!
+ *
  */
-
-  uses('xp.compiler.ast.Node');
-
+class DynamicVariableReferenceNode extends Node {
+  public $target= null;
+  public $expression = null;
+  
   /**
-   * Dynamic variable reference
+   * Creates a new dynamic variable reference
    *
-   * Example
-   * ~~~~~~~
-   * <code>
-   *   $this->$name;
-   *   $this->{$name};
-   *   $this->{substr($name, 0, -5)};
-   * </code>
-   *
-   * Note
-   * ~~~~
-   * This is only available in PHP syntax!
-   *
+   * @param   xp.compiler.ast.Node target
+   * @param  xp.compiler.ast.Node expression
    */
-  class DynamicVariableReferenceNode extends xp·compiler·ast·Node {
-    public $target= NULL;
-    public $expression = NULL;
-    
-    /**
-     * Creates a new dynamic variable reference
-     *
-     * @param   xp.compiler.ast.Node target
-     * @param  xp.compiler.ast.Node expression
-     */
-    public function __construct($target= NULL, xp·compiler·ast·Node $expression) {
-      $this->target= $target;
-      $this->expression= $expression;
-    }
+  public function __construct($target= null, Node $expression) {
+    $this->target= $target;
+    $this->expression= $expression;
   }
-?>
+}

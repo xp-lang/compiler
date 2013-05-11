@@ -1,48 +1,39 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace xp\compiler\checks;
 
-  uses('xp.compiler.checks.Check', 'xp.compiler.ast.PropertyNode');
+/**
+ * Verifies properties
+ */
+class PropertiesVerification extends \lang\Object implements Check {
 
   /**
-   * Verifies properties
+   * Return node this check works on
    *
+   * @return  lang.XPClass<? extends xp.compiler.ast.Node>
    */
-  class PropertiesVerification extends Object implements Check {
+  public function node() {
+    return \lang\XPClass::forName('xp.compiler.ast.PropertyNode');
+  }
 
-    /**
-     * Return node this check works on
-     *
-     * @return  lang.XPClass<? extends xp.compiler.ast.Node>
-     */
-    public function node() {
-      return XPClass::forName('xp.compiler.ast.PropertyNode');
-    }
-
-    /**
-     * Return whether this check is to be run deferred
-     *
-     * @return  bool
-     */
-    public function defer() {
-      return FALSE;
-    }
-    
-    /**
-     * Executes this check
-     *
-     * @param   xp.compiler.ast.Node node
-     * @param   xp.compiler.types.Scope scope
-     * @return  bool
-     */
-    public function verify(xp·compiler·ast·Node $node, Scope $scope) {
-      $routine= cast($node, 'xp.compiler.ast.PropertyNode');
-
-      if ($scope->declarations[0] instanceof InterfaceNode) {
-        return array('I403', 'Interfaces may not have properties');
-      }
+  /**
+   * Return whether this check is to be run deferred
+   *
+   * @return  bool
+   */
+  public function defer() {
+    return false;
+  }
+  
+  /**
+   * Executes this check
+   *
+   * @param   xp.compiler.ast.Node node
+   * @param   xp.compiler.types.Scope scope
+   * @return  bool
+   */
+  public function verify(\xp\compiler\ast\Node $node, \xp\compiler\types\Scope $scope) {
+    $routine= \cast($node, 'xp.compiler.ast.PropertyNode');
+    if ($scope->declarations[0] instanceof \xp\compiler\ast\InterfaceNode) {
+      return array('I403', 'Interfaces may not have properties');
     }
   }
-?>
+}

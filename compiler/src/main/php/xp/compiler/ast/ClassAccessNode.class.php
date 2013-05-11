@@ -1,28 +1,21 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents class access
  *
- * $Id$ 
+ * ```php
+ * self::class;
+ * ```
  */
-
-  uses('xp.compiler.ast.Node');
-
+class ClassAccessNode extends Node {
+  public $type= null;
+  
   /**
-   * Represents class access
+   * Constructor
    *
-   * <code>
-   *   self::class;
-   * </code>
+   * @param   xp.compiler.types.TypeName type
    */
-  class ClassAccessNode extends xp·compiler·ast·Node {
-    public $type= NULL;
-    
-    /**
-     * Constructor
-     *
-     * @param   xp.compiler.types.TypeName type
-     */
-    public function __construct($type= NULL) {
-      $this->type= $type;
-    }
+  public function __construct($type= null) {
+    $this->type= $type;
   }
-?>
+}

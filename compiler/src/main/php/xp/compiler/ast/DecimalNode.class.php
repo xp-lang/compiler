@@ -1,25 +1,18 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace xp\compiler\ast;
 
-  uses('xp.compiler.ast.NumberNode');
+/**
+ * Represents a decimal literal
+ *
+ * @test  xp://net.xp_lang.tests.resolve.NumberResolveTest
+ */
+class DecimalNode extends NumberNode {
 
   /**
-   * Represents a decimal literal
+   * Resolve this node's value.
    *
-   * @test  xp://net.xp_lang.tests.resolve.NumberResolveTest
+   * @return  var
    */
-  class DecimalNode extends NumberNode {
-
-    /**
-     * Resolve this node's value.
-     *
-     * @return  var
-     */
-    public function resolve() {
-      return (double)$this->value;
-    }
+  public function resolve() {
+    return (double)$this->value;
   }
-?>
+}

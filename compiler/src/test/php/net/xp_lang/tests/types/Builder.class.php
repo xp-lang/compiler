@@ -1,28 +1,21 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace net\xp_lang\tests\types;
 
- $package= 'net.xp_lang.tests.types';
+/**
+ * Fixture for testing extension methods reflection
+ *
+ * @see   xp://net.xp_lang.tests.types.TypeReflectionTest
+ */
+class Builder extends \lang\Object {
 
   /**
-   * Fixture for testing extension methods reflection
+   * Creates a new builder instance by copying an existing one if given
    *
-   * @see   xp://net.xp_lang.tests.types.TypeReflectionTest
+   * @param   self self
+   * @return  self
    */
-  class net·xp_lang·tests·types·Builder extends Object {
-
-    /**
-     * Creates a new builder instance by copying an existing one if given
-     *
-     * @param   self self
-     * @return  self
-     */
-    public static function create(self $self= NULL) {
-      $copy= clone $self;
-      // TBI
-      return $copy;
-    }
+  public static function create(self $self= null) {
+    $copy= clone $self;
+    // TBI
+    return $copy;
   }
-?>
+}

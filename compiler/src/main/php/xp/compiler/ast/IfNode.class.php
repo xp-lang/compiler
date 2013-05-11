@@ -1,20 +1,10 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
+<?php namespace xp\compiler\ast;
+
+/**
+ * The "if" statement
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * (Insert class' description here)
-   *
-   * @purpose  purpose
-   */
-  class IfNode extends xp·compiler·ast·Node {
-    public $condition  = NULL;
-    public $statements = NULL;
-    public $otherwise  = NULL;
-    
-  }
-?>
+class IfNode extends Node {
+  public $condition  = null;
+  public $statements = null;
+  public $otherwise  = null;  
+}

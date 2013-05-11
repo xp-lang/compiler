@@ -1,29 +1,21 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents the clone statement
  *
- * $Id$
+ * ```php
+ * $clone= clone $expression;
+ * ```
  */
-
-  uses('xp.compiler.ast.Node');
-
+class CloneNode extends Node {
+  public $expression;
+  
   /**
-   * Represents the clone statement
+   * Constructor
    *
-   * <code>
-   *   $clone= clone $expression;
-   * </code>
-   *
+   * @param   xp.compiler.ast.Node expression
    */
-  class CloneNode extends xp·compiler·ast·Node {
-    public $expression;
-    
-    /**
-     * Constructor
-     *
-     * @param   xp.compiler.ast.Node expression
-     */
-    public function __construct(xp·compiler·ast·Node $expression) {
-      $this->expression= $expression;
-    }
+  public function __construct(Node $expression) {
+    $this->expression= $expression;
   }
-?>
+}

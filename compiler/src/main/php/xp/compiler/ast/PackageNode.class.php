@@ -1,17 +1,8 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace xp\compiler\ast;
+
+/**
+ * Package statement
  */
+class PackageNode extends Node {
 
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * (Insert class' description here)
-   *
-   * @purpose  purpose
-   */
-  class PackageNode extends xp·compiler·ast·Node {
-    
-  }
-?>
+}

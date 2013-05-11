@@ -1,21 +1,11 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace xp\compiler\ast;
+
+/**
+ * Ternary operator `condition ? expression : conditional`
  */
-
-  uses('xp.compiler.ast.Node');
-
-  /**
-   * (Insert class' description here)
-   *
-   * @purpose  purpose
-   */
-  class TernaryNode extends xp·compiler·ast·Node {
-    public
-      $condition,
-      $expression,
-      $conditional;
-    
-  }
-?>
+class TernaryNode extends Node {
+  public
+    $condition,
+    $expression,
+    $conditional;  
+}

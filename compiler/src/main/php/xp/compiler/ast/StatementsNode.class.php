@@ -1,25 +1,17 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents a list of statements
  */
-
-  uses('xp.compiler.ast.Node');
-
+class StatementsNode extends Node {
+  public $list= array();
+  
   /**
-   * Represents a list of statements
+   * Constructor.
    *
+   * @param   xp.compiler.ast.Node[] initial
    */
-  class StatementsNode extends xp·compiler·ast·Node {
-    public $list= array();
-    
-    /**
-     * Constructor.
-     *
-     * @param   xp.compiler.ast.Node[] initial
-     */
-    public function __construct(array $initial= array()) {
-      $this->list= $initial;
-    }
+  public function __construct(array $initial= array()) {
+    $this->list= $initial;
   }
-?>
+}

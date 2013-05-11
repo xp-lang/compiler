@@ -1,27 +1,23 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace net\xp_lang\tests\syntax\xp;
 
-  uses('net.xp_lang.tests.syntax.xp.ParserTestCase');
+use xp\compiler\ast\InvocationNode;
+use xp\compiler\ast\VariableNode;
+
+/**
+ * TestCase
+ *
+ */
+class InvocationTest extends ParserTestCase {
 
   /**
-   * TestCase
+   * Test writeLine()
    *
    */
-  class InvocationTest extends ParserTestCase {
-
-    /**
-     * Test writeLine()
-     *
-     */
-    #[@test]
-    public function writeLine() {
-      $this->assertEquals(
-        array(new InvocationNode('writeLine', array(new VariableNode('m')))),
-        $this->parse('writeLine($m);')
-      );
-    }
+  #[@test]
+  public function writeLine() {
+    $this->assertEquals(
+      array(new InvocationNode('writeLine', array(new VariableNode('m')))),
+      $this->parse('writeLine($m);')
+    );
   }
-?>
+}

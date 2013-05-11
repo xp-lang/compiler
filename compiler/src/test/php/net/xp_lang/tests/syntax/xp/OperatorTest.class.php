@@ -1,52 +1,42 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace net\xp_lang\tests\syntax\xp;
 
-  uses(
-    'unittest.TestCase',
-    'xp.compiler.syntax.xp.Lexer',
-    'xp.compiler.syntax.xp.Parser'
-  );
+use xp\compiler\syntax\xp\Lexer;
+use xp\compiler\syntax\xp\Parser;
+use xp\compiler\ast\OperatorNode;
+use xp\compiler\types\TypeName;
+
+/**
+ * TestCase
+ *
+ */
+class OperatorTest extends ParserTestCase {
 
   /**
-   * TestCase
+   * Parse operator source and return statements inside this operator.
    *
+   * @param   string src
+   * @return  xp.compiler.Node[]
    */
-  class OperatorTest extends TestCase {
-  
-    /**
-     * Parse operator source and return statements inside this operator.
-     *
-     * @param   string src
-     * @return  xp.compiler.Node[]
-     */
-    protected function parse($src) {
-      return create(new xp·compiler·syntax·xp·Parser())->parse(new xp·compiler·syntax·xp·Lexer($src, '<string:'.$this->name.'>'))->declaration->body;
-    }
-
-    /**
-     * Test operator declaration
-     *
-     */
-    #[@test]
-    public function concatOperator() {
-      $this->assertEquals(array(new OperatorNode(array(
-        'modifiers'  => MODIFIER_PUBLIC | MODIFIER_STATIC,
-        'annotations'=> NULL,
-        'name'       => '',
-        'symbol'     => '~',
-        'returns'    => new TypeName('self'),
-        'parameters' => array(
-          array('name' => 'self', 'type' => new TypeName('self'), 'check' => TRUE),
-          array('name' => 'arg', 'type' => TypeName::$VAR, 'check' => TRUE),
-        ),
-        'throws'     => NULL,
-        'body'       => array()
-      ))), $this->parse('class String { 
-        public static self operator ~(self $self, var $arg) { }
-      }'));
-    }
+  protected function parse($src) {
+    return create(new Parser())->parse(new Lexer($src, '<string:'.$this->name.'>'))->declaration->body;
   }
-?>
+
+  #[@test]
+  public function concat_operator() {
+    $this->assertEquals(array(new OperatorNode(array(
+      'modifiers'  => MODIFIER_PUBLIC | MODIFIER_STATIC,
+      'annotations'=> null,
+      'name'       => '',
+      'symbol'     => '~',
+      'returns'    => new TypeName('self'),
+      'parameters' => array(
+        array('name' => 'self', 'type' => new TypeName('self'), 'check' => true),
+        array('name' => 'arg', 'type' => TypeName::$VAR, 'check' => true),
+      ),
+      'throws'     => null,
+      'body'       => array()
+    ))), $this->parse('class String { 
+      public static self operator ~(self $self, var $arg) { }
+    }'));
+  }
+}

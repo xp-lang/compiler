@@ -1,26 +1,19 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\ast;
+
+/**
+ * Represents an octal literal
  *
- * $Id$
+ * @see   xp://xp.compiler.ast.NaturalNode
+ * @test  xp://net.xp_lang.tests.resolve.NumberResolveTest
  */
-
-  uses('xp.compiler.ast.NaturalNode');
-
+class OctalNode extends NaturalNode {
+  
   /**
-   * Represents an octal literal
+   * Resolve this node's value.
    *
-   * @see   xp://xp.compiler.ast.NaturalNode
-   * @test  xp://net.xp_lang.tests.resolve.NumberResolveTest
+   * @return  var
    */
-  class OctalNode extends NaturalNode {
-    
-    /**
-     * Resolve this node's value.
-     *
-     * @return  var
-     */
-    public function resolve() {
-      return octdec($this->value);
-    }
+  public function resolve() {
+    return octdec($this->value);
   }
-?>
+}

@@ -1,37 +1,27 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
+<?php namespace xp\compiler\syntax\php;
+
+/**
+ * PHP 5.3 Syntax (no alternative syntax)
  */
-
-  $package= 'xp.compiler.syntax.php';
-
-  uses('xp.compiler.Syntax', 'xp.compiler.syntax.php.Parser', 'xp.compiler.syntax.php.Lexer');
+class Syntax extends \xp\compiler\Syntax {
 
   /**
-   * PHP 5.3 Syntax (no alternative syntax)
+   * Creates a parser instance
    *
+   * @return  text.parser.generic.AbstractParser
    */
-  class xp·compiler·syntax·php·Syntax extends Syntax {
-
-    /**
-     * Creates a parser instance
-     *
-     * @return  text.parser.generic.AbstractParser
-     */
-    protected function newParser() {
-      return new xp·compiler·syntax·php·Parser();
-    }
-
-    /**
-     * Creates a lexer instance
-     *
-     * @param   io.streams.InputStream in
-     * @param   string source
-     * @return  text.parser.generic.AbstractLexer
-     */
-    protected function newLexer(InputStream $in, $source) {
-      return new xp·compiler·syntax·php·Lexer($in, $source);
-    }
+  protected function newParser() {
+    return new Parser();
   }
-?>
+
+  /**
+   * Creates a lexer instance
+   *
+   * @param   io.streams.InputStream in
+   * @param   string source
+   * @return  text.parser.generic.AbstractLexer
+   */
+  protected function newLexer(\io\streams\InputStream $in, $source) {
+    return new Lexer($in, $source);
+  }
+}

@@ -1,26 +1,19 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace xp\compiler\types;
+
+/**
+ * Represents the method scope
  *
- * $Id$
+ * @see     xp://xp.compiler.Scope
  */
-
-  uses('xp.compiler.types.Scope', 'xp.compiler.task.CompilationTask');
-
+class TaskScope extends Scope {
+  
   /**
-   * Represents the method scope
+   * Constructor
    *
-   * @see     xp://xp.compiler.Scope
+   * @param   xp.compiler.task.CompilationTask task
    */
-  class TaskScope extends Scope {
-    
-    /**
-     * Constructor
-     *
-     * @param   xp.compiler.task.CompilationTask task
-     */
-    public function __construct(CompilationTask $task) {
-      parent::__construct();
-      $this->task= $task;
-    }
+  public function __construct(\xp\compiler\task\CompilationTask $task) {
+    parent::__construct();
+    $this->task= $task;
   }
-?>
+}

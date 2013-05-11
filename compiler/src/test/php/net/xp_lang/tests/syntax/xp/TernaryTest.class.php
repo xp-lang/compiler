@@ -1,83 +1,82 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$
- */
+<?php namespace net\xp_lang\tests\syntax\xp;
 
-  uses('net.xp_lang.tests.syntax.xp.ParserTestCase');
+use xp\compiler\ast\TernaryNode;
+use xp\compiler\ast\VariableNode;
+use xp\compiler\ast\IntegerNode;
+use xp\compiler\ast\BracedExpressionNode;
+use xp\compiler\ast\AssignmentNode;
+
+/**
+ * TestCase
+ *
+ */
+class TernaryTest extends ParserTestCase {
 
   /**
-   * TestCase
+   * Test ternary - expr ? expr : expr
    *
    */
-  class TernaryTest extends ParserTestCase {
-  
-    /**
-     * Test ternary - expr ? expr : expr
-     *
-     */
-    #[@test]
-    public function ternary() {
-      $this->assertEquals(array(new TernaryNode(array(
-        'condition'     => new VariableNode('i'),
+  #[@test]
+  public function ternary() {
+    $this->assertEquals(array(new TernaryNode(array(
+      'condition'     => new VariableNode('i'),
+      'expression'    => new IntegerNode('1'),
+      'conditional'   => new IntegerNode('2'),
+    ))), $this->parse('
+      $i ? 1 : 2;
+    '));
+  }
+
+  /**
+   * Test ternary - expr ?: expr
+   *
+   */
+  #[@test]
+  public function assignment() {
+    $this->assertEquals(array(new AssignmentNode(array(
+      'variable'      => new VariableNode('a'),
+      'expression'    => new TernaryNode(array(
+        'condition'     => new VariableNode('argc'),
+        'expression'    => new VariableNode('args0'),
+        'conditional'   => new IntegerNode('1')
+      )),
+      'op'            => '='
+    ))), $this->parse('
+      $a= $argc ? $args0 : 1;
+    '));
+  }
+
+  /**
+   * Test ternary - expr ?: expr
+   *
+   */
+  #[@test]
+  public function withoutExpression() {
+    $this->assertEquals(array(new TernaryNode(array(
+      'condition'     => new VariableNode('i'),
+      'expression'    => null,
+      'conditional'   => new IntegerNode('2'),
+    ))), $this->parse('
+      $i ?: 2;
+    '));
+  }
+
+  /**
+   * Test ternary - expr ?: (expr ? expr : expr)
+   *
+   */
+  #[@test]
+  public function nested() {
+    $this->assertEquals(array(new TernaryNode(array(
+      'condition'     => new VariableNode('i'),
+      'expression'    => null,
+      'conditional'   => new BracedExpressionNode(new TernaryNode(array(
+        'condition'     => new VariableNode('f'),
         'expression'    => new IntegerNode('1'),
         'conditional'   => new IntegerNode('2'),
-      ))), $this->parse('
-        $i ? 1 : 2;
-      '));
-    }
-
-    /**
-     * Test ternary - expr ?: expr
-     *
-     */
-    #[@test]
-    public function assignment() {
-      $this->assertEquals(array(new AssignmentNode(array(
-        'variable'      => new VariableNode('a'),
-        'expression'    => new TernaryNode(array(
-          'condition'     => new VariableNode('argc'),
-          'expression'    => new VariableNode('args0'),
-          'conditional'   => new IntegerNode('1')
-        )),
-        'op'            => '='
-      ))), $this->parse('
-        $a= $argc ? $args0 : 1;
-      '));
-    }
-
-    /**
-     * Test ternary - expr ?: expr
-     *
-     */
-    #[@test]
-    public function withoutExpression() {
-      $this->assertEquals(array(new TernaryNode(array(
-        'condition'     => new VariableNode('i'),
-        'expression'    => NULL,
-        'conditional'   => new IntegerNode('2'),
-      ))), $this->parse('
-        $i ?: 2;
-      '));
-    }
-
-    /**
-     * Test ternary - expr ?: (expr ? expr : expr)
-     *
-     */
-    #[@test]
-    public function nested() {
-      $this->assertEquals(array(new TernaryNode(array(
-        'condition'     => new VariableNode('i'),
-        'expression'    => NULL,
-        'conditional'   => new BracedExpressionNode(new TernaryNode(array(
-          'condition'     => new VariableNode('f'),
-          'expression'    => new IntegerNode('1'),
-          'conditional'   => new IntegerNode('2'),
-        )))
-      ))), $this->parse('
-        $i ?: ($f ? 1 : 2);
-      '));
-    }
+      )))
+    ))), $this->parse('
+      $i ?: ($f ? 1 : 2);
+    '));
   }
-?>
+}
