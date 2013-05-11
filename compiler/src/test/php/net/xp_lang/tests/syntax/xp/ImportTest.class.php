@@ -54,9 +54,22 @@ class ImportTest extends ParserTestCase {
   #[@test]
   public function staticImport() {
     $this->assertEquals(array(new StaticImportNode(array(
+        'name'     => 'rdbms.criterion.Restrictions.in'
+      ))), 
+      $this->parse('import static rdbms.criterion.Restrictions::in; public class Test { }')
+    );
+  }
+
+  /**
+   * Test static import
+   *
+   */
+  #[@test]
+  public function staticImportOnDemand() {
+    $this->assertEquals(array(new StaticImportNode(array(
         'name'     => 'rdbms.criterion.Restrictions.*'
       ))), 
-      $this->parse('import static rdbms.criterion.Restrictions.*; public class Test { }')
+      $this->parse('import static rdbms.criterion.Restrictions::*; public class Test { }')
     );
   }
 

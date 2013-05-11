@@ -212,12 +212,19 @@ import:
       $3->name= $4.'.'.$6;
       $$= $3;
     }
+  | T_IMPORT T_STATIC qualifiedname T_DOUBLE_COLON importqualifier ';' {
+    $$= $yyLex->create(new StaticImportNode(array('name' => $3.'.'.$5)));
+  }
 ;
 
 importtype:
     /* empty */ { $$= new ImportNode(); }
-  | T_STATIC    { $$= new StaticImportNode(); }
   | T_NATIVE    { $$= new NativeImportNode(); }
+;
+
+importqualifier:
+    member
+  | '*'
 ;
 
 importname:
