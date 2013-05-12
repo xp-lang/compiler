@@ -202,8 +202,7 @@ class Runner extends \lang\Object {
           'w' => array(function($r) { Console::writeLine($r); return 0; }, true)
         );
         list($return, $add)= $options[$args[$i][1]];
-        $syntax= Syntax::forName($args[++$i]);
-        $files[]= new CommandLineSource($args[++$i], $syntax, $i, $add);
+        $files[]= new CommandLineSource($args[++$i], $args[++$i], $i, $add);
         $manager= newinstance('xp.compiler.io.FileManager', array(), '{
           public $declared= array();
           public function write($r, \io\File $target) {

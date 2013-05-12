@@ -20,14 +20,14 @@ class CommandLineSource extends \lang\Object implements Source {
   /**
    * Constructor
    *
+   * @param   string syntax
    * @param   string fragment
-   * @param   xp.compiler.Syntax s Syntax to use
    * @param   int offset
    * @param   bool return whether to add return statement if not present in fragment
    * @throws  lang.IllegalArgumentException
    */
-  public function __construct($fragment, \xp\compiler\Syntax $syntax, $offset, $return= false) {
-    $this->syntax= $syntax;
+  public function __construct($syntax, $fragment, $offset, $return= false) {
+    $this->syntax= \xp\compiler\Syntax::forName($syntax);
     $this->offset= $offset;
 
     // Add "return" statement if not present. TODO: If other languages are added
