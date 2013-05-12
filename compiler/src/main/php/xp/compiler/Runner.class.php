@@ -36,6 +36,9 @@ use util\cmd\Console;
  *   <li>-v:
  *     Display verbose diagnostics
  *   </li>
+ *   <li>-q:
+ *     Only display compilation errors
+ *   </li>
  *   <li>-cp [path]: 
  *     Add path to classpath
  *   </li>
@@ -168,6 +171,8 @@ class Runner extends \lang\Object {
         $manager->addSourcePath($args[++$i]);
       } else if ('-v' == $args[$i]) {
         $listener= new VerboseDiagnosticListener(Console::$out);
+      } else if ('-q' == $args[$i]) {
+        $listener= new QuietDiagnosticListener(Console::$out);
       } else if ('-t' == $args[$i]) {
         $levels= LogLevel::NONE;
         foreach (explode(',', $args[++$i]) as $level) {
