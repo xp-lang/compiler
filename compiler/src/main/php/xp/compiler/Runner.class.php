@@ -11,6 +11,7 @@ use lang\ResourceProvider;
 use lang\reflect\Package;
 use xp\compiler\emit\source\Emitter;
 use xp\compiler\diagnostic\DefaultDiagnosticListener;
+use xp\compiler\diagnostic\QuietDiagnosticListener;
 use xp\compiler\diagnostic\VerboseDiagnosticListener;
 use xp\compiler\io\FileSource;
 use xp\compiler\io\CommandLineSource;
@@ -188,6 +189,7 @@ class Runner extends \lang\Object {
         $files= array_merge($files, self::fromFolder($args[$i], true));
       } else if ('-e' == $args[$i]) {
         $syntax= Syntax::forName($args[++$i]);
+        $listener= new QuietDiagnosticListener(Console::$out);
         $files[]= new CommandLineSource($args[++$i], $syntax, $i);
         $manager= newinstance('xp.compiler.io.FileManager', array(), '{
           public $declared= array();
