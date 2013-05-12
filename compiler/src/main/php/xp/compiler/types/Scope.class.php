@@ -134,17 +134,6 @@ abstract class Scope extends \lang\Object {
   }
   
   /**
-   * Return whether an extension method is available
-   *
-   * @param   xp.compiler.types.Types type
-   * @param   string name method name
-   * @return  bool
-   */
-  public function hasExtension(Types $type, $name) {
-    return null !== $this->getExtension($type, $name);
-  }
-
-  /**
    * Get an extension method
    *
    * @param   xp.compiler.types.Types type
