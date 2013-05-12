@@ -39,8 +39,9 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.CompilationProfile
    */
   public function setProfile(CompilationProfile $profile) {
-    $this->optimizations->clear();
-    $this->checks->clear();
+    $this->clearOptimizations();
+    $this->clearChecks();
+
     foreach ($profile->warnings as $impl) {
       $this->checks->add($impl, false);
     }
@@ -75,6 +76,13 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
   }
 
   /**
+   * Clears all optimizations
+   */
+  public function clearOptimizations() {
+    $this->optimizations->clear();
+  }
+
+  /**
    * Adds a check
    *
    * @param   xp.compiler.checks.Checks c
@@ -85,7 +93,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
     $this->checks->add($c, $error);
     return $c;
   }
-  
+
   /**
    * Adds a check
    *
@@ -96,6 +104,13 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
   public function withCheck(Check $c, $error= false) {
     $this->checks->add($c, $error);
     return $this;
+  }
+
+  /**
+   * Clears all checks
+   */
+  public function clearChecks() {
+    $this->checks->clear();
   }
 
   /**
