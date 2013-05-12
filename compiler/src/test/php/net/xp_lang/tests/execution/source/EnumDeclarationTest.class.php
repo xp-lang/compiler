@@ -14,44 +14,6 @@ class EnumDeclarationTest extends ExecutionTest {
    *
    */
   #[@test]
-  public function coinEnum() {
-    $class= self::define('enum', 'Coin', null, '{
-      penny(1), nickel(2), dime(10), quarter(25);
-
-      public int value() {
-        return $this.ordinal;
-      }
-
-      public string color() {
-        switch ($this) {
-          case self::$penny: return "copper";
-          case self::$nickel: return "nickel";
-          case self::$dime: case self::$quarter: return "silver";
-        }
-      }
-    }');
-    $this->assertEquals('SourceCoin', $class->getName());
-    $this->assertTrue($class->isEnum());
-    
-    // Test values
-    foreach (array(
-      array('penny', 1, 'copper'),
-      array('nickel', 2, 'nickel'),
-      array('dime', 10, 'silver'),
-      array('quarter', 25, 'silver')
-    ) as $values) {
-      $coin= Enum::valueOf($class, $values[0]);
-      $this->assertEquals($values[0], $coin->name(), $values[0]);
-      $this->assertEquals($values[1], $coin->value(), $values[0]);
-      $this->assertEquals($values[2], $coin->color(), $values[0]);
-    }
-  }
-
-  /**
-   * Test declaring an enum
-   *
-   */
-  #[@test]
   public function operationEnum() {
     $class= self::define('abstract enum', 'Operation', null, '{
       plus {
