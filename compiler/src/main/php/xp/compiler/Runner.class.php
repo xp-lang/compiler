@@ -239,7 +239,7 @@ class Runner extends \lang\Object {
       return 3;
     }
     
-    // Compile files. Use 0 exitcode to indicate success, 1 for failure
+    // Compile files and pass return value to result handler
     return $result($compiler->compile($files, $listener, $manager, $emitter));
   }
 }
