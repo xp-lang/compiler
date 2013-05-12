@@ -20,7 +20,7 @@ class PropertiesOverloadingTest extends ExecutionTest {
    * Sets up this test. Defines base and child fixtures
    */
   #[@beforeClass]
-  public function defineFixtures() {
+  public static function defineFixtures() {
     self::$base= self::define('class', 'TimePeriod', null, '{
       protected int $seconds = 0;
       

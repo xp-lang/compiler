@@ -10,7 +10,7 @@ class AutoPropertiesTest extends ExecutionTest {
    * Creates fixture.
    */
   #[@beforeClass]
-  public function setUp() {
+  public static function defineFixture() {
     self::$fixture= self::define('class', 'FixtureForAutoPropertiesTest', null, '{
       public int id { get; set; }
     }');

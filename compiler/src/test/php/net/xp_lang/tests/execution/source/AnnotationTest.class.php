@@ -11,7 +11,7 @@ class AnnotationTest extends ExecutionTest {
    * Sets up test case and define class to be used in fixtures
    */
   #[@beforeClass]
-  public function defineFixture() {
+  public static function defineFixture() {
     self::$fixture= self::define('class', 'AnnotationsForAnnotationTest', null, '{
     
       [@test]
