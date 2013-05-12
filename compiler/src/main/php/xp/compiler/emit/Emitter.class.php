@@ -694,7 +694,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
 
     try {
       $this->checks->verify($node, $this->scope[0], $this) && call_user_func(
-        array($this, 'emit'.substr(get_class($node), strlen('xp\\compiler\\ast\\'), -4)),
+        array($this, 'emit'.substr(get_class($node), 16, -4)),    // strlen('xp\\compiler\\ast\\'), strlen
         $b,
         $node
       );
