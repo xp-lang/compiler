@@ -6,8 +6,7 @@
  * @test    xp://net.xp_lang.tests.StringSourceTest
  */
 class CommandLineSource extends \lang\Object implements Source {
-  protected $source= null;
-  protected $name= null;
+  protected $fragment= null;
   protected $syntax= null;
   protected $template= '';
 
@@ -22,13 +21,11 @@ class CommandLineSource extends \lang\Object implements Source {
    *
    * @param   string syntax
    * @param   string fragment
-   * @param   int offset
    * @param   bool return whether to add return statement if not present in fragment
    * @throws  lang.IllegalArgumentException
    */
-  public function __construct($syntax, $fragment, $offset, $return= false) {
+  public function __construct($syntax, $fragment, $return= false) {
     $this->syntax= \xp\compiler\Syntax::forName($syntax);
-    $this->offset= $offset;
 
     // Add "return" statement if not present. TODO: If other languages are added
     // in which the string "return" is not the return statement, then this needs
@@ -76,7 +73,7 @@ class CommandLineSource extends \lang\Object implements Source {
    * @return  string
    */
   public function getURI() {
-    return 'Command line arg #'.$this->offset;
+    return 'Command line argument';
   }
 
   /**
@@ -85,7 +82,7 @@ class CommandLineSource extends \lang\Object implements Source {
    * @return  string
    */
   public function toString() {
-    return $this->getClassName().'<arg #'.$this->offset.'>';
+    return $this->getClassName().'(syntax= '.$this->syntax->name().', fragment= '.$this->fragment.'>';
   }
 
   /**

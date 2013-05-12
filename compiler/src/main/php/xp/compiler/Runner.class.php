@@ -212,23 +212,23 @@ class Runner extends \lang\Object {
         $files= array_merge($files, self::fromFolder($args[++$i], false));
       } else if (is_dir($args[$i])) {
         $files= array_merge($files, self::fromFolder($args[$i], true));
-      } else if ('-e' == $args[$i] || '-w' == $args[$i]) {
+      } else if ('-e' == $args[$i]) {
         $listener= new QuietDiagnosticListener(Console::$out);
-        $options= array(
-          'e' => array(function($r) { return (int)$r; }, false),
-          'w' => array(function($r) { Console::writeLine($r); return 0; }, true)
-        );
-        list($return, $add)= $options[$args[$i][1]];
-        $files[]= new CommandLineSource($args[++$i], $args[++$i], $i, $add);
+        $files[]= new CommandLineSource($args[++$i], $args[++$i], $i, false);
         $manager= self::declaringFileManager();
-
-        // The rest of the arguments are for the evaluated code's main() method
-        $argv= array_slice($args, $i + 1);
-        $result= function($success) use($manager, $argv, $return) {
-          return !$success ? 1 : $return($manager->declared[CommandLineSource::$NAME]
-            ->getMethod('main')
-            ->invoke(null, array($argv))
-          );
+        $result= function($success, $argv) use($manager) {
+          if (!$success) return 1;
+          return (int)$manager->declared[CommandLineSource::$NAME]->getMethod('main')->invoke(null, array($argv));
+        };
+        break;
+      } else if ('-w' == $args[$i]) {
+        $listener= new QuietDiagnosticListener(Console::$out);
+        $files[]= new CommandLineSource($args[++$i], $args[++$i], $i, true);
+        $manager= self::declaringFileManager();
+        $result= function($success, $argv) use($manager) {
+          if (!$success) return 1;
+          Console::writeLine($manager->declared[CommandLineSource::$NAME]->getMethod('main')->invoke(null, array($argv)));
+          return 0;
         };
         break;
       } else {
@@ -256,6 +256,6 @@ class Runner extends \lang\Object {
     }
     
     // Compile files and pass return value to result handler
-    return $result($compiler->compile($files, $listener, $manager, $emitter));
+    return $result($compiler->compile($files, $listener, $manager, $emitter), array_slice($args, $i + 1));
   }
 }
