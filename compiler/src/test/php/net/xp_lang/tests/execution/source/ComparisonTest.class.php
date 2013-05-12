@@ -9,7 +9,7 @@ class ComparisonTest extends ExecutionTest {
    * Returns constants for use with constants tests
    */
   public function constants() {
-    return array('0', 'null', '"string"', '[]', '-1');
+    return array('0', 'null', 'false', 'true', '"string"', '[]', '[:]', '-1', '-0.5');
   }
   
   /**
