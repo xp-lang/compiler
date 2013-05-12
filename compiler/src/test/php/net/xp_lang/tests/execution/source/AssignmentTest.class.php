@@ -10,7 +10,7 @@ class AssignmentTest extends ExecutionTest {
    */
   public function setUp() {
     parent::setUp();
-    $this->check(new \xp\compiler\checks\IsAssignable(), true);
+    self::check(new \xp\compiler\checks\IsAssignable(), true);
   }
   
   /**

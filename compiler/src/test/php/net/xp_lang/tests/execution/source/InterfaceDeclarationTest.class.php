@@ -15,9 +15,9 @@ class InterfaceDeclarationTest extends ExecutionTest {
    */
   public function setUp() {
     parent::setUp();
-    $this->check(new \xp\compiler\checks\RoutinesVerification(), true);
-    $this->check(new \xp\compiler\checks\FieldsVerification(), true);
-    $this->check(new \xp\compiler\checks\PropertiesVerification(), true);
+    self::check(new \xp\compiler\checks\RoutinesVerification(), true);
+    self::check(new \xp\compiler\checks\FieldsVerification(), true);
+    self::check(new \xp\compiler\checks\PropertiesVerification(), true);
   }
   
   /**

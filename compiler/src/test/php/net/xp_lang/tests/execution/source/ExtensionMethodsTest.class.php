@@ -14,7 +14,7 @@ class ExtensionMethodsTest extends ExecutionTest {
    */
   public function setUp() {
     parent::setUp();
-    $this->check(new \xp\compiler\checks\RoutinesVerification(), true);
+    self::check(new \xp\compiler\checks\RoutinesVerification(), true);
   }
 
   /**

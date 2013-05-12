@@ -14,7 +14,7 @@ class PropertiesOverloadingTest extends ExecutionTest {
    */
   public function setUp() {
     parent::setUp();
-    $this->check(new \xp\compiler\checks\UninitializedVariables(), true);
+    self::check(new \xp\compiler\checks\UninitializedVariables(), true);
     if (null !== self::$base) return;
 
     try {
