@@ -19,20 +19,26 @@ use io\streams\MemoryInputStream;
  */
 abstract class ExecutionTest extends \unittest\TestCase {
   protected static $syntax;
-  protected static $emitter;
-
+  private static $emitter= null;
   protected $counter= 0;
 
   /**
    * Sets up compiler API
-   *
    */
   #[@beforeClass]
   public static function setupCompilerApi() {
     self::$syntax= Syntax::forName('xp');
-    self::$emitter= new Emitter();
   }
-  
+
+  /**
+   * Gets emitter
+   *
+   * @return   xp.compiler.emit.Emitter
+   */
+  protected static function emitter() {
+    return self::$emitter ?: self::$emitter= new Emitter();
+  }
+
   /**
    * Adds a check
    *
@@ -40,7 +46,15 @@ abstract class ExecutionTest extends \unittest\TestCase {
    * @param   bool error
    */
   protected static function check(Check $c, $error= false) {
-    self::$emitter->addCheck($c, $error);
+    self::emitter()->addCheck($c, $error);
+  }
+
+  /**
+   * Tears down compiler API
+   */
+  #[@afterClass]
+  public static function removeChecks() {
+    self::emitter()->clearChecks();
   }
   
   /**
@@ -51,7 +65,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
    * @return  var
    */
   protected function run($src, array $imports= array()) {
-    return $this->define(
+    return self::define(
       'class', 
       ucfirst($this->name).'·'.($this->counter++), 
       null,
@@ -68,7 +82,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
    * @return  lang.XPClass
    */
   protected function compile($src, array $imports= array()) {
-    return $this->define(
+    return self::define(
       'class', 
       ucfirst($this->name).'·'.($this->counter++), 
       null,
@@ -87,18 +101,19 @@ abstract class ExecutionTest extends \unittest\TestCase {
    * @param   string[] imports
    * @return  lang.XPClass
    */
-  protected function define($type, $class, $parent, $src, array $imports= array()) {
+  protected static function define($type, $class, $parent, $src, array $imports= array()) {
+    $emitter= self::emitter();
     $class= 'Source'.$class;
     $scope= new TaskScope(new CompilationTask(
       new FileSource(new File(__FILE__), self::$syntax),
       new NullDiagnosticListener(),
       new FileManager(),
-      self::$emitter
+      $emitter
     ));
     
     // Parent class
     if ($parent instanceof XPClass) {
-      $extends= $this->getClass()->getPackage()->getName().'.'.$parent->getName();
+      $extends= create(new XPClass(__CLASS__))->getPackage()->getName().'.'.$parent->getName();
       $scope->addResolved($extends, new TypeReflection($parent));
       $scope->addTypeImport($extends);
     } else {
@@ -106,11 +121,11 @@ abstract class ExecutionTest extends \unittest\TestCase {
     }
     
     // Emit
-    $r= self::$emitter->emit(
+    $r= $emitter->emit(
       self::$syntax->parse(new MemoryInputStream(
         implode("\n", $imports).
         ' public '.$type.' '.$class.' '.($extends ? ' extends '.$extends : '').$src
-      ), $this->name), 
+      ), $class), 
       $scope
     );
     \xp::gc();
