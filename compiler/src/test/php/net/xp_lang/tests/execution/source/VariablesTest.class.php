@@ -7,10 +7,9 @@ class VariablesTest extends ExecutionTest {
 
   /**
    * Sets up this test. Add uninitialized variables check
-   *
    */
-  public function setUp() {
-    parent::setUp();
+  #[@beforeClass]
+  public static function useUninitializedVariablesCheck() {
     self::check(new \xp\compiler\checks\UninitializedVariables(), true);
   }
   

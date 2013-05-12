@@ -10,11 +10,10 @@ use lang\XPClass;
 class InterfaceDeclarationTest extends ExecutionTest {
 
   /**
-   * Sets up test case and adds RoutinesVerification check
-   *
+   * Sets up this test. Add routines, fields and properties verification
    */
-  public function setUp() {
-    parent::setUp();
+  #[@beforeClass]
+  public static function useRoutinesVerificationCheck() {
     self::check(new \xp\compiler\checks\RoutinesVerification(), true);
     self::check(new \xp\compiler\checks\FieldsVerification(), true);
     self::check(new \xp\compiler\checks\PropertiesVerification(), true);

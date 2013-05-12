@@ -9,11 +9,10 @@ use lang\XPClass;
 class MemberInitTest extends ExecutionTest {
 
   /**
-   * Sets up test case and adds IsAsssignale check
-   *
+   * Sets up this test. Add unitialized variables check
    */
-  public function setUp() {
-    parent::setUp();
+  #[@beforeClass]
+  public static function useUninitializedVariablesCheck() {
     self::check(new \xp\compiler\checks\UninitializedVariables(), true);
   }
 
