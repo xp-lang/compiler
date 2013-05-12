@@ -46,7 +46,8 @@ class QuietDiagnosticListener extends \lang\Object implements DiagnosticListener
    * @param   text.parser.generic.ParseException reason
    */
   public function parsingFailed(Source $src, \text\parser\generic\ParseException $reason) {
-    $this->writer->write($src, ': ', $reason);
+    $this->writer->writeLine('*** @', $src, ':');
+    $this->writer->writeLine($reason->compoundMessage());
   }
 
   /**
@@ -56,7 +57,8 @@ class QuietDiagnosticListener extends \lang\Object implements DiagnosticListener
    * @param   lang.FormatException reason
    */
   public function emittingFailed(Source $src, \lang\FormatException $reason) {
-    $this->writer->write($src, ': ', $reason);
+    $this->writer->writeLine('*** @', $src, ':');
+    $this->writer->writeLine($reason->compoundMessage());
   }
 
   /**
@@ -66,7 +68,8 @@ class QuietDiagnosticListener extends \lang\Object implements DiagnosticListener
    * @param   lang.Throwable reason
    */
   public function compilationFailed(Source $src, \lang\Throwable $reason) {
-    $this->writer->write($src, ': ', $reason);
+    $this->writer->writeLine('*** @', $src, ':');
+    $this->writer->writeLine($reason);
   }
 
   /**
