@@ -141,18 +141,33 @@ abstract class LexerTest extends \unittest\TestCase {
   }
 
   /**
-   * Test escape sequences
-   *
+   * Provides values for escape_expansion test
    */
-  #[@test]
-  public function escapeSequences() {
-    foreach (array('r' => "\r", 'n' => "\n", 't' => "\t", '\\' => "\\") as $escape => $expanded) {
-      $t= $this->tokensOf('$s= "{\\'.$escape.'}";');
-      $this->assertEquals(array(Parser::T_VARIABLE, 's', array(1, 6)), $t[0]);
-      $this->assertEquals(array(61, '=', array(1, 8)), $t[1]);
-      $this->assertEquals(array(Parser::T_STRING, '{'.$expanded.'}', array(1, 10)), $t[2], $escape);
-      $this->assertEquals(array(59, ';', array(1, 16)), $t[3]);
-    }
+  public function escapes() {
+    return array(
+      array('r', "\x0d"),
+      array('n', "\x0a"),
+      array('t', "\x09"),
+      array('b', "\x08"),
+      array('f', "\x0c"),
+      array('\\', "\x5c")
+    );
+  }
+
+  /**
+   * Test escape sequences
+   */
+  #[@test, @values('escapes')]
+  public function escape_expansion($escape, $expanded) {
+    $this->assertEquals(
+      array(
+        array(Parser::T_VARIABLE, 's', array(1, 6)),
+        array(61, '=', array(1, 8)),
+        array(Parser::T_STRING, '{'.$expanded.'}', array(1, 10)),
+        array(59, ';', array(1, 16))
+      ),
+      $this->tokensOf('$s= "{\\'.$escape.'}";')
+    );
   }
 
   /**
