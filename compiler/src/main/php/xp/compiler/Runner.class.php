@@ -193,16 +193,21 @@ class Runner extends \lang\Object {
           public $declared= array();
           public function write($r, \io\File $target) {
             $r->executeWith(array());
-            $this->declared[]= \lang\XPClass::forName($r->type()->name());
+            $t= $r->type()->name();
+            $this->declared[$t]= \lang\XPClass::forName($t);
           }
         }');
+
+        // The rest of the arguments are for the evaluated code's main() method
         $argv= array_slice($args, $i + 1);
+        $i= $s;
+
+        // Execute main() for compiled type
         $result= function($success) use($manager, $argv) {
           if (!$success) return 1;    // Compilation failed
-          $manager->declared[0]->getMethod('main')->invoke(null, array($argv));
+          $manager->declared[CommandLineSource::$NAME]->getMethod('main')->invoke(null, array($argv));
           return 0;
         };
-        $i= $s;   // The rest of the arguments are for the evaluated code's main() method
       } else {
         $files[]= new FileSource(new File($args[$i]));
       }

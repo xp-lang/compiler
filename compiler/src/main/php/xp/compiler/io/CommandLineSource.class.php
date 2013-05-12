@@ -10,7 +10,8 @@ class CommandLineSource extends \lang\Object implements Source {
   protected $name= null;
   protected $syntax= null;
 
-  public static $TEMPLATE= '/** Generated */ class _Generated { /** Entry */ public static void main(string[] $args) {%s}}';
+  public static $NAME= '_Generated';
+  public static $TEMPLATE= '/** Generated */ class %s { /** Entry */ public static void main(string[] $args) {%s}}';
 
   /**
    * Constructor
@@ -31,7 +32,7 @@ class CommandLineSource extends \lang\Object implements Source {
    * @return  io.streams.InputStream
    */
   public function getInputStream() {
-    return new \io\streams\MemoryInputStream(sprintf(self::$TEMPLATE, $this->fragment));
+    return new \io\streams\MemoryInputStream(sprintf(self::$TEMPLATE, self::$NAME, $this->fragment));
   }
   
   /**
