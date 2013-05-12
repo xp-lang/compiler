@@ -36,8 +36,8 @@ class MethodOverloadingTest extends ExecutionTest {
       }', array(
         'import native core.strcmp;',
       ));
-    } catch (Throwable $e) {
-      throw new PrerequisitesNotMetError($e->getMessage(), $e);
+    } catch (\lang\Throwable $e) {
+      throw new \unittest\PrerequisitesNotMetError($e->getMessage(), $e);
     }
   }
   

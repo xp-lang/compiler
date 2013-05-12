@@ -8,6 +8,9 @@ Git commit: ?????
 
 Heads up!
 ~~~~~~~~~
+- Changed tests using `foreach` to use @values annotation. Requires 
+  parameterized unittest feature (RFC #0267) and thus XP 5.9.1
+  (friebe)
 - Converted the code base to namespaces
   (friebe)
 
