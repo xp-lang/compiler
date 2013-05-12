@@ -14,35 +14,6 @@ class EnumDeclarationTest extends ExecutionTest {
    *
    */
   #[@test]
-  public function weekdayEnum() {
-    $class= self::define('enum', 'WeekDay', null, '{
-      MON, TUE, WED, THU, FRI, SAT, SUN;
-      
-      public bool isWeekend() {
-        return $this.ordinal > self::$FRI.ordinal;
-      }
-    }');
-    $this->assertEquals('SourceWeekDay', $class->getName());
-    $this->assertTrue($class->isEnum());
-    
-    with ($method= $class->getMethod('isWeekend')); {
-      $this->assertEquals('isWeekend', $method->getName());
-      $this->assertEquals(MODIFIER_PUBLIC, $method->getModifiers());
-      $this->assertEquals(Primitive::$BOOLEAN, $method->getReturnType());
-      $this->assertEquals(0, $method->numParameters());
-    }
-
-    $this->assertEquals('WED', Enum::valueOf($class, 'WED')->name());
-    $this->assertEquals('SAT', Enum::valueOf($class, 'SAT')->name());
-    $this->assertTrue(Enum::valueOf($class, 'SUN')->isWeekend());
-    $this->assertFalse(Enum::valueOf($class, 'MON')->isWeekend());
-  }
-
-  /**
-   * Test declaring an enum
-   *
-   */
-  #[@test]
   public function coinEnum() {
     $class= self::define('enum', 'Coin', null, '{
       penny(1), nickel(2), dime(10), quarter(25);

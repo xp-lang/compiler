@@ -18,17 +18,8 @@ use io\streams\MemoryInputStream;
  *
  */
 abstract class ExecutionTest extends \unittest\TestCase {
-  protected static $syntax;
   private static $emitter= null;
   protected $counter= 0;
-
-  /**
-   * Sets up compiler API
-   */
-  #[@beforeClass]
-  public static function setupCompilerApi() {
-    self::$syntax= Syntax::forName('xp');
-  }
 
   /**
    * Gets emitter
@@ -103,9 +94,10 @@ abstract class ExecutionTest extends \unittest\TestCase {
    */
   protected static function define($type, $class, $parent, $src, array $imports= array()) {
     $emitter= self::emitter();
+    $syntax= Syntax::forName('xp');
     $class= 'Source'.$class;
     $scope= new TaskScope(new CompilationTask(
-      new FileSource(new File(__FILE__), self::$syntax),
+      new FileSource(new File(__FILE__), $syntax),
       new NullDiagnosticListener(),
       new FileManager(),
       $emitter
@@ -122,7 +114,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
     
     // Emit
     $r= $emitter->emit(
-      self::$syntax->parse(new MemoryInputStream(
+      $syntax->parse(new MemoryInputStream(
         implode("\n", $imports).
         ' public '.$type.' '.$class.' '.($extends ? ' extends '.$extends : '').$src
       ), $class), 
