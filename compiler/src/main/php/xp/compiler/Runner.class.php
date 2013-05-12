@@ -54,8 +54,11 @@ use util\cmd\Console;
  *   <li>-o [outputdir]: 
  *     Write compiled files to outputdir (will be created if not existant)
  *   </li>
- *   <li>-e [language] [code] 
- *     Compile and run the given code
+ *   <li>-e [language] [code] [arg[,arg[,arg]]] 
+ *     Compile and run the given code, passing args as $args
+ *   </li>
+ *   <li>-w [language] [code] [arg[,arg[,arg]]] 
+ *     Same as -e, but enclose in Console::writeLine()
  *   </li>
  *   <li>-t [level[,level[...]]]:
  *     Set trace level (all, none, info, warn, error, debug)
@@ -192,10 +195,15 @@ class Runner extends \lang\Object {
         $files= array_merge($files, self::fromFolder($args[++$i], false));
       } else if (is_dir($args[$i])) {
         $files= array_merge($files, self::fromFolder($args[$i], true));
-      } else if ('-e' == $args[$i]) {
-        $syntax= Syntax::forName($args[++$i]);
+      } else if ('-e' == $args[$i] || '-w' == $args[$i]) {
         $listener= new QuietDiagnosticListener(Console::$out);
-        $files[]= new CommandLineSource($args[++$i], $syntax, $i);
+        $options= array(
+          'e' => array(function($r) { return (int)$r; }, false),
+          'w' => array(function($r) { Console::writeLine($r); return 0; }, true)
+        );
+        list($return, $add)= $options[$args[$i][1]];
+        $syntax= Syntax::forName($args[++$i]);
+        $files[]= new CommandLineSource($args[++$i], $syntax, $i, $add);
         $manager= newinstance('xp.compiler.io.FileManager', array(), '{
           public $declared= array();
           public function write($r, \io\File $target) {
@@ -207,14 +215,13 @@ class Runner extends \lang\Object {
 
         // The rest of the arguments are for the evaluated code's main() method
         $argv= array_slice($args, $i + 1);
-        $i= $s;
-
-        // Execute main() for compiled type
-        $result= function($success) use($manager, $argv) {
-          if (!$success) return 1;    // Compilation failed
-          $manager->declared[CommandLineSource::$NAME]->getMethod('main')->invoke(null, array($argv));
-          return 0;
+        $result= function($success) use($manager, $argv, $return) {
+          return !$success ? 1 : $return($manager->declared[CommandLineSource::$NAME]
+            ->getMethod('main')
+            ->invoke(null, array($argv))
+          );
         };
+        break;
       } else {
         $files[]= new FileSource(new File($args[$i]));
       }

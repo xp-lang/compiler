@@ -23,12 +23,20 @@ class CommandLineSource extends \lang\Object implements Source {
    * @param   string fragment
    * @param   xp.compiler.Syntax s Syntax to use
    * @param   int offset
+   * @param   bool return whether to add return statement if not present in fragment
    * @throws  lang.IllegalArgumentException
    */
-  public function __construct($fragment, \xp\compiler\Syntax $syntax, $offset) {
-    $this->fragment= $fragment;
+  public function __construct($fragment, \xp\compiler\Syntax $syntax, $offset, $return= false) {
     $this->syntax= $syntax;
     $this->offset= $offset;
+
+    // Add "return" statement if not present. TODO: If other languages are added
+    // in which the string "return" is not the return statement, then this needs
+    // to be rewritten
+    $this->fragment= rtrim($fragment, ';').';';
+    if ($return && !(strstr($fragment, 'return ') || strstr($fragment, 'return;'))) {
+      $this->fragment= 'return '.$this->fragment;
+    }
 
     // Verify template
     $name= $this->syntax->name();
