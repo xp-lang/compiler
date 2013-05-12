@@ -141,7 +141,24 @@ class Runner extends \lang\Object {
     }
     return $files;
   } 
-  
+
+  /**
+   * Creates and returns a file manager which publically exposed compiled
+   * types via the "declared" member, indexed by their name.
+   *
+   * @return  xp.compiler.io.FileManager
+   */
+  protected static function declaringFileManager() {
+    return newinstance('xp.compiler.io.FileManager', array(), '{
+      public $declared= array();
+      public function write($r, \io\File $target) {
+        $r->executeWith(array());
+        $t= $r->type()->name();
+        $this->declared[$t]= \lang\XPClass::forName($t);
+      }
+    }');
+  }
+
   /**
    * Entry point method
    *
@@ -203,14 +220,7 @@ class Runner extends \lang\Object {
         );
         list($return, $add)= $options[$args[$i][1]];
         $files[]= new CommandLineSource($args[++$i], $args[++$i], $i, $add);
-        $manager= newinstance('xp.compiler.io.FileManager', array(), '{
-          public $declared= array();
-          public function write($r, \io\File $target) {
-            $r->executeWith(array());
-            $t= $r->type()->name();
-            $this->declared[$t]= \lang\XPClass::forName($t);
-          }
-        }');
+        $manager= self::declaringFileManager();
 
         // The rest of the arguments are for the evaluated code's main() method
         $argv= array_slice($args, $i + 1);
