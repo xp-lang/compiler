@@ -84,7 +84,7 @@ abstract class Scope extends \lang\Object {
   /**
    * Gets list of resolved types
    *
-   * @return  util.collections.HashTable<lang.types.String, xp.compiler.types.Types>
+   * @return  util.collections.HashTable<string, xp.compiler.types.Types>
    */
   public function resolvedTypes() {
     return $this->resolved;
