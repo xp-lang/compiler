@@ -13,6 +13,7 @@ use xp\compiler\emit\source\Emitter;
 use xp\compiler\diagnostic\DefaultDiagnosticListener;
 use xp\compiler\diagnostic\VerboseDiagnosticListener;
 use xp\compiler\io\FileSource;
+use xp\compiler\io\CommandLineSource;
 use xp\compiler\io\FileManager;
 use util\log\Logger;
 use util\log\LogCategory;
@@ -40,7 +41,7 @@ use util\cmd\Console;
  *   <li>-sp [path]: 
  *     Adds path to source path (source path will equal classpath initially)
  *   </li>
- *   <li>-e [emitter]: 
+ *   <li>-E [emitter]: 
  *     Use emitter, defaults to "source"
  *   </li>
  *   <li>-p [profile[,profile[,...]]]:
@@ -48,6 +49,9 @@ use util\cmd\Console;
  *   </li>
  *   <li>-o [outputdir]: 
  *     Write compiled files to outputdir (will be created if not existant)
+ *   </li>
+ *   <li>-e [language] [code] 
+ *     Compile and run the given code
  *   </li>
  *   <li>-t [level[,level[...]]]:
  *     Set trace level (all, none, info, warn, error, debug)
@@ -167,7 +171,7 @@ class Runner extends \lang\Object {
           $levels |= LogLevel::named($level);
         }
         $compiler->setTrace(create(new LogCategory('xcc'))->withAppender(new ConsoleAppender(), $levels));
-      } else if ('-e' == $args[$i]) {
+      } else if ('-E' == $args[$i]) {
         $emitter= $args[++$i];
       } else if ('-p' == $args[$i]) {
         $profiles= explode(',', $args[++$i]);
@@ -180,6 +184,25 @@ class Runner extends \lang\Object {
         $files= array_merge($files, self::fromFolder($args[++$i], false));
       } else if (is_dir($args[$i])) {
         $files= array_merge($files, self::fromFolder($args[$i], true));
+      } else if ('-e' == $args[$i]) {
+        $syntax= Syntax::forName($args[++$i]);
+        $files[]= new CommandLineSource($args[++$i], $syntax, $i);
+        $manager= newinstance('xp.compiler.io.FileManager', array(array_slice($args, $i)), '{
+          private $args;
+          public function __construct($args) {
+            $this->args= $args;
+          }
+
+          public function write($r, \io\File $target) {
+            $r->executeWith(array());
+            $cl= \lang\XPClass::forName($r->type()->name());
+            try {
+              $cl->getMethod("main")->invoke(null, array($this->args));
+            } catch (\lang\reflect\TargetInvocationException $e) {
+              \util\cmd\Console::$err->writeLine("*** ", $e);
+            }
+          }
+        }');
       } else {
         $files[]= new FileSource(new File($args[$i]));
       }
