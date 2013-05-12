@@ -6,6 +6,11 @@ Version ?.?.?, released ????-??-??
 ----------------------------------
 Git commit: ?????
 
+
+Version 1.10.0, released 2013-05-12
+-----------------------------------
+Git commit: a50a7ea22e49431a6698564d0311097fe30871fb
+
 Heads up!
 ~~~~~~~~~
 - Changed tests using `foreach` to use @values annotation. Requires 
