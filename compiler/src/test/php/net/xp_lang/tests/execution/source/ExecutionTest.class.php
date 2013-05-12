@@ -19,8 +19,8 @@ use io\streams\MemoryInputStream;
  */
 abstract class ExecutionTest extends \unittest\TestCase {
   protected static $syntax;
-  
-  protected $emitter;
+  protected static $emitter;
+
   protected $counter= 0;
 
   /**
@@ -30,6 +30,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
   #[@beforeClass]
   public static function setupCompilerApi() {
     self::$syntax= Syntax::forName('xp');
+    self::$emitter= new Emitter();
   }
   
   /**
@@ -38,17 +39,8 @@ abstract class ExecutionTest extends \unittest\TestCase {
    * @param   xp.compiler.checks.Checks c
    * @param   bool error
    */
-  protected function check(Check $c, $error= false) {
-    $this->emitter->addCheck($c, $error);
-  }
-
-  /**
-   * Sets up test case
-   *
-   */
-  public function setUp() {
-    $this->emitter= new Emitter();
-    $this->counter= 0;
+  protected static function check(Check $c, $error= false) {
+    self::$emitter->addCheck($c, $error);
   }
   
   /**
@@ -101,7 +93,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
       new FileSource(new File(__FILE__), self::$syntax),
       new NullDiagnosticListener(),
       new FileManager(),
-      $this->emitter
+      self::$emitter
     ));
     
     // Parent class
@@ -114,7 +106,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
     }
     
     // Emit
-    $r= $this->emitter->emit(
+    $r= self::$emitter->emit(
       self::$syntax->parse(new MemoryInputStream(
         implode("\n", $imports).
         ' public '.$type.' '.$class.' '.($extends ? ' extends '.$extends : '').$src
