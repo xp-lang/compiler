@@ -2,13 +2,11 @@
 
 /**
  * Tests comparisons
- *
  */
 class ComparisonTest extends ExecutionTest {
   
   /**
    * Test constant == a
-   *
    */
   #[@test]
   public function constantLeft() {
@@ -23,7 +21,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test constant === a
-   *
    */
   #[@test]
   public function constantLeftIdentical() {
@@ -38,7 +35,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test $a == constant
-   *
    */
   #[@test]
   public function constantRight() {
@@ -53,7 +49,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test $a == constant
-   *
    */
   #[@test]
   public function constantRightIdentical() {
@@ -68,7 +63,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test <
-   *
    */
   #[@test]
   public function smallerThan() {
@@ -78,7 +72,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test <=
-   *
    */
   #[@test]
   public function smallerThanOrEqual() {
@@ -89,7 +82,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test <
-   *
    */
   #[@test]
   public function greaterThan() {
@@ -99,7 +91,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test >=
-   *
    */
   #[@test]
   public function greaterThanOrEqual() {
@@ -110,7 +101,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test !=
-   *
    */
   #[@test]
   public function notEqual() {
@@ -120,7 +110,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test !=
-   *
    */
   #[@test]
   public function isEqual() {
@@ -130,7 +119,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test !== with integers
-   *
    */
   #[@test]
   public function integersNotIdentical() {
@@ -140,7 +128,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test !== with integers
-   *
    */
   #[@test]
   public function integersIdentical() {
