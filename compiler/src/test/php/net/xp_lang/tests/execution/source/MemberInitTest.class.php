@@ -23,7 +23,7 @@ class MemberInitTest extends ExecutionTest {
    * @return  lang.Generic
    */
   protected function newInstance($src) {
-    return $this->define('class', $this->getName(), null, $src)->newInstance();
+    return self::define('class', $this->getName(), null, $src)->newInstance();
   }
 
   /**

@@ -15,7 +15,7 @@ class EnumDeclarationTest extends ExecutionTest {
    */
   #[@test]
   public function weekdayEnum() {
-    $class= $this->define('enum', 'WeekDay', null, '{
+    $class= self::define('enum', 'WeekDay', null, '{
       MON, TUE, WED, THU, FRI, SAT, SUN;
       
       public bool isWeekend() {
@@ -44,7 +44,7 @@ class EnumDeclarationTest extends ExecutionTest {
    */
   #[@test]
   public function coinEnum() {
-    $class= $this->define('enum', 'Coin', null, '{
+    $class= self::define('enum', 'Coin', null, '{
       penny(1), nickel(2), dime(10), quarter(25);
 
       public int value() {
@@ -82,7 +82,7 @@ class EnumDeclarationTest extends ExecutionTest {
    */
   #[@test]
   public function operationEnum() {
-    $class= $this->define('abstract enum', 'Operation', null, '{
+    $class= self::define('abstract enum', 'Operation', null, '{
       plus {
         public int evaluate(int $x, int $y) { return $x + $y; }
       },
@@ -108,7 +108,7 @@ class EnumDeclarationTest extends ExecutionTest {
    */
   #[@test]
   public function partialOperationEnum() {
-    $class= $this->define('abstract enum', 'PartialOperation', null, '{
+    $class= self::define('abstract enum', 'PartialOperation', null, '{
       plus {
         public int evaluate(int $x, int $y) { return $x + $y; }
       };
@@ -128,7 +128,7 @@ class EnumDeclarationTest extends ExecutionTest {
    */
   #[@test, @expect('lang.FormatException')]
   public function brokenOperationEnum() {
-    $this->define('enum', 'BrokenOperation', null, '{
+    self::define('enum', 'BrokenOperation', null, '{
       plus {
         public int evaluate(int $x, int $y) { return $x + $y; }
       };

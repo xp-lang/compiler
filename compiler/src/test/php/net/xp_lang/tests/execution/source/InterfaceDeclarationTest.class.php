@@ -25,7 +25,7 @@ class InterfaceDeclarationTest extends ExecutionTest {
    */
   #[@test]
   public function comparableInterface() {
-    $class= $this->define('interface', 'Comparable', null, '{
+    $class= self::define('interface', 'Comparable', null, '{
       public int compareTo(Generic $in);
     }');
     $this->assertEquals('SourceComparable', $class->getName());
@@ -50,7 +50,7 @@ class InterfaceDeclarationTest extends ExecutionTest {
    */
   #[@test, @expect('lang.FormatException')]
   public function interfacesMayNotHaveFields() {
-    $this->define('interface', 'WithField', null, '{
+    self::define('interface', 'WithField', null, '{
       public int $field = 0;
     }');
   }
@@ -62,7 +62,7 @@ class InterfaceDeclarationTest extends ExecutionTest {
    */
   #[@test, @expect('lang.FormatException')]
   public function interfacesMayNotHaveProperties() {
-    $this->define('interface', 'WithProperty', null, '{
+    self::define('interface', 'WithProperty', null, '{
       public int property { get { return 0; } }
     }');
   }
@@ -74,7 +74,7 @@ class InterfaceDeclarationTest extends ExecutionTest {
    */
   #[@test, @expect('lang.FormatException')]
   public function interfaceMethodsMayNotContainBody() {
-    $this->define('interface', 'WithMethod', null, '{
+    self::define('interface', 'WithMethod', null, '{
       public int method() {
         return 0;
       }
@@ -87,7 +87,7 @@ class InterfaceDeclarationTest extends ExecutionTest {
    */
   #[@test]
   public function genericInterface() {
-    $class= $this->define('interface', 'Filter<T>', null, '{ 
+    $class= self::define('interface', 'Filter<T>', null, '{ 
       public bool accept(T $element);
     }');
     $this->assertTrue($class->isGenericDefinition());

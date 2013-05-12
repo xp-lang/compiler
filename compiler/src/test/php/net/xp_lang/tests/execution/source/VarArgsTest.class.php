@@ -13,7 +13,7 @@ class VarArgsTest extends ExecutionTest {
    */
   #[@test]
   public function intArray() {
-    $class= $this->define('class', $this->name, null, '{
+    $class= self::define('class', $this->name, null, '{
       public int[] $values;
       
       public __construct(int... $values) {
@@ -29,7 +29,7 @@ class VarArgsTest extends ExecutionTest {
    */
   #[@test]
   public function stringFormat() {
-    $class= $this->define('class', $this->name, null, '{
+    $class= self::define('class', $this->name, null, '{
       public static string format(string $f, var... $args) {
         return vsprintf($f, $args);
       }

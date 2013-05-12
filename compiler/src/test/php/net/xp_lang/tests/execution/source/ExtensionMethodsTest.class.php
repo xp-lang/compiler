@@ -22,7 +22,7 @@ class ExtensionMethodsTest extends ExecutionTest {
    */
   #[@test]
   public function classExtension() {
-    $class= $this->define('class', 'ClassExtension', null, '{
+    $class= self::define('class', 'ClassExtension', null, '{
       public static lang.reflect.Method[] methodsNamed(this lang.XPClass $class, text.regex.Pattern $pattern) {
         $r= new lang.reflect.Method[] { };
         foreach ($method in $class.getMethods()) {
@@ -47,7 +47,7 @@ class ExtensionMethodsTest extends ExecutionTest {
    */
   #[@test]
   public function stringExtension() {
-    $class= $this->define('class', 'StringExtension', null, '{
+    $class= self::define('class', 'StringExtension', null, '{
       public static bool equal(this string $in, string $cmp, bool $strict) {
         return $strict ? $in === $cmp : $in == $cmp;
       }
@@ -67,7 +67,7 @@ class ExtensionMethodsTest extends ExecutionTest {
    */
   #[@test]
   public function arrayExtension() {
-    $class= $this->define('class', 'MethodExtension', null, '{
+    $class= self::define('class', 'MethodExtension', null, '{
       protected static string[] names(this lang.reflect.Method[] $methods) {
         $r= [];
         foreach ($method in $methods) {
@@ -93,7 +93,7 @@ class ExtensionMethodsTest extends ExecutionTest {
    */
   #[@test]
   public function arrayOfSubclassExtension() {
-    $class= $this->define('class', 'ObjectExtension', null, '{
+    $class= self::define('class', 'ObjectExtension', null, '{
       protected static string[] hashCodes(this Object[] $objects) {
         $r= [];
         foreach ($object in $objects) {
@@ -119,7 +119,7 @@ class ExtensionMethodsTest extends ExecutionTest {
    */
   #[@test]
   public function mapExtension() {
-    $class= $this->define('class', 'MapExtension', null, '{
+    $class= self::define('class', 'MapExtension', null, '{
       protected static string[] keys(this [:string] $map) {
         $r= [];
         foreach ($key, $value in $map) {
@@ -145,7 +145,7 @@ class ExtensionMethodsTest extends ExecutionTest {
    */
   #[@test]
   public function mapOfSubclassExtension() {
-    $class= $this->define('class', 'ObjectMapExtension', null, '{
+    $class= self::define('class', 'ObjectMapExtension', null, '{
       protected static Object[] values(this [:Object] $map) {
         $r= [];
         foreach ($value in $map) {
@@ -184,7 +184,7 @@ class ExtensionMethodsTest extends ExecutionTest {
   #  @expect(class= 'lang.Error', withMessage= 'Call to undefined method lang.XPClass::fieldsNamed() from scope SourceExtensionDoesNotApplyIfOnlyUsed·0')
   #]
   public function extensionDoesNotApplyIfOnlyUsed() {
-    $class= $this->define('class', 'ClassFieldExtension1', null, '{
+    $class= self::define('class', 'ClassFieldExtension1', null, '{
       public static lang.reflect.Field[] fieldsNamed(this lang.XPClass $class, text.regex.Pattern $pattern) {
         throw new IllegalStateException("Unreachable");
       }
@@ -198,7 +198,7 @@ class ExtensionMethodsTest extends ExecutionTest {
    */
   #[@test]
   public function extensionApplies() {
-    $class= $this->define('class', 'ClassFieldExtension2', null, '{
+    $class= self::define('class', 'ClassFieldExtension2', null, '{
       public static lang.reflect.Field[] fieldsNamed(this lang.XPClass $class, text.regex.Pattern $pattern) {
         $r= new lang.reflect.Field[] { };
         foreach ($field in $class.getFields()) {
@@ -220,7 +220,7 @@ class ExtensionMethodsTest extends ExecutionTest {
    */
   #[@test, @expect('lang.FormatException')]
   public function nonStaticMethod() {
-    $this->define('class', 'StringIncorrectExtension', null, '{
+    self::define('class', 'StringIncorrectExtension', null, '{
       public bool equal(this string $in, string $cmp, bool $strict) {
         return $strict ? $in === $cmp : $in == $cmp;
       }

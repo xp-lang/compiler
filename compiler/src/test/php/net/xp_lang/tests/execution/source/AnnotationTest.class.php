@@ -5,15 +5,14 @@
  *
  */
 class AnnotationTest extends ExecutionTest {
-  protected $fixture= null;
+  protected static $fixture= null;
   
   /**
    * Sets up test case and define class to be used in fixtures
-   *
    */
-  public function setUp() {
-    parent::setUp();
-    $this->fixture= $this->define('class', 'AnnotationsFor'.$this->name, null, '{
+  #[@beforeClass]
+  public function defineFixture() {
+    self::$fixture= self::define('class', 'AnnotationsForAnnotationTest', null, '{
     
       [@test]
       public void getAll() { }
@@ -40,7 +39,7 @@ class AnnotationTest extends ExecutionTest {
    */
   #[@test]
   public function testAnnotation() {
-    with ($m= $this->fixture->getMethod('getAll')); {
+    with ($m= self::$fixture->getMethod('getAll')); {
       $this->assertTrue($m->hasAnnotation('test'));
       $this->assertEquals(null, $m->getAnnotation('test'));
     }
@@ -52,7 +51,7 @@ class AnnotationTest extends ExecutionTest {
    */
   #[@test]
   public function ignoreAnnotation() {
-    with ($m= $this->fixture->getMethod('deleteAll')); {
+    with ($m= self::$fixture->getMethod('deleteAll')); {
       $this->assertTrue($m->hasAnnotation('test'), '@test');
       $this->assertEquals(null, $m->getAnnotation('test'), '@test');
       $this->assertTrue($m->hasAnnotation('ignore'), '@ignore');
@@ -66,7 +65,7 @@ class AnnotationTest extends ExecutionTest {
    */
   #[@test]
   public function limitAnnotation() {
-    with ($m= $this->fixture->getMethod('updateAll')); {
+    with ($m= self::$fixture->getMethod('updateAll')); {
       $this->assertTrue($m->hasAnnotation('test'), '@test');
       $this->assertEquals(null, $m->getAnnotation('test'), '@test');
       $this->assertTrue($m->hasAnnotation('limit'), '@limit');
@@ -80,7 +79,7 @@ class AnnotationTest extends ExecutionTest {
    */
   #[@test]
   public function restrictedAnnotation() {
-    with ($m= $this->fixture->getMethod('reset')); {
+    with ($m= self::$fixture->getMethod('reset')); {
       $this->assertTrue($m->hasAnnotation('restricted'));
       $this->assertEquals(array('roles' => array('admin', 'root')), $m->getAnnotation('restricted'));
     }

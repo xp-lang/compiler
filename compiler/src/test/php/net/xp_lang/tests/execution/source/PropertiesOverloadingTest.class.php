@@ -9,51 +9,50 @@ class PropertiesOverloadingTest extends ExecutionTest {
   protected static $child= null;
 
   /**
-   * Sets up test case
-   *
+   * Sets up this test. Add uninitialized variables check
    */
-  public function setUp() {
-    parent::setUp();
+  #[@beforeClass]
+  public static function useUninitializedVariablesCheck() {
     self::check(new \xp\compiler\checks\UninitializedVariables(), true);
-    if (null !== self::$base) return;
+  }
 
-    try {
-      self::$base= $this->define('class', 'TimePeriod', null, '{
-        protected int $seconds = 0;
-        
-        public __construct(int $initial= 0) {
-          $this.seconds= $initial;
-        }
+  /**
+   * Sets up this test. Defines base and child fixtures
+   */
+  #[@beforeClass]
+  public function defineFixtures() {
+    self::$base= self::define('class', 'TimePeriod', null, '{
+      protected int $seconds = 0;
+      
+      public __construct(int $initial= 0) {
+        $this.seconds= $initial;
+      }
 
-        public double hours {
-          get { return $this.seconds / 3600; }
-          set { $this.seconds= 3600 * $value; }
-        }
+      public double hours {
+        get { return $this.seconds / 3600; }
+        set { $this.seconds= 3600 * $value; }
+      }
 
-        public double minutes {
-          get { return $this.seconds / 60; }
-          set { $this.seconds= $value * 60; }
-        }
+      public double minutes {
+        get { return $this.seconds / 60; }
+        set { $this.seconds= $value * 60; }
+      }
 
-        public int seconds {
-          get { return $this.seconds; }
-          set { $this.seconds= $value; }
-        }
-      }');
-      self::$child= $this->define('class', 'WholeTimePeriod', self::$base, '{
-        public int hours {
-          get { return floor($this.seconds / 3600) as int; }
-        }
+      public int seconds {
+        get { return $this.seconds; }
+        set { $this.seconds= $value; }
+      }
+    }');
+    self::$child= self::define('class', 'WholeTimePeriod', self::$base, '{
+      public int hours {
+        get { return floor($this.seconds / 3600) as int; }
+      }
 
-        public int minutes {
-          get { return floor($this.seconds / 60) as int; }
-          set { $this.seconds= $value * 60; }
-        }
-      }', array('import native standard.floor;'));
-    } catch (\lang\Throwable $e) {
-      self::$base= self::$child= null;
-      throw new \unittest\PrerequisitesNotMetError($e->getMessage(), $e);
-    }
+      public int minutes {
+        get { return floor($this.seconds / 60) as int; }
+        set { $this.seconds= $value * 60; }
+      }
+    }', array('import native standard.floor;'));
   }
   
   /**

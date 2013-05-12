@@ -64,7 +64,7 @@ class VariablesTest extends ExecutionTest {
    */
   #[@test, @expect(class= 'lang.FormatException', withMessage= '/Uninitialized variable this/')]
   public function thisInStaticMethods() {
-    $this->define(
+    self::define(
       'class', 
       ucfirst($this->name).'·'.($this->counter++), 
       null,
@@ -78,7 +78,7 @@ class VariablesTest extends ExecutionTest {
    */
   #[@test, @expect(class= 'lang.FormatException', withMessage= '/Uninitialized variable this/')]
   public function thisMemberReferenceInStaticMethods() {
-    $this->define(
+    self::define(
       'class', 
       ucfirst($this->name).'·'.($this->counter++), 
       null,
@@ -92,7 +92,7 @@ class VariablesTest extends ExecutionTest {
    */
   #[@test, @expect(class= 'lang.FormatException', withMessage= '/Uninitialized variable this/')]
   public function thisMemberCallInStaticMethods() {
-    $this->define(
+    self::define(
       'class', 
       ucfirst($this->name).'·'.($this->counter++), 
       null,
