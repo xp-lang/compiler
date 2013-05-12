@@ -58,9 +58,9 @@ abstract class Scope extends \lang\Object {
     $child->importer= $this->importer;
     $child->task= $this->task;
     $child->package= $this->package;
+    $child->resolved= $this->resolved;
     
     // Reference arrays - TODO: Refactor and use Vectors instead
-    $child->resolved= &$this->resolved;
     $child->extensions= &$this->extensions;
     $child->declarations= &$this->declarations;
     $child->imports= &$this->imports;
