@@ -5,15 +5,15 @@ use lang\Enum;
 
 /**
  * Tests enum declarations
+ *
+ * @see   xp://net.xp_lang.tests.execution.source.WeekDayEnumDeclarationTest
+ * @see   xp://net.xp_lang.tests.execution.source.CoinEnumDeclarationTest
+ * @see   xp://net.xp_lang.tests.execution.source.OperationEnumDeclarationTest
  */
 class EnumDeclarationTest extends ExecutionTest {
 
-  /**
-   * Test declaring an enum
-   *
-   */
   #[@test]
-  public function partialOperationEnum() {
+  public function abstract_enum_with_one_member() {
     $class= self::define('abstract enum', 'PartialOperation', null, '{
       plus {
         public int evaluate(int $x, int $y) { return $x + $y; }
@@ -28,12 +28,8 @@ class EnumDeclarationTest extends ExecutionTest {
     $this->assertEquals(2, $plus->evaluate(1, 1));
   }
 
-  /**
-   * Test declaring an enum
-   *
-   */
   #[@test, @expect('lang.FormatException')]
-  public function brokenOperationEnum() {
+  public function only_abstract_enums_can_contain_members_with_bodies() {
     self::define('enum', 'BrokenOperation', null, '{
       plus {
         public int evaluate(int $x, int $y) { return $x + $y; }
