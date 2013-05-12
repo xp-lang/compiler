@@ -4,36 +4,9 @@ use lang\Primitive;
 use lang\Enum;
 
 /**
- * Tests class declarations
- *
+ * Tests enum declarations
  */
 class EnumDeclarationTest extends ExecutionTest {
-
-  /**
-   * Test declaring an enum
-   *
-   */
-  #[@test]
-  public function operationEnum() {
-    $class= self::define('abstract enum', 'Operation', null, '{
-      plus {
-        public int evaluate(int $x, int $y) { return $x + $y; }
-      },
-      minus {
-        public int evaluate(int $x, int $y) { return $x - $y; }
-      };
-      
-      public abstract int evaluate(int $x, int $y);
-    }');
-    $this->assertEquals('SourceOperation', $class->getName());
-    $this->assertTrue($class->isEnum());
-
-    $plus= Enum::valueOf($class, 'plus');
-    $this->assertEquals(2, $plus->evaluate(1, 1));
-
-    $minus= Enum::valueOf($class, 'minus');
-    $this->assertEquals(0, $minus->evaluate(1, 1));
-  }
 
   /**
    * Test declaring an enum
