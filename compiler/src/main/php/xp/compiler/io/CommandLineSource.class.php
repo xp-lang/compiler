@@ -9,9 +9,13 @@ class CommandLineSource extends \lang\Object implements Source {
   protected $source= null;
   protected $name= null;
   protected $syntax= null;
+  protected $template= '';
 
   public static $NAME= '_Generated';
-  public static $TEMPLATE= '/** Generated */ class %s { /** Entry */ public static void main(string[] $args) {%s}}';
+  public static $TEMPLATE= array(
+    'xp'  => '/** Generated */ public class %s { /** Entry */ public static void main(string[] $args) {%s}}',
+    'php' => '<?php /** Generated */ class %s extends \lang\Object { /** Entry */ public static function main(array $args) {%s}}'
+  );
 
   /**
    * Constructor
@@ -19,11 +23,19 @@ class CommandLineSource extends \lang\Object implements Source {
    * @param   string fragment
    * @param   xp.compiler.Syntax s Syntax to use
    * @param   int offset
+   * @throws  lang.IllegalArgumentException
    */
   public function __construct($fragment, \xp\compiler\Syntax $syntax, $offset) {
     $this->fragment= $fragment;
     $this->syntax= $syntax;
     $this->offset= $offset;
+
+    // Verify template
+    $name= $this->syntax->name();
+    if (!isset(self::$TEMPLATE[$name])) {
+      throw new \lang\IllegalArgumentException('No command line code template for syntax "'.$name.'"');
+    }
+    $this->template= self::$TEMPLATE[$name];
   }
   
   /**
@@ -32,7 +44,11 @@ class CommandLineSource extends \lang\Object implements Source {
    * @return  io.streams.InputStream
    */
   public function getInputStream() {
-    return new \io\streams\MemoryInputStream(sprintf(self::$TEMPLATE, self::$NAME, $this->fragment));
+    return new \io\streams\MemoryInputStream(sprintf(
+      $this->template,
+      self::$NAME,
+      $this->fragment
+    ));
   }
   
   /**
