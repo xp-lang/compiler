@@ -187,7 +187,7 @@ class Runner extends \lang\Object {
       } else if ('-e' == $args[$i]) {
         $syntax= Syntax::forName($args[++$i]);
         $files[]= new CommandLineSource($args[++$i], $syntax, $i);
-        $manager= newinstance('xp.compiler.io.FileManager', array(array_slice($args, $i)), '{
+        $manager= newinstance('xp.compiler.io.FileManager', array(array_slice($args, $i + 1)), '{
           private $args;
           public function __construct($args) {
             $this->args= $args;
@@ -203,6 +203,7 @@ class Runner extends \lang\Object {
             }
           }
         }');
+        $i= $s;   // The rest of the arguments are for the evaluated code's main() method
       } else {
         $files[]= new FileSource(new File($args[$i]));
       }
