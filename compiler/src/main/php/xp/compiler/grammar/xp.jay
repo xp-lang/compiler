@@ -207,13 +207,17 @@ imports:
 ;
 
 import:
-    T_IMPORT member '.' importname ';' {
+    T_IMPORT importname '.' importqualifier ';' {
       $$= $yyLex->create(new ImportNode(array('name' => $2.'.'.$4)));
     }
-  | T_IMPORT T_NATIVE member '.' importname ';' {
+  | T_IMPORT T_NATIVE importname '.' importqualifier ';' {
       $$= $yyLex->create(new NativeImportNode(array('name' => $3.'.'.$5)));
     }
-  | T_IMPORT T_STATIC qualifiedname T_DOUBLE_COLON importqualifier ';' {
+  | T_IMPORT T_STATIC importname T_DOUBLE_COLON importqualifier ';' {
+    $$= $yyLex->create(new StaticImportNode(array('name' => $3.'.'.$5)));
+  }
+  | T_IMPORT T_STATIC importname '.' importqualifier ';' {
+    $this->error(E_WARNING, 'Deprecated static import form used', array($3.'::'.$5));
     $$= $yyLex->create(new StaticImportNode(array('name' => $3.'.'.$5)));
   }
 ;
@@ -224,8 +228,8 @@ importqualifier:
 ;
 
 importname:
-    importqualifier
-  | importname '.' importqualifier { $$= $1.'.'.$3; }
+    member
+  | importname '.' member { $$= $1.'.'.$3; }
 ;
 
 qualifiedname:

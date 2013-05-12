@@ -74,6 +74,19 @@ class ImportTest extends ParserTestCase {
   }
 
   /**
+   * Test static import
+   *
+   */
+  #[@test]
+  public function staticImportDeprecatedForm() {
+    $this->assertEquals(array(new StaticImportNode(array(
+        'name'     => 'rdbms.criterion.Restrictions.in'
+      ))), 
+      $this->parse('import static rdbms.criterion.Restrictions.in; public class Test { }')
+    );
+  }
+
+  /**
    * Test native import
    *
    */

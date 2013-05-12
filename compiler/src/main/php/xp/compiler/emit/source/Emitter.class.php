@@ -2494,12 +2494,6 @@ class Emitter extends \xp\compiler\emit\Emitter {
    * @return  xp.compiler.Result
    */
   public function emit(ParseTree $tree, Scope $scope) {
-    $this->messages= array(
-      'warnings' => array(),
-      'errors'   => array()
-    );
-    
-    // Create and initialize op array
     $bytes= new Buffer('', 1);
     
     array_unshift($this->local, array());

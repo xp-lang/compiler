@@ -749,7 +749,17 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
     
     return sprintf('[%4s] %s at line %d, offset %d', $code, $message, $pos[0], $pos[1]);
   }
-  
+
+  /**
+   * Clears messages
+   */
+  public function clearMessages() {
+    $this->messages= array(
+      'warnings' => array(),
+      'errors'   => array()
+    );
+  }
+
   /**
    * Issue a warning
    *
