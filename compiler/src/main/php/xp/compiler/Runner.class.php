@@ -214,7 +214,7 @@ class Runner extends \lang\Object {
         $files= array_merge($files, self::fromFolder($args[$i], true));
       } else if ('-e' == $args[$i]) {
         $listener= new QuietDiagnosticListener(Console::$out);
-        $files[]= new CommandLineSource($args[++$i], $args[++$i], $i, false);
+        $files[]= new CommandLineSource($args[++$i], $args[++$i], false);
         $manager= self::declaringFileManager();
         $result= function($success, $argv) use($manager) {
           if (!$success) return 1;
@@ -223,7 +223,7 @@ class Runner extends \lang\Object {
         break;
       } else if ('-w' == $args[$i]) {
         $listener= new QuietDiagnosticListener(Console::$out);
-        $files[]= new CommandLineSource($args[++$i], $args[++$i], $i, true);
+        $files[]= new CommandLineSource($args[++$i], $args[++$i], true);
         $manager= self::declaringFileManager();
         $result= function($success, $argv) use($manager) {
           if (!$success) return 1;

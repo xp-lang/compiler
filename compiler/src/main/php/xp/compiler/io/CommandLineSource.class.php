@@ -82,7 +82,7 @@ class CommandLineSource extends \lang\Object implements Source {
    * @return  string
    */
   public function toString() {
-    return $this->getClassName().'(syntax= '.$this->syntax->name().', fragment= '.$this->fragment.'>';
+    return $this->getClassName().'(syntax= '.$this->syntax->name().', fragment= `'.$this->fragment.'`)';
   }
 
   /**
