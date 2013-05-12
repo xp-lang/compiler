@@ -797,7 +797,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
   protected function emitTernary($b, $ternary) {
     $this->emitOne($b, $ternary->condition);
     $b->append('?');
-    $this->emitOne($b, $ternary->expression ? $ternary->expression : $ternary->condition);
+    $this->emitOne($b, $ternary->expression ?: $ternary->condition);
     $b->append(':');
     $this->emitOne($b, $ternary->conditional);
   }
@@ -2054,7 +2054,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
    * @param   xp.compiler.ast.EnumNode declaration
    */
   protected function emitEnum($b, $declaration) {
-    $parent= $declaration->parent ? $declaration->parent : new TypeName('lang.Enum');
+    $parent= $declaration->parent ?: new TypeName('lang.Enum');
     $parentType= $this->resolveType($parent);
     $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $declaration), $parentType);
     $this->scope[0]->addResolved('self', $thisType);
@@ -2221,7 +2221,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
    * @param   xp.compiler.ast.ClassNode declaration
    */
   protected function emitClass($b, $declaration) {
-    $parent= $declaration->parent ? $declaration->parent : new TypeName('lang.Object');
+    $parent= $declaration->parent ?: new TypeName('lang.Object');
     $parentType= $this->resolveType($parent);
     $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $declaration), $parentType);
     $this->scope[0]->addResolved('self', $thisType);

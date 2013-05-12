@@ -305,9 +305,9 @@ abstract class Scope extends \lang\Object {
    */
   public function typeOf(Node $node) {
     if ($node instanceof ArrayNode) {
-      return $node->type ? $node->type : new TypeName('var[]');
+      return $node->type ?: new TypeName('var[]');
     } else if ($node instanceof MapNode) {
-      return $node->type ? $node->type : new TypeName('[:var]');
+      return $node->type ?: new TypeName('[:var]');
     } else if ($node instanceof StringNode) {
       return new TypeName('string');
     } else if ($node instanceof NaturalNode) {
