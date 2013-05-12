@@ -145,14 +145,16 @@ class Runner extends \lang\Object {
       self::showUsage();
       return 2;
     }
-    
+
+    // Set up compiler
     $compiler= new Compiler();
     $manager= new FileManager();
     $manager->setSourcePaths(\xp::$classpath);
-    $profiles= array('default');
-    $emitter= 'source';
     
     // Handle arguments
+    $profiles= array('default');
+    $emitter= 'source';
+    $result= function($success) { return $success ? 0 : 1; };
     $files= array();
     $listener= new DefaultDiagnosticListener(Console::$out);
     for ($i= 0, $s= sizeof($args); $i < $s; $i++) {
@@ -187,22 +189,19 @@ class Runner extends \lang\Object {
       } else if ('-e' == $args[$i]) {
         $syntax= Syntax::forName($args[++$i]);
         $files[]= new CommandLineSource($args[++$i], $syntax, $i);
-        $manager= newinstance('xp.compiler.io.FileManager', array(array_slice($args, $i + 1)), '{
-          private $args;
-          public function __construct($args) {
-            $this->args= $args;
-          }
-
+        $manager= newinstance('xp.compiler.io.FileManager', array(), '{
+          public $declared= array();
           public function write($r, \io\File $target) {
             $r->executeWith(array());
-            $cl= \lang\XPClass::forName($r->type()->name());
-            try {
-              $cl->getMethod("main")->invoke(null, array($this->args));
-            } catch (\lang\reflect\TargetInvocationException $e) {
-              \util\cmd\Console::$err->writeLine("*** ", $e);
-            }
+            $this->declared[]= \lang\XPClass::forName($r->type()->name());
           }
         }');
+        $argv= array_slice($args, $i + 1);
+        $result= function($success) use($manager, $argv) {
+          if (!$success) return 1;    // Compilation failed
+          $manager->declared[0]->getMethod('main')->invoke(null, array($argv));
+          return 0;
+        };
         $i= $s;   // The rest of the arguments are for the evaluated code's main() method
       } else {
         $files[]= new FileSource(new File($args[$i]));
@@ -229,6 +228,6 @@ class Runner extends \lang\Object {
     }
     
     // Compile files. Use 0 exitcode to indicate success, 1 for failure
-    return $compiler->compile($files, $listener, $manager, $emitter) ? 0 : 1;
+    return $result($compiler->compile($files, $listener, $manager, $emitter));
   }
 }
