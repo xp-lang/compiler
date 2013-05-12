@@ -6,11 +6,17 @@
 class AutoPropertiesTest extends ExecutionTest {
   protected static $fixture= null;
 
-  #[@beforeClass]
-  public function defineFixtureClass() {
-    self::$fixture= $this->define('class', 'FixtureForAutoPropertiesTest', null, '{
-      public int id { get; set; }
-    }');
+  /**
+   * Creates fixture. Note: cannot be done in an `@beforeClass` method 
+   * since we need access to `$this->define()`
+   */
+  public function setUp() {
+    parent::setUp();
+    if (null === self::$fixture) {
+      self::$fixture= $this->define('class', 'FixtureForAutoPropertiesTest', null, '{
+        public int id { get; set; }
+      }');
+    }
   }
 
   /**
