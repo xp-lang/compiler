@@ -7,63 +7,63 @@ class PropertiesTest extends ExecutionTest {
   protected static $fixture= null;
 
   /**
-   * Sets up test case
-   *
+   * Sets up this test. Add uninitialized variables check
    */
-  public function setUp() {
-    parent::setUp();
-    $this->check(new \xp\compiler\checks\UninitializedVariables(), true);
-    if (null !== self::$fixture) return;
+  #[@beforeClass]
+  public static function useUninitializedVariablesCheck() {
+    self::check(new \xp\compiler\checks\UninitializedVariables(), true);
+  }
 
-    try {
-      self::$fixture= $this->define('class', 'StringBufferFor'.$this->name, null, '{
-        protected string $buffer;
+  /**
+   * Sets up this test. Defines StringBuffer fixture
+   */
+  #[@beforeClass]
+  public static function defineFixture() {
+    self::$fixture= self::define('class', 'StringBufferForPropertiesTest', null, '{
+      protected string $buffer;
 
-        public __construct(string $initial) {
-          $this.buffer= $initial;
+      public __construct(string $initial) {
+        $this.buffer= $initial;
+      }
+
+      public int length {
+        get { return strlen($this.buffer); }
+        set { throw new lang.IllegalAccessException("Cannot set string length"); }
+      }
+
+      public string[] chars {
+        get { return str_split($this.buffer); }
+        set { $this.buffer= implode("", $value); }
+      }
+
+      public string this[int $offset] {
+        get {
+          return $offset >= 0 && $offset < $this.length ? $this.buffer[$offset] : null;
         }
-
-        public int length {
-          get { return strlen($this.buffer); }
-          set { throw new lang.IllegalAccessException("Cannot set string length"); }
-        }
-
-        public string[] chars {
-          get { return str_split($this.buffer); }
-          set { $this.buffer= implode("", $value); }
-        }
-
-        public string this[int $offset] {
-          get {
-            return $offset >= 0 && $offset < $this.length ? $this.buffer[$offset] : null;
-          }
-          set {
-            if (null === $offset) {
-              $this.buffer ~= $value;
-            } else {
-              $this.buffer= substr($this.buffer, 0, $offset) ~ $value ~ substr($this.buffer, $offset+ 1);
-            }
-          }
-          unset {
-            throw new lang.IllegalAccessException("Cannot remove string offsets");
-          }
-          isset {
-            return $offset >= 0 && $offset < $this.length;
+        set {
+          if (null === $offset) {
+            $this.buffer ~= $value;
+          } else {
+            $this.buffer= substr($this.buffer, 0, $offset) ~ $value ~ substr($this.buffer, $offset+ 1);
           }
         }
-
-        public string toString() {
-          return $this.buffer;
+        unset {
+          throw new lang.IllegalAccessException("Cannot remove string offsets");
         }
-      }', array(
-        'import native core.strlen;', 
-        'import native standard.str_split;',
-        'import native standard.substr;',
-        'import native standard.implode;',
-      ));
-    } catch (\lang\Throwable $e) {
-      throw new \unittest\PrerequisitesNotMetError($e->getMessage(), $e);
-    }
+        isset {
+          return $offset >= 0 && $offset < $this.length;
+        }
+      }
+
+      public string toString() {
+        return $this.buffer;
+      }
+    }', array(
+      'import native core.strlen;', 
+      'import native standard.str_split;',
+      'import native standard.substr;',
+      'import native standard.implode;',
+    ));
   }
   
   /**

@@ -8,6 +8,32 @@ Git commit: ?????
 
 Heads up!
 ~~~~~~~~~
+- Changed emitter command line argument from "-e" to "-E"! See pull 
+  request #30 - "-e" is now for command line code evaluation.
+  (friebe)
+
+RFCs
+~~~~
+- Implemented RFC #0238: xcc -e and xcc -w (command line code evaluation)
+  (friebe)
+
+Bugfixes
+~~~~~~~~
+- Fixed issue #31: Backslash in XP Language not considered a syntax error
+  (friebe)
+
+Features
+~~~~~~~~
+- Added command line option "-q" which will show only compilation errors
+  (friebe)
+
+
+Version 1.10.0, released 2013-05-12
+-----------------------------------
+Git commit: a50a7ea22e49431a6698564d0311097fe30871fb
+
+Heads up!
+~~~~~~~~~
 - Changed tests using `foreach` to use @values annotation. Requires 
   parameterized unittest feature (RFC #0267) and thus XP 5.9.1
   (friebe)

@@ -9,36 +9,29 @@ class MethodOverloadingTest extends ExecutionTest {
 
   /**
    * Sets up test case
-   *
    */
-  public function setUp() {
+  #[@beforeClass]
+  public static function defineFixture() {
     throw new \unittest\PrerequisitesNotMetError('Not yet implemented');
 
-    parent::setUp();
-    if (null !== self::$fixture) return;
-
-    try {
-      self::$fixture= $this->define('class', 'FixtureForMethodOverloadingTest', null, '{
-        public bool compare(string $a, string $b) {
-          return strcmp($a, $b);
+    self::$fixture= self::define('class', 'FixtureForMethodOverloadingTest', null, '{
+      public bool compare(string $a, string $b) {
+        return strcmp($a, $b);
+      }
+      
+      public bool compare(int $a, int $b) {
+        return $a === $b ? 0 : ($a < $b ? -1 : 1);
+      }
+      
+      public bool run(string $which) {
+        switch ($which) {
+          case "strings": return $this.compare("Hello", "World");
+          case "ints": return $this.compare(1, 2);
         }
-        
-        public bool compare(int $a, int $b) {
-          return $a === $b ? 0 : ($a < $b ? -1 : 1);
-        }
-        
-        public bool run(string $which) {
-          switch ($which) {
-            case "strings": return $this.compare("Hello", "World");
-            case "ints": return $this.compare(1, 2);
-          }
-        }
-      }', array(
-        'import native core.strcmp;',
-      ));
-    } catch (\lang\Throwable $e) {
-      throw new \unittest\PrerequisitesNotMetError($e->getMessage(), $e);
-    }
+      }
+    }', array(
+      'import native core.strcmp;',
+    ));
   }
   
   /**
