@@ -1,7 +1,10 @@
 <?php namespace xp\compiler\types;
 
 use lang\XPClass;
-use lang\Type;
+use lang\Type; 
+use lang\ArrayType; 
+use lang\MapType; 
+use lang\Primitive; 
 
 /**
  * Represents a reflected type
@@ -134,10 +137,53 @@ class TypeReflection extends Types {
       return TypeName::$VAR;
     } else if ('self' === $t) {
       return new TypeName($this->class->getName());
-    } else if (0 == strncmp($t, 'array', 5)) {
+    } else if (0 === strncmp($t, 'array', 5)) {
       return new TypeName('var[]');
+    } else {
+      return new TypeName($t);
     }
-    return new TypeName($t);
+  }
+
+  /**
+   * Maps default values
+   * 
+   * @param   var value
+   * @return  xp.compiler.ast.Node
+   * @throws  lang.IllegalArgumentException
+   */
+  protected function nodeOf($value) {
+
+    // Primitives
+    if (null === $value) {
+      return new \xp\compiler\ast\NullNode();
+    } else if (Primitive::$STRING->isInstance($value)) {
+      return new \xp\compiler\ast\StringNode($value);
+    } else if (Primitive::$INT->isInstance($value)) {
+      return new \xp\compiler\ast\IntegerNode($value);
+    } else if (Primitive::$DOUBLE->isInstance($value)) {
+      return new \xp\compiler\ast\DecimalNode($value);
+    } else if (Primitive::$BOOL->isInstance($value)) {
+      return new \xp\compiler\ast\BooleanNode($value);
+    }
+
+    // Arrays and maps
+    $type= typeof($value);
+    if ($type instanceof ArrayType) {
+      $r= new \xp\compiler\ast\ArrayNode();
+      foreach ($value as $element) {
+        $r->values[]= $this->nodeOf($element);
+      }
+      return $r;
+    } else if ($type instanceof MapType) {
+      $r= new \xp\compiler\ast\MapNode();
+      foreach ($value as $key => $member) {
+        $r->elements[]= array($this->nodeOf($key), $this->nodeOf($member));
+      }
+      return $r;
+    }
+
+    // Other types of default values shouldn't appear here
+    throw new \lang\IllegalArgumentException('Cannot map '.$type->toString().' to a creation node');
   }
 
   /**
@@ -162,7 +208,10 @@ class TypeReflection extends Types {
       $c->modifiers= $constructor->getModifiers();
       $c->parameters= array();
       foreach ($constructor->getParameters() as $p) {
-        $c->parameters[]= $this->typeNameOf($p->getTypeName());
+        $c->parameters[$p->getName()]= array(
+          'type'    => $this->typeNameOf($p->getTypeName()), 
+          'default' => $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : NULL
+        );
       }
       $c->holder= $this;  
       return $c;
@@ -195,7 +244,10 @@ class TypeReflection extends Types {
       $m->modifiers= $method->getModifiers();
       $m->parameters= array();
       foreach ($method->getParameters() as $p) {
-        $m->parameters[]= $this->typeNameOf($p->getTypeName());
+        $m->parameters[$p->getName()]= array(
+          'type'    => $this->typeNameOf($p->getTypeName()), 
+          'default' => $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : NULL
+        );
       }
       $m->holder= $this;
       return $m;
@@ -286,7 +338,10 @@ class TypeReflection extends Types {
       $m->modifiers= $method->getModifiers();
       $m->parameters= array();
       foreach ($method->getParameters() as $p) {
-        $m->parameters[]= $this->typeNameOf($p->getTypeName());
+        $m->parameters[$p->getName()]= array(
+          'type'    => $this->typeNameOf($p->getTypeName()), 
+          'default' => $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : NULL
+        );
       }
       $m->holder= $this;
       return $m;

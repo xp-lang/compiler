@@ -205,24 +205,40 @@ class Emitter extends \xp\compiler\emit\Emitter {
     }
     $uses && $b->insert('uses(\''.implode("', '", $uses).'\');', 0);
   }
-  
+
   /**
    * Emit parameters
    *
    * @param   xp.compiler.emit.Buffer b
-   * @param   xp.compiler.ast.Node[] params
+   * @param   xp.compiler.types.Types
+   * @param   xp.compiler.ast.Node[] arguments
    * @param   bool brackets
    * @return  int
    */
-  protected function emitInvocationArguments($b, array $params, $brackets= true) {
+  protected function emitInvocationArguments($b, $ptr, array $arguments, $brackets= TRUE) {
     $brackets && $b->append('(');
-    $s= sizeof($params)- 1;
-    foreach ($params as $i => $param) {
-      $this->emitOne($b, $param);
-      $i < $s && $b->append(',');
+    $s= sizeof($arguments)- 1;
+    $i= 0;
+    if (is_string(key($arguments))) {    // Named
+      $p= sizeof($ptr->parameters)- 1;
+      foreach ($ptr->parameters as $name => $param) {
+        if (isset($arguments[$name])) {
+          $this->emitOne($b, $arguments[$name]);
+        } else if ($param['default']) {
+          $this->emitOne($b, $param['default']);
+        } else {
+          $this->error('P404', 'Cannot omit '.$ptr->name.'()\'s parameter "'.$name.'"');
+        }
+        $i++ < $p && $b->append(',');
+      }
+    } else {                          // Ordered
+      foreach ($arguments as $param) {
+        $this->emitOne($b, $param);
+        $i++ < $s && $b->append(',');
+      }
     }
     $brackets && $b->append(')');
-    return sizeof($params);
+    return sizeof($arguments);
   }
   
   /**
@@ -244,11 +260,11 @@ class Emitter extends \xp\compiler\emit\Emitter {
     // Static method call vs. function call
     if (true === $ptr) {
       $b->append($inv->name);
-      $this->emitInvocationArguments($b, (array)$inv->arguments);
+      $this->emitInvocationArguments($b, null, (array)$inv->arguments);
       $this->scope[0]->setType($inv, TypeName::$VAR);
     } else {
       $b->append($ptr->holder->literal().'::'.$ptr->name());
-      $this->emitInvocationArguments($b, (array)$inv->arguments);
+      $this->emitInvocationArguments($b, $ptr, (array)$inv->arguments);
       $this->scope[0]->setType($inv, $ptr->returns);
     }
   }
@@ -447,7 +463,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
   public function emitStaticMethodCall($b, $call) {
     $ptr= $this->resolveType($call->type);
     $b->append($ptr->literal().'::'.$call->name);
-    $this->emitInvocationArguments($b, (array)$call->arguments);
+    $this->emitInvocationArguments($b, $ptr->getMethod($call->name), (array)$call->arguments);
 
     // Record type
     $this->scope[0]->setType($call, $ptr->hasMethod($call->name) ? $ptr->getMethod($call->name)->returns : TypeName::$VAR);
@@ -469,7 +485,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
       $b->append(') ? null : call_user_func(')->append($var);
       if ($call->arguments) {
         $b->append(', ');
-        $this->emitInvocationArguments($b, $call->arguments, false);
+        $this->emitInvocationArguments($b, null, $call->arguments, false);
       }
       $b->append('))');
     } else {
@@ -477,7 +493,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
       $this->emitOne($b, $call->target);
       if ($call->arguments) {
         $b->append(', ');
-        $this->emitInvocationArguments($b, $call->arguments, false);
+        $this->emitInvocationArguments($b, null, $call->arguments, false);
       }
       $b->append(')');
     }
@@ -499,7 +515,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
       $b->insert($ext->holder->literal().'::'.$call->name.'(', $mark);
       if ($call->arguments) {
         $b->append(', ');
-        $this->emitInvocationArguments($b, $call->arguments, false);
+        $this->emitInvocationArguments($b, $ext, $call->arguments, false);
       }
       $b->append(')');
       $this->scope[0]->setType($call, $ext->returns);
@@ -514,7 +530,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
       $b->insert('(NULL === ('.$var.'=', $mark);
       $b->append(') ? NULL : ')->append($var)->append('->');
       $b->append($call->name);
-      $this->emitInvocationArguments($b, (array)$call->arguments);
+      $this->emitInvocationArguments($b, $ptr->getMethod($call->name), (array)$call->arguments);
       $b->append(')');
     } else {
 
@@ -534,7 +550,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
       }
 
       $b->append('->'.$call->name);
-      $this->emitInvocationArguments($b, (array)$call->arguments);
+      $this->emitInvocationArguments($b, $ptr->getMethod($call->name), (array)$call->arguments);
     }
 
     // Record type
@@ -1187,8 +1203,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
    */
   protected function emitDynamicInstanceCreation($b, $new) {
     $b->append('new ')->append('$')->append($new->variable);
-    $this->emitInvocationArguments($b, (array)$new->parameters);
-    
+    $this->emitInvocationArguments($b, null, (array)$new->parameters);
     $this->scope[0]->setType($new, new TypeName('lang.Object'));
   }
 
@@ -1256,12 +1271,12 @@ class Emitter extends \xp\compiler\emit\Emitter {
       $b->append('>\'');
       if ($new->parameters) {
         $b->append(',');
-        $this->emitInvocationArguments($b, (array)$new->parameters, false);
+        $this->emitInvocationArguments($b, $ptr->getConstructor(), (array)$new->parameters, false);
       }
       $b->append(')');
     } else {
       $b->append('new '.$ptr->literal());
-      $this->emitInvocationArguments($b, (array)$new->parameters);
+      $this->emitInvocationArguments($b, $ptr->getConstructor(), (array)$new->parameters);
     }
   }
   
@@ -2280,8 +2295,8 @@ class Emitter extends \xp\compiler\emit\Emitter {
       $arguments= array();
       $parameters= array();
       if ($parentType->hasConstructor()) {
-        foreach ($parentType->getConstructor()->parameters as $i => $type) {
-          $parameters[]= array('name' => '··a'.$i, 'type' => $type);    // TODO: default
+        foreach ($parentType->getConstructor()->parameters as $i => $param) {
+          $parameters[]= array('name' => '··a'.$i, 'type' => $param['type']);    // TODO: default
           $arguments[]= new VariableNode('··a'.$i);
         }
         $body= array(new StaticMethodCallNode(new TypeName('parent'), '__construct', $arguments));

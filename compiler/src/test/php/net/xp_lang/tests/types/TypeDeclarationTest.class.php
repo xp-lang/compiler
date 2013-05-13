@@ -143,14 +143,15 @@ class TypeDeclarationTest extends \unittest\TestCase {
             'modifiers'   => MODIFIER_PUBLIC,
             'parameters'  => array(
               array(
-                'name'  => 'start',
-                'type'  => new TypeName('int'),
-                'check' => true
+                'name'    => 'start',
+                'type'    => new TypeName('int'),
+                'check'   => true
               ), 
               array(
-                'name'  => 'end',
-                'type'  => new TypeName('int'),
-                'check' => true
+                'name'    => 'end',
+                'type'    => new TypeName('int'),
+                'check'   => true,
+                'default' => new IntegerNode(0) 
               )
             )
           )),
@@ -363,7 +364,13 @@ class TypeDeclarationTest extends \unittest\TestCase {
     $method= $this->stringClass()->getMethod('substring');
     $this->assertEquals(new TypeName('lang.types.String'), $method->returns);
     $this->assertEquals('substring', $method->name);
-    $this->assertEquals(array(new TypeName('int'), new TypeName('int')), $method->parameters);
+    $this->assertEquals(
+      array(
+        'start'  => array('type' => new TypeName('int'), 'default' => NULL), 
+        'end'    => array('type' => new TypeName('int'), 'default' => new IntegerNode(0)) 
+      ),
+      $method->parameters
+    );
     $this->assertEquals(MODIFIER_PUBLIC, $method->modifiers);
   }
 

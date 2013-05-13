@@ -180,7 +180,10 @@ class GenericTypeTest extends \unittest\TestCase {
    */
   #[@test]
   public function hashTableGetMethodParameters() {
-    $this->assertEquals(array(new TypeName('string')), $this->newGenericHashTableType()->getMethod('get')->parameters);
+    $this->assertEquals(
+      array('key' => array('type' => new TypeName('string'), 'default' => null)),
+      $this->newGenericHashTableType()->getMethod('get')->parameters
+    );
   }
 
   /**
@@ -225,6 +228,9 @@ class GenericTypeTest extends \unittest\TestCase {
    */
   #[@test]
   public function vectorGetMethodParameters() {
-    $this->assertEquals(array(new TypeName('int')), $this->newGenericVectorType()->getMethod('get')->parameters);
+    $this->assertEquals(
+      array('index' => array('type' => new TypeName('int'), 'default' => null)),
+      $this->newGenericVectorType()->getMethod('get')->parameters
+    );
   }
 }

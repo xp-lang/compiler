@@ -127,7 +127,10 @@ class TypeDeclaration extends Types {
         $c= new Constructor();
         $c->modifiers= $member->modifiers;
         foreach ($member->parameters as $p) {
-          $c->parameters[]= $p['type'];
+          $c->parameters[$p['name']]= array(
+            'type'    => $p['type'],
+            'default' => isset($p['default']) ? $p['default'] : null
+          );
         }
         $c->holder= $this;
         return $c;
@@ -163,7 +166,10 @@ class TypeDeclaration extends Types {
         $m->returns= $member->returns;
         $m->modifiers= $member->modifiers;
         foreach ((array)$member->parameters as $p) {
-          $m->parameters[]= $p['type'];
+          $m->parameters[$p['name']]= array(
+            'type'    => $p['type'], 
+            'default' => isset($p['default']) ? $p['default'] : null
+          );
         }
         $m->holder= $this;
         return $m;
@@ -188,7 +194,10 @@ class TypeDeclaration extends Types {
         $m->returns= $member->returns;
         $m->modifiers= $member->modifiers;
         foreach ((array)$member->parameters as $p) {
-          $m->parameters[]= $p['type'];
+          $m->parameters[$p['name']]= array(
+            'type'    => $p['type'], 
+            'default' => isset($p['default']) ? $p['default'] : null
+          );
         }
         $m->holder= $this;
 
@@ -225,7 +234,10 @@ class TypeDeclaration extends Types {
         $m->returns= $member->returns;
         $m->modifiers= $member->modifiers;
         foreach ($member->parameters as $p) {
-          $m->parameters[]= $p->type;
+          $m->parameters[$p['name']]= array(
+            'type'    => $p['type'], 
+            'default' => isset($p['default']) ? $p['default'] : null
+          );
         }
         $m->holder= $this;
         return $m;

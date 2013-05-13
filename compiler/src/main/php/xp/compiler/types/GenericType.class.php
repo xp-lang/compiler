@@ -180,7 +180,12 @@ class GenericType extends Types {
    * @return  xp.compiler.types.Constructor
    */
   public function getConstructor() {
-    return $this->definition->getConstructor();
+    if (null === ($constructor= $this->definition->getConstructor())) return null;
+
+    foreach ($constructor->parameters as $name => $param) {
+      $param['type'] && $constructor->parameters[$name]['type']= $this->rewrite($param['type']);
+    }
+    return $constructor;
   }
 
   /**
@@ -216,12 +221,13 @@ class GenericType extends Types {
    * @return  xp.compiler.types.Method
    */
   public function getMethod($name) {
-    if (null !== ($method= $this->definition->getMethod($name))) {
-      $method->returns= $method->returns ? $this->rewrite($method->returns) : null;
-      $method->parameters= $this->rewriteAll($method->parameters);
-      return $method;
+    if (null === ($method= $this->definition->getMethod($name))) return null;
+
+    $method->returns= $method->returns ? $this->rewrite($method->returns) : null;
+    foreach ($method->parameters as $name => $param) { 
+      $param['type'] && $method->parameters[$name]['type']= $this->rewrite($param['type']);
     }
-    return null;
+    return $method;
   }
 
   /**

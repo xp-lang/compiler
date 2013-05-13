@@ -143,7 +143,13 @@ class TypeReflectionTest extends \unittest\TestCase {
     $method= create(new TypeReflection(XPClass::forName('lang.types.String')))->getMethod('substring');
     $this->assertEquals(new TypeName('lang.types.String'), $method->returns);
     $this->assertEquals('substring', $method->name);
-    $this->assertEquals(array(new TypeName('int'), new TypeName('int')), $method->parameters);
+    $this->assertEquals(
+      array(
+        'start'  => array('type' => new TypeName('int'), 'default' => NULL), 
+        'length' => array('type' => new TypeName('int'), 'default' => new \xp\compiler\ast\IntegerNode(0)) 
+      ),
+      $method->parameters
+    );
     $this->assertEquals(MODIFIER_PUBLIC, $method->modifiers);
   }
 
@@ -309,7 +315,7 @@ class TypeReflectionTest extends \unittest\TestCase {
     $builder= create(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.Builder')));
     $this->assertEquals(
       new TypeName('net.xp_lang.tests.types.Builder'),
-      $builder->getMethod('create')->parameters[0]
+      $builder->getMethod('create')->parameters['self']['type']
     );
   }
 
