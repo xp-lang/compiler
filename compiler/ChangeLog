@@ -6,9 +6,25 @@ Version ?.?.?, released ????-??-??
 ----------------------------------
 Git commit: ?????
 
+Heads up!
+~~~~~~~~~
+- Changed emitter command line argument from "-e" to "-E"! See pull 
+  request #30 - "-e" is now for command line code evaluation.
+  (friebe)
+
+RFCs
+~~~~
+- Implemented RFC #0238: xcc -e and xcc -w (command line code evaluation)
+  (friebe)
+
 Bugfixes
 ~~~~~~~~
 - Fixed issue #31: Backslash in XP Language not considered a syntax error
+  (friebe)
+
+Features
+~~~~~~~~
+- Added command line option "-q" which will show only compilation errors
   (friebe)
 
 
