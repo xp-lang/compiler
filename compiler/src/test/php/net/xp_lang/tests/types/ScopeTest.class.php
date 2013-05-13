@@ -207,7 +207,6 @@ class ScopeTest extends \unittest\TestCase {
       $classNameMethod= new Method('getClassName')
     ); {
       $this->fixture->addExtension($objectType, $classNameMethod);
-      $this->assertTrue($this->fixture->hasExtension($objectType, $classNameMethod->name));
       $this->assertEquals(
         $classNameMethod,
         $this->fixture->getExtension($objectType, $classNameMethod->name)
@@ -226,7 +225,6 @@ class ScopeTest extends \unittest\TestCase {
       $sortedMethod= new Method('sorted')
     ); {
       $this->fixture->addExtension($objectsType, $sortedMethod);
-      $this->assertTrue($this->fixture->hasExtension($objectsType, $sortedMethod->name));
       $this->assertEquals(
         $sortedMethod,
         $this->fixture->getExtension($objectsType, $sortedMethod->name)
@@ -245,7 +243,6 @@ class ScopeTest extends \unittest\TestCase {
       $keyMethod= new Method('key')
     ); {
       $this->fixture->addExtension($mapType, $keyMethod);
-      $this->assertTrue($this->fixture->hasExtension($mapType, $keyMethod->name));
       $this->assertEquals(
         $keyMethod,
         $this->fixture->getExtension($mapType, $keyMethod->name)
@@ -265,7 +262,6 @@ class ScopeTest extends \unittest\TestCase {
       $classNameMethod= new Method('getClassName')
     ); {
       $this->fixture->addExtension($objectType, $classNameMethod);
-      $this->assertTrue($this->fixture->hasExtension($dateType, $classNameMethod->name));
       $this->assertEquals(
         $classNameMethod,
         $this->fixture->getExtension($dateType, $classNameMethod->name)

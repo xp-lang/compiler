@@ -9,19 +9,32 @@ use lang\reflect\Package;
 abstract class Syntax extends \lang\Object {
   private static $syntaxes= array();
   protected $parser= null;
+  protected $name;
   
   static function __static() {
     foreach (Package::forName('xp.compiler.syntax')->getPackages() as $syntax) {
-      self::$syntaxes[$syntax->getSimpleName()]= $syntax->loadClass('Syntax')->newInstance();
+      $name= $syntax->getSimpleName();
+      self::$syntaxes[$name]= $syntax->loadClass('Syntax')->newInstance($name);
     }
   }
   
   /**
    * Constructor
    *
+   * @param  string name
    */
-  public function __construct() {
+  public function __construct($name) {
+    $this->name= $name;
     $this->parser= $this->newParser();
+  }
+
+  /**
+   * Get name
+   *
+   * @return string name
+   */
+  public function name() {
+    return $this->name;
   }
   
   /**

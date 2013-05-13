@@ -19,7 +19,7 @@ class FileSource extends \lang\Object implements Source {
    */
   public function __construct(File $file, Syntax $s= null) {
     $this->file= $file;
-    $this->syntax= $s ? $s : Syntax::forName($this->file->getExtension());
+    $this->syntax= $s ?: Syntax::forName($this->file->getExtension());
   }
   
   /**

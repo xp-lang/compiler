@@ -42,7 +42,7 @@ class CompilationTask extends \lang\Object {
     $this->manager= $manager;
     $this->listener= $listener;
     $this->emitter= $emitter;
-    $this->done= $done ? $done : create('new util.collections.HashTable<xp.compiler.io.Source, xp.compiler.types.Types>()');
+    $this->done= $done ?: create('new util.collections.HashTable<xp.compiler.io.Source, xp.compiler.types.Types>()');
   }
 
   /**

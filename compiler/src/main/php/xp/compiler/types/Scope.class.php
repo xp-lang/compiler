@@ -58,9 +58,9 @@ abstract class Scope extends \lang\Object {
     $child->importer= $this->importer;
     $child->task= $this->task;
     $child->package= $this->package;
+    $child->resolved= $this->resolved;
     
     // Reference arrays - TODO: Refactor and use Vectors instead
-    $child->resolved= &$this->resolved;
     $child->extensions= &$this->extensions;
     $child->declarations= &$this->declarations;
     $child->imports= &$this->imports;
@@ -84,7 +84,7 @@ abstract class Scope extends \lang\Object {
   /**
    * Gets list of resolved types
    *
-   * @return  util.collections.HashTable<lang.types.String, xp.compiler.types.Types>
+   * @return  util.collections.HashTable<string, xp.compiler.types.Types>
    */
   public function resolvedTypes() {
     return $this->resolved;
@@ -133,17 +133,6 @@ abstract class Scope extends \lang\Object {
     }
   }
   
-  /**
-   * Return whether an extension method is available
-   *
-   * @param   xp.compiler.types.Types type
-   * @param   string name method name
-   * @return  bool
-   */
-  public function hasExtension(Types $type, $name) {
-    return null !== $this->getExtension($type, $name);
-  }
-
   /**
    * Get an extension method
    *
@@ -316,9 +305,9 @@ abstract class Scope extends \lang\Object {
    */
   public function typeOf(Node $node) {
     if ($node instanceof ArrayNode) {
-      return $node->type ? $node->type : new TypeName('var[]');
+      return $node->type ?: new TypeName('var[]');
     } else if ($node instanceof MapNode) {
-      return $node->type ? $node->type : new TypeName('[:var]');
+      return $node->type ?: new TypeName('[:var]');
     } else if ($node instanceof StringNode) {
       return new TypeName('string');
     } else if ($node instanceof NaturalNode) {

@@ -13,7 +13,7 @@ class DefaultArgsTest extends ExecutionTest {
    *
    */
   public function fixtureClass() {
-    return $this->define('class', $this->name, null, '{
+    return self::define('class', $this->name, null, '{
       public int[] $values;
       
       public __construct(int $a, int $b= 2) {
@@ -55,7 +55,7 @@ class DefaultArgsTest extends ExecutionTest {
    */
   #[@test]
   public function complex() {
-    $class= $this->define('class', $this->name, null, '{
+    $class= self::define('class', $this->name, null, '{
       public static Generic newInstance(XPClass $class= Object::class) {
         return $class.newInstance();
       }

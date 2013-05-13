@@ -15,7 +15,7 @@ class TypeRestrictionTest extends ExecutionTest {
    * @return  lang.Generic
    */
   protected function signature($signature) {
-    $type= $this->define(
+    $type= self::define(
       'class', 
       ucfirst($this->name).'·'.($this->counter++), 
       null,
