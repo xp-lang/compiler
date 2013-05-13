@@ -11,8 +11,10 @@ use lang\ResourceProvider;
 use lang\reflect\Package;
 use xp\compiler\emit\source\Emitter;
 use xp\compiler\diagnostic\DefaultDiagnosticListener;
+use xp\compiler\diagnostic\QuietDiagnosticListener;
 use xp\compiler\diagnostic\VerboseDiagnosticListener;
 use xp\compiler\io\FileSource;
+use xp\compiler\io\CommandLineSource;
 use xp\compiler\io\FileManager;
 use util\log\Logger;
 use util\log\LogCategory;
@@ -34,13 +36,16 @@ use util\cmd\Console;
  *   <li>-v:
  *     Display verbose diagnostics
  *   </li>
+ *   <li>-q:
+ *     Only display compilation errors
+ *   </li>
  *   <li>-cp [path]: 
  *     Add path to classpath
  *   </li>
  *   <li>-sp [path]: 
  *     Adds path to source path (source path will equal classpath initially)
  *   </li>
- *   <li>-e [emitter]: 
+ *   <li>-E [emitter]: 
  *     Use emitter, defaults to "source"
  *   </li>
  *   <li>-p [profile[,profile[,...]]]:
@@ -48,6 +53,12 @@ use util\cmd\Console;
  *   </li>
  *   <li>-o [outputdir]: 
  *     Write compiled files to outputdir (will be created if not existant)
+ *   </li>
+ *   <li>-e [language] [code] [arg[,arg[,arg]]] 
+ *     Compile and run the given code, passing args as $args
+ *   </li>
+ *   <li>-w [language] [code] [arg[,arg[,arg]]] 
+ *     Same as -e, but enclose in Console::writeLine()
  *   </li>
  *   <li>-t [level[,level[...]]]:
  *     Set trace level (all, none, info, warn, error, debug)
@@ -130,7 +141,24 @@ class Runner extends \lang\Object {
     }
     return $files;
   } 
-  
+
+  /**
+   * Creates and returns a file manager which publically exposed compiled
+   * types via the "declared" member, indexed by their name.
+   *
+   * @return  xp.compiler.io.FileManager
+   */
+  protected static function declaringFileManager() {
+    return newinstance('xp.compiler.io.FileManager', array(), '{
+      public $declared= array();
+      public function write($r, \io\File $target) {
+        $r->executeWith(array());
+        $t= $r->type()->name();
+        $this->declared[$t]= \lang\XPClass::forName($t);
+      }
+    }');
+  }
+
   /**
    * Entry point method
    *
@@ -141,14 +169,16 @@ class Runner extends \lang\Object {
       self::showUsage();
       return 2;
     }
-    
+
+    // Set up compiler
     $compiler= new Compiler();
     $manager= new FileManager();
     $manager->setSourcePaths(\xp::$classpath);
-    $profiles= array('default');
-    $emitter= 'source';
     
     // Handle arguments
+    $profiles= array('default');
+    $emitter= 'source';
+    $result= function($success) { return $success ? 0 : 1; };
     $files= array();
     $listener= new DefaultDiagnosticListener(Console::$out);
     for ($i= 0, $s= sizeof($args); $i < $s; $i++) {
@@ -161,13 +191,15 @@ class Runner extends \lang\Object {
         $manager->addSourcePath($args[++$i]);
       } else if ('-v' == $args[$i]) {
         $listener= new VerboseDiagnosticListener(Console::$out);
+      } else if ('-q' == $args[$i]) {
+        $listener= new QuietDiagnosticListener(Console::$out);
       } else if ('-t' == $args[$i]) {
         $levels= LogLevel::NONE;
         foreach (explode(',', $args[++$i]) as $level) {
           $levels |= LogLevel::named($level);
         }
         $compiler->setTrace(create(new LogCategory('xcc'))->withAppender(new ConsoleAppender(), $levels));
-      } else if ('-e' == $args[$i]) {
+      } else if ('-E' == $args[$i]) {
         $emitter= $args[++$i];
       } else if ('-p' == $args[$i]) {
         $profiles= explode(',', $args[++$i]);
@@ -180,6 +212,25 @@ class Runner extends \lang\Object {
         $files= array_merge($files, self::fromFolder($args[++$i], false));
       } else if (is_dir($args[$i])) {
         $files= array_merge($files, self::fromFolder($args[$i], true));
+      } else if ('-e' == $args[$i]) {
+        $listener= new QuietDiagnosticListener(Console::$out);
+        $files[]= new CommandLineSource($args[++$i], $args[++$i], false);
+        $manager= self::declaringFileManager();
+        $result= function($success, $argv) use($manager) {
+          if (!$success) return 1;
+          return (int)$manager->declared[CommandLineSource::$NAME]->getMethod('main')->invoke(null, array($argv));
+        };
+        break;
+      } else if ('-w' == $args[$i]) {
+        $listener= new QuietDiagnosticListener(Console::$out);
+        $files[]= new CommandLineSource($args[++$i], $args[++$i], true);
+        $manager= self::declaringFileManager();
+        $result= function($success, $argv) use($manager) {
+          if (!$success) return 1;
+          Console::writeLine($manager->declared[CommandLineSource::$NAME]->getMethod('main')->invoke(null, array($argv)));
+          return 0;
+        };
+        break;
       } else {
         $files[]= new FileSource(new File($args[$i]));
       }
@@ -204,7 +255,7 @@ class Runner extends \lang\Object {
       return 3;
     }
     
-    // Compile files. Use 0 exitcode to indicate success, 1 for failure
-    return $compiler->compile($files, $listener, $manager, $emitter) ? 0 : 1;
+    // Compile files and pass return value to result handler
+    return $result($compiler->compile($files, $listener, $manager, $emitter), array_slice($args, $i + 1));
   }
 }
