@@ -1,32 +1,24 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
 /**
- * Tests properties
- *
+ * Tests compact syntax
  */
 class CompactSyntaxTest extends ExecutionTest {
   protected static $fixture= null;
 
   /**
-   * Defines fixture class. Cannot be moved to a "beforeClass" method
-   * because we need the compiler API instantiated.
+   * Defines fixture class.
    */
-  public function setUp() {
-    parent::setUp();
-    if (null !== self::$fixture) return;
+  #[@beforeClass]
+  public static function defineFixture() {
+    self::$fixture= self::define('class', 'CompactSyntaxTestFixture', null, '{
+      protected string $name = "Test";
 
-    try {
-      self::$fixture= $this->define('class', 'CompactSyntaxTestFixture', null, '{
-        protected string $name = "Test";
-
-        public string getName() -> $this.name;
-        public void setName($this.name) { }
-        public this withName($this.name) { }
-        public this useName($this.name= "Default");
-      }');
-    } catch (\lang\_Throwable $e) {
-      throw new \unittest\PrerequisitesNotMetError($e->getMessage(), $e);
-    }
+      public string getName() -> $this.name;
+      public void setName($this.name) { }
+      public this withName($this.name) { }
+      public this useName($this.name= "Default");
+    }');
   }
   
   /**

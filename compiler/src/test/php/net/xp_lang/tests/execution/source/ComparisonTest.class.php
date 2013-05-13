@@ -2,73 +2,62 @@
 
 /**
  * Tests comparisons
- *
  */
 class ComparisonTest extends ExecutionTest {
+
+  /**
+   * Returns constants for use with constants tests
+   */
+  public function constants() {
+    return array('0', 'null', 'false', 'true', '"string"', '[]', '[:]', '-1', '-0.5');
+  }
   
   /**
-   * Test constant == a
-   *
+   * Test constant == $a
    */
-  #[@test]
-  public function constantLeft() {
-    foreach (array('0', 'null', '"string"', '[]', '-1') as $constant) {
-      $this->assertEquals(
-        true, 
-        $this->run('$a= '.$constant.'; return '.$constant.' == $a;'), 
-        $constant
-      );
-    }
+  #[@test, @values('constants')]
+  public function constant_equality_on_lhs($constant) {
+    $this->assertTrue(
+      $this->run('$a= '.$constant.'; return '.$constant.' == $a;'), 
+      $constant
+    );
   }
 
   /**
-   * Test constant === a
-   *
+   * Test constant === $a
    */
-  #[@test]
-  public function constantLeftIdentical() {
-    foreach (array('0', 'null', '"string"', '[]', '-1') as $constant) {
-      $this->assertEquals(
-        true, 
-        $this->run('$a= '.$constant.'; return '.$constant.' === $a;'), 
-        $constant
-      );
-    }
+  #[@test, @values('constants')]
+  public function constant_identity_on_lhs($constant) {
+    $this->assertTrue(
+      $this->run('$a= '.$constant.'; return '.$constant.' === $a;'), 
+      $constant
+    );
   }
 
   /**
    * Test $a == constant
-   *
    */
-  #[@test]
-  public function constantRight() {
-    foreach (array('0', 'null', '"string"', '[]', '-1') as $constant) {
-      $this->assertEquals(
-        true, 
-        $this->run('$a= '.$constant.'; return $a == '.$constant.';'), 
-        $constant
-      );
-    }
+  #[@test, @values('constants')]
+  public function constant_equality_on_rhs($constant) {
+    $this->assertTrue(
+      $this->run('$a= '.$constant.'; return $a == '.$constant.';'),
+      $constant
+    );
   }
 
   /**
-   * Test $a == constant
-   *
+   * Test $a === constant
    */
-  #[@test]
-  public function constantRightIdentical() {
-    foreach (array('0', 'null', '"string"', '[]', '-1') as $constant) {
-      $this->assertEquals(
-        true, 
-        $this->run('$a= '.$constant.'; return $a === '.$constant.';'), 
-        $constant
-      );
-    }
+  #[@test, @values('constants')]
+  public function constant_identity_on_rhs($constant) {
+    $this->assertTrue(
+      $this->run('$a= '.$constant.'; return $a === '.$constant.';'),
+      $constant
+    );
   }
 
   /**
    * Test <
-   *
    */
   #[@test]
   public function smallerThan() {
@@ -78,7 +67,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test <=
-   *
    */
   #[@test]
   public function smallerThanOrEqual() {
@@ -89,7 +77,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test <
-   *
    */
   #[@test]
   public function greaterThan() {
@@ -99,7 +86,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test >=
-   *
    */
   #[@test]
   public function greaterThanOrEqual() {
@@ -110,7 +96,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test !=
-   *
    */
   #[@test]
   public function notEqual() {
@@ -120,7 +105,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test !=
-   *
    */
   #[@test]
   public function isEqual() {
@@ -130,7 +114,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test !== with integers
-   *
    */
   #[@test]
   public function integersNotIdentical() {
@@ -140,7 +123,6 @@ class ComparisonTest extends ExecutionTest {
 
   /**
    * Test !== with integers
-   *
    */
   #[@test]
   public function integersIdentical() {

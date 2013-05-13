@@ -216,4 +216,44 @@ class UnsupportedFeaturesTest extends ParserTestCase {
   public function nowDoc() {
     $this->parse("\$s= <<<'EOS'\nHello\nEOS;");
   }
+
+  /**
+   * Test namespaced constants are not supported
+   *
+   * @see   php://namespaces
+   */
+  #[@test, @expect(class= 'lang.FormatException', withMessage= '/Syntax error/')]
+  public function namespacedConstants() {
+    $this->parse('$s= hello\world;');
+  }
+
+  /**
+   * Test namespaced functions are not supported
+   *
+   * @see   php://namespaces
+   */
+  #[@test, @expect(class= 'lang.FormatException', withMessage= '/Syntax error/')]
+  public function namespacedFunctions() {
+    $this->parse('$s= hello\world();');
+  }
+
+  /**
+   * Test namespaced instantiations are not supported
+   *
+   * @see   php://namespaces
+   */
+  #[@test, @expect(class= 'lang.FormatException', withMessage= '/Syntax error/')]
+  public function namespacedInstantiation() {
+    $this->parse('$s= new hello\World();');
+  }
+
+  /**
+   * Test namespaced static member accesses are not supported
+   *
+   * @see   php://namespaces
+   */
+  #[@test, @expect(class= 'lang.FormatException', withMessage= '/Syntax error/')]
+  public function namespacedStaticMemberAccess() {
+    $this->parse('$s= hello\World::class;');
+  }
 }

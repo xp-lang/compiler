@@ -42,7 +42,7 @@ class MethodCallVerificationTest extends \unittest\TestCase {
       MODIFIER_PUBLIC, 
       null,
       new TypeName('Fixture'),
-      $parent ? $parent : new TypeName('lang.Object'),
+      $parent ?: new TypeName('lang.Object'),
       null,
       array(
         new MethodNode(array(

@@ -6,11 +6,11 @@
 class AssignmentTest extends ExecutionTest {
 
   /**
-   * Sets up test case and adds IsAsssignale check
+   * Sets up this test. Add IsAssignable check
    */
-  public function setUp() {
-    parent::setUp();
-    $this->check(new \xp\compiler\checks\IsAssignable(), true);
+  #[@beforeClass]
+  public static function useIsAssignableCheck() {
+    self::check(new \xp\compiler\checks\IsAssignable(), true);
   }
   
   /**

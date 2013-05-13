@@ -72,7 +72,7 @@ class StaticImportTest extends ExecutionTest {
    */
   #[@test]
   public function importSelf() {
-    $class= $this->define('class', 'ImportSelfTest', null, '{
+    $class= self::define('class', 'ImportSelfTest', null, '{
       public static string join(string $a, string $b) {
         return $a ~ " " ~ $b;
       }

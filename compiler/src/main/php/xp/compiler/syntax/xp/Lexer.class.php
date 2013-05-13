@@ -83,16 +83,13 @@ class Lexer extends \text\parser\generic\AbstractLexer {
       '?' => array('?..' => 0, '?.' => Parser::T_NAV),    // "T?..." = non-checked vararg of T
     );
 
-  const 
-    DELIMITERS = " ^|&?!.:;,@%~=<>(){}[]#+-*/\"'\r\n\t\$`";
+  const DELIMITERS    = " ^|&?!.:;,@%~=<>(){}[]#+-*/\\\"'\r\n\t\$`";
 
-  public
-    $fileName  = null;
+  public $fileName    = null;
 
-  protected
-    $comment   = null,
-    $tokenizer = null,
-    $forward   = array();
+  protected $comment  = null;
+  protected $tokenizer= null;
+  protected $forward  = array();
 
   /**
    * Constructor
