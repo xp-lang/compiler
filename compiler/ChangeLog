@@ -6,6 +6,11 @@ Version ?.?.?, released ????-??-??
 ----------------------------------
 Git commit: ?????
 
+Bugfixes
+~~~~~~~~
+- Fixed issue #31: Backslash in XP Language not considered a syntax error
+  (friebe)
+
 
 Version 1.10.0, released 2013-05-12
 -----------------------------------
