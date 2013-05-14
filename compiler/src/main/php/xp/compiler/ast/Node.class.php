@@ -20,6 +20,9 @@ abstract class Node extends \lang\Object {
   /**
    * Helper method to compare two objects (as arrays) recursively
    *
+   * FIXME: This can be replaced by util.Objects::equal() - but we need
+   * to bump our minimum requirement to 5.9.2
+   *
    * @param   array a1
    * @param   array a2
    * @return  bool
