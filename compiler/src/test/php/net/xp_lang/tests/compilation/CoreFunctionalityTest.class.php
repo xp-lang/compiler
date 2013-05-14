@@ -15,7 +15,7 @@ class CoreFunctionalityTest extends \unittest\TestCase {
    *
    * @return var[]
    */
-  protected function functions() {
+  public function functions() {
     return array(
       'newinstance',
       'with',
