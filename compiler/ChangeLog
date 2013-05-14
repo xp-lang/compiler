@@ -6,6 +6,11 @@ Version ?.?.?, released ????-??-??
 ----------------------------------
 Git commit: ?????
 
+
+Version 1.10.1, released 2013-05-14
+-----------------------------------
+Git commit: 85d2e2ecd2213d4ff38640a07d54fb88f519c8e8
+
 Heads up!
 ~~~~~~~~~
 - Changed emitter command line argument from "-e" to "-E"! See pull 
