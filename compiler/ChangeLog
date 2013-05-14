@@ -19,6 +19,8 @@ RFCs
 
 Bugfixes
 ~~~~~~~~
+- Fixed `this()` core functionality not being correctly resolved
+  (friebe)
 - Fixed fatal error in toString() of xp.compiler.types.* member classes
   (friebe)
 - Fixed bug in PHP syntax with concatenation operator precedence

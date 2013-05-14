@@ -2519,6 +2519,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
       'delete'      => true,
       'cast'        => true,
       'is'          => true,
+      'this'        => true,
       'isset'       => true,
       'unset'       => true,
       'empty'       => true,
