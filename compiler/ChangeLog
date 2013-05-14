@@ -19,6 +19,8 @@ RFCs
 
 Bugfixes
 ~~~~~~~~
+- Fixed bug in PHP syntax with concatenation operator precedence
+  (friebe)
 - Fixed issue #31: Backslash in XP Language not considered a syntax error
   (friebe)
 
