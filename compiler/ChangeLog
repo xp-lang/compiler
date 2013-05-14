@@ -14,11 +14,19 @@ Heads up!
 
 RFCs
 ~~~~
+- Implemented RFC #0249: Exponentiation operator
+  (friebe)
 - Implemented RFC #0238: xcc -e and xcc -w (command line code evaluation)
   (friebe)
 
 Bugfixes
 ~~~~~~~~
+- Fixed `this()` core functionality not being correctly resolved
+  (friebe)
+- Fixed fatal error in toString() of xp.compiler.types.* member classes
+  (friebe)
+- Fixed bug in PHP syntax with concatenation operator precedence
+  (friebe)
 - Fixed issue #31: Backslash in XP Language not considered a syntax error
   (friebe)
 

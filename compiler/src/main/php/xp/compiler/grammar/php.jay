@@ -86,8 +86,9 @@ use xp\compiler\ast\NoopNode;
 %left '|'
 %left '^'
 %left '&'
-%nonassoc '.' T_EQUALS T_NOT_EQUALS
+%nonassoc T_EQUALS T_NOT_EQUALS
 %nonassoc '<' T_SE '>' T_GE
+%right '.'
 %left '+' '-'
 %left '*' '/' '%'
 %right '!'

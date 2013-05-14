@@ -44,7 +44,7 @@ class Method extends \lang\Object {
     return sprintf(
       '%s<%s %s %s(%s)>',
       $this->getClassName(),
-      implode(' ', Modifiers::namesOf($this->modifiers)),
+      implode(' ', \lang\reflect\Modifiers::namesOf($this->modifiers)),
       $this->returns->compoundName(),
       $this->name,
       substr($signature, 2)

@@ -52,6 +52,19 @@ class BinaryOpTest extends ParserTestCase {
   }
 
   /**
+   * Test exponentiation  operator
+   *
+   */
+  #[@test]
+  public function exponentiation() {
+    $this->assertEquals(array(new BinaryOpNode(array(
+      'lhs'           => new VariableNode('i'),
+      'rhs'           => new IntegerNode('10'),
+      'op'            => '**'
+    ))), $this->parse('$i ** 10;'));
+  }
+
+  /**
    * Test division operator
    *
    */
@@ -150,6 +163,26 @@ class BinaryOpTest extends ParserTestCase {
         'op'  => '~'
       ))), 
       $this->parse('"Hello #" ~ ($i + 1);')
+    );
+  }
+
+  /**
+   * Test concatenation
+   *
+   */
+  #[@test]
+  public function concatenation_string_variable_and_string() {
+    $this->assertEquals(
+      array(new BinaryOpNode(array(
+        'lhs' => new StringNode('/^'),
+        'rhs' => new BinaryOpNode(array(
+          'lhs' => new VariableNode('module'),
+          'rhs' => new StringNode('@.+/'),
+          'op'  => '~'
+        )),
+        'op'  => '~'
+      ))),
+      $this->parse("'/^' ~ \$module ~ '@.+/';")
     );
   }
 }

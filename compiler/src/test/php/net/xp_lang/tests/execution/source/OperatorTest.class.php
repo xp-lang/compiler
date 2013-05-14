@@ -249,6 +249,15 @@ class OperatorTest extends ExecutionTest {
   }
 
   /**
+   * Test **
+   *
+   */
+  #[@test]
+  public function power() {
+    $this->assertEquals(8, $this->run('$a= 2; return $a ** 3;'));
+  }
+
+  /**
    * Test /
    *
    */
