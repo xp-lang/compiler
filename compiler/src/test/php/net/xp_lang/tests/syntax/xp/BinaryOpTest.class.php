@@ -52,6 +52,19 @@ class BinaryOpTest extends ParserTestCase {
   }
 
   /**
+   * Test exponentiation  operator
+   *
+   */
+  #[@test]
+  public function exponentiation() {
+    $this->assertEquals(array(new BinaryOpNode(array(
+      'lhs'           => new VariableNode('i'),
+      'rhs'           => new IntegerNode('10'),
+      'op'            => '**'
+    ))), $this->parse('$i ** 10;'));
+  }
+
+  /**
    * Test division operator
    *
    */
