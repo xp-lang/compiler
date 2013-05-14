@@ -699,19 +699,20 @@ class Emitter extends \xp\compiler\emit\Emitter {
    */
   protected function emitBinaryOp($b, $bin) {
     static $ops= array(
-      '~'   => '.',
-      '-'   => '-',
-      '+'   => '+',
-      '*'   => '*',
-      '/'   => '/',
-      '%'   => '%',
-      '|'   => '|',
-      '&'   => '&',
-      '^'   => '^',
-      '&&'  => '&&',
-      '||'  => '||',
-      '>>'  => '>>',
-      '<<'  => '<<',
+      '~'   => array(true, '.'),
+      '-'   => array(true, '-'),
+      '+'   => array(true, '+'),
+      '*'   => array(true, '*'),
+      '/'   => array(true, '/'),
+      '%'   => array(true, '%'),
+      '|'   => array(true, '|'),
+      '&'   => array(true, '&'),
+      '^'   => array(true, '^'),
+      '&&'  => array(true, '&&'),
+      '||'  => array(true, '||'),
+      '>>'  => array(true, '>>'),
+      '<<'  => array(true, '<<'),
+      '**'  => array(false, 'pow')
     );
     static $ovl= array(
       '~'   => 'concat',
@@ -738,10 +739,19 @@ class Emitter extends \xp\compiler\emit\Emitter {
         return;
       }
     }
-    
-    $this->emitOne($b, $bin->lhs);
-    $b->append($ops[$bin->op]);
-    $this->emitOne($b, $bin->rhs);
+
+    $o= $ops[$bin->op];
+    if ($o[0]) {        // infix
+      $this->emitOne($b, $bin->lhs);
+      $b->append($o[1]);
+      $this->emitOne($b, $bin->rhs);
+    } else {
+      $b->append($o[1])->append('(');
+      $this->emitOne($b, $bin->lhs);
+      $b->append(',');
+      $this->emitOne($b, $bin->rhs);
+      $b->append(')');
+    }
   }
 
   /**

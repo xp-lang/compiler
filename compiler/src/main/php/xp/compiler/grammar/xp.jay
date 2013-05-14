@@ -85,6 +85,7 @@ use xp\compiler\ast\BracedExpressionNode;
 %right T_ARROW
 %left '+' '-'
 %left '*' '/' '%'
+%left T_EXP
 %right '!'
 %nonassoc T_INSTANCEOF
 %right '~' T_INC T_DEC
@@ -169,6 +170,7 @@ use xp\compiler\ast\BracedExpressionNode;
 %token T_AND_EQUAL 418
 %token T_XOR_EQUAL 419
 %token T_NAV 420
+%token T_EXP 421
 
 %token T_WITH 430
 
@@ -950,6 +952,7 @@ binary_operation:
   | expression '^' expression { $$= array('lhs' => $1, 'rhs' => $3, 'op' => $2); }
   | expression '>' '>' expression { $$= array('lhs' => $1, 'rhs' => $4, 'op' => $2.$3); }
   | expression '<' '<' expression { $$= array('lhs' => $1, 'rhs' => $4, 'op' => $2.$3); }
+  | expression T_EXP expression { $$= array('lhs' => $1, 'rhs' => $3, 'op' => $2); }
 ;
 
 unary_prefix_operation:
