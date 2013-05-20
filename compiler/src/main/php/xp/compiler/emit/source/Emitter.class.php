@@ -1948,8 +1948,11 @@ class Emitter extends \xp\compiler\emit\Emitter {
           $initializable= true;
         } catch (\lang\IllegalStateException $e) {
           $this->warn('R100', $e->getMessage(), $field->initialization);
+          $initializable= false;
         }
-      } else {
+      }
+
+      if (!$initializable) {
         $init= new Buffer('', $b->line);
         $this->enter(new MethodScope('<init>'));
         if ($static) {
