@@ -24,7 +24,7 @@ class ArrayNode extends Node implements Resolveable {
     $resolved= array();
     foreach ($this->values as $i => $value) {
       if (!$value instanceof Resolveable) {
-        throw new IllegalStateException('Value at offset '.$i.' is not resolveable: '.xp::stringOf($value));
+        throw new \lang\IllegalStateException('Value at offset '.$i.' is not resolveable: '.\xp::stringOf($value));
       }
       $resolved[]= $value->resolve();
     }

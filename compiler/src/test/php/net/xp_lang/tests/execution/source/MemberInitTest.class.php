@@ -54,6 +54,32 @@ class MemberInitTest extends ExecutionTest {
   }
 
   /**
+   * Test member initialized to a map containing an object
+   *
+   * @see  https://github.com/xp-framework/xp-language/issues/32
+   */
+  #[@test]
+  public function toMapOfObjects() {
+    $this->assertEquals(
+      array('one' => new \lang\types\String('one')),
+      $this->newInstance('{ public [:lang.types.String] $map= [ one : new lang.types.String("one") ]; }')->map
+    );
+  }
+
+  /**
+   * Test member initialized to a map containing an object
+   *
+   * @see  https://github.com/xp-framework/xp-language/issues/32
+   */
+  #[@test]
+  public function toArrayOfObjects() {
+    $this->assertEquals(
+      array(new \lang\types\String('one')),
+      $this->newInstance('{ public lang.types.String[] $list= [new lang.types.String("one")]; }')->list
+    );
+  }
+
+  /**
    * Test member initialized to an empty string
    *
    */
