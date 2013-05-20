@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 1.10.2 / 2013-05-20
+
 ### RFCs
 
 * Implemented RFC 273: ChangeLog formatting - (@thekid)
