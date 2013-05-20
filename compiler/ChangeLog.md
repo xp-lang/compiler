@@ -7,6 +7,10 @@ XP Compiler ChangeLog
 
 * Implemented RFC 273: ChangeLog formatting - (@thekid)
 
+### Bugfixes
+
+* Fixed issue #32 - Fatal error during compilation (@thekid)
+
 ## 1.10.1 / 2013-05-14
 
 ### Heads up!
