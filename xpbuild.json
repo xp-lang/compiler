@@ -1,7 +1,0 @@
-{
-  "base"     : "compiler",
-  "naming"   : {
-    "main"     : "xp-compiler-{VERSION}.xar",
-    "test"     : "xp-compiler-test-{VERSION}.xar"
-  }
-}
