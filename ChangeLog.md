@@ -3,6 +3,10 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 1.10.3 / 2013-05-27
+
+* Implemented RFC 274: XP Language Repository reorganization (@thekid)
+
 ## 1.10.2 / 2013-05-20
 
 * Implemented RFC 273: ChangeLog formatting - (@thekid)
