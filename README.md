@@ -81,7 +81,7 @@ $ git clone git://github.com/xp-framework/xp-language.git
 
 ### Directory structure
 ```
-[path]/xp-language
+[path]/compiler
  |- ChangeLog.md      # Version log
  |- README.md         # This file
  |- module.pth        # Module classpath
