@@ -11,4 +11,4 @@ before_script:
   - wget 'http://xp-framework.net/setup/5.9.1' -O - | php -- -d .
 
 script:
-  - cd compiler && ../unittest src/test/config/*ini
+  - ./unittest src/test/config/*ini

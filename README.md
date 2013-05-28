@@ -1,6 +1,6 @@
 XP Language
 ===========
-[![Build Status](https://secure.travis-ci.org/xp-framework/xp-language.png)](http://travis-ci.org/xp-framework/xp-language)
+[![Build Status](https://secure.travis-ci.org/xp-lang/compiler.png)](https://travis-ci.org/xp-lang/compiler)
 
 XP language is a feature-rich, typed and compiled programming language, based on the popular PHP language and designed to syntactically support features of the XP Framework. The source you write and compile with it can make use of the XP Framework's foundation classes. As the language itself is written in the XP Framework, no binary or proprietary extensions are needed! 
 
@@ -12,10 +12,10 @@ Use the XP Installer to add this module as follows:
 $ cd ~/.xp
 
 # First installation
-$ xpi add xp-framework/xp-language
+$ xpi add xp-lang/compiler
 
 # Later on
-$ xpi upgrade xp-framework/xp-language
+$ xpi upgrade xp-lang/compiler
 ```
 
 *Note: It is assumed you are using `~./xp` as path for your globally available XP modules, and have this path inside your xp.ini's `use` statement.*
@@ -81,24 +81,24 @@ $ git clone git://github.com/xp-framework/xp-language.git
 
 ### Directory structure
 ```
-[path]/xp-language
-`- compiler
-   |- ChangeLog         # Version log
-   |- module.pth        # Module classpath
-   `- src               # Sourcecode, by Maven conventions
-      |- main
-      |  `- php
-      `- test
-         |- php
-         `- config      # Unittest configuration
+[path]/compiler
+ |- ChangeLog.md      # Version log
+ |- README.md         # This file
+ |- module.pth        # Module classpath
+ `- src               # Sourcecode, by Maven conventions
+    |- main
+    |  `- php
+    `- test
+       |- php
+       `- config      # Unittest configuration
 ```
 
 ### Using it
 Add that path to your `use` setting before the global module path inside your `xp.ini`, e.g.:
 
 ```ini
-use=~/devel/xp-framework/core:~/devel/xp-language/compiler:~/.xp
-                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+use=~/devel/xp-framework/core:~/devel/compiler:~/.xp
+                              ^^^^^^^^^^^^^^^^
 ```
 
 *On Windows systems, use `;` as separator*
@@ -108,3 +108,4 @@ use=~/devel/xp-framework/core:~/devel/xp-language/compiler:~/.xp
 Contributing
 ------------
 To contribute, use the GitHub way - fork, hack, and submit a pull request!
+
