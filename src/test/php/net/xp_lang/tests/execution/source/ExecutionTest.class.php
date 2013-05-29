@@ -94,6 +94,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
    */
   protected static function define($type, $class, $parent, $src, array $imports= array()) {
     $emitter= self::emitter();
+    $emitter->clearMessages();
     $syntax= Syntax::forName('xp');
     $class= 'Source'.$class;
     $scope= new TaskScope(new CompilationTask(
