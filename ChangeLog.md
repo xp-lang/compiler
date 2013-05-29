@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Implemented RFC 250: Static member import syntax change (@thekid)
+
 ## 1.10.3 / 2013-05-27
 
 * Implemented RFC 274: XP Language Repository reorganization (@thekid)
