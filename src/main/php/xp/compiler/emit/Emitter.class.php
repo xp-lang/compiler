@@ -709,7 +709,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
 
     try {
       $this->checks->verify($node, $this->scope[0], $this) && call_user_func(
-        array($this, 'emit'.substr(get_class($node), strlen('xp\\compiler\\ast\\'), -4)),
+        array($this, 'emit'.substr(get_class($node), 16, -4)),    // strlen('xp\\compiler\\ast\\'), strlen
         $b,
         $node
       );
@@ -764,7 +764,17 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
     
     return sprintf('[%4s] %s at line %d, offset %d', $code, $message, $pos[0], $pos[1]);
   }
-  
+
+  /**
+   * Clears messages
+   */
+  public function clearMessages() {
+    $this->messages= array(
+      'warnings' => array(),
+      'errors'   => array()
+    );
+  }
+
   /**
    * Issue a warning
    *

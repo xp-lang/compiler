@@ -101,11 +101,11 @@ class FileManager extends \lang\Object {
    * @param   xp.compiler.Syntax s Syntax to use, determined via source file's syntax otherwise
    * @return  xp.compiler.ast.ParseTree
    */
-  public function parseFile(Source $in, Syntax $s= null) {
+  public function parseFile(Source $in, Syntax $s= null, $messages= null) {
     if (null === $s) {
       $s= $in->getSyntax();
     }
-    return $s->parse($in->getInputStream(), $in->getURI());
+    return $s->parse($in->getInputStream(), $in->getURI(), $messages);
   }
 
   /**
