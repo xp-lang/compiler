@@ -127,7 +127,27 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    * @param   xp.compiler.ast.TypeDeclarationNode
    * @param   string qualified
    */
-  protected abstract function registerClass($b, $declaration, $qualified);
+  protected function registerClass($b, $declaration, $qualified) {
+    unset($this->metadata[0]['EXT']);
+
+    // Retain comment
+    $this->metadata[0]['class'][DETAIL_COMMENT]= $declaration->comment
+      ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($declaration->comment, 4, strpos($declaration->comment, '* @')- 2)))
+      : null
+    ;
+
+    // Copy annotations
+    $this->emitAnnotations($this->metadata[0]['class'], (array)$declaration->annotations);
+
+    $b->append($this->core.'::$cn[\''.$declaration->literal.'\']= \''.$qualified.'\';');
+    $b->append($this->core.'::$meta[\''.$qualified.'\']= '.var_export($this->metadata[0], true).';');
+    
+    // Run static initializer if existant on synthetic types
+    if ($declaration->synthetic && $this->inits[0][2]) {
+      $b->append($declaration->literal)->append('::__static();');
+    }
+  }
+
 
   /**
    * Returns a new temporary variable
@@ -1405,7 +1425,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
             ->append($i + 1)
             ->append(' passed to ".__METHOD__." must be of ')
             ->append($t->name)
-            ->append(', ".xp::typeOf($')
+            ->append(', ".'.$this->core.'::typeOf($')
             ->append($param['name'])
             ->append(')." given");')
           ;
@@ -1945,7 +1965,126 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $f->modifiers= $field->modifiers;
     $this->types[0]->addField($f);
   }
-  
+
+  /**
+   * Emit a class declaration
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.ClassNode declaration
+   */
+  protected function emitClass($b, $declaration) {
+    $parent= $declaration->parent ?: new TypeName('lang.Object');
+    $parentType= $this->resolveType($parent);
+    $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $declaration), $parentType);
+    $this->scope[0]->addResolved('self', $thisType);
+    $this->scope[0]->addResolved('parent', $parentType);
+    
+    $this->enter(new TypeDeclarationScope());    
+    $this->emitTypeName($b, 'class', $declaration);
+    $b->append(' extends '.$this->literal($parentType, true));
+    array_unshift($this->metadata, array(array(), array()));
+    $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
+    array_unshift($this->properties, array());
+    array_unshift($this->inits, array(false => array(), true => array(), 2 => false));
+
+    // Generics
+    if ($declaration->name->isGeneric()) {
+      $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['self']= $this->genericComponentAsMetadata($declaration->name);
+    }
+    if ($parent->isGeneric()) {
+      $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['parent']= $this->genericComponentAsMetadata($parent);
+    }
+
+    // Check if we need to implement ArrayAccess
+    foreach ((array)$declaration->body as $node) {
+      if ($node instanceof IndexerNode) {
+        $declaration->implements[]= 'ArrayAccess';
+      }
+    }
+    
+    // Interfaces
+    if ($declaration->implements) {
+      $b->append(' implements ');
+      $s= sizeof($declaration->implements)- 1;
+      foreach ($declaration->implements as $i => $type) {
+        if ($type instanceof TypeName) {
+          if ($type->isGeneric()) {
+            $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['implements'][$i]= $this->genericComponentAsMetadata($type);
+          }
+          $b->append($this->literal($this->resolveType($type), true));
+        } else {
+          $b->append($type);
+        }
+        $i < $s && $b->append(', ');
+      }
+    }
+    
+    // Members
+    $b->append('{');
+    foreach ((array)$declaration->body as $node) {
+      $this->emitOne($b, $node);
+    }
+    $this->emitProperties($b, $this->properties[0]);
+    
+    // Generate a constructor if initializations are available.
+    // They will have already been emitted if a constructor exists!
+    if ($this->inits[0][false]) {
+      $arguments= array();
+      $parameters= array();
+      if ($parentType->hasConstructor()) {
+        foreach ($parentType->getConstructor()->parameters as $i => $type) {
+          $parameters[]= array('name' => '··a'.$i, 'type' => $type);    // TODO: default
+          $arguments[]= new VariableNode('··a'.$i);
+        }
+        $body= array(new StaticMethodCallNode(new TypeName('parent'), '__construct', $arguments));
+      } else {
+        $body= array();
+      }
+      $this->emitOne($b, new ConstructorNode(array(
+        'modifiers'    => MODIFIER_PUBLIC,
+        'parameters'   => $parameters,
+        'annotations'  => null,
+        'body'         => $body,
+        'comment'      => '(Generated)',
+        'position'     => $declaration->position
+      )));
+    }
+
+    // Generate a static initializer if initializations are available.
+    // They will have already been emitted if a static initializer exists!
+    if ($this->inits[0][true]) {
+      $this->emitOne($b, new StaticInitializerNode(null));
+    }
+    
+    // Create __import.
+    if (isset($this->metadata[0]['EXT'])) {
+      $b->append('static function __import($scope) {');
+      foreach ($this->metadata[0]['EXT'] as $method => $type) {
+        $b->append($this->core.'::$ext[$scope][\'')->append($type)->append('\']= \'')->append($thisType->literal())->append('\';');
+      }
+      $b->append('}');
+    }
+
+    // Generic instances have {definition-type, null, [argument-type[0..n]]} 
+    // stored  as type names in their details
+    if (isset($declaration->generic)) {
+      $this->metadata[0]['class'][DETAIL_GENERIC]= $declaration->generic;
+    }
+
+    $b->append('}');
+    $this->leave();
+    $this->registerClass($b, $declaration, $thisType->name());
+    array_shift($this->properties);
+    array_shift($this->metadata);
+    array_shift($this->inits);
+
+    // Register type info
+    $this->types[0]->name= $thisType->name();
+    $this->types[0]->kind= Types::CLASS_KIND;
+    $this->types[0]->literal= $declaration->literal;
+    $this->types[0]->parent= $parentType;
+  }
+
   /**
    * Emit an enum declaration
    *
@@ -2135,125 +2274,6 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $this->types[0]->kind= Types::INTERFACE_KIND;
     $this->types[0]->literal= $declaration->literal;
     $this->types[0]->parent= null;
-  }
-
-  /**
-   * Emit a class declaration
-   *
-   * @param   xp.compiler.emit.Buffer b
-   * @param   xp.compiler.ast.ClassNode declaration
-   */
-  protected function emitClass($b, $declaration) {
-    $parent= $declaration->parent ?: new TypeName('lang.Object');
-    $parentType= $this->resolveType($parent);
-    $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $declaration), $parentType);
-    $this->scope[0]->addResolved('self', $thisType);
-    $this->scope[0]->addResolved('parent', $parentType);
-    
-    $this->enter(new TypeDeclarationScope());    
-    $this->emitTypeName($b, 'class', $declaration);
-    $b->append(' extends '.$parentType->literal(true));
-    array_unshift($this->metadata, array(array(), array()));
-    $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
-    array_unshift($this->properties, array());
-    array_unshift($this->inits, array(false => array(), true => array(), 2 => false));
-
-    // Generics
-    if ($declaration->name->isGeneric()) {
-      $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['self']= $this->genericComponentAsMetadata($declaration->name);
-    }
-    if ($parent->isGeneric()) {
-      $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['parent']= $this->genericComponentAsMetadata($parent);
-    }
-
-    // Check if we need to implement ArrayAccess
-    foreach ((array)$declaration->body as $node) {
-      if ($node instanceof IndexerNode) {
-        $declaration->implements[]= 'ArrayAccess';
-      }
-    }
-    
-    // Interfaces
-    if ($declaration->implements) {
-      $b->append(' implements ');
-      $s= sizeof($declaration->implements)- 1;
-      foreach ($declaration->implements as $i => $type) {
-        if ($type instanceof TypeName) {
-          if ($type->isGeneric()) {
-            $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['implements'][$i]= $this->genericComponentAsMetadata($type);
-          }
-          $b->append($this->resolveType($type)->literal(true));
-        } else {
-          $b->append($type);
-        }
-        $i < $s && $b->append(', ');
-      }
-    }
-    
-    // Members
-    $b->append('{');
-    foreach ((array)$declaration->body as $node) {
-      $this->emitOne($b, $node);
-    }
-    $this->emitProperties($b, $this->properties[0]);
-    
-    // Generate a constructor if initializations are available.
-    // They will have already been emitted if a constructor exists!
-    if ($this->inits[0][false]) {
-      $arguments= array();
-      $parameters= array();
-      if ($parentType->hasConstructor()) {
-        foreach ($parentType->getConstructor()->parameters as $i => $type) {
-          $parameters[]= array('name' => '··a'.$i, 'type' => $type);    // TODO: default
-          $arguments[]= new VariableNode('··a'.$i);
-        }
-        $body= array(new StaticMethodCallNode(new TypeName('parent'), '__construct', $arguments));
-      } else {
-        $body= array();
-      }
-      $this->emitOne($b, new ConstructorNode(array(
-        'modifiers'    => MODIFIER_PUBLIC,
-        'parameters'   => $parameters,
-        'annotations'  => null,
-        'body'         => $body,
-        'comment'      => '(Generated)',
-        'position'     => $declaration->position
-      )));
-    }
-
-    // Generate a static initializer if initializations are available.
-    // They will have already been emitted if a static initializer exists!
-    if ($this->inits[0][true]) {
-      $this->emitOne($b, new StaticInitializerNode(null));
-    }
-    
-    // Create __import
-    if (isset($this->metadata[0]['EXT'])) {
-      $b->append('static function __import($scope) {');
-      foreach ($this->metadata[0]['EXT'] as $method => $type) {
-        $b->append('xp::$ext[$scope]["')->append($type)->append('"]= "')->append($this->literal($thisType))->append('";');
-      }
-      $b->append('}');
-    }
-
-    // Generic instances have {definition-type, null, [argument-type[0..n]]} 
-    // stored  as type names in their details
-    if (isset($declaration->generic)) {
-      $this->metadata[0]['class'][DETAIL_GENERIC]= $declaration->generic;
-    }
-
-    $b->append('}');
-    $this->leave();
-    $this->registerClass($b, $declaration, $thisType->name());
-    array_shift($this->properties);
-    array_shift($this->metadata);
-    array_shift($this->inits);
-
-    // Register type info
-    $this->types[0]->name= $thisType->name();
-    $this->types[0]->kind= Types::CLASS_KIND;
-    $this->types[0]->literal= $declaration->literal;
-    $this->types[0]->parent= $parentType;
   }
 
   /**
