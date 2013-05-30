@@ -9,6 +9,7 @@ class TypeReference extends Types {
   protected $type= null;
   protected $literal= '';
   protected $kind= 0;
+  protected $modifiers= 0;
   
   /**
    * Constructor
@@ -20,15 +21,20 @@ class TypeReference extends Types {
   public function __construct(TypeName $type, $kind= parent::CLASS_KIND, $modifiers= 0) {
     $this->type= $type;
     $this->kind= $kind;
+    $this->modifiers= $modifiers;
     
-    // Calculate type literal, using the RFC #0037 fully qualified
-    // form for package types
-    if ($modifiers & MODIFIER_PACKAGE) {
-      $this->literal= strtr($this->type->name, '.', '·');
-    } else {
-      $p= strrpos($this->type->name, '.');
-      $this->literal= false === $p ? $this->type->name : substr($this->type->name, $p+ 1);
-    }
+    // Calculate type literal
+    $p= strrpos($this->type->name, '.');
+    $this->literal= false === $p ? $this->type->name : substr($this->type->name, $p+ 1);
+  }
+
+   /**
+   * Returns modifiers
+   *
+   * @return int
+   */
+  public function modifiers() {
+    return $this->modifiers;
   }
 
   /**

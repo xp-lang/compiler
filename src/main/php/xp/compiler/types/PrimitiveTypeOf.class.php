@@ -15,7 +15,16 @@ class PrimitiveTypeOf extends Types {
   public function __construct($t) {
     $this->name= $t->name;
   }
-  
+
+  /**
+   * Returns modifiers
+   *
+   * @return int
+   */
+  public function modifiers() {
+    return MODIFIER_PUBLIC;
+  }
+
   /**
    * Returns name
    *

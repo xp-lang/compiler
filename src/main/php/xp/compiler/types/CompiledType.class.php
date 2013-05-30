@@ -8,7 +8,6 @@
 class CompiledType extends Types {
   public $name= null;
   public $parent= null;
-  public $literal= null;
   public $kind= null;
   public $indexer= null;
   public $constructor= null;
@@ -19,6 +18,7 @@ class CompiledType extends Types {
   public $properties= array();
   public $generics= null;
   public $extensions= array();
+  public $modifiers= 0;
 
   /**
    * Constructor
@@ -27,6 +27,15 @@ class CompiledType extends Types {
    */
   public function __construct($name= '') {
     $this->name= $name;
+  }
+
+  /**
+   * Returns modifiers
+   *
+   * @return int
+   */
+  public function modifiers() {
+    return $this->modifiers;
   }
   
   /**

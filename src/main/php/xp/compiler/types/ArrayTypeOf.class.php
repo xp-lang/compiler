@@ -17,7 +17,16 @@ class ArrayTypeOf extends Types {
   public function __construct(Types $component) {
     $this->component= $component;
   }
-  
+
+  /**
+   * Returns modifiers
+   *
+   * @return int
+   */
+  public function modifiers() {
+    return MODIFIER_PUBLIC;
+  }
+
   /**
    * Returns name
    *

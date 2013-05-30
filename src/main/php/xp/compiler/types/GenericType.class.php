@@ -21,7 +21,16 @@ class GenericType extends Types {
     $this->components= $components;
     $this->placeholders= $this->definition->genericPlaceholders();
   }
-  
+
+  /**
+   * Returns modifiers
+   *
+   * @return int
+   */
+  public function modifiers() {
+    return $this->definition->modifiers();
+  }
+
   /**
    * Rewrite a placeholder for a real type
    *

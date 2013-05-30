@@ -21,6 +21,15 @@ class TypeReflection extends Types {
   }
 
   /**
+   * Returns modifiers
+   *
+   * @return int
+   */
+  public function modifiers() {
+    return strpos($this->class->literal(), '·') ? MODIFIER_PACKAGE : MODIFIER_PUBLIC;
+  }
+
+  /**
    * Returns parent type
    *
    * @return  xp.compiler.types.Types

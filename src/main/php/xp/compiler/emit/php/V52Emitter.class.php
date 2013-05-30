@@ -30,7 +30,11 @@ class V52Emitter extends Emitter {
    * @return string
    */
   protected function literal($t, $base= false) {
-    return $t->literal($base);
+    if ($t->modifiers() & MODIFIER_PACKAGE) {
+      return strtr($t->package(), '.', '·').'·'.$t->literal($base);
+    } else {
+      return $t->literal($base);
+    }
   }
 
   /**

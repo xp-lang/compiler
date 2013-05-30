@@ -2103,6 +2103,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $this->types[0]->kind= Types::CLASS_KIND;
     $this->types[0]->literal= $declaration->literal;
     $this->types[0]->parent= $parentType;
+    $this->types[0]->modifiers= $declaration->modifiers;
   }
 
   /**
@@ -2150,7 +2151,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
 
     // Ensure parent class and interfaces are loaded
     $this->emitTypeName($b, 'class', $declaration);
-    $b->append(' extends '.$parentType->literal(true));
+    $b->append(' extends '.$this->literal($parentType, true));
     array_unshift($this->metadata, array(array(), array()));
     $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
     array_unshift($this->properties, array('get' => array(), 'set' => array()));
@@ -2246,6 +2247,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $this->types[0]->kind= Types::ENUM_KIND;
     $this->types[0]->literal= $declaration->literal;
     $this->types[0]->parent= $parentType;
+    $this->types[0]->modifiers= $declaration->modifiers;
   }
 
   /**
@@ -2275,7 +2277,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         if ($type->isGeneric()) {
           $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['extends'][$i]= $this->genericComponentAsMetadata($type);
         }
-        $b->append($this->resolveType($type)->literal(true));
+        $b->append($this->literal($this->resolveType($type), true));
         $i < $s && $b->append(', ');
       }
     }
@@ -2294,6 +2296,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $this->types[0]->kind= Types::INTERFACE_KIND;
     $this->types[0]->literal= $declaration->literal;
     $this->types[0]->parent= null;
+    $this->types[0]->modifiers= $declaration->modifiers;
   }
 
   /**
@@ -2315,7 +2318,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    */
   protected function emitInstanceOf($b, $instanceof) {
     $this->emitOne($b, $instanceof->expression);
-    $b->append(' instanceof ')->append($this->resolveType($instanceof->type)->literal());
+    $b->append(' instanceof ')->append($this->literal($this->resolveType($instanceof->type)));
   }
 
   /**

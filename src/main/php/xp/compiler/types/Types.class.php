@@ -193,6 +193,13 @@ abstract class Types extends \lang\Object {
   public abstract function genericPlaceholders();
 
   /**
+   * Returns modifiers
+   *
+   * @return int
+   */
+  public abstract function modifiers();
+
+  /**
    * Returns package name
    *
    * @return  string

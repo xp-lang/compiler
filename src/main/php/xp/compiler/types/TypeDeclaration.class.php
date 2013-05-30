@@ -33,7 +33,16 @@ class TypeDeclaration extends Types {
   public function parent() {
     return $this->parent;
   }
-  
+
+  /**
+   * Returns modifiers
+   *
+   * @return int
+   */
+  public function modifiers() {
+    return $this->tree->declaration->modifiers;
+  }
+
   /**
    * Returns name
    *
