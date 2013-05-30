@@ -107,13 +107,34 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   protected abstract function literal($t, $base= false);
 
   /**
+   * Returns the literal for a given type
+   *
+   * @param  xp.compiler.types.TypeName t
+   * @return string
+   */
+  protected abstract function declaration($t);
+
+  /**
    * Emit type name and modifiers
    *
    * @param   xp.compiler.emit.Buffer b
    * @param   string type
    * @param   xp.compiler.ast.TypeDeclarationNode declaration
    */
-  protected abstract function emitTypeName($b, $type, TypeDeclarationNode $declaration);
+  protected function emitTypeName($b, $type, TypeDeclarationNode $declaration, $prefix= '') {
+    $this->metadata[0]['class']= array();
+    $declaration->literal= $this->declaration($declaration->name);
+
+    // Emit abstract and final modifiers
+    if (Modifiers::isAbstract($declaration->modifiers)) {
+      $b->append('abstract ');
+    } else if (Modifiers::isFinal($declaration->modifiers)) {
+      $b->append('final ');
+    }
+
+    // Emit declaration
+    $b->append($type)->append(' ')->append($prefix.$declaration->name->name);
+  }
 
   /**
    * Returns a new temporary variable

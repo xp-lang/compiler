@@ -39,29 +39,17 @@ class V53Emitter extends Emitter {
   }
 
   /**
-   * Emit type name and modifiers
+   * Returns the literal for a given declaration
    *
-   * @param   xp.compiler.emit.Buffer b
-   * @param   string type
-   * @param   xp.compiler.ast.TypeDeclarationNode declaration
+   * @param  xp.compiler.types.TypeName t
+   * @return string
    */
-  protected function emitTypeName($b, $type, TypeDeclarationNode $declaration) {
-    $this->metadata[0]['class']= array();
+  protected function declaration($t) {
     if ($this->scope[0]->package) {
-      $declaration->literal= strtr($this->scope[0]->package->name, '.', '\\').'\\'.$declaration->name->name;
+      return strtr($this->scope[0]->package->name, '.', '\\').'\\'.$t->name;
     } else {
-      $declaration->literal= $declaration->name->name;
+      return $t->name;
     }
-    
-    // Emit abstract and final modifiers
-    if (Modifiers::isAbstract($declaration->modifiers)) {
-      $b->append('abstract ');
-    } else if (Modifiers::isFinal($declaration->modifiers)) {
-      $b->append('final ');
-    } 
-    
-    // Emit declaration
-    $b->append(' ')->append($type)->append(' ')->append($declaration->name->name);
   }
 
   /**
