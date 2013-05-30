@@ -31,7 +31,6 @@ class V53Emitter extends Emitter {
   protected function literal($t, $base= false) {
     $name= $t->name();
     $package= substr($name, 0, strrpos($name, '.'));
-    //fputs(STDERR, "-> ".$t->toString()." := ".$t->literal($base)." @ <$package>\n\n");
     if ('' === $package || 0 === strncmp('php', $package, 3)) {
       return '\\'.$t->literal($base);
     } else {

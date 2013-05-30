@@ -320,7 +320,7 @@ class V52Emitter extends Emitter {
           if ($type->isGeneric()) {
             $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['implements'][$i]= $this->genericComponentAsMetadata($type);
           }
-          $b->append($this->literal($type, true));
+          $b->append($this->literal($this->resolveType($type), true));
         } else {
           $b->append($type);
         }
