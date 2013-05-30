@@ -41,14 +41,14 @@ class V53Emitter extends Emitter {
   /**
    * Returns the literal for a given declaration
    *
-   * @param  xp.compiler.types.TypeName t
+   * @param  xp.compiler.as.TypeDeclarationNode decl
    * @return string
    */
-  protected function declaration($t) {
+  protected function declaration($decl) {
     if ($this->scope[0]->package) {
-      return strtr($this->scope[0]->package->name, '.', '\\').'\\'.$t->name;
+      return strtr($this->scope[0]->package->name, '.', '\\').'\\'.$decl->name->name;
     } else {
-      return $t->name;
+      return $decl->name->name;
     }
   }
 
