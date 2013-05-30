@@ -63,39 +63,6 @@ class V52Emitter extends Emitter {
   }
 
   /**
-   * Emits class registration
-   *
-   * <code>
-   *   xp::$cn['class.'.$name]= $qualified;
-   *   xp::$meta['details.'.$qualified]= $meta;
-   * </code>
-   *
-   * @param   xp.compiler.emit.Buffer b
-   * @param   xp.compiler.ast.TypeDeclarationNode
-   * @param   string qualified
-   */
-  protected function registerClass($b, $declaration, $qualified) {
-    unset($this->metadata[0]['EXT']);
-
-    // Retain comment
-    $this->metadata[0]['class'][DETAIL_COMMENT]= $declaration->comment
-      ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($declaration->comment, 4, strpos($declaration->comment, '* @')- 2)))
-      : null
-    ;
-
-    // Copy annotations
-    $this->emitAnnotations($this->metadata[0]['class'], (array)$declaration->annotations);
-
-    $b->append('xp::$cn[\''.$declaration->literal.'\']= \''.$qualified.'\';');
-    $b->append('xp::$meta[\''.$qualified.'\']= '.var_export($this->metadata[0], true).';');
-    
-    // Run static initializer if existant on synthetic types
-    if ($declaration->synthetic && $this->inits[0][2]) {
-      $b->append($declaration->literal)->append('::__static();');
-    }
-  }
-
-  /**
    * Emit uses statements for a given list of types
    *
    * @param   xp.compiler.emit.Buffer b
