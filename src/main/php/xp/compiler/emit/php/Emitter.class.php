@@ -98,6 +98,15 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $types        = array(null);
 
   /**
+   * Returns the literal for a given type
+   *
+   * @param  xp.compiler.types.Types t
+   * @param  bool base Whether to use only the base type
+   * @return string
+   */
+  protected abstract function literal($t, $base= false);
+
+  /**
    * Emit type name and modifiers
    *
    * @param   xp.compiler.emit.Buffer b
@@ -210,7 +219,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       $this->emitInvocationArguments($b, (array)$inv->arguments);
       $this->scope[0]->setType($inv, TypeName::$VAR);
     } else {
-      $b->append($ptr->holder->literal().'::'.$ptr->name());
+      $b->append($this->literal($ptr->holder).'::'.$ptr->name());
       $this->emitInvocationArguments($b, (array)$inv->arguments);
       $this->scope[0]->setType($inv, $ptr->returns);
     }
@@ -409,7 +418,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    */
   public function emitStaticMethodCall($b, $call) {
     $ptr= $this->resolveType($call->type);
-    $b->append($ptr->literal().'::'.$call->name);
+    $b->append($this->literal($ptr).'::'.$call->name);
     $this->emitInvocationArguments($b, (array)$call->arguments);
 
     // Record type
@@ -459,7 +468,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     // Check for extension methods
     $ptr= new TypeInstance($this->resolveType($this->scope[0]->typeOf($call->target), false));
     if (null !== ($ext= $this->scope[0]->getExtension($ptr, $call->name))) {
-      $b->insert($ext->holder->literal().'::'.$call->name.'(', $mark);
+      $b->insert($this->literal($ext->holder).'::'.$call->name.'(', $mark);
       if ($call->arguments) {
         $b->append(', ');
         $this->emitInvocationArguments($b, $call->arguments, false);
@@ -512,7 +521,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    */
   public function emitStaticMemberAccess($b, $access) {
     $ptr= $this->resolveType($access->type);
-    $b->append($ptr->literal().'::$'.$access->name);
+    $b->append($this->literal($ptr).'::$'.$access->name);
 
     // Record type
     $this->scope[0]->setType($access, $ptr->hasField($access->name) ? $ptr->getField($access->name)->type : TypeName::$VAR);
@@ -622,7 +631,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    */
   public function emitConstantAccess($b, $access) {
     $ptr= $this->resolveType($access->type);
-    $b->append($ptr->literal().'::'.$access->name);
+    $b->append($this->literal($ptr).'::'.$access->name);
 
     // Record type
     $this->scope[0]->setType($access, $ptr->hasConstant($access->name) ? $ptr->getConstant($access->name)->type : TypeName::$VAR);
@@ -691,7 +700,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       $ptr= $this->resolveType($t);
       if ($ptr->hasOperator($bin->op)) {
         $o= $ptr->getOperator($bin->op);
-        $b->append($ptr->literal());
+        $b->append($this->literal($ptr));
         $b->append('::operator··')->append($ovl[$bin->op])->append('(');
         $this->emitOne($b, $bin->lhs);
         $b->append(',');
@@ -1088,7 +1097,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     }
     
     // First catch.
-    $b->append('} catch('.$this->resolveType($first->type)->literal().' $'.$first->variable.') {'); {
+    $b->append('} catch('.$this->literal($this->resolveType($first->type)).' $'.$first->variable.') {'); {
       $this->scope[0]->setType(new VariableNode($first->variable), $first->type);
       $this->emitAll($b, (array)$first->statements);
       $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
@@ -1096,7 +1105,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     
     // Additional catches
     for ($i= 1; $i < $numHandlers; $i++) {
-      $b->append('} catch('.$this->resolveType($try->handling[$i]->type)->literal().' $'.$try->handling[$i]->variable.') {'); {
+      $b->append('} catch('.$this->literal($this->resolveType($try->handling[$i]->type)).' $'.$try->handling[$i]->variable.') {'); {
         $this->scope[0]->setType(new VariableNode($try->handling[$i]->variable), $try->handling[$i]->type);
         $this->emitAll($b, (array)$try->handling[$i]->statements);
         $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
@@ -1204,7 +1213,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $p= array('parent' => $new->type, 'implements' => null);
       }
 
-      $unique= new TypeName(strtr($parent->literal(), '\\', '¦').'··'.uniqid());
+      $unique= new TypeName(strtr($this->literal($parent), '\\', '¦').'··'.uniqid());
       $decl= new ClassNode(0, null, $unique, $p['parent'], $p['implements'], $new->body);
       $decl->synthetic= true;
       $generic && $decl->generic= $generic;
@@ -1233,7 +1242,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       }
       $b->append(')');
     } else {
-      $b->append('new '.$ptr->literal());
+      $b->append('new '.$this->literal($ptr));
       $this->emitInvocationArguments($b, (array)$new->parameters);
     }
   }
@@ -1277,7 +1286,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         
         $this->emitOne($b, $assign->variable);
         $b->append('=');
-        $b->append($ptr->literal());
+        $b->append($this->literal($ptr));
         $b->append('::operator··')->append($ovl[$assign->op])->append('(');
         $this->emitOne($b, $assign->variable);
         $b->append(',');
@@ -1387,7 +1396,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         } else if ($t->isArray() || $t->isMap()) {
           $b->append('array ');
         } else if ($t->isClass() && !$this->scope[0]->declarations[0]->name->isPlaceHolder($t)) {
-          $b->append($ptr->literal())->append(' ');
+          $b->append($this->literal($ptr))->append(' ');
         } else if ('{' === $delim) {
           $defer[]= create(new Buffer('', $b->line))
             ->append('if (NULL !== $')->append($param['name'])->append(' && !is("'.$t->name.'", $')
@@ -1576,7 +1585,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $type= $this->resolveType($method->extension),
         $this->resolveType(new TypeName('self'))->getMethod($method->name)
       );
-      $this->metadata[0]['EXT'][$method->name]= $type->literal();   // HACK, this should be accessible in scope
+      $this->metadata[0]['EXT'][$method->name]= $this->literal($type);   // HACK, this should be accessible in scope
     }
     $b->append(implode(' ', Modifiers::namesOf($method->modifiers)));
     $b->append(' function '.$method->name);
@@ -2024,7 +2033,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         new ReturnNode(new StaticMethodCallNode(
           new TypeName('parent'),
           'membersOf', 
-          array(new StringNode($thisType->literal()))
+          array(new StringNode($this->literal($thisType)))
         ))
       ),
       'comment'    => '(Generated)'
@@ -2222,7 +2231,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     if (isset($this->metadata[0]['EXT'])) {
       $b->append('static function __import($scope) {');
       foreach ($this->metadata[0]['EXT'] as $method => $type) {
-        $b->append('xp::$ext[$scope]["')->append($type)->append('"]= "')->append($thisType->literal())->append('";');
+        $b->append('xp::$ext[$scope]["')->append($type)->append('"]= "')->append($this->literal($thisType))->append('";');
       }
       $b->append('}');
     }

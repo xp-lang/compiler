@@ -47,12 +47,7 @@ class TypeReflection extends Types {
    * @return  string
    */
   public function literal() {
-    $name= $this->class->getName();
-    if (0 === strncmp('php.', $name, 4)) {
-      return '\\'.substr($name, 4);
-    } else {
-      return '\\'.strtr($name, '.', '\\');
-    }
+    return $this->class->getSimpleName();
   }
   
   /**
@@ -231,7 +226,7 @@ class TypeReflection extends Types {
    * @return  [:xp.compiler.types.Method[]]
    */
   public function getExtensions() {
-    $name= $this->literal();
+    $name= '\\'.strtr($this->class->getName(), '.', '\\');
 
     // Extension methods are registered via __import()
     if (!method_exists($name, '__import')) return array();

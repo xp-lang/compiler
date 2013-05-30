@@ -30,7 +30,7 @@ class TypeReflectionTest extends \unittest\TestCase {
   #[@test]
   public function literal() {
     $decl= new TypeReflection(XPClass::forName('unittest.TestCase'));
-    $this->assertEquals('\\unittest\\TestCase', $decl->literal());
+    $this->assertEquals('TestCase', $decl->literal());
   }
 
   /**

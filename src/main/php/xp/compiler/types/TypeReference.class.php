@@ -23,7 +23,12 @@ class TypeReference extends Types {
     
     // Calculate type literal, using the RFC #0037 fully qualified
     // form for package types
-    $this->literal= '\\'.strtr($this->type->name, '.', '\\');
+    if ($modifiers & MODIFIER_PACKAGE) {
+      $this->literal= strtr($this->type->name, '.', '·');
+    } else {
+      $p= strrpos($this->type->name, '.');
+      $this->literal= false === $p ? $this->type->name : substr($this->type->name, $p+ 1);
+    }
   }
 
   /**

@@ -50,6 +50,17 @@ use lang\Throwable;
 class V52Emitter extends Emitter {
 
   /**
+   * Returns the literal for a given type
+   *
+   * @param  xp.compiler.types.Types t
+   * @param  bool base Whether to use only the base type
+   * @return string
+   */
+  protected function literal($t, $base= false) {
+    return $t->literal($base);
+  }
+
+  /**
    * Emit type name and modifiers
    *
    * @param   xp.compiler.emit.Buffer b
@@ -219,7 +230,7 @@ class V52Emitter extends Emitter {
         } else if ($t->isArray() || $t->isMap()) {
           $b->append('array ');
         } else if ($t->isClass() && !$this->scope[0]->declarations[0]->name->isPlaceHolder($t)) {
-          $b->append($ptr->literal())->append(' ');
+          $b->append($this->literal($ptr))->append(' ');
         } else if ('{' === $delim) {
           $defer[]= create(new Buffer('', $b->line))
             ->append('if (NULL !== $')->append($param['name'])->append(' && !is("'.$t->name.'", $')
@@ -307,7 +318,7 @@ class V52Emitter extends Emitter {
     
     $this->enter(new TypeDeclarationScope());    
     $this->emitTypeName($b, 'class', $declaration);
-    $b->append(' extends '.$parentType->literal(true));
+    $b->append(' extends '.$this->literal($parentType, true));
     array_unshift($this->metadata, array(array(), array()));
     $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
     array_unshift($this->properties, array());
@@ -337,7 +348,7 @@ class V52Emitter extends Emitter {
           if ($type->isGeneric()) {
             $this->metadata[0]['class'][DETAIL_ANNOTATIONS]['generic']['implements'][$i]= $this->genericComponentAsMetadata($type);
           }
-          $b->append($this->resolveType($type)->literal(true));
+          $b->append($this->literal($type, true));
         } else {
           $b->append($type);
         }

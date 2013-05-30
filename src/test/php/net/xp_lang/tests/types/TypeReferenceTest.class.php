@@ -28,7 +28,7 @@ class TypeReferenceTest extends \unittest\TestCase {
   #[@test]
   public function literalWithoutPackage() {
     $decl= new TypeReference(new TypeName('TestCase'));
-    $this->assertEquals('\\TestCase', $decl->literal());
+    $this->assertEquals('TestCase', $decl->literal());
   }
 
   /**
@@ -38,7 +38,7 @@ class TypeReferenceTest extends \unittest\TestCase {
   #[@test]
   public function literalWithoutPackageAndPackageModifier() {
     $decl= new TypeReference(new TypeName('TestCase'), Types::PARTIAL_KIND, MODIFIER_PACKAGE);
-    $this->assertEquals('\\TestCase', $decl->literal());
+    $this->assertEquals('TestCase', $decl->literal());
   }
 
   /**
@@ -58,7 +58,7 @@ class TypeReferenceTest extends \unittest\TestCase {
   #[@test]
   public function literalWithPackage() {
     $decl= new TypeReference(new TypeName('unittest.TestCase'));
-    $this->assertEquals('\\unittest\\TestCase', $decl->literal());
+    $this->assertEquals('TestCase', $decl->literal());
   }
 
   /**
@@ -68,7 +68,7 @@ class TypeReferenceTest extends \unittest\TestCase {
   #[@test]
   public function literalWithPackageAndPackageModifier() {
     $decl= new TypeReference(new TypeName('unittest.TestCase'), Types::PARTIAL_KIND, MODIFIER_PACKAGE);
-    $this->assertEquals('\\unittest\\TestCase', $decl->literal());
+    $this->assertEquals('unittest·TestCase', $decl->literal());
   }
 
   /**
