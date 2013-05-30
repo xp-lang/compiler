@@ -28,7 +28,7 @@ class CompilationTask extends \lang\Object {
    * @param   xp.compiler.io.Source source
    * @param   xp.compiler.diagnostic.DiagnosticListener listener
    * @param   xp.compiler.io.FileManager manager
-   * @param   xp.compiler.emit.V53Emitter emitter
+   * @param   xp.compiler.emit.Emitter emitter
    * @param   util.collections.HashTable<xp.compiler.io.Source, xp.compiler.types.Types> done
    */
   public function __construct(
