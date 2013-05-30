@@ -30,8 +30,7 @@ class V53Emitter extends Emitter {
    * @return string
    */
   protected function literal($t, $base= false) {
-    $name= $t->name();
-    $package= substr($name, 0, strrpos($name, '.'));
+    $package= $t->package();
     if ('' === $package || 0 === strncmp('php', $package, 3)) {
       return '\\'.$t->literal($base);
     } else {
