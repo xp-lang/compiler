@@ -67,8 +67,15 @@ abstract class Syntax extends \lang\Object {
    * @param   string source default null
    * @return  xp.compiler.ast.ParseTree tree
    */
-  public function parse(InputStream $in, $source= null) {
-    return $this->parser->parse($this->newLexer($in, $source ? $source : $in->toString()));
+  public function parse(InputStream $in, $source= null, $messages= null) {
+    $result= $this->parser->parse($this->newLexer($in, $source ? $source : $in->toString()));
+    if ($messages) foreach ($this->parser->getWarnings() as $warning) {
+      $messages->warn(
+        sprintf('P%03d', $warning->code),
+        $warning->message.($warning->expected ? ', expected '.implode(', ', $warning->expected) : '')
+      );
+    }
+    return $result;
   }
   
   /**

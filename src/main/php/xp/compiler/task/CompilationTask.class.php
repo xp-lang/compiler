@@ -130,7 +130,8 @@ class CompilationTask extends \lang\Object {
       // Start run
       $this->listener->compilationStarted($this->source);
       try {
-        $tree= $this->manager->parseFile($this->source);
+        $this->emitter->clearMessages();
+        $tree= $this->manager->parseFile($this->source, null, /* messages */ $this->emitter);
         $this->done[$this->source]= $this->partialType($tree);
         $result= $this->emitter->emit($tree, $scope);
         $target= $this->manager->getTarget($result, $this->source);
