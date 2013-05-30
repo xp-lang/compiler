@@ -109,7 +109,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   /**
    * Returns the literal for a given declaration
    *
-   * @param  xp.compiler.as.TypeDeclarationNode decl
+   * @param  xp.compiler.ast.TypeDeclarationNode decl
    * @return string
    */
   protected abstract function declaration($decl);

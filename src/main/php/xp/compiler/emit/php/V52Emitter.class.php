@@ -36,7 +36,7 @@ class V52Emitter extends Emitter {
   /**
    * Returns the literal for a given declaration
    *
-   * @param  xp.compiler.as.TypeDeclarationNode decl
+   * @param  xp.compiler.ast.TypeDeclarationNode decl
    * @return string
    */
   protected function declaration($decl) {
