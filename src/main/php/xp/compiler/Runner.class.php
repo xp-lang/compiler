@@ -9,7 +9,7 @@ use io\collections\iterate\AnyOfFilter;
 use util\Properties;
 use lang\ResourceProvider;
 use lang\reflect\Package;
-use xp\compiler\emit\source\Emitter;
+use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\diagnostic\DefaultDiagnosticListener;
 use xp\compiler\diagnostic\QuietDiagnosticListener;
 use xp\compiler\diagnostic\VerboseDiagnosticListener;
@@ -243,7 +243,7 @@ class Runner extends \lang\Object {
     }
     
     // Setup emitter and load compiler profile configurations
-    $emitter= Package::forName('xp.compiler.emit')->getPackage($emitter)->loadClass('Emitter')->newInstance();
+    $emitter= Package::forName('xp.compiler.emit')->getPackage($emitter)->loadClass('V53Emitter')->newInstance();
     try {
       $reader= new CompilationProfileReader();
       foreach ($profiles as $configuration) {

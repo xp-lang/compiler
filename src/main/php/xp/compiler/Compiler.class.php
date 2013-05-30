@@ -1,6 +1,6 @@
 <?php namespace xp\compiler;
 
-use xp\compiler\emit\Emitter;
+use xp\compiler\emit\V53Emitter;
 use xp\compiler\task\CompilationTask;
 use xp\compiler\diagnostic\DiagnosticListener;
 use xp\compiler\io\FileManager;
@@ -18,10 +18,10 @@ class Compiler extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.io.Source[] sources
    * @param   xp.compiler.diagnostic.DiagnosticListener listener
    * @param   xp.compiler.io.FileManager manager
-   * @param   xp.compiler.emit.Emitter emitter
+   * @param   xp.compiler.emit.V53Emitter emitter
    * @return  bool success if all files compiled correctly, true, false otherwise
    */
-  public function compile(array $sources, DiagnosticListener $listener, FileManager $manager, Emitter $emitter) {
+  public function compile(array $sources, DiagnosticListener $listener, FileManager $manager, V53Emitter $emitter) {
     $emitter->setTrace($this->cat);
     $listener->runStarted();
     $errors= 0;

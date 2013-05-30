@@ -21,7 +21,7 @@ class FileManagerTest extends \unittest\TestCase {
    */
   #[@beforeClass]
   public static function defineResult() {
-    self::$result= \lang\ClassLoader::defineClass('FileManagerTestEmitterResult', 'lang.Object', array('xp.compiler.emit.EmitterResult'), '{
+    self::$result= \lang\ClassLoader::defineClass('FileManagerTestVEmitterResult', 'lang.Object', array('xp.compiler.emit.EmitterResult'), '{
       protected $type= null;
       public function __construct($name) { $this->type= new \xp\compiler\types\TypeReference(new \xp\compiler\types\TypeName($name)); }
       public function type() { return $this->type; }

@@ -1,4 +1,4 @@
-<?php namespace xp\compiler\emit\source;
+<?php namespace xp\compiler\emit\php;
 
 use xp\compiler\types\CompiledType;
 use xp\compiler\types\TypeDeclaration;
@@ -86,7 +86,7 @@ use lang\Throwable;
  * @test     xp://net.xp_lang.tests.compilation.TypeTest
  * @see      xp://xp.compiler.ast.ParseTree
  */
-class Emitter extends \xp\compiler\emit\Emitter {
+class V53Emitter extends \xp\compiler\emit\Emitter {
   protected 
     $temp         = array(null),
     $method       = array(null),

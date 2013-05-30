@@ -68,7 +68,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * Adds an optimization
    *
    * @param   xp.compiler.optimize.Optimization o
-   * @return  xp.compiler.emit.Emitter this
+   * @return  xp.compiler.emit.V53Emitter this
    */
   public function withOptimization(Optimization $o) {
     $this->optimizations->add($o);
@@ -99,7 +99,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    *
    * @param   xp.compiler.checks.Checks c
    * @param   bool error
-   * @return  xp.compiler.emit.Emitter this
+   * @return  xp.compiler.emit.V53Emitter this
    */
   public function withCheck(Check $c, $error= false) {
     $this->checks->add($c, $error);
