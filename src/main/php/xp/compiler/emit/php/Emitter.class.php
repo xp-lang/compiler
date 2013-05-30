@@ -116,40 +116,6 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   protected abstract function emitTypeName($b, $type, TypeDeclarationNode $declaration);
 
   /**
-   * Emits class registration
-   *
-   * <code>
-   *   xp::$cn['class.'.$name]= $qualified;
-   *   xp::$meta['details.'.$qualified]= $meta;
-   * </code>
-   *
-   * @param   xp.compiler.emit.Buffer b
-   * @param   xp.compiler.ast.TypeDeclarationNode
-   * @param   string qualified
-   */
-  protected function registerClass($b, $declaration, $qualified) {
-    unset($this->metadata[0]['EXT']);
-
-    // Retain comment
-    $this->metadata[0]['class'][DETAIL_COMMENT]= $declaration->comment
-      ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($declaration->comment, 4, strpos($declaration->comment, '* @')- 2)))
-      : null
-    ;
-
-    // Copy annotations
-    $this->emitAnnotations($this->metadata[0]['class'], (array)$declaration->annotations);
-
-    $b->append($this->core.'::$cn[\''.$declaration->literal.'\']= \''.$qualified.'\';');
-    $b->append($this->core.'::$meta[\''.$qualified.'\']= '.var_export($this->metadata[0], true).';');
-    
-    // Run static initializer if existant on synthetic types
-    if ($declaration->synthetic && $this->inits[0][2]) {
-      $b->append($declaration->literal)->append('::__static();');
-    }
-  }
-
-
-  /**
    * Returns a new temporary variable
    *
    * @return  string
@@ -1764,6 +1730,39 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $i->parameter= new TypeName($this->resolveType($indexer->parameter['type'])->name());
     $i->modifiers= $indexer->modifiers;
     $this->types[0]->indexer= $i;
+  }
+
+  /**
+   * Emits class registration
+   *
+   * <code>
+   *   xp::$cn['class.'.$name]= $qualified;
+   *   xp::$meta['details.'.$qualified]= $meta;
+   * </code>
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.TypeDeclarationNode
+   * @param   string qualified
+   */
+  protected function registerClass($b, $declaration, $qualified) {
+    unset($this->metadata[0]['EXT']);
+
+    // Retain comment
+    $this->metadata[0]['class'][DETAIL_COMMENT]= $declaration->comment
+      ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($declaration->comment, 4, strpos($declaration->comment, '* @')- 2)))
+      : null
+    ;
+
+    // Copy annotations
+    $this->emitAnnotations($this->metadata[0]['class'], (array)$declaration->annotations);
+
+    $b->append($this->core.'::$cn[\''.$declaration->literal.'\']= \''.$qualified.'\';');
+    $b->append($this->core.'::$meta[\''.$qualified.'\']= '.var_export($this->metadata[0], true).';');
+
+    // Run static initializer if existant on synthetic types
+    if ($declaration->synthetic && $this->inits[0][2]) {
+      $b->append($declaration->literal)->append('::__static();');
+    }
   }
 
   /**
