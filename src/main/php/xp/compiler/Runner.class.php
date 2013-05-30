@@ -244,17 +244,20 @@ class Runner extends \lang\Object {
     
     // Setup emitter and load compiler profile configurations
     sscanf($emitter, '%[^0-9]%d.%d', $language, $major, $minor);
-    $emit= Package::forName('xp.compiler.emit')
-      ->getPackage($language)
-      ->loadClass('V'.$major.$minor.'Emitter')
-      ->newInstance()
-    ;
     try {
+      $emit= Package::forName('xp.compiler.emit')
+        ->getPackage($language)
+        ->loadClass('V'.$major.$minor.'Emitter')
+        ->newInstance()
+      ;
       $reader= new CompilationProfileReader();
       foreach ($profiles as $configuration) {
         $reader->addSource(new Properties('res://xp/compiler/'.$configuration.'.xcp.ini'));
       }
       $emit->setProfile($reader->getProfile());
+    } catch (\lang\ClassLoadingException $e) {
+      Console::$err->writeLine('*** No emitter named "', $emitter, '": ', $e->compoundMessage());
+      return 4;
     } catch (\lang\Throwable $e) {
       Console::$err->writeLine('*** Cannot load profile configuration(s) '.implode(',', $profiles).': '.$e->getMessage());
       return 3;
