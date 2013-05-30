@@ -2,47 +2,19 @@
 
 use xp\compiler\types\CompiledType;
 use xp\compiler\types\TypeDeclaration;
-use xp\compiler\types\TypeInstance;
 use xp\compiler\types\TypeName;
 use xp\compiler\types\Types;
-use xp\compiler\types\Scope;
-use xp\compiler\types\CompilationUnitScope;
 use xp\compiler\types\TypeDeclarationScope;
-use xp\compiler\types\MethodScope;
-use xp\compiler\types\Method;
-use xp\compiler\types\Field;
-use xp\compiler\types\Constructor;
-use xp\compiler\types\Property;
-use xp\compiler\types\Operator;
-use xp\compiler\types\Indexer;
-use xp\compiler\types\Constant;
 use xp\compiler\ast\ParseTree;
 use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\TypeDeclarationNode;
 use xp\compiler\ast\Resolveable;
-use xp\compiler\ast\ArrayAccessNode;
-use xp\compiler\ast\StaticMemberAccessNode;
-use xp\compiler\ast\MethodCallNode;
-use xp\compiler\ast\MemberAccessNode;
 use xp\compiler\ast\StaticMethodCallNode;
-use xp\compiler\ast\FinallyNode;
-use xp\compiler\ast\CatchNode;
-use xp\compiler\ast\ThrowNode;
-use xp\compiler\ast\ClassNode;
-use xp\compiler\ast\AssignmentNode;
-use xp\compiler\ast\ArrayNode;
-use xp\compiler\ast\FieldNode;
 use xp\compiler\ast\ConstructorNode;
-use xp\compiler\ast\MethodNode;
-use xp\compiler\ast\ReturnNode;
-use xp\compiler\ast\StringNode;
-use xp\compiler\ast\EnumMemberNode;
 use xp\compiler\ast\IndexerNode;
 use xp\compiler\ast\StaticInitializerNode;
-use xp\compiler\ast\LocalsToMemberPromoter;
 use xp\compiler\emit\Buffer;
 use lang\reflect\Modifiers;
-use lang\Throwable;
 
 /**
  * Emits sourcecode using PHP 5.3 sourcecode
