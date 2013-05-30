@@ -46,7 +46,7 @@ use util\cmd\Console;
  *     Adds path to source path (source path will equal classpath initially)
  *   </li>
  *   <li>-E [emitter]: 
- *     Use emitter, defaults to "source"
+ *     Use emitter, defaults to "php5.3"
  *   </li>
  *   <li>-p [profile[,profile[,...]]]:
  *     Use compiler profiles (defaults to ["default"]) - xp/compiler/{profile}.xcp.ini
@@ -177,7 +177,7 @@ class Runner extends \lang\Object {
     
     // Handle arguments
     $profiles= array('default');
-    $emitter= 'source';
+    $emitter= 'php5.3';
     $result= function($success) { return $success ? 0 : 1; };
     $files= array();
     $listener= new DefaultDiagnosticListener(Console::$out);
@@ -243,19 +243,24 @@ class Runner extends \lang\Object {
     }
     
     // Setup emitter and load compiler profile configurations
-    $emitter= Package::forName('xp.compiler.emit')->getPackage($emitter)->loadClass('V53Emitter')->newInstance();
+    sscanf($emitter, '%[^0-9]%d.%d', $language, $major, $minor);
+    $emit= Package::forName('xp.compiler.emit')
+      ->getPackage($language)
+      ->loadClass('V'.$major.$minor.'Emitter')
+      ->newInstance()
+    ;
     try {
       $reader= new CompilationProfileReader();
       foreach ($profiles as $configuration) {
         $reader->addSource(new Properties('res://xp/compiler/'.$configuration.'.xcp.ini'));
       }
-      $emitter->setProfile($reader->getProfile());
+      $emit->setProfile($reader->getProfile());
     } catch (\lang\Throwable $e) {
       Console::$err->writeLine('*** Cannot load profile configuration(s) '.implode(',', $profiles).': '.$e->getMessage());
       return 3;
     }
     
     // Compile files and pass return value to result handler
-    return $result($compiler->compile($files, $listener, $manager, $emitter), array_slice($args, $i + 1));
+    return $result($compiler->compile($files, $listener, $manager, $emit), array_slice($args, $i + 1));
   }
 }
