@@ -15,6 +15,20 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     uses('xp.compiler.Syntax', 'io.File');   // HACK: Ensure Syntax and File classes are loaded
   }
 
+  public function __construct($path) {
+    $this->files= new FileManager();
+
+    // Maven conventions
+    foreach (array('/src/main/xp', '/src/test/xp') as $dir) {
+      if (is_dir($d= $path.$dir)) {
+        $this->files->addSourcePath($d);
+      }
+    }
+
+    // Current directory
+    $this->files->addSourcePath($path);
+  }
+
   /**
    * Locate a class' sourcecode
    *
@@ -22,17 +36,10 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @return xp.compiler.io.Source or NULL if nothing can be found
    */
   protected function locateSource($class) {
-    if (isset($this->source[$class])) return $this->source[$class];
-
-    $name= strtr($class, '.', '/');
-    foreach (Syntax::available() as $syntax) {
-      foreach (\lang\ClassLoader::getLoaders() as $loader) {
-        if ($loader->providesResource($name.'.'.$syntax->name())) {
-          return $this->source[$class]= new ClassLoaderSource($loader, $name, $syntax);
-        }
-      }
+    if (!isset($this->source[$class])) {
+      $this->source[$class]= $this->files->findClass($class);
     }
-    return null;
+    return $this->source[$class];
   }
 
   /**
@@ -107,7 +114,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     $scope= new TaskScope(new CompilationTask(
       $source,
       new NullDiagnosticListener(),
-      new FileManager(),
+      $this->files,
       $emitter
     ));
     try {
@@ -153,7 +160,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @return string
    */
   public function instanceId() {
-    return 'jit';
+    return implode('|', $this->files->getSourcePaths());
   }
 
   /**

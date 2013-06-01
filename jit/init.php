@@ -8,7 +8,7 @@ $f= function() use(&$f) {
     // Ensure delegates are set up. Unfortunately, the static initializer will 
     // be invoked twice - although with no effect, it's unnecessary nevertheless:/
     ClassLoader::__static();
-    ClassLoader::registerLoader(JitClassLoader::instanceFor(''), true);
+    ClassLoader::registerLoader(JitClassLoader::instanceFor('.'), true);
   } else {
     \xp::$cli[]= $f;
   }
