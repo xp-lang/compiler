@@ -117,12 +117,34 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     $r->executeWith(array());
     return $r->type()->literal();
   }
+
+  /**
+   * Gets a resource
+   *
+   * @param  string $string name
+   * @return string
+   * @throws lang.ElementNotFoundException
+   */
   public function getResource($string) {
     throw new \lang\ElementNotFoundException($string);
   }
+
+  /**
+   * Gets a resource as a stream
+   *
+   * @param  string $string name
+   * @return io.Stream
+   * @throws lang.ElementNotFoundException
+   */
   public function getResourceAsStream($string) {
     throw new \lang\ElementNotFoundException($string);
   }
+
+  /**
+   * Get unique identifier for this class loader
+   *
+   * @return string
+   */
   public function instanceId() {
     return 'jit';
   }
