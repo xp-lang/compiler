@@ -9,7 +9,7 @@ use xp\compiler\Syntax;
  */
 class ClassLoaderSource extends \lang\Object implements Source {
   protected $loader= null;
-  protected $name= '';
+  protected $resource= '';
   protected $syntax= null;
   
   /**
@@ -21,7 +21,7 @@ class ClassLoaderSource extends \lang\Object implements Source {
    */
   public function __construct(IClassLoader $loader, $name, Syntax $syntax) {
     $this->loader= $loader;
-    $this->name= $name;
+    $this->resource= $name.'.'.$syntax->name();
     $this->syntax= $syntax;
   }
   
@@ -31,7 +31,7 @@ class ClassLoaderSource extends \lang\Object implements Source {
    * @return  io.streams.InputStream
    */
   public function getInputStream() {
-    return $this->loader->getResourceAsStream($this->name.'.'.$this->syntax->name())->getInputStream();
+    return $this->loader->getResourceAsStream($this->resource)->getInputStream();
   }
   
   /**
@@ -50,7 +50,7 @@ class ClassLoaderSource extends \lang\Object implements Source {
    * @return  string
    */
   public function getURI() {
-    return $this->loader->instanceId().$this->name;
+    return $this->loader->getResourceAsStream($this->resource)->getURI();
   }
 
   /**
@@ -60,10 +60,10 @@ class ClassLoaderSource extends \lang\Object implements Source {
    */
   public function toString() {
     return sprintf(
-      '%s(%s, resource= %s.%s)',
+      '%s(%s, resource= %s, syntax= %s)',
       $this->getClassName(),
       $this->loader->toString(),
-      $this->name,
+      $this->resource,
       $this->syntax->name()
     );
   }
@@ -74,6 +74,6 @@ class ClassLoaderSource extends \lang\Object implements Source {
    * @return  string
    */
   public function hashCode() {
-    return 'C:'.$this->getURI();
+    return 'C:'.$this->loader->instanceId().$this->resource;
   }
 }
