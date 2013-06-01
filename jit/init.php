@@ -1,37 +1,11 @@
 <?php
-$f= function() use($init, &$f) {
+$f= function() use(&$f) {
   if (class_exists('ClassLoader', false)) {
-    class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
-      public function providesClass($class) {
-        fputs(STDERR, "P? $class\n");
-        return false;
-      }
-      public function providesResource($filename) {
-        return false;
-      }
-      public function providesPackage($package) {
-        return false;   // TBI
-      }
-      public function packageContents($package) {
-        return array(); // TBI
-      }
-      public function loadClass($class) {
-        return new XPClass($this->loadClass0($class));
-      }
-      public function loadClass0($class) {
-        throw new \lang\ClassNotFoundException($class);
-      }
-      public function getResource($string) {
-        throw new \lang\ElementNotFoundException($string);
-      }
-      public function getResourceAsStream($string) {
-        throw new \lang\ElementNotFoundException($string);
-      }
-      public function instanceId() {
-        return "jit";
-      }
-    };
-    \lang\ClassLoader::registerLoader(new JitClassLoader());
+
+    // Ensure delegates are set up. Unfortunately, the static initializer will 
+    // be invoked twice - although with no effect, it's unnecessary nevertheless:/
+    \lang\ClassLoader::__static();
+    \lang\ClassLoader::registerLoader(new \xp\compiler\JitClassLoader(), true);
   } else {
     xp::$cli[]= $f;
   }
