@@ -94,6 +94,9 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @throws lang.ClassLoadingException
    */
   public function loadClass0($class) {
+    if (isset(\xp::$cl[$class])) return \xp::reflect($class);
+
+    // Locate sourcecode
     if (null === ($source= $this->locateSource($class))) {
       throw new \lang\ClassNotFoundException($class);  
     }
@@ -112,6 +115,9 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     } catch (\lang\Throwable $e) {
       throw new \lang\ClassFormatException('Cannot compile '.$source->getURI(), $e);
     }
+
+    // Clean up
+    unset($this->source[$class]);
 
     // Define type
     $r->executeWith(array());
@@ -147,5 +153,14 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    */
   public function instanceId() {
     return 'jit';
+  }
+
+  /**
+   * Gets a string representation
+   *
+   * @return string
+   */
+  public function toString() {
+    return $this->getClassName();
   }
 }
