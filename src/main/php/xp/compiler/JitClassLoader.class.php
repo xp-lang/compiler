@@ -8,8 +8,13 @@ use xp\compiler\task\CompilationTask;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\Syntax;
 
+/**
+ * JIT ("Just in time") compiling class loader. Enables the efficient
+ * "edit / save / run" paradigm at development time.
+ */
 class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
   protected $source= array();
+  protected $files= null;
 
   static function __static() {
     uses('xp.compiler.Syntax', 'io.File');   // HACK: Ensure Syntax and File classes are loaded
