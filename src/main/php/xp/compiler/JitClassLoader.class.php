@@ -110,7 +110,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     try {
       $r= $emitter->emit($source->getSyntax()->parse($source->getInputStream()), $scope);
     } catch (\lang\Throwable $e) {
-      throw new \lang\ClassLoadingException('Cannot compile '.$source->getURI(), $e);
+      throw new \lang\ClassFormatException('Cannot compile '.$source->getURI(), $e);
     }
 
     // Define type
