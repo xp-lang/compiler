@@ -9,6 +9,12 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     \lang\XPClass::forName('xp.compiler.Syntax');   // Ensure Syntax class is loaded
   }
 
+  /**
+   * Locate a class' sourcecode
+   *
+   * @param  string $class
+   * @return xp.compiler.io.Source or NULL if nothing can be found
+   */
   protected function locateSource($class) {
     if (isset($this->source[$class])) return $this->source[$class];
 
@@ -32,15 +38,37 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
   public function providesClass($class) {
     return null !== $this->locateSource($class);
   }
+
+  /**
+   * Checks whether this class loader provides a given resource
+   *
+   * @param  string $filename
+   * @return bool
+   */
   public function providesResource($filename) {
     return false;
   }
+
+  /**
+   * Checks whether this class loader provides a given package
+   *
+   * @param  string $package
+   * @return bool
+   */
   public function providesPackage($package) {
     return false;   // TBI
   }
+
+  /**
+   * Returns a given package's contents
+   *
+   * @param  string $package
+   * @return string[]
+   */
   public function packageContents($package) {
     return array(); // TBI
   }
+
   public function loadClass($class) {
     return new \lang\XPClass($this->loadClass0($class));
   }
