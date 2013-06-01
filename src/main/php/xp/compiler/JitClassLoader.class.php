@@ -15,13 +15,19 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     uses('xp.compiler.Syntax', 'io.File');   // HACK: Ensure Syntax and File classes are loaded
   }
 
+  /**
+   * Creates a JIT Class loader instances for a given path
+   *
+   * @param string $path
+   */
   public function __construct($path) {
     $this->files= new FileManager();
 
     // Maven conventions
-    foreach (array('/src/main/xp', '/src/test/xp') as $dir) {
-      if (is_dir($d= $path.$dir)) {
-        $this->files->addSourcePath($d);
+    $path= rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+    foreach (array('src/main/xp', 'src/test/xp') as $dir) {
+      if (is_dir($d= realpath($path.$dir))) {
+        $this->files->addSourcePath($d.DIRECTORY_SEPARATOR);
       }
     }
 
@@ -37,7 +43,8 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    */
   protected function locateSource($class) {
     if (!isset($this->source[$class])) {
-      $this->source[$class]= $this->files->findClass($class);
+      if (null === ($source= $this->files->findClass($class))) return null;
+      $this->source[$class]= $source;
     }
     return $this->source[$class];
   }
@@ -69,7 +76,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @return bool
    */
   public function providesPackage($package) {
-    return false;   // TBI
+    return null !== $this->files->findPackage($package);
   }
 
   /**
@@ -79,7 +86,39 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @return string[]
    */
   public function packageContents($package) {
-    return array(); // TBI
+
+    // Calculate syntax regex for matching on files
+    static $syntaxes= '';
+    if (!$syntaxes) {
+      foreach (Syntax::available() as $syntax) {
+        $syntaxes.= '|'.$syntax->name();
+      }
+      $syntaxes= '/\.('.substr($syntaxes, 1).')$/';
+    }
+
+    // List directory contents, replacing compileable source files with 
+    // class file names. These of course don't exist yet, but will be 
+    // compiled on demand
+    $return= array();
+    $dir= strtr($package, '.', DIRECTORY_SEPARATOR);
+    foreach ($this->files->getSourcePaths() as $path) {
+      if (!is_dir($d= $path.$dir.DIRECTORY_SEPARATOR)) continue;
+
+      $handle= opendir($d);
+      while ($e= readdir($handle)) {
+        if ('.' === $e || '..' === $e) {
+          continue;
+        } else if (is_dir($d.$e)) {
+          $return[]= $e.'/';
+        } else if (strstr($e, \xp::CLASS_FILE_EXT)) {
+          $return[]= $e;
+        } else {
+          $return[]= preg_replace($syntaxes, \xp::CLASS_FILE_EXT, $e);
+        }
+      }
+      closedir($handle);
+    }
+    return $return;
   }
 
   /**
@@ -109,7 +148,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     }
 
     // Parse, then emit source
-    // fputs(STDERR, "COMPILE ".$source->toString()."...\n");
+    // DEBUG fputs(STDERR, "COMPILE ".$source->toString()."\n");
     $emitter= new \xp\compiler\emit\source\Emitter();
     $scope= new TaskScope(new CompilationTask(
       $source,
@@ -120,6 +159,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     try {
       $r= $emitter->emit($source->getSyntax()->parse($source->getInputStream()), $scope);
     } catch (\lang\Throwable $e) {
+      // DEBUG $e->printStackTrace(STDERR);
       throw new \lang\ClassFormatException('Cannot compile '.$source->getURI(), $e);
     }
 
@@ -160,7 +200,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @return string
    */
   public function instanceId() {
-    return implode('|', $this->files->getSourcePaths());
+    return 'jit:'.implode('|', $this->files->getSourcePaths());
   }
 
   /**
@@ -184,6 +224,6 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @return string
    */
   public function toString() {
-    return $this->getClassName();
+    return $this->getClassName().'('.implode(', ', $this->files->getSourcePaths()).')';
   }
 }
