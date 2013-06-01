@@ -121,6 +121,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
 
     // Define type
     $r->executeWith(array());
+    \xp::$cl[$class]= $this->getClassName().'://'.$this->instanceId();
     return $r->type()->literal();
   }
 
@@ -153,6 +154,21 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    */
   public function instanceId() {
     return 'jit';
+  }
+
+  /**
+   * Fetch instance of classloader by path
+   *
+   * @param   string path the identifier
+   * @return  lang.IClassLoader
+   */
+  public static function instanceFor($path) {
+    static $pool= array();
+
+    if (!isset($pool[$path])) {
+      $pool[$path]= new self($path);
+    }
+    return $pool[$path];
   }
 
   /**
