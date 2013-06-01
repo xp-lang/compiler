@@ -229,6 +229,6 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @return string
    */
   public function toString() {
-    return $this->getClassName().'('.implode(', ', $this->files->getSourcePaths()).')';
+    return $this->getClassName().'<'.implode(', ', $this->files->getSourcePaths()).'>';
   }
 }
