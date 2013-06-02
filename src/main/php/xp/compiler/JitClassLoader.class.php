@@ -7,6 +7,8 @@ use xp\compiler\io\ClassLoaderSource;
 use xp\compiler\task\CompilationTask;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\Syntax;
+use io\Folder;
+use io\File;
 
 /**
  * JIT ("Just in time") compiling class loader. Enables the efficient
@@ -38,6 +40,15 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
 
     // Current directory
     $this->files->addSourcePath($path);
+
+    // Output, "target" is Maven conformant, "dist" used in several projects
+    $output= $path;
+    foreach (array('target', 'dist') as $dir) {
+      if (is_dir($d= realpath($path.$dir))) {
+        $output= $d;
+      }
+    }
+    $this->files->setOutput(new Folder($output));
   }
 
   /**
@@ -61,7 +72,14 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @return bool
    */
   public function providesClass($class) {
-    return null !== $this->locateSource($class);
+    if (null === ($source= $this->locateSource($class))) return false;
+
+    $origin= new File($source->getURI());
+    $target= new File($this->files->getOutput(), strtr($class, '.', DIRECTORY_SEPARATOR).\xp::CLASS_FILE_EXT);
+
+    // If the target does not exist or the source is newer, it needs to be compiled.
+    // Otherwise, no action needs to be taken.
+    return $target->exists() ? $origin->lastModified() > $target->lastModified() : true;
   }
 
   /**
@@ -163,6 +181,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     ));
     try {
       $r= $emitter->emit($source->getSyntax()->parse($source->getInputStream()), $scope);
+      $this->files->write($r, $this->files->getTarget($r, $source));
     } catch (\lang\Throwable $e) {
       // DEBUG $e->printStackTrace(STDERR);
       throw new \lang\ClassFormatException('Cannot compile '.$source->getURI(), $e);
@@ -229,6 +248,6 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @return string
    */
   public function toString() {
-    return $this->getClassName().'<'.implode(', ', $this->files->getSourcePaths()).'>';
+    return $this->getClassName().'<'.implode(', ', $this->files->getSourcePaths()).' -> '.$this->files->getOutput()->toString().'>';
   }
 }

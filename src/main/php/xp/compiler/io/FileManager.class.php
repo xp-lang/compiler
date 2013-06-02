@@ -33,6 +33,15 @@ class FileManager extends \lang\Object {
     $this->output= $output;
     return $this;
   }
+
+  /**
+   * Gets output folder
+   *
+   * @return  io.Folder
+   */
+  public function getOutput() {
+    return $this->output;
+  }
   
   /**
    * Set source paths
