@@ -67,6 +67,7 @@ The XP Language features - among others - support for the following:
 ### Further reading
 To get an overview of XP Language's features, these are good reads:
 
+* [The XP Language Wiki](https://github.com/xp-lang/compiler/wiki)
 * [RFC #0052: Make XP its own (compiled) language](https://github.com/xp-framework/rfc/issues/52)
 * [XP Blog: Language](http://news.planet-xp.net/category/17/Language/)
 
