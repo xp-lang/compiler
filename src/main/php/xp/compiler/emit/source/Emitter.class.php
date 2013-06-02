@@ -1818,10 +1818,16 @@ class Emitter extends \xp\compiler\emit\Emitter {
       $this->properties[0][$name][$property->name]= array($property->type, $statements);
     }
 
+    $type= $this->resolveType($property->type);
+    $this->metadata[0][0][$property->name]= array(
+      DETAIL_ANNOTATIONS  => array('type' => $type->name()),
+      DETAIL_PROPERTY     => $property->modifiers
+    );
+
     // Register type information
     $p= new Property();
     $p->name= $property->name;
-    $p->type= new TypeName($this->resolveType($property->type)->name());
+    $p->type= new TypeName($type->name());
     $p->modifiers= $property->modifiers;
     $this->types[0]->addProperty($p);
   }    
@@ -1883,7 +1889,8 @@ class Emitter extends \xp\compiler\emit\Emitter {
       $this->leave();
     }
     
-    // Declare auto-properties as private with null as initial value
+    // Declare auto-properties as private with null as initial value. Declare a
+    // public static member with all properties' names and types as hashmap.
     foreach ($auto as $name => $none) $b->append('private $__·'.$name.'= null;');
   }
 
