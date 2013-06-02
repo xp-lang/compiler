@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 1.10.4 / 2013-06-02
+
 * Fixed properties inconsistency - see pull request #35 (@thekid)
 * Implemented RFC 250: Static member import syntax change (@thekid)
 
