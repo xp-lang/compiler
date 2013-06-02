@@ -1846,7 +1846,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
   protected function emitProperties($b, array $properties) {
     static $mangled= '··name';
     
-    $auto= array();
+    $auto= $types= array();
     if (!empty($properties['get'])) {
       $b->append('function __get($'.$mangled.') {');
       $this->enter(new MethodScope('__get'));
@@ -1859,6 +1859,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
         } else {
           $this->emitAll($b, $definition[1]);
         }
+        $types[$name]= $this->resolveType($definition[0])->name();
         $b->append('} else ');
       }
       $b->append('return parent::__get($'.$mangled.'); }');
@@ -1877,14 +1878,21 @@ class Emitter extends \xp\compiler\emit\Emitter {
         } else {
           $this->emitAll($b, $definition[1]);
         }
+        $types[$name]= $this->resolveType($definition[0])->name();
         $b->append('} else ');
       }
       $b->append('parent::__set($'.$mangled.', $value); }');
       $this->leave();
     }
     
-    // Declare auto-properties as private with null as initial value
+    // Declare auto-properties as private with null as initial value. Declare a
+    // public static member with all properties' names and types as hashmap.
     foreach ($auto as $name => $none) $b->append('private $__·'.$name.'= null;');
+    $types && $b
+      ->append('public static $__·= ')
+      ->append(str_replace("\n", '', var_export($types, true)))
+      ->append(';')
+    ;
   }
 
   /**

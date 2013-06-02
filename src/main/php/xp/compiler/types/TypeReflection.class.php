@@ -338,7 +338,9 @@ class TypeReflection extends Types {
    * @return  bool
    */
   public function hasProperty($name) {
-    return false;
+    if (!$this->class->_reflect->hasProperty('__·')) return false;
+    $parameters= $this->class->_reflect->getStaticPropertyValue('__·');
+    return isset($parameters[$name]);
   }
   
   /**
@@ -348,7 +350,16 @@ class TypeReflection extends Types {
    * @return  xp.compiler.types.Property
    */
   public function getProperty($name) {
-    return null;
+    if (!$this->class->_reflect->hasProperty('__·')) return null;
+    $parameters= $this->class->_reflect->getStaticPropertyValue('__·');
+    if (!isset($parameters[$name])) return null;
+
+    $p= new Property();
+    $p->name= $name;
+    $p->modifiers= MODIFIER_PUBLIC;   // FIXME
+    $p->type= new TypeName($parameters[$name]);
+    $p->holder= $this;
+    return $p;
   }
 
   /**
