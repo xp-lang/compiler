@@ -53,7 +53,7 @@
     <xp.compile.testPhpIncludePattern>**/*.*</xp.compile.testPhpIncludePattern>
 
     <!-- Unittest ini files location -->
-    <xp.test.iniDirectory>${basedir}/src/test/resources</xp.test.iniDirectory>
+    <xp.test.iniDirectory>${basedir}/src/test/config/</xp.test.iniDirectory>
   </properties>
 
   <prerequisites>
