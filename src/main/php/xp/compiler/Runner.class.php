@@ -186,7 +186,7 @@ class Runner extends \lang\Object {
         self::showUsage();
         return 2;
       } else if ('-cp' == $args[$i]) {
-        ClassLoader::registerPath($args[++$i]);
+        \lang\ClassLoader::registerPath($args[++$i]);
       } else if ('-sp' == $args[$i]) {
         $manager->addSourcePath($args[++$i]);
       } else if ('-v' == $args[$i]) {

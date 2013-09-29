@@ -3,6 +3,9 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Fixed Fatal error: Class 'xp\compiler\ClassLoader' not found when using
+  command line argument `-cp` - (@thekid)
+
 ## 1.10.4 / 2013-06-02
 
 * Fixed properties inconsistency - see pull request #35 (@thekid)
