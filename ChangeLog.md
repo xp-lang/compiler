@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Made error message more verbose when syntax cannot be determined from
+  file referenced by command line argument - (@thekid)
 * Fixed Fatal error: Class 'xp\compiler\ClassLoader' not found when using
   command line argument `-cp` - (@thekid)
 
