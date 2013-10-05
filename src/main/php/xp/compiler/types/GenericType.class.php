@@ -218,7 +218,9 @@ class GenericType extends Types {
   public function getMethod($name) {
     if (null !== ($method= $this->definition->getMethod($name))) {
       $method->returns= $method->returns ? $this->rewrite($method->returns) : null;
-      $method->parameters= $this->rewriteAll($method->parameters);
+      foreach ($method->parameters as $i => $parameter) {
+        $method->parameters[$i]->type= $this->rewrite($parameter->type);
+      }
       return $method;
     }
     return null;

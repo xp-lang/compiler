@@ -2,7 +2,10 @@
 
 use xp\compiler\types\TypeReflection;
 use xp\compiler\types\TypeName;
+use xp\compiler\types\Parameter;
 use xp\compiler\types\Types;
+use xp\compiler\ast\IntegerNode;
+use xp\compiler\ast\NullNode;
 use lang\XPClass;
 use lang\ClassLoader;
 
@@ -143,7 +146,13 @@ class TypeReflectionTest extends \unittest\TestCase {
     $method= create(new TypeReflection(XPClass::forName('lang.types.String')))->getMethod('substring');
     $this->assertEquals(new TypeName('lang.types.String'), $method->returns);
     $this->assertEquals('substring', $method->name);
-    $this->assertEquals(array(new TypeName('int'), new TypeName('int')), $method->parameters);
+    $this->assertEquals(
+      array(
+        new Parameter('start', new TypeName('int')),
+        new Parameter('length', new TypeName('int'), new IntegerNode(0))
+      ),
+      $method->parameters
+    );
     $this->assertEquals(MODIFIER_PUBLIC, $method->modifiers);
   }
 
@@ -308,7 +317,7 @@ class TypeReflectionTest extends \unittest\TestCase {
   public function selfParameterType() {
     $builder= create(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.Builder')));
     $this->assertEquals(
-      new TypeName('net.xp_lang.tests.types.Builder'),
+      new Parameter('self', new TypeName('net.xp_lang.tests.types.Builder'), new NullNode()),
       $builder->getMethod('create')->parameters[0]
     );
   }

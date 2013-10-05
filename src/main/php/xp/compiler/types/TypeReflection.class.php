@@ -141,6 +141,29 @@ class TypeReflection extends Types {
   }
 
   /**
+   * Create a node object for a given value
+   *
+   * @param   var value
+   * @return  xp.compiler.ast.Node
+   */
+  protected function nodeOf($value) {
+    if (null === $value) {
+      return new \xp\compiler\ast\NullNode();
+    } else if (is_int($value)) {
+      return new \xp\compiler\ast\IntegerNode($value);
+    } else if (is_double($value)) {
+      return new \xp\compiler\ast\DecimalNode($value);
+    } else if (is_string($value)) {
+      return new \xp\compiler\ast\StringNode($value);
+    } else if (is_bool($value)) {
+      return new \xp\compiler\ast\BooleanNode($value);
+    } else {
+      throw new IllegalArgumentException('Cannot convert '.\xp::stringOf($value).' to a node');
+    }
+  }
+
+
+  /**
    * Returns whether a constructor exists
    *
    * @return  bool
@@ -162,7 +185,11 @@ class TypeReflection extends Types {
       $c->modifiers= $constructor->getModifiers();
       $c->parameters= array();
       foreach ($constructor->getParameters() as $p) {
-        $c->parameters[]= $this->typeNameOf($p->getTypeName());
+        $c->parameters[]= new Parameter(
+          $p->getName(),
+          $this->typeNameOf($p->getTypeName()),
+          $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : null
+        );
       }
       $c->holder= $this;  
       return $c;
@@ -195,7 +222,11 @@ class TypeReflection extends Types {
       $m->modifiers= $method->getModifiers();
       $m->parameters= array();
       foreach ($method->getParameters() as $p) {
-        $m->parameters[]= $this->typeNameOf($p->getTypeName());
+        $m->parameters[]= new Parameter(
+          $p->getName(),
+          $this->typeNameOf($p->getTypeName()),
+          $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : null
+        );
       }
       $m->holder= $this;
       return $m;
@@ -286,7 +317,11 @@ class TypeReflection extends Types {
       $m->modifiers= $method->getModifiers();
       $m->parameters= array();
       foreach ($method->getParameters() as $p) {
-        $m->parameters[]= $this->typeNameOf($p->getTypeName());
+        $m->parameters[]= new Parameter(
+          $p->getName(),
+          $this->typeNameOf($p->getTypeName()),
+          $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : null
+        );
       }
       $m->holder= $this;
       return $m;

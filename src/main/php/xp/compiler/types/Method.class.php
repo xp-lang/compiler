@@ -39,7 +39,7 @@ class Method extends \lang\Object {
   public function toString() {
     $signature= '';
     foreach ($this->parameters as $parameter) {
-      $signature.= ', '.$parameter->compoundName();
+      $signature.= ', '.$parameter->toString();
     }
     return sprintf(
       '%s<%s %s %s(%s)>',

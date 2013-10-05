@@ -6,6 +6,7 @@ use xp\compiler\types\Types;
 use xp\compiler\types\TypeName;
 use xp\compiler\types\Field;
 use xp\compiler\types\Method;
+use xp\compiler\types\Parameter;
 use xp\compiler\types\Property;
 use xp\compiler\types\Constant;
 use xp\compiler\types\Operator;
@@ -215,7 +216,7 @@ class CompiledTypeTest extends \unittest\TestCase {
     $m= new Method('sorted');
     $m->modifiers= MODIFIER_PUBLIC | MODIFIER_STATIC;
     $m->returns= new TypeName('lang.types.ArrayList');
-    $m->parameters= array(new TypeName('lang.types.ArrayList'));
+    $m->parameters= array(new Parameter('self', new TypeName('lang.types.ArrayList')));
     $this->fixture->addMethod($m, new TypeName('lang.types.ArrayList'));
     $extensions= $this->fixture->getExtensions();
 

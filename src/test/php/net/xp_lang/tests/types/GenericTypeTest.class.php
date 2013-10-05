@@ -3,6 +3,7 @@
 use xp\compiler\types\GenericType;
 use xp\compiler\types\TypeReflection;
 use xp\compiler\types\Types;
+use xp\compiler\types\Parameter;
 use xp\compiler\types\TypeName;
 use lang\XPClass;
 
@@ -180,7 +181,10 @@ class GenericTypeTest extends \unittest\TestCase {
    */
   #[@test]
   public function hashTableGetMethodParameters() {
-    $this->assertEquals(array(new TypeName('string')), $this->newGenericHashTableType()->getMethod('get')->parameters);
+    $this->assertEquals(
+      array(new Parameter('key', new TypeName('string'))),
+      $this->newGenericHashTableType()->getMethod('get')->parameters
+    );
   }
 
   /**
@@ -225,6 +229,9 @@ class GenericTypeTest extends \unittest\TestCase {
    */
   #[@test]
   public function vectorGetMethodParameters() {
-    $this->assertEquals(array(new TypeName('int')), $this->newGenericVectorType()->getMethod('get')->parameters);
+    $this->assertEquals(
+      array(new Parameter('index', new TypeName('int'))),
+      $this->newGenericVectorType()->getMethod('get')->parameters
+    );
   }
 }

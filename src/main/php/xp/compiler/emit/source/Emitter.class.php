@@ -16,6 +16,7 @@ use xp\compiler\types\Property;
 use xp\compiler\types\Operator;
 use xp\compiler\types\Indexer;
 use xp\compiler\types\Constant;
+use xp\compiler\types\Parameter;
 use xp\compiler\ast\ParseTree;
 use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\TypeDeclarationNode;
@@ -1442,7 +1443,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
         }
       }
 
-      $signature[]= new TypeName($ptr->name());
+      $signature[]= new Parameter($param['name'], new TypeName($ptr->name()), isset($param['default']) ? $param['default'] : null);
       $genericParams.= ', '.$t->compoundName();
       $this->metadata[0][1][$this->method[0]][DETAIL_ARGUMENTS][$i]= $ptr->name();
       
@@ -2300,8 +2301,8 @@ class Emitter extends \xp\compiler\emit\Emitter {
       $arguments= array();
       $parameters= array();
       if ($parentType->hasConstructor()) {
-        foreach ($parentType->getConstructor()->parameters as $i => $type) {
-          $parameters[]= array('name' => '··a'.$i, 'type' => $type);    // TODO: default
+        foreach ($parentType->getConstructor()->parameters as $i => $param) {
+          $parameters[]= array('name' => '··a'.$i, 'type' => $param->type, 'default' => $param->default);
           $arguments[]= new VariableNode('··a'.$i);
         }
         $body= array(new StaticMethodCallNode(new TypeName('parent'), '__construct', $arguments));

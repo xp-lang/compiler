@@ -153,7 +153,11 @@ class TypeInstance extends Types {
         $m->modifiers= $method->getModifiers();
         $m->parameters= array();
         foreach ($method->getParameters() as $p) {
-          $m->parameters[]= $this->typeNameOf($p->getTypeName());
+          $m->parameters[]= new Parameter(
+            $p->getName(),
+            $this->typeNameOf($p->getTypeName()),
+            $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : null
+          );
         }
       }
       $m->holder= $this;

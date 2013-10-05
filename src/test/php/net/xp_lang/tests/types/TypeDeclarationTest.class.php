@@ -3,6 +3,7 @@
 use xp\compiler\types\TypeDeclaration;
 use xp\compiler\types\TypeName;
 use xp\compiler\types\Types;
+use xp\compiler\types\Parameter;
 use xp\compiler\ast\ParseTree;
 use xp\compiler\ast\ClassNode;
 use xp\compiler\ast\InterfaceNode;
@@ -143,14 +144,15 @@ class TypeDeclarationTest extends \unittest\TestCase {
             'modifiers'   => MODIFIER_PUBLIC,
             'parameters'  => array(
               array(
-                'name'  => 'start',
-                'type'  => new TypeName('int'),
-                'check' => true
+                'name'    => 'start',
+                'type'    => new TypeName('int'),
+                'check'   => true
               ), 
               array(
-                'name'  => 'end',
-                'type'  => new TypeName('int'),
-                'check' => true
+                'name'    => 'end',
+                'type'    => new TypeName('int'),
+                'check'   => true,
+                'default' => new IntegerNode(-1)
               )
             )
           )),
@@ -363,7 +365,13 @@ class TypeDeclarationTest extends \unittest\TestCase {
     $method= $this->stringClass()->getMethod('substring');
     $this->assertEquals(new TypeName('lang.types.String'), $method->returns);
     $this->assertEquals('substring', $method->name);
-    $this->assertEquals(array(new TypeName('int'), new TypeName('int')), $method->parameters);
+    $this->assertEquals(
+      array(
+        new Parameter('start', new TypeName('int')),
+        new Parameter('end', new TypeName('int'), new IntegerNode(-1))
+      ),
+      $method->parameters
+    );
     $this->assertEquals(MODIFIER_PUBLIC, $method->modifiers);
   }
 
