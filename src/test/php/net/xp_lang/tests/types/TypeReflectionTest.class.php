@@ -309,10 +309,6 @@ class TypeReflectionTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test "self" used in parameter type
-   *
-   */
   #[@test]
   public function selfParameterType() {
     $builder= create(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.Builder')));
@@ -322,9 +318,36 @@ class TypeReflectionTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test enum member type
-   */
+  #[@test]
+  public function parameter_with_array_default() {
+    $cl= ClassLoader::defineClass('TypeReflectionTest_'.$this->name, 'lang.Object', array(), '{
+      /** @param string[] param */
+      public function fixture($param= array()) { }
+    }');
+    $this->assertEquals(
+      new Parameter('param', new TypeName('string[]'), new \xp\compiler\ast\ArrayNode(array(
+        'type'   => new TypeName('string[]'),
+        'values' => array()
+      ))),
+      create(new TypeReflection($cl))->getMethod('fixture')->parameters[0]
+    );
+  }
+
+  #[@test]
+  public function parameter_with_map_default() {
+    $cl= ClassLoader::defineClass('TypeReflectionTest_'.$this->name, 'lang.Object', array(), '{
+      /** @param [:string] param */
+      public function fixture($param= array()) { }
+    }');
+    $this->assertEquals(
+      new Parameter('param', new TypeName('[:string]'), new \xp\compiler\ast\MapNode(array(
+        'type'     => new TypeName('[:string]'),
+        'elements' => array()
+      ))),
+      create(new TypeReflection($cl))->getMethod('fixture')->parameters[0]
+    );
+  }
+
   #[@test]
   public function enumMemberType() {
     $cl= ClassLoader::defineClass('TypeReflectionTest_Enum', 'lang.Enum', array(), '{
@@ -336,9 +359,6 @@ class TypeReflectionTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test enum member type
-   */
   #[@test]
   public function abstractEnumMemberType() {
     $cl= ClassLoader::defineClass('TypeReflectionTest_AbstractEnum', 'lang.Enum', array(), '{

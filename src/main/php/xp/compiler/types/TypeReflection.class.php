@@ -2,6 +2,7 @@
 
 use lang\XPClass;
 use lang\Type;
+use lang\Primitive;
 
 /**
  * Represents a reflected type
@@ -144,21 +145,41 @@ class TypeReflection extends Types {
    * Create a node object for a given value
    *
    * @param   var value
+   * @param   lang.Type t
    * @return  xp.compiler.ast.Node
    */
-  protected function nodeOf($value) {
-    if (null === $value) {
-      return new \xp\compiler\ast\NullNode();
-    } else if (is_int($value)) {
+  protected function nodeOf($value, $t) {
+    if (null === $value) return new \xp\compiler\ast\NullNode();
+
+    // Switch on type
+    if (Primitive::$INT->equals($t)) {
       return new \xp\compiler\ast\IntegerNode($value);
-    } else if (is_double($value)) {
+    } else if (Primitive::$DOUBLE->equals($t)) {
       return new \xp\compiler\ast\DecimalNode($value);
-    } else if (is_string($value)) {
+    } else if (Primitive::$STRING->equals($t)) {
       return new \xp\compiler\ast\StringNode($value);
-    } else if (is_bool($value)) {
+    } else if (Primitive::$BOOL->equals($t)) {
       return new \xp\compiler\ast\BooleanNode($value);
+    } else if (Type::$VAR->equals($t)) {
+      return $this->nodeOf($value, typeof($value));
+    } else if ($t instanceof \lang\ArrayType) {
+      $n= new \xp\compiler\ast\ArrayNode();
+      $c= $t->componentType();
+      $n->type= new TypeName($t->getName());
+      foreach ($value as $element) {
+        $n->values[]= $this->nodeOf($value, $c);
+      }
+      return $n;
+    } else if ($t instanceof \lang\MapType) {
+      $n= new \xp\compiler\ast\MapNode();
+      $c= $t->componentType();
+      $n->type= new TypeName($t->getName());
+      foreach ($value as $key => $element) {
+        $n->members[]= array($this->nodeOf($key, Primitive::$STRING), $this->nodeOf($value, $c));
+      }
+      return $n;
     } else {
-      throw new IllegalArgumentException('Cannot convert '.\xp::stringOf($value).' to a node');
+      throw new \lang\IllegalArgumentException('Cannot convert '.$t->toString().' to a node');
     }
   }
 
@@ -188,7 +209,7 @@ class TypeReflection extends Types {
         $c->parameters[]= new Parameter(
           $p->getName(),
           $this->typeNameOf($p->getTypeName()),
-          $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : null
+          $p->isOptional() ? $this->nodeOf($p->getDefaultValue(), $p->getType()) : null
         );
       }
       $c->holder= $this;  
@@ -225,7 +246,7 @@ class TypeReflection extends Types {
         $m->parameters[]= new Parameter(
           $p->getName(),
           $this->typeNameOf($p->getTypeName()),
-          $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : null
+          $p->isOptional() ? $this->nodeOf($p->getDefaultValue(), $p->getType()) : null
         );
       }
       $m->holder= $this;
@@ -320,7 +341,7 @@ class TypeReflection extends Types {
         $m->parameters[]= new Parameter(
           $p->getName(),
           $this->typeNameOf($p->getTypeName()),
-          $p->isOptional() ? $this->nodeOf($p->getDefaultValue()) : null
+          $p->isOptional() ? $this->nodeOf($p->getDefaultValue(), $p->getType()) : null
         );
       }
       $m->holder= $this;

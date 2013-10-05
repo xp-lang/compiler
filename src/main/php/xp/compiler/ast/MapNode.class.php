@@ -22,4 +22,17 @@ class MapNode extends Node implements Resolveable {
     }
     return $resolved;
   }
+
+  /**
+   * Returns a hashcode
+   *
+   * @return  string
+   */
+  public function hashCode() {
+    $s= '';
+    foreach ($this->elements as $pair) {
+      $s.= ', '.$pair[0]->toString().' : '.$pair[1]->toString();
+    }
+    return ($this->type ? $this->type->compoundName() : '[:var]').' {'.substr($s, 2).'}';
+  }
 }
