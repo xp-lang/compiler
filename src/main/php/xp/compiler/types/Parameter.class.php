@@ -55,7 +55,7 @@ class Parameter extends \lang\Object {
       $cmp instanceof self &&
       $this->name === $cmp->name &&
       $this->type->equals($cmp->type) &&
-      \util\Objects::equal($this->default, $cmp->default)
+      (null === $this->default && null === $cmp->default || $this->default->equals($cmp->default))
     );
   }
   
