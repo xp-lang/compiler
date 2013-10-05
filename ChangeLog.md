@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 1.11.0 / 2013-10-05
+
 * Heads up: Changed xp.compiler.types.Types implementations to return an 
   array of Parameter objects holding name, type and optional default value 
   instead of just the parameters' types - (@thekid)
