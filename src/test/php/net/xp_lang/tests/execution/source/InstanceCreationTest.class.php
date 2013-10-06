@@ -80,6 +80,23 @@ class InstanceCreationTest extends ExecutionTest {
   }
 
   /**
+   * Test creating a new anonymous instance from an interface
+   *
+   */
+  #[@test]
+  public function twoAnonymousInstances() {
+    $instances= $this->run('return [
+      new Object() { public string id() -> "a"; },
+      new Object() { public string id() -> "b"; }
+    ];');
+
+    $this->assertEquals(
+      array('a', 'b'),
+      array_map(function($e) { return $e->id(); }, $instances)
+    );
+  }
+
+  /**
    * Test creating a new anonymous instance from lang.Object
    *
    */
