@@ -2060,8 +2060,8 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       $arguments= array();
       $parameters= array();
       if ($parentType->hasConstructor()) {
-        foreach ($parentType->getConstructor()->parameters as $i => $type) {
-          $parameters[]= array('name' => '··a'.$i, 'type' => $type);    // TODO: default
+        foreach ($parentType->getConstructor()->parameters as $i => $parameter) {
+          $parameters[]= array('name' => '··a'.$i, 'type' => $parameter->type, 'default' => $parameter->default);
           $arguments[]= new VariableNode('··a'.$i);
         }
         $body= array(new StaticMethodCallNode(new TypeName('parent'), '__construct', $arguments));

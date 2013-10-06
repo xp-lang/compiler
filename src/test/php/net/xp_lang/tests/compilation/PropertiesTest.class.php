@@ -1,6 +1,6 @@
 <?php namespace net\xp_lang\tests\compilation;
 
-use xp\compiler\emit\source\Emitter;
+use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\types\TypeName;
 use xp\compiler\types\TypeReflection;
 use xp\compiler\types\Property;
@@ -27,7 +27,7 @@ use lang\reflect\Modifiers;
    *
    */
   public function setUp() {
-    $this->emitter= new Emitter();
+    $this->emitter= new V53Emitter();
     $this->scope= new TaskScope(new CompilationTask(
       new FileSource(new File(__FILE__), Syntax::forName('xp')),
       new NullDiagnosticListener(),
