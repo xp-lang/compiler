@@ -3,6 +3,10 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Fixed anonymous instance creation to create unique class names, thus
+  preventing "Fatal error: Cannot redeclare class ..." errors.
+  (@thekid)
+
 ## 1.11.0 / 2013-10-05
 
 * Heads up: Changed xp.compiler.types.Types implementations to return an 

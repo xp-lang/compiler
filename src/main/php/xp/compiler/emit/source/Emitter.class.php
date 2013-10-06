@@ -1242,7 +1242,7 @@ class Emitter extends \xp\compiler\emit\Emitter {
         $p= array('parent' => $new->type, 'implements' => null);
       }
 
-      $unique= new TypeName(strtr($parent->literal(), '\\', '¦').'··'.uniqid());
+      $unique= new TypeName(strtr($parent->literal(), '\\', '¦').'··'.strtr(uniqid(null, true), '.', '·'));
       $decl= new ClassNode(0, null, $unique, $p['parent'], $p['implements'], $new->body);
       $decl->synthetic= true;
       $generic && $decl->generic= $generic;
