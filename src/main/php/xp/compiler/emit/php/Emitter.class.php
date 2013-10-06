@@ -654,10 +654,12 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    */
   public function emitClassAccess($b, $access) {
     $ptr= $this->resolveType($access->type);
-    $b->append('XPClass::forName(\''.$ptr->name().'\')');
+    $classType= new TypeName('lang.XPClass');
+    $b->append($this->literal($this->resolveType($classType, false)));
+    $b->append('::forName(\''.$ptr->name().'\')');
 
     // Record type
-    $this->scope[0]->setType($access, new TypeName('lang.XPClass'));
+    $this->scope[0]->setType($access, $classType);
   }
 
   /**
