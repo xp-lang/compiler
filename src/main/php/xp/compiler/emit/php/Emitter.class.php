@@ -1226,11 +1226,11 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $p= array('parent' => $new->type, 'implements' => null);
       }
 
-      $unique= new TypeName(strtr($this->literal($parent), '\\', '¦').'··'.strtr(uniqid(null, true), '.', '·'));
+      $unique= new TypeName($parent->literal().'··'.strtr(uniqid(null, true), '.', '·'));
       $decl= new ClassNode(0, null, $unique, $p['parent'], $p['implements'], $new->body);
       $decl->synthetic= true;
       $generic && $decl->generic= $generic;
-      $ptr= new TypeDeclaration(new ParseTree(null, array(), $decl), $parent);
+      $ptr= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $decl), $parent);
       $this->scope[0]->declarations[]= $decl;
       $this->scope[0]->setType($new, $unique);
     } else {

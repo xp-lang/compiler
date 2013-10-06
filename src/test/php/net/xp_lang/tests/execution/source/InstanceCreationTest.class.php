@@ -80,6 +80,20 @@ class InstanceCreationTest extends ExecutionTest {
   }
 
   /**
+   * Test creating a new anonymous instance from an interface inside a package
+   *
+   */
+  #[@test]
+  public function anonymousInterfaceInstanceInTestPackage() {
+    $runnable= $this->run('return new lang.Runnable() {
+      public void run() {
+        throw new lang.MethodNotImplementedException("run");
+      }
+    };', array('package test;'));
+    $this->assertAnonymousInstanceOf('lang.Runnable', $runnable);
+  }
+
+  /**
    * Test creating a new anonymous instance from an interface
    *
    */
