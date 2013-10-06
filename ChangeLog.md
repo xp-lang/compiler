@@ -10,6 +10,8 @@ XP Compiler ChangeLog
 * Changed "-E" command line argument to support versions: `-E name` will 
   load xp.compiler.emit.name.Emitter, `-E name60` will load the class
   xp.compiler.emit.name.V60Emitter - (@thekid)
+* Changed all emit*() methods in xp.compiler.emit.Emitter to protected
+  (@thekid)
 
 ## 1.11.1 / 2013-10-06
 
