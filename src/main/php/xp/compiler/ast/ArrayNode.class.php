@@ -30,4 +30,17 @@ class ArrayNode extends Node implements Resolveable {
     }
     return $resolved;
   }
+
+  /**
+   * Returns a hashcode
+   *
+   * @return  string
+   */
+  public function hashCode() {
+    $s= '';
+    foreach ($this->values as $i => $value) {
+      $s.= ', '.$value->toString();
+    }
+    return ($this->type ? $this->type->compoundName() : 'var[]').' {'.substr($s, 2).'}';
+  }
 }

@@ -2,6 +2,7 @@
 
 use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\types\TypeName;
+use xp\compiler\types\Parameter;
 use xp\compiler\types\TaskScope;
 use xp\compiler\io\FileManager;
 use xp\compiler\io\FileSource;
@@ -22,7 +23,6 @@ class TypeTest extends \unittest\TestCase {
 
   /**
    * Sets up test case
-   *
    */
   public function setUp() {
     $this->emitter= new V53Emitter();
@@ -48,74 +48,42 @@ class TypeTest extends \unittest\TestCase {
     return $r->type();
   }
 
-  /**
-   * Test name() on compiled type
-   *
-   */
   #[@test]
   public function name() {
     $this->assertEquals('Person', $this->compile('class Person { }')->name());
   }
 
-  /**
-   * Test name() on compiled type
-   *
-   */
   #[@test]
   public function nameInsidePackage() {
     $this->assertEquals('demo.Person', $this->compile('package demo; class Person { }')->name());
   }
 
-  /**
-   * Test name() on compiled type
-   *
-   */
   #[@test]
   public function packageNameInsidePackage() {
     $this->assertEquals('demo.Person', $this->compile('package demo; package class Person { }')->name());
   }
 
-  /**
-   * Test literal() on compiled type
-   *
-   */
   #[@test]
   public function literal() {
     $this->assertEquals('Person', $this->compile('class Person { }')->literal());
   }
 
-  /**
-   * Test literal() on compiled type
-   *
-   */
   #[@test]
   public function literalInsidePackage() {
     $this->assertEquals('demo\\Person', $this->compile('package demo; class Person { }')->literal());
   }
 
-  /**
-   * Test literal() on compiled type
-   *
-   */
   #[@test]
   public function packageLiteralInsidePackage() {
     $this->assertEquals('demo\\Person', $this->compile('package demo; package class Person { }')->literal());
   }
 
-  /**
-   * Test hasField() on compiled type
-   *
-   */
   #[@test]
   public function classFieldExists() {
     $t= $this->compile('class Person { public string $name; }');
     $this->assertTrue($t->hasField('name'));
   }
 
-  /**
-   * Test getField() on compiled type
-   *
-   */
   #[@test]
   public function classField() {
     $f= $this->compile('class Person { public string $name; }')->getField('name');
@@ -124,20 +92,12 @@ class TypeTest extends \unittest\TestCase {
     $this->assertEquals(MODIFIER_PUBLIC, $f->modifiers);
   }
 
-  /**
-   * Test hasProperty() on compiled type
-   *
-   */
   #[@test]
   public function classPropertyExists() {
     $t= $this->compile('class Person { public string name { get { } set { } } }');
     $this->assertTrue($t->hasProperty('name'));
   }
 
-  /**
-   * Test getProperty() on compiled type
-   *
-   */
   #[@test]
   public function classProperty() {
     $f= $this->compile('class Person { public string name { get { } set { } } }')->getProperty('name');
@@ -146,20 +106,12 @@ class TypeTest extends \unittest\TestCase {
     $this->assertEquals(MODIFIER_PUBLIC, $f->modifiers);
   }
 
-  /**
-   * Test hasField() on compiled type
-   *
-   */
   #[@test]
   public function classStaticFieldExists() {
     $t= $this->compile('class Logger { public static self $instance; }');
     $this->assertTrue($t->hasField('instance'));
   }
 
-  /**
-   * Test getField() on compiled type
-   *
-   */
   #[@test]
   public function classStaticField() {
     $f= $this->compile('class Logger { public static self $instance; }')->getField('instance');
@@ -168,10 +120,6 @@ class TypeTest extends \unittest\TestCase {
     $this->assertEquals(MODIFIER_STATIC | MODIFIER_PUBLIC, $f->modifiers);
   }
 
-  /**
-   * Test getField() on compiled type
-   *
-   */
   #[@test]
   public function classStaticFieldWithNonStaticInitialization() {
     $f= $this->compile('class Convert { public static var $headline= text.regex.Pattern::compile("==(.+)=="); }')->getField('headline');
@@ -180,10 +128,6 @@ class TypeTest extends \unittest\TestCase {
     $this->assertEquals(MODIFIER_STATIC | MODIFIER_PUBLIC, $f->modifiers);
   }
 
-  /**
-   * Test getField() on compiled type
-   *
-   */
   #[@test]
   public function classFieldWithNonStaticInitialization() {
     $f= $this->compile('class Convert { public var $headline= text.regex.Pattern::compile("==(.+)=="); }')->getField('headline');
@@ -192,20 +136,12 @@ class TypeTest extends \unittest\TestCase {
     $this->assertEquals(MODIFIER_PUBLIC, $f->modifiers);
   }
   
-  /**
-   * Test hasField() on compiled type
-   *
-   */
   #[@test]
   public function enumFieldExists() {
     $t= $this->compile('enum Days { MON, TUE, WED, THU, FRI, SAT, SUN }');
     $this->assertTrue($t->hasField('MON'));
   }
 
-  /**
-   * Test getField() on compiled type
-   *
-   */
   #[@test]
   public function enumField() {
     $f= $this->compile('enum Days { MON, TUE, WED, THU, FRI, SAT, SUN }')->getField('MON');
@@ -214,20 +150,12 @@ class TypeTest extends \unittest\TestCase {
     $this->assertEquals(MODIFIER_STATIC | MODIFIER_PUBLIC, $f->modifiers);
   }
 
-  /**
-   * Test hasConstant() on compiled type
-   *
-   */
   #[@test]
   public function classConstantExists() {
     $t= $this->compile('class StringConstants { const string LF= "\n"; }');
     $this->assertTrue($t->hasConstant('LF'));
   }
 
-  /**
-   * Test getConstant() on compiled type
-   *
-   */
   #[@test]
   public function classConstant() {
     $c= $this->compile('class StringConstants { const string LF= "\n"; }')->getConstant('LF');
@@ -236,20 +164,12 @@ class TypeTest extends \unittest\TestCase {
     $this->assertEquals("\n", $c->value);
   }
 
-  /**
-   * Test hasConstant() on compiled type
-   *
-   */
   #[@test]
   public function interfaceConstantExists() {
     $t= $this->compile('interface StringConstants { const string LF= "\n"; }');
     $this->assertTrue($t->hasConstant('LF'));
   }
 
-  /**
-   * Test getConstant() on compiled type
-   *
-   */
   #[@test]
   public function interfaceConstant() {
     $c= $this->compile('interface StringConstants { const string LF= "\n"; }')->getConstant('LF');
@@ -258,66 +178,48 @@ class TypeTest extends \unittest\TestCase {
     $this->assertEquals("\n", $c->value);
   }
 
-  /**
-   * Test hasMethod() on compiled type
-   *
-   */
   #[@test]
   public function classMethodExists() {
     $t= $this->compile('class String { public self substring(int $start, int $len) { }}');
     $this->assertTrue($t->hasMethod('substring'));
   }
 
-  /**
-   * Test getMethod() on compiled type
-   *
-   */
   #[@test]
   public function classMethod() {
     $m= $this->compile('class String { public self substring(int $start, int $len) { }}')->getMethod('substring');
     $this->assertEquals('substring', $m->name);
     $this->assertEquals(new TypeName('String'), $m->returns);
     $this->assertEquals(MODIFIER_PUBLIC, $m->modifiers);
-    $this->assertEquals(array(new TypeName('int'), new TypeName('int')), $m->parameters);
+    $this->assertEquals(
+      array(new Parameter('start', new TypeName('int')), new Parameter('len', new TypeName('int'))),
+      $m->parameters
+    );
   }
 
-  /**
-   * Test hasOperator() on compiled type
-   *
-   */
   #[@test]
   public function classOperatorExists() {
     $t= $this->compile('class Complex { public static self operator + (self $a, self $b) { }}');
     $this->assertTrue($t->hasOperator('+'));
   }
 
-  /**
-   * Test getOperator() on compiled type
-   *
-   */
   #[@test]
   public function classOperator() {
     $m= $this->compile('class Complex { public static self operator + (self $a, self $b) { }}')->getOperator('+');
     $this->assertEquals('+', $m->symbol);
     $this->assertEquals(new TypeName('Complex'), $m->returns);
     $this->assertEquals(MODIFIER_PUBLIC | MODIFIER_STATIC, $m->modifiers);
-    $this->assertEquals(array(new TypeName('Complex'), new TypeName('Complex')), $m->parameters);
+    $this->assertEquals(
+      array(new Parameter('a', new TypeName('Complex')), new Parameter('b', new TypeName('Complex'))),
+      $m->parameters
+    );
   }
 
-  /**
-   * Test hasMethod() on compiled type
-   *
-   */
   #[@test]
   public function enumMethodExists() {
     $t= $this->compile('enum Coin { penny(1), nickel(2), dime(10), quarter(25); public string color() { }}');
     $this->assertTrue($t->hasMethod('color'));
   }
 
-  /**
-   * Test getMethod() on compiled type
-   *
-   */
   #[@test]
   public function enumMethod() {
     $m= $this->compile('enum Coin { penny(1), nickel(2), dime(10), quarter(25); public string color() { }}')->getMethod('color');
@@ -327,20 +229,12 @@ class TypeTest extends \unittest\TestCase {
     $this->assertEquals(array(), $m->parameters);
   }
 
-  /**
-   * Test hasIndexer() on compiled type
-   *
-   */
   #[@test]
   public function classIndexerExists() {
     $t= $this->compile('class ArrayList<T> { public T this[int $offset] { get { } set { } isset { } unset { } }}');
     $this->assertTrue($t->hasIndexer('color'));
   }
 
-  /**
-   * Test getIndexer() on compiled type
-   *
-   */
   #[@test]
   public function classIndexer() {
     $i= $this->compile('class ArrayList<T> { public T this[int $offset] { get { } set { } isset { } unset { } }}')->getIndexer();

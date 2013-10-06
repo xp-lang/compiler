@@ -2,6 +2,7 @@
 
 use lang\XPClass;
 use lang\Type;
+use lang\Primitive;
 
 /**
  * Represents a reflected type
@@ -150,6 +151,49 @@ class TypeReflection extends Types {
   }
 
   /**
+   * Create a node object for a given value
+   *
+   * @param   var value
+   * @param   lang.Type t
+   * @return  xp.compiler.ast.Node
+   */
+  protected function nodeOf($value, $t) {
+    if (null === $value) return new \xp\compiler\ast\NullNode();
+
+    // Switch on type
+    if (Primitive::$INT->equals($t)) {
+      return new \xp\compiler\ast\IntegerNode($value);
+    } else if (Primitive::$DOUBLE->equals($t)) {
+      return new \xp\compiler\ast\DecimalNode($value);
+    } else if (Primitive::$STRING->equals($t)) {
+      return new \xp\compiler\ast\StringNode($value);
+    } else if (Primitive::$BOOL->equals($t)) {
+      return new \xp\compiler\ast\BooleanNode($value);
+    } else if (Type::$VAR->equals($t)) {
+      return $this->nodeOf($value, typeof($value));
+    } else if ($t instanceof \lang\ArrayType) {
+      $n= new \xp\compiler\ast\ArrayNode();
+      $c= $t->componentType();
+      $n->type= new TypeName($t->getName());
+      foreach ($value as $element) {
+        $n->values[]= $this->nodeOf($value, $c);
+      }
+      return $n;
+    } else if ($t instanceof \lang\MapType) {
+      $n= new \xp\compiler\ast\MapNode();
+      $c= $t->componentType();
+      $n->type= new TypeName($t->getName());
+      foreach ($value as $key => $element) {
+        $n->members[]= array($this->nodeOf($key, Primitive::$STRING), $this->nodeOf($value, $c));
+      }
+      return $n;
+    } else {
+      throw new \lang\IllegalArgumentException('Cannot convert '.$t->toString().' to a node');
+    }
+  }
+
+
+  /**
    * Returns whether a constructor exists
    *
    * @return  bool
@@ -171,7 +215,11 @@ class TypeReflection extends Types {
       $c->modifiers= $constructor->getModifiers();
       $c->parameters= array();
       foreach ($constructor->getParameters() as $p) {
-        $c->parameters[]= $this->typeNameOf($p->getTypeName());
+        $c->parameters[]= new Parameter(
+          $p->getName(),
+          $this->typeNameOf($p->getTypeName()),
+          $p->isOptional() ? $this->nodeOf($p->getDefaultValue(), $p->getType()) : null
+        );
       }
       $c->holder= $this;  
       return $c;
@@ -204,7 +252,11 @@ class TypeReflection extends Types {
       $m->modifiers= $method->getModifiers();
       $m->parameters= array();
       foreach ($method->getParameters() as $p) {
-        $m->parameters[]= $this->typeNameOf($p->getTypeName());
+        $m->parameters[]= new Parameter(
+          $p->getName(),
+          $this->typeNameOf($p->getTypeName()),
+          $p->isOptional() ? $this->nodeOf($p->getDefaultValue(), $p->getType()) : null
+        );
       }
       $m->holder= $this;
       return $m;
@@ -295,7 +347,11 @@ class TypeReflection extends Types {
       $m->modifiers= $method->getModifiers();
       $m->parameters= array();
       foreach ($method->getParameters() as $p) {
-        $m->parameters[]= $this->typeNameOf($p->getTypeName());
+        $m->parameters[]= new Parameter(
+          $p->getName(),
+          $this->typeNameOf($p->getTypeName()),
+          $p->isOptional() ? $this->nodeOf($p->getDefaultValue(), $p->getType()) : null
+        );
       }
       $m->holder= $this;
       return $m;
@@ -347,7 +403,8 @@ class TypeReflection extends Types {
    * @return  bool
    */
   public function hasProperty($name) {
-    return false;
+    $class= $this->class->getName();
+    return isset(\xp::$meta[$class][0][$name][DETAIL_PROPERTY]);
   }
   
   /**
@@ -357,7 +414,15 @@ class TypeReflection extends Types {
    * @return  xp.compiler.types.Property
    */
   public function getProperty($name) {
-    return null;
+    $class= $this->class->getName();
+    if (!isset(\xp::$meta[$class][0][$name][DETAIL_PROPERTY])) return null;
+
+    $p= new Property();
+    $p->name= $name;
+    $p->modifiers= \xp::$meta[$class][0][$name][DETAIL_PROPERTY];
+    $p->type= new TypeName(\xp::$meta[$class][0][$name][DETAIL_ANNOTATIONS]['type']);
+    $p->holder= $this;
+    return $p;
   }
 
   /**
