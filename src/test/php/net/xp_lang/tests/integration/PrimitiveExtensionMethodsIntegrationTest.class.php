@@ -1,6 +1,6 @@
 <?php namespace net\xp_lang\tests\integration;
 
-use xp\compiler\emit\source\Emitter;
+use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\types\TaskScope;
 use xp\compiler\io\FileManager;
 use xp\compiler\io\StringSource;
@@ -40,7 +40,7 @@ class PrimitiveExtensionMethodsIntegrationTest extends \unittest\TestCase {
       }
     }';
   
-    $emitter= new Emitter();
+    $emitter= new V53Emitter();
     $task= new CompilationTask(
       new StringSource(sprintf($decl, $this->counter++, $source), self::$syntax, $this->name),
       new NullDiagnosticListener(),

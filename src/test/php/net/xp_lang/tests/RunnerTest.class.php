@@ -98,4 +98,69 @@ class RunnerTest extends \unittest\TestCase {
       this($this->run(array('-e', 'xp', '@syntax error@')), 'out')
     );
   }
+
+  #[@test]
+  public function select_v52_emitter() {
+    $this->assertEquals(
+      "Test\n",
+      this($this->run(array('-E', 'php5.2', '-w', 'xp', '"Test"')), 'out')
+    );
+  }
+
+  #[@test]
+  public function select_v53_emitter() {
+    $this->assertEquals(
+      "Test\n",
+      this($this->run(array('-E', 'php5.3', '-w', 'xp', '"Test"')), 'out')
+    );
+  }
+
+  #[@test]
+  public function select_userdefined_emitter() {
+    \lang\ClassLoader::defineClass('xp.compiler.emit.test.Emitter', 'xp.compiler.emit.php.V53Emitter', array(), '{
+      public function emit(\xp\compiler\ast\ParseTree $tree, xp\compiler\types\Scope $scope) {
+        Console::writeLine("Test emitter emitting...");
+        return parent::emit($tree, $scope);
+      }
+    }');
+    $this->assertEquals(
+      "Test emitter emitting...\nTest\n",
+      this($this->run(array('-E', 'test', '-w', 'xp', '"Test"')), 'out')
+    );
+  }
+
+  #[@test]
+  public function select_non_existant_emitter() {
+    $this->assertMatches(
+      'No emitter named "@non_existant@"',
+      this($this->run(array('-E', '@non_existant@', '-w', 'xp', '"Test"')), 'err')
+    );
+  }
+
+  #[@test]
+  public function select_non_existant_emitter_version() {
+    $this->assertMatches(
+      'No emitter named "php5.1"',
+      this($this->run(array('-E', 'php5.1', '-w', 'xp', '"Test"')), 'err')
+    );
+  }
+
+  #[@test]
+  public function select_illegal_emitter() {
+    $this->assertMatches(
+      'Cannot use emitter named "php"',
+      this($this->run(array('-E', 'php', '-w', 'xp', '"Test"')), 'err')
+    );
+  }
+
+  #[@test]
+  public function select_non_emitter() {
+    \lang\ClassLoader::defineClass('xp.compiler.emit.non.V1Emitter', 'lang.Object', array(), '{
+      // Empty
+    }');
+    $this->assertMatches(
+      'Not an emitter implementation',
+      this($this->run(array('-E', 'non1', '-w', 'xp', '"Test"')), 'err')
+    );
+  }
 }

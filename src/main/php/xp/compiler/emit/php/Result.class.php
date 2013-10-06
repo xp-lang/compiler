@@ -1,4 +1,4 @@
-<?php namespace xp\compiler\emit\source;
+<?php namespace xp\compiler\emit\php;
 
 /**
  * Compilation result from source emitter

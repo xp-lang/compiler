@@ -22,6 +22,15 @@ class TypeReflection extends Types {
   }
 
   /**
+   * Returns modifiers
+   *
+   * @return int
+   */
+  public function modifiers() {
+    return strpos($this->class->literal(), '·') ? MODIFIER_PACKAGE : MODIFIER_PUBLIC;
+  }
+
+  /**
    * Returns parent type
    *
    * @return  xp.compiler.types.Types
@@ -48,7 +57,7 @@ class TypeReflection extends Types {
    * @return  string
    */
   public function literal() {
-    return \xp::reflect($this->class->getName());
+    return $this->class->getSimpleName();
   }
   
   /**
@@ -278,7 +287,7 @@ class TypeReflection extends Types {
    * @return  [:xp.compiler.types.Method[]]
    */
   public function getExtensions() {
-    $name= $this->literal();
+    $name= '\\'.strtr($this->class->getName(), '.', '\\');
 
     // Extension methods are registered via __import()
     if (!method_exists($name, '__import')) return array();
