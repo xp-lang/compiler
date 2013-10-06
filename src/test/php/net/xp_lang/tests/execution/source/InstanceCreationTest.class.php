@@ -21,21 +21,23 @@ class InstanceCreationTest extends ExecutionTest {
     $this->assertTrue((bool)strstr($instance->getClassName(), '··'), $instance->getClassName());
   }
   
-  /**
-   * Test creating a new object
-   *
-   */
   #[@test]
-  public function newObject() {
+  public function new_instance_from_object_class() {
     $this->assertInstanceOf('lang.Object', $this->run('return new Object();'));
   }
 
-  /**
-   * Test creating a new generic hashtable
-   *
-   */
   #[@test]
-  public function newGenericHashTable() {
+  public function new_instance_from_fully_qualified_object_class() {
+    $this->assertInstanceOf('lang.Object', $this->run('return new lang.Object();'));
+  }
+
+  #[@test]
+  public function new_instance_from_namespaced_class() {
+    $this->assertInstanceOf('xp.compiler.Syntax', $this->run('return xp.compiler.Syntax::forName("xp");'));
+  }
+
+  #[@test]
+  public function new_generic_hashtable() {
     $hash= $this->run('return new util.collections.HashTable<lang.types.String, lang.Generic>();');
     $this->assertEquals(
       array(XPClass::forName('lang.types.String'), XPClass::forName('lang.Generic')), 
@@ -43,34 +45,17 @@ class InstanceCreationTest extends ExecutionTest {
     );
   }
 
-  /**
-   * Test creating a new generic hashtable
-   *
-   */
   #[@test]
-  public function newGenericVector() {
+  public function new_generic_vector() {
     $hash= $this->run('return new util.collections.Vector<int>();');
     $this->assertEquals(
       array(Primitive::$INT), 
       $hash->getClass()->genericArguments()
     );
   }
-
-  /**
-   * Test creating a new object
-   *
-   */
-  #[@test]
-  public function newObjectFullyQualified() {
-    $this->assertInstanceOf('lang.Object', $this->run('return new lang.Object();'));
-  }
   
-  /**
-   * Test creating a new anonymous instance from an interface
-   *
-   */
   #[@test]
-  public function anonymousInterfaceInstance() {
+  public function anonymous_interface_instance() {
     $runnable= $this->run('return new lang.Runnable() {
       public void run() {
         throw new lang.MethodNotImplementedException("run");
@@ -79,12 +64,18 @@ class InstanceCreationTest extends ExecutionTest {
     $this->assertAnonymousInstanceOf('lang.Runnable', $runnable);
   }
 
-  /**
-   * Test creating a new anonymous instance from an interface inside a package
-   *
-   */
   #[@test]
-  public function anonymousInterfaceInstanceInTestPackage() {
+  public function anonymous_instance_with_body() {
+    $object= $this->run('return new lang.Object() {
+      public void run() {
+        throw new lang.MethodNotImplementedException("run");
+      }
+    };');
+    $this->assertAnonymousInstanceOf('lang.Object', $object);
+  }
+
+  #[@test]
+  public function anonymous_interface_instance_inside_test_package() {
     $runnable= $this->run('return new lang.Runnable() {
       public void run() {
         throw new lang.MethodNotImplementedException("run");
@@ -93,12 +84,8 @@ class InstanceCreationTest extends ExecutionTest {
     $this->assertAnonymousInstanceOf('lang.Runnable', $runnable);
   }
 
-  /**
-   * Test creating a new anonymous instance from an interface
-   *
-   */
   #[@test]
-  public function twoAnonymousInstances() {
+  public function two_anonymous_interface_instances() {
     $instances= $this->run('return [
       new Object() { public string id() -> "a"; },
       new Object() { public string id() -> "b"; }
@@ -110,26 +97,8 @@ class InstanceCreationTest extends ExecutionTest {
     );
   }
 
-  /**
-   * Test creating a new anonymous instance from lang.Object
-   *
-   */
   #[@test]
-  public function anonymousInstance() {
-    $object= $this->run('return new lang.Object() {
-      public void run() {
-        throw new lang.MethodNotImplementedException("run");
-      }
-    };');
-    $this->assertAnonymousInstanceOf('lang.Object', $object);
-  }
-
-  /**
-   * Test creating a new anonymous instance from an abstract class
-   *
-   */
-  #[@test]
-  public function anonymousInstanceFromAbstractBase() {
+  public function anonymous_instance_from_abstract_base_class() {
     $command= $this->run('return new util.cmd.Command() {
       public void run() {
         throw new lang.MethodNotImplementedException("run");
@@ -138,13 +107,8 @@ class InstanceCreationTest extends ExecutionTest {
     $this->assertAnonymousInstanceOf('util.cmd.Command', $command);
   }
 
-  /**
-   * Test creating a new anonymous instance from an generic interface
-   *
-   * @see   xp://net.xp_lang.tests.execution.source.Filter
-   */
   #[@test]
-  public function anonymousGenericInterfaceInstance() {
+  public function anonymous_generic_interface_instance() {
     $f= $this->run('return new net.xp_lang.tests.execution.source.Filter<string>() {
       public bool accept(string $e) {
         return "Test" === $e;
