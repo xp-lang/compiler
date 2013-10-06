@@ -241,22 +241,32 @@ class Runner extends \lang\Object {
       return 2;
     }
     
-    // Setup emitter and load compiler profile configurations
+    // Setup emitter
     sscanf($emitter, '%[^0-9]%d.%d', $language, $major, $minor);
     try {
-      $emit= Package::forName('xp.compiler.emit')
+      $emit= \lang\XPClass::forName('xp.compiler.emit.Emitter')->cast(Package::forName('xp.compiler.emit')
         ->getPackage($language)
-        ->loadClass('V'.$major.$minor.'Emitter')
+        ->loadClass(($major ? ('V'.$major.$minor) : '').'Emitter')
         ->newInstance()
-      ;
+      );
+    } catch (\lang\ClassCastException $e) {
+      Console::$err->writeLine('*** Not an emitter implementation: ', $e->compoundMessage());
+      return 4;
+    } catch (\lang\IllegalAccessException $e) {
+      Console::$err->writeLine('*** Cannot use emitter named "', $emitter, '": ', $e->compoundMessage());
+      return 4;
+    } catch (\lang\Throwable $e) {
+      Console::$err->writeLine('*** No emitter named "', $emitter, '": ', $e->compoundMessage());
+      return 4;
+    }
+
+    // Load compiler profile configurations
+    try {
       $reader= new CompilationProfileReader();
       foreach ($profiles as $configuration) {
         $reader->addSource(new Properties('res://xp/compiler/'.$configuration.'.xcp.ini'));
       }
       $emit->setProfile($reader->getProfile());
-    } catch (\lang\ClassLoadingException $e) {
-      Console::$err->writeLine('*** No emitter named "', $emitter, '": ', $e->compoundMessage());
-      return 4;
     } catch (\lang\Throwable $e) {
       Console::$err->writeLine('*** Cannot load profile configuration(s) '.implode(',', $profiles).': '.$e->getMessage());
       return 3;
