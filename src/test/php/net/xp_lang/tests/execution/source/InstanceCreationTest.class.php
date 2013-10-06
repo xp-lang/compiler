@@ -65,6 +65,12 @@ class InstanceCreationTest extends ExecutionTest {
   }
 
   #[@test]
+  public function anonymous_instance() {
+    $object= $this->run('return new lang.Object() { };');
+    $this->assertAnonymousInstanceOf('lang.Object', $object);
+  }
+
+  #[@test]
   public function anonymous_instance_with_body() {
     $object= $this->run('return new lang.Object() {
       public void run() {

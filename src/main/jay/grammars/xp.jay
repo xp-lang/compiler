@@ -293,7 +293,7 @@ classbody_opt:
 
 classbody:
     classbody classmember { $$[]= $2; }
-  | /* empty */ { $$= NULL; }
+  | /* empty */ { $$= array(); }
 ;
 
 classmember:
@@ -721,7 +721,7 @@ instancecreation:
       $$= new InstanceCreationNode();
       $$->type= $1;
       $$->parameters= $3;
-      $5 && $$->body= $5;
+      $$->body= $5;
     }
   | arraytype '{' expressionlist_opt '}' {
       $$= new ArrayNode();

@@ -40,7 +40,7 @@ class ClassDeclarationTest extends ParserTestCase {
         new TypeName('Empty'),      // Name
         null,                       // Parent
         array(),                    // Implements
-        null                        // Body
+        array()                     // Body
       ), 
       $this->parse('class Empty { }')
     );
@@ -83,7 +83,7 @@ class ClassDeclarationTest extends ParserTestCase {
         new TypeName('Empty'),
         null,
         array(),
-        null
+        array()
       ), 
       $this->parse('[@Deprecated] class Empty { }')
     );
@@ -102,7 +102,7 @@ class ClassDeclarationTest extends ParserTestCase {
         new TypeName('Class'),
         new TypeName('lang.Object'),
         array(),
-        null
+        array()
       ), 
       $this->parse('class Class extends lang.Object { }')
     );
@@ -121,7 +121,7 @@ class ClassDeclarationTest extends ParserTestCase {
         new TypeName('HttpConnection'),
         null,
         array(new TypeName('Traceable')),
-        null
+        array()
       ), 
       $this->parse('class HttpConnection implements Traceable { }')
     );
@@ -140,7 +140,7 @@ class ClassDeclarationTest extends ParserTestCase {
         new TypeName('Math'),
         null,
         array(new TypeName('util.Observer'), new TypeName('Traceable')),
-        null
+        array()
       ), 
       $this->parse('class Math implements util.Observer, Traceable { }')
     );
@@ -159,7 +159,7 @@ class ClassDeclarationTest extends ParserTestCase {
         new TypeName('Integer'),
         new TypeName('Number'),
         array(new TypeName('Observer')),
-        null
+        array()
       ), 
       $this->parse('class Integer extends Number implements Observer { }')
     );
@@ -178,7 +178,7 @@ class ClassDeclarationTest extends ParserTestCase {
         new TypeName('Class'),
         null,
         array(),
-        null
+        array()
       ), 
       $this->parse('public class Class { }')
     );
@@ -197,7 +197,7 @@ class ClassDeclarationTest extends ParserTestCase {
         new TypeName('Base'),
         null,
         array(),
-        null
+        array()
       ), 
       $this->parse('public abstract class Base { }')
     );
@@ -216,7 +216,7 @@ class ClassDeclarationTest extends ParserTestCase {
         new TypeName('Class', array(new TypeName('T'))),
         null,
         array(),
-        null
+        array()
       ), 
       $this->parse('class Class<T> { }')
     );
@@ -235,7 +235,7 @@ class ClassDeclarationTest extends ParserTestCase {
         new TypeName('HashTable', array(new TypeName('K'), new TypeName('V'))),
         null,
         array(new TypeName('Map', array(new TypeName('K'), new TypeName('V')))),
-        null
+        array()
       ), 
       $this->parse('class HashTable<K, V> implements Map<K, V> { }')
     );
@@ -253,7 +253,7 @@ class ClassDeclarationTest extends ParserTestCase {
         null,
         new TypeName('Empty'),
         null,
-        null
+        array()
       ), 
       $this->parse('interface Empty { }')
     );
@@ -271,7 +271,7 @@ class ClassDeclarationTest extends ParserTestCase {
         null,
         new TypeName('Filter', array(new TypeName('T'))),
         null,
-        null
+        array()
       ), 
       $this->parse('interface Filter<T> { }')
     );
@@ -289,7 +289,7 @@ class ClassDeclarationTest extends ParserTestCase {
         null,
         new TypeName('Map', array(new TypeName('K'), new TypeName('V'))),
         null,
-        null
+        array()
       ), 
       $this->parse('interface Map<K, V> { }')
     );
@@ -307,7 +307,7 @@ class ClassDeclarationTest extends ParserTestCase {
         null,
         new TypeName('Debuggable'),
         array(new TypeName('util.log.Traceable')),
-        null
+        array()
       ), 
       $this->parse('interface Debuggable extends util.log.Traceable { }')
     );
@@ -325,7 +325,7 @@ class ClassDeclarationTest extends ParserTestCase {
         null,
         new TypeName('Debuggable'),
         array(new TypeName('Traceable'), new TypeName('Observer', array(new TypeName('T')))),
-        null
+        array()
       ), 
       $this->parse('interface Debuggable extends Traceable, Observer<T> { }')
     );

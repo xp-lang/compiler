@@ -1787,7 +1787,7 @@ use xp\compiler\ast\BracedExpressionNode;
     { $yyVal[]= $yyVals[0+$yyTop]; } break;
 
     case 35:  #line 296 "src/main/jay/grammars/xp.jay"
-    { $yyVal= NULL; } break;
+    { $yyVal= array(); } break;
 
     case 36:  #line 300 "src/main/jay/grammars/xp.jay"
     { $yyVal= $yyVals[0+$yyTop]; } break;
@@ -2316,7 +2316,7 @@ use xp\compiler\ast\BracedExpressionNode;
       $yyVal= new InstanceCreationNode();
       $yyVal->type= $yyVals[-4+$yyTop];
       $yyVal->parameters= $yyVals[-2+$yyTop];
-      $yyVals[0+$yyTop] && $yyVal->body= $yyVals[0+$yyTop];
+      $yyVal->body= $yyVals[0+$yyTop];
     } break;
 
     case 174:  #line 726 "src/main/jay/grammars/xp.jay"
