@@ -85,4 +85,17 @@ class RunnerTest extends \unittest\TestCase {
       $this->run(array('-w', 'xp', $source))
     );
   }
+
+  #[@test]
+  public function syntax_error_yields_nonzero_exitcode() {
+    $this->assertEquals(1, this($this->run(array('-e', 'xp', '@syntax error@')), 'exit'));
+  }
+
+  #[@test]
+  public function syntax_error_shows_error_on_stdout() {
+    $this->assertMatches(
+      'Syntax error at Command line argument',
+      this($this->run(array('-e', 'xp', '@syntax error@')), 'out')
+    );
+  }
 }
