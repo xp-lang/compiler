@@ -1140,11 +1140,13 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     // Manually verify as we can then rely on call target type being available
     if (!$this->checks->verify($arm, $this->scope[0], $this, true)) return;
 
+    $exceptionType= $this->literal($this->resolveType(new TypeName('php.Exception')));
     $b->append('$'.$mangled.'= NULL; try {');
     $this->emitAll($b, (array)$arm->statements);
-    $b->append('} catch (Exception $'.$mangled.') {}');
+    $b->append('} catch (')->append($exceptionType)->append('$'.$mangled.') {}');
     foreach ($arm->variables as $v) {
-      $b->append('try { $')->append($v->name)->append('->close(); } catch (Exception $'.$ignored.') {}');
+      $b->append('try { $')->append($v->name)->append('->close(); } ');
+      $b->append('catch (')->append($exceptionType)->append(' $'.$ignored.') {}');
     }
     $b->append('if ($'.$mangled.') throw $'.$mangled.';'); 
   }
