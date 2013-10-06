@@ -1,6 +1,6 @@
 <?php namespace net\xp_lang\tests\types;
 
-use xp\compiler\emit\source\Emitter;
+use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\types\TypeReflection;
 use xp\compiler\types\TypeReference;
 use xp\compiler\types\ArrayTypeOf;
@@ -47,7 +47,7 @@ class ScopeTest extends \unittest\TestCase {
       new FileSource(new File(__FILE__), Syntax::forName('xp')),
       new NullDiagnosticListener(),
       new FileManager(),
-      new Emitter()
+      new V53Emitter()
     ));
   }
   

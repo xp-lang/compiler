@@ -194,6 +194,23 @@ abstract class Types extends \lang\Object {
   public abstract function genericPlaceholders();
 
   /**
+   * Returns modifiers
+   *
+   * @return int
+   */
+  public abstract function modifiers();
+
+  /**
+   * Returns package name
+   *
+   * @return  string
+   */
+  public function package() {
+    $name= $this->name();
+    return substr($name, 0, strrpos($name, '.'));
+  }
+
+  /**
    * Test this type for equality with another object
    *
    * @param   lang.Generic cmp

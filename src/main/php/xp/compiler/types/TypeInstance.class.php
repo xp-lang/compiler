@@ -23,6 +23,15 @@ class TypeInstance extends Types {
   }
 
   /**
+   * Returns modifiers
+   *
+   * @return int
+   */
+  public function modifiers() {
+    return $this->declaration->modifiers();
+  }
+
+  /**
    * Returns name
    *
    * @return  string

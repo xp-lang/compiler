@@ -3,7 +3,7 @@
 /**
  * TestCase
  *
- * @see      xp://xp.compiler.emit.source.NativeImporter
+ * @see      xp://xp.compiler.emit.php.NativeImporter
  */
 class SourceNativeImporterTest extends \unittest\TestCase {
   protected $fixture= null;
@@ -13,7 +13,7 @@ class SourceNativeImporterTest extends \unittest\TestCase {
    *
    */
   public function setUp() {
-    $this->fixture= new \xp\compiler\emit\source\NativeImporter();
+    $this->fixture= new \xp\compiler\emit\php\NativeImporter();
   }
 
   /**

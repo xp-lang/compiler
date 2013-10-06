@@ -3,6 +3,16 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Added backwards compatible emitter (-E php5.2) to create non-namespaced
+  code for use with XP 5.8 and PHP 5.2 - (@thekid)
+* Changed default behaviour to creating namespaced code (compatible with 
+  XP 5.9 and PHP 5.3+) - (@thekid)
+* Changed "-E" command line argument to support versions: `-E name` will 
+  load xp.compiler.emit.name.Emitter, `-E name60` will load the class
+  xp.compiler.emit.name.V60Emitter - (@thekid)
+* Changed all emit*() methods in xp.compiler.emit.Emitter to protected
+  (@thekid)
+
 ## 1.11.1 / 2013-10-06
 
 * Changed runner to create unique class names in `xcc [-e|-w]` for testing

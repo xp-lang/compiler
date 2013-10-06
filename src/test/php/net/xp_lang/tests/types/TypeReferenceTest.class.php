@@ -68,7 +68,7 @@ class TypeReferenceTest extends \unittest\TestCase {
   #[@test]
   public function literalWithPackageAndPackageModifier() {
     $decl= new TypeReference(new TypeName('unittest.TestCase'), Types::PARTIAL_KIND, MODIFIER_PACKAGE);
-    $this->assertEquals('unittest·TestCase', $decl->literal());
+    $this->assertEquals('TestCase', $decl->literal());
   }
 
   /**

@@ -40,7 +40,7 @@ class Constant extends \lang\Object {
       $this->getClassName(),
       $this->type->compoundName(),
       $this->name,
-      xp::stringOf($this->value)
+      \xp::stringOf($this->value)
     );
   }
 }

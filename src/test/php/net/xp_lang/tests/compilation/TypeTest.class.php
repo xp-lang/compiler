@@ -1,6 +1,6 @@
 <?php namespace net\xp_lang\tests\compilation;
 
-use xp\compiler\emit\source\Emitter;
+use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\types\TypeName;
 use xp\compiler\types\Parameter;
 use xp\compiler\types\TaskScope;
@@ -25,7 +25,7 @@ class TypeTest extends \unittest\TestCase {
    * Sets up test case
    */
   public function setUp() {
-    $this->emitter= new Emitter();
+    $this->emitter= new V53Emitter();
     $this->scope= new TaskScope(new CompilationTask(
       new FileSource(new File(__FILE__), Syntax::forName('xp')),
       new NullDiagnosticListener(),
@@ -66,16 +66,6 @@ class TypeTest extends \unittest\TestCase {
   #[@test]
   public function literal() {
     $this->assertEquals('Person', $this->compile('class Person { }')->literal());
-  }
-
-  #[@test]
-  public function literalInsidePackage() {
-    $this->assertEquals('Person', $this->compile('package demo; class Person { }')->literal());
-  }
-
-  #[@test]
-  public function packageLiteralInsidePackage() {
-    $this->assertEquals('demo·Person', $this->compile('package demo; package class Person { }')->literal());
   }
 
   #[@test]

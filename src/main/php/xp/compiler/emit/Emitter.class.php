@@ -68,7 +68,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * Adds an optimization
    *
    * @param   xp.compiler.optimize.Optimization o
-   * @return  xp.compiler.emit.Emitter this
+   * @return  self this
    */
   public function withOptimization(Optimization $o) {
     $this->optimizations->add($o);
@@ -99,7 +99,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    *
    * @param   xp.compiler.checks.Checks c
    * @param   bool error
-   * @return  xp.compiler.emit.Emitter this
+   * @return  self this
    */
   public function withCheck(Check $c, $error= false) {
     $this->checks->add($c, $error);
@@ -195,7 +195,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
   protected abstract function emitConstant($b, $const);
 
   /**
-   * Emit \casts
+   * Emit casts
    *
    * @param   xp.compiler.emit.Buffer b
    * @param   xp.compiler.ast.CastNode cast
@@ -248,7 +248,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.emit.Buffer b
    * @param   xp.compiler.ast.DynamicVariableReferenceNode access
    */
-  public abstract function emitDynamicMemberAccess($b, $access);
+  protected abstract function emitDynamicMemberAccess($b, $access);
 
   /**
    * Emit static method call
@@ -256,7 +256,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.emit.Buffer b
    * @param   xp.compiler.ast.StaticMethodCallNode call
    */
-  public abstract function emitStaticMethodCall($b, $call);
+  protected abstract function emitStaticMethodCall($b, $call);
 
   /**
    * Emit instance call
@@ -264,7 +264,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.emit.Buffer b
    * @param   xp.compiler.ast.InstanceCallNode call
    */
-  public abstract function emitInstanceCall($b, $call);
+  protected abstract function emitInstanceCall($b, $call);
 
   /**
    * Emit method call
@@ -272,7 +272,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.emit.Buffer b
    * @param   xp.compiler.ast.MethodCallNode call
    */
-  public abstract function emitMethodCall($b, $call);
+  protected abstract function emitMethodCall($b, $call);
 
   /**
    * Emit member access
@@ -280,7 +280,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.emit.Buffer b
    * @param   xp.compiler.ast.StaticMemberAccessNode access
    */
-  public abstract function emitStaticMemberAccess($b, $access);
+  protected abstract function emitStaticMemberAccess($b, $access);
 
   /**
    * Emit member access
@@ -288,7 +288,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.emit.Buffer b
    * @param   xp.compiler.ast.MemberAccessNode access
    */
-  public abstract function emitMemberAccess($b, $access);
+  protected abstract function emitMemberAccess($b, $access);
 
   /**
    * Emit array access
@@ -296,7 +296,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.emit.Buffer b
    * @param   xp.compiler.ast.ArrayAccessNode access
    */
-  public abstract function emitArrayAccess($b, $access);
+  protected abstract function emitArrayAccess($b, $access);
 
   /**
    * Emit constant access
@@ -304,7 +304,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.emit.Buffer b
    * @param   xp.compiler.ast.ConstantAccessNode access
    */
-  public abstract function emitConstantAccess($b, $access);
+  protected abstract function emitConstantAccess($b, $access);
 
   /**
    * Emit class access
@@ -312,7 +312,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.emit.Buffer b
    * @param   xp.compiler.ast.ClassAccessNode access
    */
-  public abstract function emitClassAccess($b, $access);
+  protected abstract function emitClassAccess($b, $access);
 
   /**
    * Emit a braced expression
@@ -417,14 +417,6 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.ast.WhileNode loop
    */
   protected abstract function emitWhile($b, $loop);
-
-  /**
-   * Emit components inside a for() statement
-   *
-   * @param   xp.compiler.emit.Buffer b
-   * @return  xp.compiler.ast.Node[] nodes
-   */
-  protected abstract function emitForComponent($b, array $nodes);
 
   /**
    * Emit for loop

@@ -1,6 +1,6 @@
 <?php namespace net\xp_lang\tests\integration;
 
-use xp\compiler\emit\source\Emitter;
+use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\types\TaskScope;
 use xp\compiler\io\FileManager;
 use xp\compiler\io\FileSource;
@@ -45,7 +45,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
     $src= sprintf($src, 'FixtureForUsesDeclarationsTest·'.($this->counter++));
 
     // Compile sourcecode
-    $emitter= new Emitter();
+    $emitter= new V53Emitter();
     $scope= new TaskScope(new CompilationTask(
       new FileSource(new File(__FILE__), self::$syntax),
       new NullDiagnosticListener(),
