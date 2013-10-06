@@ -1222,7 +1222,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $p= array('parent' => $new->type, 'implements' => null);
       }
 
-      $unique= new TypeName(strtr($this->literal($parent), '\\', '¦').'··'.uniqid());
+      $unique= new TypeName(strtr($this->literal($parent), '\\', '¦').'··'.strtr(uniqid(null, true), '.', '·'));
       $decl= new ClassNode(0, null, $unique, $p['parent'], $p['implements'], $new->body);
       $decl->synthetic= true;
       $generic && $decl->generic= $generic;
