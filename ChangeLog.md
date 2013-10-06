@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 1.11.1 / 2013-10-06
+
 * Changed runner to create unique class names in `xcc [-e|-w]` for testing
   reasons - (@thekid)
 * Fixed anonymous instance creation to create unique class names, thus
