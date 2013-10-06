@@ -51,7 +51,7 @@ class CommandLineSource extends \lang\Object implements Source {
   public function getInputStream() {
     return new \io\streams\MemoryInputStream(sprintf(
       $this->template,
-      self::$NAME,
+      self::$NAME.strtr(uniqid(null, true), '.', '_'),
       $this->fragment
     ));
   }

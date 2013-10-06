@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Changed runner to create unique class names in `xcc [-e|-w]` for testing
+  reasons - (@thekid)
 * Fixed anonymous instance creation to create unique class names, thus
   preventing "Fatal error: Cannot redeclare class ..." errors.
   (@thekid)

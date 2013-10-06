@@ -61,4 +61,28 @@ class RunnerTest extends \unittest\TestCase {
   public function run_with_long_help_shows_usage_on_stderr() {
     $this->assertMatches('Usage:', this($this->run(array('--help')), 'err'));
   }
+
+  #[@test, @values([
+  #  'util.cmd.Console::writeLine("Hello World")',
+  #  'util.cmd.Console::writeLine("Hello World");'
+  #])]
+  public function evaluate($source) {
+    $this->assertEquals(
+      array('exit' => 0, 'out' => "Hello World\n", 'err' => ''),
+      $this->run(array('-e', 'xp', $source))
+    );
+  }
+
+  #[@test, @values([
+  #  '"Hello World"',
+  #  '"Hello World";'
+  #  'return "Hello World"'
+  #  'return "Hello World";'
+  #])]
+  public function write($source) {
+    $this->assertEquals(
+      array('exit' => 0, 'out' => "Hello World\n", 'err' => ''),
+      $this->run(array('-w', 'xp', $source))
+    );
+  }
 }
