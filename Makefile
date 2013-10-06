@@ -1,18 +1,16 @@
 ##
 # Makefile to generate parsers from grammar files
-#
-# $Id$
 
-GEN?=../../../ports/technologies/opt/jay
+GEN?=../jay
 
-all: syntax/xp/Parser.class.php syntax/php/Parser.class.php
+all: src/main/php/xp/compiler/syntax/xp/Parser.class.php src/main/php/xp/compiler/syntax/php/Parser.class.php
 
 clean:
 	-rm y.output
 
-syntax/xp/Parser.class.php: grammar/xp.jay $(GEN)/skel/php5.skl
-	sh $(GEN)/generate.sh grammar/xp.jay php5-ns > $@
+src/main/php/xp/compiler/syntax/xp/Parser.class.php: src/main/jay/grammars/xp.jay $(GEN)/skel/php5-ns.skl
+	sh $(GEN)/generate.sh src/main/jay/grammars/xp.jay php5-ns > $@
 
-syntax/php/Parser.class.php: grammar/php.jay $(GEN)/skel/php5.skl
-	sh $(GEN)/generate.sh grammar/php.jay php5-ns > $@
+src/main/php/xp/compiler/syntax/php/Parser.class.php: src/main/jay/grammars/php.jay $(GEN)/skel/php5-ns.skl
+	sh $(GEN)/generate.sh src/main/jay/grammars/php.jay php5-ns > $@
 
