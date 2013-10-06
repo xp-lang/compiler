@@ -75,8 +75,8 @@ class RunnerTest extends \unittest\TestCase {
 
   #[@test, @values([
   #  '"Hello World"',
-  #  '"Hello World";'
-  #  'return "Hello World"'
+  #  '"Hello World";',
+  #  'return "Hello World"',
   #  'return "Hello World";'
   #])]
   public function write($source) {
