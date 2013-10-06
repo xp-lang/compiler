@@ -30,20 +30,17 @@ class V52Emitter extends Emitter {
    * @return string
    */
   protected function literal($t, $base= false) {
-    if ($t->modifiers() & MODIFIER_PACKAGE) {
-      return strtr($t->package(), '.', '·').'·'.$t->literal($base);
-    } else {
-      return $t->literal($base);
-    }
+    return $t->literal($base);
   }
 
   /**
    * Returns the literal for a given declaration
    *
    * @param  xp.compiler.ast.TypeDeclarationNode decl
+   * @param  bool package whether to include the package or not
    * @return string
    */
-  protected function declaration($decl) {
+  protected function declaration($decl, $package= true) {
     if ($decl->modifiers & MODIFIER_PACKAGE) {
       return strtr($this->scope[0]->package->name, '.', '·').'·'.$decl->name->name;
     } else {

@@ -111,9 +111,10 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    * Returns the literal for a given declaration
    *
    * @param  xp.compiler.ast.TypeDeclarationNode decl
+   * @param  bool package whether to include the package or not
    * @return string
    */
-  protected abstract function declaration($decl);
+  protected abstract function declaration($decl, $package= true);
 
   /**
    * Emit type name and modifiers
@@ -124,7 +125,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    */
   protected function emitTypeName($b, $type, TypeDeclarationNode $declaration, $prefix= '') {
     $this->metadata[0]['class']= array();
-    $declaration->literal= $this->declaration($declaration);
+    $declaration->literal= $this->declaration($declaration, $package= false);
 
     // Emit abstract and final modifiers
     if (Modifiers::isAbstract($declaration->modifiers)) {
@@ -1778,7 +1779,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     // Copy annotations
     $this->emitAnnotations($this->metadata[0]['class'], (array)$declaration->annotations);
 
-    $b->append($this->core.'::$cn[\''.$declaration->literal.'\']= \''.$qualified.'\';');
+    $b->append($this->core.'::$cn[\''.$this->declaration($declaration).'\']= \''.$qualified.'\';');
     $b->append($this->core.'::$meta[\''.$qualified.'\']= '.var_export($this->metadata[0], true).';');
 
     // Run static initializer if existant on synthetic types
@@ -2088,7 +2089,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     if (isset($this->metadata[0]['EXT'])) {
       $b->append('static function __import($scope) {');
       foreach ($this->metadata[0]['EXT'] as $method => $type) {
-        $b->append($this->core.'::$ext[$scope][\'')->append($type)->append('\']= \'')->append($thisType->literal())->append('\';');
+        $b->append($this->core.'::$ext[$scope][\'')->append($type)->append('\']= \'')->append($this->declaration($declaration))->append('\';');
       }
       $b->append('}');
     }

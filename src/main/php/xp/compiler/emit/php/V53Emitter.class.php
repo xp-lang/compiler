@@ -42,10 +42,11 @@ class V53Emitter extends Emitter {
    * Returns the literal for a given declaration
    *
    * @param  xp.compiler.ast.TypeDeclarationNode decl
+   * @param  bool package whether to include the package or not
    * @return string
    */
-  protected function declaration($decl) {
-    if ($this->scope[0]->package) {
+  protected function declaration($decl, $package= true) {
+    if ($package && $this->scope[0]->package) {
       return strtr($this->scope[0]->package->name, '.', '\\').'\\'.$decl->name->name;
     } else {
       return $decl->name->name;

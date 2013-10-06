@@ -69,16 +69,6 @@ class TypeTest extends \unittest\TestCase {
   }
 
   #[@test]
-  public function literalInsidePackage() {
-    $this->assertEquals('demo\\Person', $this->compile('package demo; class Person { }')->literal());
-  }
-
-  #[@test]
-  public function packageLiteralInsidePackage() {
-    $this->assertEquals('demo\\Person', $this->compile('package demo; package class Person { }')->literal());
-  }
-
-  #[@test]
   public function classFieldExists() {
     $t= $this->compile('class Person { public string $name; }');
     $this->assertTrue($t->hasField('name'));
