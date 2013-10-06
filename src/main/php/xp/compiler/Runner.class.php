@@ -153,8 +153,7 @@ class Runner extends \lang\Object {
       public $declared= array();
       public function write($r, \io\File $target) {
         $r->executeWith(array());
-        $t= $r->type()->name();
-        $this->declared[$t]= \lang\XPClass::forName($t);
+        $this->declared[]= \lang\XPClass::forName($r->type()->name());
       }
     }');
   }
@@ -218,7 +217,7 @@ class Runner extends \lang\Object {
         $manager= self::declaringFileManager();
         $result= function($success, $argv) use($manager) {
           if (!$success) return 1;
-          return (int)$manager->declared[CommandLineSource::$NAME]->getMethod('main')->invoke(null, array($argv));
+          return (int)$manager->declared[0]->getMethod('main')->invoke(null, array($argv));
         };
         break;
       } else if ('-w' == $args[$i]) {
@@ -227,7 +226,7 @@ class Runner extends \lang\Object {
         $manager= self::declaringFileManager();
         $result= function($success, $argv) use($manager) {
           if (!$success) return 1;
-          Console::writeLine($manager->declared[CommandLineSource::$NAME]->getMethod('main')->invoke(null, array($argv)));
+          Console::writeLine($manager->declared[0]->getMethod('main')->invoke(null, array($argv)));
           return 0;
         };
         break;
