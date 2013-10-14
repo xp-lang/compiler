@@ -13,6 +13,8 @@ use xp\compiler\ast\BooleanNode;
 use xp\compiler\ast\ArrayNode;
 use xp\compiler\ast\MapNode;
 use xp\compiler\ast\InstanceCreationNode;
+use xp\compiler\ast\ConstantAccessNode;
+use xp\compiler\ast\StaticMemberAccessNode;
 
 /**
  * TestCase
@@ -255,6 +257,28 @@ class AnnotationTest extends ParserTestCase {
         )))
       ))),
       $this->parseMethodWithAnnotations('[@action(new unittest.actions.IsPlatform("WIN"))]')
+    );
+  }
+
+  #[@test]
+  public function constant_reference() {
+    $this->assertEquals(
+      array(new AnnotationNode(array(
+        'type'       => 'inject',
+        'parameters' => array('name' => new ConstantAccessNode(new TypeName('self'), 'CONNECTION_DSN'))
+      ))),
+      $this->parseMethodWithAnnotations('[@inject(name = self::CONNECTION_DSN)]')
+    );
+  }
+
+  #[@test]
+  public function static_member() {
+    $this->assertEquals(
+      array(new AnnotationNode(array(
+        'type'       => 'value',
+        'parameters' => array('default' => new StaticMemberAccessNode(new TypeName('CommandLine'), 'UNIX'))
+      ))),
+      $this->parseMethodWithAnnotations('[@value(CommandLine::$UNIX)]')
     );
   }
 }
