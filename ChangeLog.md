@@ -7,6 +7,7 @@ XP Compiler ChangeLog
   code for use with XP 5.8 and PHP 5.2 - (@thekid)
 * Changed default behaviour to creating namespaced code (compatible with 
   XP 5.9 and PHP 5.3+) - (@thekid)
+  http://news.planet-xp.net/article/551/2013/10/10/
 * Changed "-E" command line argument to support versions: `-E name` will 
   load xp.compiler.emit.name.Emitter, `-E name60` will load the class
   xp.compiler.emit.name.V60Emitter - (@thekid)
