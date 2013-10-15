@@ -41,6 +41,7 @@ use xp\compiler\ast\EnumMemberNode;
 use xp\compiler\ast\IndexerNode;
 use xp\compiler\ast\StaticInitializerNode;
 use xp\compiler\ast\LocalsToMemberPromoter;
+use xp\compiler\ast\InstanceCreationNode;
 use xp\compiler\emit\Buffer;
 use lang\reflect\Modifiers;
 use lang\Throwable;
@@ -1495,6 +1496,34 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   }
 
   /**
+   * Resolve annotation value
+   *
+   * @param   xp.compiler.ast.Node value
+   */
+  protected function resolveAnnotationValue($value) {
+    if ($value instanceof ClassAccessNode) {    // class literal
+      return $this->resolveType($value->class)->name();
+    } else if ($value instanceof InstanceCreationNode) {
+      $type= $this->literal($this->resolveType($value->type));
+      $params= array();
+      foreach ($value->parameters as $param) {
+        $params[]= $this->export($this->resolveAnnotationValue($param));
+      }
+      return function() use($type, $params) { return 'new '.$type.'('.implode(', ', $params).')'; };
+    } else if ($value instanceof ArrayNode) {
+      $r= array();
+      foreach ($value->values as $element) {
+        $r[]= $this->resolveAnnotationValue($element);
+      }
+      return $r;
+    } else if ($value instanceof Resolveable) {
+      return $value->resolve();
+    } else {
+      throw new \lang\IllegalStateException('Cannot resolve '.$value->toString());
+    }
+  }
+
+  /**
    * Emit annotation
    *
    * @param   &var meta
@@ -1503,16 +1532,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   protected function emitAnnotation(&$meta, $annotation) {
     $params= array();
     foreach ((array)$annotation->parameters as $name => $value) {
-      if ($value instanceof ClassAccessNode) {    // class literal
-        $params[$name]= $this->resolveType($value->class)->name();
-      } else if ($value instanceof Resolveable) {
-        $params[$name]= $value->resolve();
-      } else if ($value instanceof ArrayNode) {
-        $params[$name]= array();
-        foreach ($value->values as $element) {
-          $element instanceof Resolveable && $params[$name][]= $element->resolve();
-        }
-      }
+      $params[$name]= $this->resolveAnnotationValue($value); 
     }
 
     // Sort out where annotations should go
@@ -1759,6 +1779,20 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $this->types[0]->indexer= $i;
   }
 
+  protected function export($value) {
+    if (is_array($value)) {
+      $r= '';
+      foreach ($value as $key => $val) {
+        $r.= ', '.$this->export($key).' => '.$this->export($val);
+      }
+      return 'array('.substr($r, 2).')';
+    } else if ($value instanceof \Closure) {
+      return $value();
+    } else {
+      return var_export($value, true);
+    }
+  }
+
   /**
    * Emits class registration
    *
@@ -1784,7 +1818,9 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $this->emitAnnotations($this->metadata[0]['class'], (array)$declaration->annotations);
 
     $b->append($this->core.'::$cn[\''.$this->declaration($declaration).'\']= \''.$qualified.'\';');
-    $b->append($this->core.'::$meta[\''.$qualified.'\']= '.var_export($this->metadata[0], true).';');
+    $b->append($this->core.'::$meta[\''.$qualified.'\']= ');
+    $b->append($this->export($this->metadata[0]));
+    $b->append(';');
 
     // Run static initializer if existant on synthetic types
     if ($declaration->synthetic && $this->inits[0][2]) {

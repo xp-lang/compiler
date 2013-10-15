@@ -16,6 +16,9 @@ class AnnotationTest extends ExecutionTest {
     
       [@test]
       public void getAll() { }
+
+      [@test, @values(["Hello", new lang.types.String("Hello")])]
+      public void withValues(var $value) { }
       
       [@test, @ignore("Risky")]
       public void deleteAll() { }
@@ -42,6 +45,18 @@ class AnnotationTest extends ExecutionTest {
     with ($m= self::$fixture->getMethod('getAll')); {
       $this->assertTrue($m->hasAnnotation('test'));
       $this->assertEquals(null, $m->getAnnotation('test'));
+    }
+  }
+
+  /**
+   * Test simple annotation
+   *
+   */
+  #[@test]
+  public function newInstanceAnnotation() {
+    with ($m= self::$fixture->getMethod('withValues')); {
+      $this->assertTrue($m->hasAnnotation('values'));
+      $this->assertEquals(array('Hello', new \lang\types\String('Hello')), $m->getAnnotation('values'));
     }
   }
 
