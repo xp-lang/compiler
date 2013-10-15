@@ -18,13 +18,13 @@ class AnnotationTest extends ExecutionTest {
       [@test]
       public void getAll() { }
 
-      [@test, @values([new lang.types.String("Hello")])]
+      [@test, @value(new lang.types.String("Hello"))]
       public void withNewInstance(var $value) { }
 
-      [@test, @values([self::TEST])]
+      [@test, @value(self::TEST)]
       public void withClassConstant(var $value) { }
 
-      [@test, @values([lang.CommandLine::$UNIX])]
+      [@test, @value(lang.CommandLine::$UNIX)]
       public void withEnumMember(var $value) { }
       
       [@test, @ignore("Risky")]
@@ -43,69 +43,39 @@ class AnnotationTest extends ExecutionTest {
     }');
   }
 
-  /**
-   * Test simple annotation
-   *
-   */
-  #[@test]
-  public function testAnnotation() {
+  public function test_annotation() {
     with ($m= self::$fixture->getMethod('getAll')); {
       $this->assertTrue($m->hasAnnotation('test'));
       $this->assertEquals(null, $m->getAnnotation('test'));
     }
   }
 
-  /**
-   * Test annotation with "new T()"
-   *
-   */
   #[@test]
-  public function newInstanceAnnotation() {
+  public function newinstance_annotation() {
     with ($m= self::$fixture->getMethod('withNewInstance')); {
-      $this->assertTrue($m->hasAnnotation('values'));
-      $this->assertEquals(
-        array(new \lang\types\String('Hello')),
-        $m->getAnnotation('values')
-      );
+      $this->assertTrue($m->hasAnnotation('value'));
+      $this->assertEquals(new \lang\types\String('Hello'), $m->getAnnotation('value'));
     }
   }
 
-  /**
-   * Test annotation with "T::const"
-   *
-   */
   #[@test]
-  public function classConstantAnnotation() {
+  public function class_constant_annotation() {
     with ($m= self::$fixture->getMethod('withClassConstant')); {
-      $this->assertTrue($m->hasAnnotation('values'));
-      $this->assertEquals(
-        array('Test'),
-        $m->getAnnotation('values')
-      );
+      $this->assertTrue($m->hasAnnotation('value'));
+      $this->assertEquals('Test', $m->getAnnotation('value'));
     }
   }
 
-  /**
-   * Test annotation with "T::$MEMBER"
-   *
-   */
   #[@test]
-  public function enumMemberAnnotation() {
+  public function enum_member_annotation() {
     with ($m= self::$fixture->getMethod('withEnumMember')); {
-      $this->assertTrue($m->hasAnnotation('values'));
-      $this->assertEquals(
-        array(\lang\CommandLine::$UNIX),
-        $m->getAnnotation('values')
-      );
+      $this->assertTrue($m->hasAnnotation('value'));
+      $this->assertEquals(\lang\CommandLine::$UNIX, $m->getAnnotation('value'));
     }
   }
 
-  /**
-   * Test multiple annotations
-   *
-   */
   #[@test]
-  public function ignoreAnnotation() {
+  public function ignore_annotation() {
     with ($m= self::$fixture->getMethod('deleteAll')); {
       $this->assertTrue($m->hasAnnotation('test'), '@test');
       $this->assertEquals(null, $m->getAnnotation('test'), '@test');
@@ -114,12 +84,8 @@ class AnnotationTest extends ExecutionTest {
     }
   }
 
-  /**
-   * Test multiple annotations
-   *
-   */
   #[@test]
-  public function limitAnnotation() {
+  public function limit_annotation() {
     with ($m= self::$fixture->getMethod('updateAll')); {
       $this->assertTrue($m->hasAnnotation('test'), '@test');
       $this->assertEquals(null, $m->getAnnotation('test'), '@test');
@@ -128,12 +94,8 @@ class AnnotationTest extends ExecutionTest {
     }
   }
 
-  /**
-   * Test annotation with array value
-   *
-   */
   #[@test]
-  public function restrictedAnnotation() {
+  public function restricted_annotation() {
     with ($m= self::$fixture->getMethod('reset')); {
       $this->assertTrue($m->hasAnnotation('restricted'));
       $this->assertEquals(array('roles' => array('admin', 'root')), $m->getAnnotation('restricted'));
