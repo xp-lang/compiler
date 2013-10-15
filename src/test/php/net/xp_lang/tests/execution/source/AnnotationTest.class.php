@@ -13,12 +13,19 @@ class AnnotationTest extends ExecutionTest {
   #[@beforeClass]
   public static function defineFixture() {
     self::$fixture= self::define('class', 'AnnotationsForAnnotationTest', null, '{
+      const string TEST = "Test";
     
       [@test]
       public void getAll() { }
 
-      [@test, @values(["Hello", new lang.types.String("Hello")])]
-      public void withValues(var $value) { }
+      [@test, @values([new lang.types.String("Hello")])]
+      public void withNewInstance(var $value) { }
+
+      [@test, @values([self::TEST])]
+      public void withClassConstant(var $value) { }
+
+      [@test, @values([lang.CommandLine::$UNIX])]
+      public void withEnumMember(var $value) { }
       
       [@test, @ignore("Risky")]
       public void deleteAll() { }
@@ -49,14 +56,47 @@ class AnnotationTest extends ExecutionTest {
   }
 
   /**
-   * Test simple annotation
+   * Test annotation with "new T()"
    *
    */
   #[@test]
   public function newInstanceAnnotation() {
-    with ($m= self::$fixture->getMethod('withValues')); {
+    with ($m= self::$fixture->getMethod('withNewInstance')); {
       $this->assertTrue($m->hasAnnotation('values'));
-      $this->assertEquals(array('Hello', new \lang\types\String('Hello')), $m->getAnnotation('values'));
+      $this->assertEquals(
+        array(new \lang\types\String('Hello')),
+        $m->getAnnotation('values')
+      );
+    }
+  }
+
+  /**
+   * Test annotation with "T::const"
+   *
+   */
+  #[@test]
+  public function classConstantAnnotation() {
+    with ($m= self::$fixture->getMethod('withClassConstant')); {
+      $this->assertTrue($m->hasAnnotation('values'));
+      $this->assertEquals(
+        array('Test'),
+        $m->getAnnotation('values')
+      );
+    }
+  }
+
+  /**
+   * Test annotation with "T::$MEMBER"
+   *
+   */
+  #[@test]
+  public function enumMemberAnnotation() {
+    with ($m= self::$fixture->getMethod('withEnumMember')); {
+      $this->assertTrue($m->hasAnnotation('values'));
+      $this->assertEquals(
+        array(\lang\CommandLine::$UNIX),
+        $m->getAnnotation('values')
+      );
     }
   }
 

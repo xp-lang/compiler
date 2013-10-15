@@ -42,6 +42,7 @@ use xp\compiler\ast\IndexerNode;
 use xp\compiler\ast\StaticInitializerNode;
 use xp\compiler\ast\LocalsToMemberPromoter;
 use xp\compiler\ast\InstanceCreationNode;
+use xp\compiler\ast\ConstantAccessNode;
 use xp\compiler\emit\Buffer;
 use lang\reflect\Modifiers;
 use lang\Throwable;
@@ -1510,6 +1511,14 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $params[]= $this->export($this->resolveAnnotationValue($param));
       }
       return function() use($type, $params) { return 'new '.$type.'('.implode(', ', $params).')'; };
+    } else if ($value instanceof StaticMemberAccessNode) {
+      $type= $this->literal($this->resolveType($value->type));
+      $name= $value->name;
+      return function() use($type, $name) { return $type.'::$'.$name; };
+    } else if ($value instanceof ConstantAccessNode) {
+      $type= $this->literal($this->resolveType($value->type));
+      $name= $value->name;
+      return function() use($type, $name) { return $type.'::'.$name; };
     } else if ($value instanceof ArrayNode) {
       $r= array();
       foreach ($value->values as $element) {
