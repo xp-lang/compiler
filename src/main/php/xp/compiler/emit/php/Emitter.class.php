@@ -1508,7 +1508,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $ptr[$annotation->type]= $this->resolveAnnotationValue($annotation->parameters['default']);
       } else {
         $ptr[$annotation->type]= array();
-        foreach ((array)$annotation->parameters as $name => $value) {
+        foreach ($annotation->parameters as $name => $value) {
           $ptr[$annotation->type][$name]= $this->resolveAnnotationValue($value);
         }
       }
