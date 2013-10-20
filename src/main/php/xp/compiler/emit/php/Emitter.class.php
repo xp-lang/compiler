@@ -1493,7 +1493,25 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    */
   protected function emitAnnotations(&$meta, $annotations) {
     foreach ($annotations as $annotation) {
-      $this->emitAnnotation($meta, $annotation);
+
+      // Sort out where annotations should go
+      if (isset($annotation->target)) {
+        $ptr= &$meta[DETAIL_TARGET_ANNO][$annotation->target];
+      } else {
+        $ptr= &$meta[DETAIL_ANNOTATIONS];
+      }
+
+      // Set annotation value
+      if (!$annotation->parameters) {
+        $ptr[$annotation->type]= null;
+      } else if (isset($annotation->parameters['default'])) {
+        $ptr[$annotation->type]= $this->resolveAnnotationValue($annotation->parameters['default']);
+      } else {
+        $ptr[$annotation->type]= array();
+        foreach ((array)$annotation->parameters as $name => $value) {
+          $ptr[$annotation->type][$name]= $this->resolveAnnotationValue($value);
+        }
+      }
     }
   }
 
@@ -1539,35 +1557,6 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     }
   }
 
-  /**
-   * Emit annotation
-   *
-   * @param   &var meta
-   * @param   xp.compiler.ast.AnnotationNode lambda
-   */
-  protected function emitAnnotation(&$meta, $annotation) {
-    $params= array();
-    foreach ((array)$annotation->parameters as $name => $value) {
-      $params[$name]= $this->resolveAnnotationValue($value); 
-    }
-
-    // Sort out where annotations should go
-    if (isset($annotation->target)) {
-      $ptr= &$meta[DETAIL_TARGET_ANNO][$annotation->target];
-    } else {
-      $ptr= &$meta[DETAIL_ANNOTATIONS];
-    }
-
-    // Set annotation value
-    if (!$annotation->parameters) {
-      $ptr[$annotation->type]= null;
-    } else if (isset($annotation->parameters['default'])) {
-      $ptr[$annotation->type]= $params['default'];
-    } else {
-      $ptr[$annotation->type]= $params;
-    }
-  }
-  
   /**
    * Emit a lambda
    *
