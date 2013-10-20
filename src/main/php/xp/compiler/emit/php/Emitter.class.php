@@ -1494,23 +1494,23 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   protected function emitAnnotations(&$meta, $annotations) {
     foreach ($annotations as $annotation) {
 
-      // Sort out where annotations should go
-      if (isset($annotation->target)) {
-        $ptr= &$meta[DETAIL_TARGET_ANNO][$annotation->target];
-      } else {
-        $ptr= &$meta[DETAIL_ANNOTATIONS];
-      }
-
       // Set annotation value
       if (!$annotation->parameters) {
-        $ptr[$annotation->type]= null;
+        $value= null;
       } else if (isset($annotation->parameters['default'])) {
-        $ptr[$annotation->type]= $this->resolveAnnotationValue($annotation->parameters['default']);
+        $value= $this->resolveAnnotationValue($annotation->parameters['default']);
       } else {
-        $ptr[$annotation->type]= array();
-        foreach ($annotation->parameters as $name => $value) {
-          $ptr[$annotation->type][$name]= $this->resolveAnnotationValue($value);
+        $value= array();
+        foreach ($annotation->parameters as $name => $parameter) {
+          $value[$name]= $this->resolveAnnotationValue($parameter);
         }
+      }
+
+      // Sort out where annotations should go
+      if (isset($annotation->target)) {
+        $meta[DETAIL_TARGET_ANNO][$annotation->target][$annotation->type]= $value;
+      } else {
+        $meta[DETAIL_ANNOTATIONS][$annotation->type]= $value;
       }
     }
   }
