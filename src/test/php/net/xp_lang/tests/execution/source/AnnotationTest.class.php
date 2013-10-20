@@ -70,30 +70,47 @@ class AnnotationTest extends ExecutionTest {
   }
 
   #[@test]
+  public function has_ignore_annotation() {
+    $this->assertTrue(
+      $this->methodAnnotatedWith('[@ignore("Risky")]')->hasAnnotation('ignore')
+    );
+  }
+
+  #[@test]
   public function ignore_annotation() {
-    with ($m= $this->methodAnnotatedWith('[@test, @ignore("Risky")]')); {
-      $this->assertTrue($m->hasAnnotation('test'), '@test');
-      $this->assertEquals(null, $m->getAnnotation('test'), '@test');
-      $this->assertTrue($m->hasAnnotation('ignore'), '@ignore');
-      $this->assertEquals('Risky', $m->getAnnotation('ignore'), '@ignore');
-    }
+    $this->assertEquals(
+      'Risky',
+      $this->methodAnnotatedWith('[@ignore("Risky")]')->getAnnotation('ignore')
+    );
+  }
+
+  #[@test]
+  public function has_limit_annotation() {
+    $this->assertTrue(
+      $this->methodAnnotatedWith('[@test, @limit(time = 0.1)]')->hasAnnotation('limit')
+    );
   }
 
   #[@test]
   public function limit_annotation() {
-    with ($m= $this->methodAnnotatedWith('[@test, @limit(time = 0.1)]')); {
-      $this->assertTrue($m->hasAnnotation('test'), '@test');
-      $this->assertEquals(null, $m->getAnnotation('test'), '@test');
-      $this->assertTrue($m->hasAnnotation('limit'), '@limit');
-      $this->assertEquals(array('time' => 0.1), $m->getAnnotation('limit'), '@limit');
-    }
+    $this->assertEquals(
+      array('time' => 0.1),
+      $this->methodAnnotatedWith('[@test, @limit(time = 0.1)]')->getAnnotation('limit')
+    );
+  }
+
+  #[@test]
+  public function has_restricted_annotation() {
+    $this->assertTrue(
+      $this->methodAnnotatedWith('[@restricted(roles = ["admin", "root"])]')->hasAnnotation('restricted')
+    );
   }
 
   #[@test]
   public function restricted_annotation() {
-    with ($m= $this->methodAnnotatedWith('[@restricted(roles = ["admin", "root"])]')); {
-      $this->assertTrue($m->hasAnnotation('restricted'));
-      $this->assertEquals(array('roles' => array('admin', 'root')), $m->getAnnotation('restricted'));
-    }
+    $this->assertEquals(
+      array('roles' => array('admin', 'root')),
+      $this->methodAnnotatedWith('[@restricted(roles = ["admin", "root"])]')->getAnnotation('restricted')
+    );
   }
 }
