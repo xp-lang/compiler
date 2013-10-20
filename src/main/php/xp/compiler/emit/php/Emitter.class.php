@@ -32,6 +32,7 @@ use xp\compiler\ast\ThrowNode;
 use xp\compiler\ast\ClassNode;
 use xp\compiler\ast\AssignmentNode;
 use xp\compiler\ast\ArrayNode;
+use xp\compiler\ast\MapNode;
 use xp\compiler\ast\FieldNode;
 use xp\compiler\ast\ConstructorNode;
 use xp\compiler\ast\MethodNode;
@@ -1523,6 +1524,12 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       $r= array();
       foreach ($value->values as $element) {
         $r[]= $this->resolveAnnotationValue($element);
+      }
+      return $r;
+    } else if ($value instanceof MapNode) {
+      $r= array();
+      foreach ($value->elements as $pair) {
+        $r[$this->resolveAnnotationValue($pair[0])]= $this->resolveAnnotationValue($pair[1]);
       }
       return $r;
     } else if ($value instanceof Resolveable) {
