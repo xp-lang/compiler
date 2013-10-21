@@ -948,7 +948,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    * @param   xp.compiler.emit.Buffer b
    * @return  xp.compiler.ast.Node[] nodes
    */
-  protected function emitForComponent($b, array $nodes) {
+  protected function emitForComponent($b, $nodes) {
     $s= sizeof($nodes)- 1;
     foreach ($nodes as $i => $node) {
       $this->emitOne($b, $node);
