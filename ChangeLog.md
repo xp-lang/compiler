@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Merged pull request #37 to solve issue #36: Support "new T()", "T::const"
+  and "T::$static" inside annotations - (@thekid)
 * Added backwards compatible emitter (-E php5.2) to create non-namespaced
   code for use with XP 5.8 and PHP 5.2 - (@thekid)
 * Changed default behaviour to creating namespaced code (compatible with 
