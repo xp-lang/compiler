@@ -1342,20 +1342,15 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     
     $name= 'operator··'.$ovl[$operator->symbol];
     $this->enter(new MethodScope($name));
-    $return= $this->resolveType($operator->returns);
-    $this->metadata[0][1][$name]= array(
-      DETAIL_ARGUMENTS    => array(),
-      DETAIL_RETURNS      => $return->name(),
-      DETAIL_THROWS       => array(),
-      DETAIL_COMMENT      => $operator->comment
-        ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($operator->comment, 4, strpos($operator->comment, '* @')- 2)))
-        : null
-      ,
-      DETAIL_ANNOTATIONS  => array(),
-      DETAIL_TARGET_ANNO  => array()
-    );
     array_unshift($this->method, $name);
-    $this->emitAnnotations($this->metadata[0][1][$name], (array)$operator->annotations);
+
+    // Meta data
+    $return= $this->resolveType($operator->returns);
+    $this->metadata[0][1][$name]= $this->meta($operator->comment, $operator->annotations, array(
+      DETAIL_ARGUMENTS => array(),
+      DETAIL_RETURNS   => $return->name(),
+      DETAIL_THROWS    => array()
+    ));
 
     $b->append('public static function ')->append($name);
     $signature= $this->emitParameters($b, (array)$operator->parameters, '{');
@@ -1486,13 +1481,23 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   }
 
   /**
-   * Emit annotations
+   * Creates meta data
    *
-   * @param   &var meta
-   * @param   xp.compiler.ast.AnnotationNode[] annotations
+   * @param  string $comment
+   * @param  xp.compiler.ast.AnnotationNode[] $annotations
+   * @param  [:var] $merge
+   * @return [:var] meta data
    */
-  protected function emitAnnotations(&$meta, $annotations) {
-    foreach ($annotations as $annotation) {
+  protected function meta($comment, $annotations, $merge= array()) {
+    $meta= $merge + array(
+      DETAIL_COMMENT => $comment
+        ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($comment, 4, strpos($comment, '* @')- 2)))
+        : null
+      ,
+      DETAIL_ANNOTATIONS  => array(),
+      DETAIL_TARGET_ANNO  => array()
+    );
+    foreach ((array)$annotations as $annotation) {
 
       // Set annotation value
       if (!$annotation->parameters) {
@@ -1513,6 +1518,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $meta[DETAIL_ANNOTATIONS][$annotation->type]= $value;
       }
     }
+    return $meta;
   }
 
   /**
@@ -1630,24 +1636,18 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     
     // Begin
     $this->enter(new MethodScope($method->name));
+    array_unshift($this->method, $method->name);
     if (!Modifiers::isStatic($method->modifiers)) {
       $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
     }
-    
+
+    // Meta data
     $return= $this->resolveType($method->returns, false);
-    $this->metadata[0][1][$method->name]= array(
-      DETAIL_ARGUMENTS    => array(),
-      DETAIL_RETURNS      => $return->name(),
-      DETAIL_THROWS       => array(),
-      DETAIL_COMMENT      => $method->comment
-        ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($method->comment, 4, strpos($method->comment, '* @')- 2)))
-        : null
-      ,
-      DETAIL_ANNOTATIONS  => array(),
-      DETAIL_TARGET_ANNO  => array()
-    );
-    array_unshift($this->method, $method->name);
-    $this->emitAnnotations($this->metadata[0][1][$method->name], (array)$method->annotations);
+    $this->metadata[0][1][$method->name]= $this->meta($method->comment, $method->annotations, array(
+      DETAIL_ARGUMENTS => array(),
+      DETAIL_RETURNS   => $return->name(),
+      DETAIL_THROWS    => array()
+    ));
 
     // Parameters, body
     if (null !== $method->body) {
@@ -1709,18 +1709,14 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     // Begin
     $this->enter(new MethodScope('__construct'));
     $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
-
-    $this->metadata[0][1]['__construct']= array(
-      DETAIL_ARGUMENTS    => array(),
-      DETAIL_RETURNS      => null,
-      DETAIL_THROWS       => array(),
-      DETAIL_COMMENT      => preg_replace('/\n\s+\* ?/', "\n  ", "\n ".$constructor->comment),
-      DETAIL_ANNOTATIONS  => array(),
-      DETAIL_TARGET_ANNO  => array()
-    );
-
     array_unshift($this->method, '__construct');
-    $this->emitAnnotations($this->metadata[0][1]['__construct'], (array)$constructor->annotations);
+
+    // Meta data
+    $this->metadata[0][1]['__construct']= $this->meta($constructor->comment, $constructor->annotations, array(
+      DETAIL_ARGUMENTS => array(),
+      DETAIL_RETURNS   => null,
+      DETAIL_THROWS    => array()
+    ));
 
     // Arguments, initializations, body
     if (null !== $constructor->body) {
@@ -1812,15 +1808,6 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    */
   protected function registerClass($b, $declaration, $qualified) {
     unset($this->metadata[0]['EXT']);
-
-    // Retain comment
-    $this->metadata[0]['class'][DETAIL_COMMENT]= $declaration->comment
-      ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($declaration->comment, 4, strpos($declaration->comment, '* @')- 2)))
-      : null
-    ;
-
-    // Copy annotations
-    $this->emitAnnotations($this->metadata[0]['class'], (array)$declaration->annotations);
 
     $b->append($this->core.'::$cn[\''.$this->declaration($declaration).'\']= \''.$qualified.'\';');
     $b->append($this->core.'::$meta[\''.$qualified.'\']= ');
@@ -2023,14 +2010,12 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $initializable && $b->append('= ')->append(var_export($init, true));
     $b->append(';');
 
-    // Copy annotations
-    $this->metadata[0][0][$field->name]= array(DETAIL_ANNOTATIONS => array());
-    $this->emitAnnotations($this->metadata[0][0][$field->name], (array)$field->annotations);
-
-    // Add field metadata (type, stored in @type annotation, see
+    // Meta data. Add field metadata (type, stored in @type annotation, see
     // lang.reflect.Field and lang.XPClass::detailsForField()). 
     $type= $this->resolveType($field->type);
-    $this->metadata[0][0][$field->name][DETAIL_ANNOTATIONS]['type']= $type->name();
+    $this->metadata[0][0][$field->name]= $this->meta($field->comment, $field->annotations, array(
+      DETAIL_ANNOTATIONS => array('type' => $type->name())
+    ));
 
     // Register type information
     $f= new Field();
@@ -2057,9 +2042,11 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $this->emitTypeName($b, 'class', $declaration);
     $b->append(' extends '.$this->literal($parentType, true));
     array_unshift($this->metadata, array(array(), array()));
-    $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
     array_unshift($this->properties, array());
     array_unshift($this->inits, array(false => array(), true => array(), 2 => false));
+
+    // Meta data
+    $this->metadata[0]['class']= $this->meta($declaration->comment, $declaration->annotations, array());
 
     // Generics
     if ($declaration->name->isGeneric()) {
@@ -2207,9 +2194,11 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $this->emitTypeName($b, 'class', $declaration);
     $b->append(' extends '.$this->literal($parentType, true));
     array_unshift($this->metadata, array(array(), array()));
-    $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
     array_unshift($this->properties, array('get' => array(), 'set' => array()));
     $abstract= Modifiers::isAbstract($declaration->modifiers);
+
+    // Meta data
+    $this->metadata[0]['class']= $this->meta($declaration->comment, $declaration->annotations, array());
 
     // Generics
     if ($declaration->name->isGeneric()) {
@@ -2317,7 +2306,9 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $this->enter(new TypeDeclarationScope());    
     $this->emitTypeName($b, 'interface', $declaration);
     array_unshift($this->metadata, array(array(), array()));
-    $this->metadata[0]['class'][DETAIL_ANNOTATIONS]= array();
+
+    // Meta data
+    $this->metadata[0]['class']= $this->meta($declaration->comment, $declaration->annotations, array());
 
     // Generics
     if ($declaration->name->isGeneric()) {
