@@ -442,7 +442,7 @@ annotation:
     '@' annotation_target {
       $$= $2;
     }
-  | '@' annotation_target '(' literal ')' { 
+  | '@' annotation_target '(' annotationvalue ')' { 
       $4 && $2->parameters= array('default' => $4);
       $$= $2;
     }
@@ -475,8 +475,24 @@ annotationmembers:
 ;
 
 annotationmember:
-    T_WORD '=' literal { $$= array($1 => $3); }
-  | T_CLASS '=' literal { $$= array($1 => $3); }
+    T_WORD '=' annotationvalue { $$= array($1 => $3); }
+  | T_CLASS '=' annotationvalue { $$= array($1 => $3); }
+;
+
+annotationvalue:
+    literal
+  | T_NEW typename '(' expressionlist_opt ')' {
+      $$= $yyLex->create(new InstanceCreationNode());
+      $$->type= $2;
+      $$->parameters= $4;
+      $$->body= NULL;
+    }
+  | qualifiedname T_DOUBLE_COLON T_WORD {
+      $$= $yyLex->create(new ConstantAccessNode(new TypeName($1), $3));
+    }
+  | qualifiedname T_DOUBLE_COLON T_VARIABLE {
+      $$= $yyLex->create(new StaticMemberAccessNode(new TypeName($1), $3));
+    }
 ;
 
 methodbody:

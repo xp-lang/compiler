@@ -2,6 +2,7 @@
 
 use xp\compiler\syntax\xp\Lexer;
 use xp\compiler\syntax\xp\Parser;
+use xp\compiler\types\TypeName;
 use xp\compiler\ast\AnnotationNode;
 use xp\compiler\ast\IntegerNode;
 use xp\compiler\ast\DecimalNode;
@@ -11,6 +12,9 @@ use xp\compiler\ast\NullNode;
 use xp\compiler\ast\BooleanNode;
 use xp\compiler\ast\ArrayNode;
 use xp\compiler\ast\MapNode;
+use xp\compiler\ast\InstanceCreationNode;
+use xp\compiler\ast\ConstantAccessNode;
+use xp\compiler\ast\StaticMemberAccessNode;
 
 /**
  * TestCase
@@ -225,6 +229,56 @@ class AnnotationTest extends ParserTestCase {
     $this->assertEquals(
       array(new AnnotationNode(array('type' => 'Inject', 'target' => '$conn'))),
       $this->parseMethodWithAnnotations('[@$conn: Inject]')
+    );
+  }
+
+  #[@test]
+  public function newinstance() {
+    $this->assertEquals(
+      array(new AnnotationNode(array(
+        'type'       => 'action',
+        'parameters' => array('default' => new InstanceCreationNode(array(
+          'type'       => new TypeName('IsPlatform'),
+          'parameters' => array(new StringNode('WIN'))
+        )))
+      ))),
+      $this->parseMethodWithAnnotations('[@action(new IsPlatform("WIN"))]')
+    );
+  }
+
+  #[@test]
+  public function newinstance_fully_qualified() {
+    $this->assertEquals(
+      array(new AnnotationNode(array(
+        'type'       => 'action',
+        'parameters' => array('default' => new InstanceCreationNode(array(
+          'type'       => new TypeName('unittest.actions.IsPlatform'),
+          'parameters' => array(new StringNode('WIN'))
+        )))
+      ))),
+      $this->parseMethodWithAnnotations('[@action(new unittest.actions.IsPlatform("WIN"))]')
+    );
+  }
+
+  #[@test]
+  public function constant_reference() {
+    $this->assertEquals(
+      array(new AnnotationNode(array(
+        'type'       => 'inject',
+        'parameters' => array('name' => new ConstantAccessNode(new TypeName('self'), 'CONNECTION_DSN'))
+      ))),
+      $this->parseMethodWithAnnotations('[@inject(name = self::CONNECTION_DSN)]')
+    );
+  }
+
+  #[@test]
+  public function static_member() {
+    $this->assertEquals(
+      array(new AnnotationNode(array(
+        'type'       => 'value',
+        'parameters' => array('default' => new StaticMemberAccessNode(new TypeName('CommandLine'), 'UNIX'))
+      ))),
+      $this->parseMethodWithAnnotations('[@value(CommandLine::$UNIX)]')
     );
   }
 }
