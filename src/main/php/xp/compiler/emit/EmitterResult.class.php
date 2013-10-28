@@ -12,11 +12,4 @@ interface EmitterResult {
    * @return  xp.compiler.types.Types type
    */
   public function type();
-
-  /**
-   * Return file extension including the leading dot
-   *
-   * @return  string
-   */
-  public function extension();
 }

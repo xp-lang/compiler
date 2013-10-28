@@ -29,6 +29,17 @@ class QuietDiagnosticListener extends \lang\Object implements DiagnosticListener
   }
 
   /**
+   * Called when a compilation is skipped.
+   *
+   * @param   xp.compiler.io.Source src
+   * @param   io.File compiled
+   * @param   string[] messages
+   */
+  public function compilationSkipped(Source $src, \io\File $compiled, array $messages= array()) {
+    // NOOP
+  }
+
+  /**
    * Called when a compilation finishes successfully.
    *
    * @param   xp.compiler.io.Source src

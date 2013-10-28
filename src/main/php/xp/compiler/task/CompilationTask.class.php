@@ -5,6 +5,7 @@ use xp\compiler\types\TypeName;
 use xp\compiler\types\Types;
 use xp\compiler\CompilationException;
 use xp\compiler\Syntax;
+use xp\compiler\io\Source;
 use lang\ClassLoader;
 use lang\ElementNotFoundException;
 
@@ -16,7 +17,7 @@ use lang\ElementNotFoundException;
  */
 class CompilationTask extends \lang\Object {
   protected
-    $source     = null,
+    $arg        = null,
     $manager    = null,
     $listener   = null,
     $emitter    = null,
@@ -25,20 +26,28 @@ class CompilationTask extends \lang\Object {
   /**
    * Constructor
    *
-   * @param   xp.compiler.io.Source source
+   * @param   var arg
    * @param   xp.compiler.diagnostic.DiagnosticListener listener
    * @param   xp.compiler.io.FileManager manager
    * @param   xp.compiler.emit.Emitter emitter
    * @param   util.collections.HashTable<xp.compiler.io.Source, xp.compiler.types.Types> done
    */
   public function __construct(
-    \xp\compiler\io\Source $source, 
+    $arg, 
     \xp\compiler\diagnostic\DiagnosticListener $listener, 
     \xp\compiler\io\FileManager $manager, 
     \xp\compiler\emit\Emitter $emitter,
     $done= null
   ) {
-    $this->source= $source;
+    if ($arg instanceof Source) {
+      $this->arg= newinstance('xp.compiler.task.Argument', array($arg), '{
+        public $sources;
+        public function __construct($source) { $this->sources= array($source); }
+        public function getSources() { return $this->sources; }
+      }');
+    } else {
+      $this->arg= $arg;
+    }
     $this->manager= $manager;
     $this->listener= $listener;
     $this->emitter= $emitter;
@@ -72,7 +81,7 @@ class CompilationTask extends \lang\Object {
     foreach ($packages as $package) {
       $qualified= $package.'.'.$local;
       if (!$cl->providesClass($qualified) && !$this->manager->findClass($qualified)) continue;
-      return $qualified;
+      return ltrim($qualified, '.');
     }
     throw new ElementNotFoundException('Could not locate class '.$local.' in '.\xp::stringOf($packages));
   }
@@ -124,40 +133,52 @@ class CompilationTask extends \lang\Object {
    * @throws  xp.compiler.CompilationException
    */
   public function run() {
-    if (!$this->done->containsKey($this->source)) {
-      $scope= new \xp\compiler\types\TaskScope($this);
+    foreach ($this->arg->getSources() as $source) {
+      if (!$this->done->containsKey($source)) {
+        $scope= new \xp\compiler\types\TaskScope($this);
 
-      // Start run
-      $this->listener->compilationStarted($this->source);
-      try {
-        $this->emitter->clearMessages();
-        $tree= $this->manager->parseFile($this->source, null, /* messages */ $this->emitter);
-        $this->done[$this->source]= $this->partialType($tree);
-        $result= $this->emitter->emit($tree, $scope);
-        $target= $this->manager->getTarget($result, $this->source);
-        $this->manager->write($result, $target);
-        $this->listener->compilationSucceeded($this->source, $target, $this->emitter->messages());
-      } catch (\text\parser\generic\ParseException $e) {
-        $this->listener->parsingFailed($this->source, $e);
-        throw new CompilationException('Parse error', $e);
-      } catch (\lang\FormatException $e) {
-        $this->listener->emittingFailed($this->source, $e);
-        throw new CompilationException('Emitting error', $e);
-      } catch (\io\IOException $e) {
-        $this->listener->compilationFailed($this->source, $e);
-        throw new CompilationException('I/O error', $e);
-      } catch (\lang\Throwable $e) {
-        $this->listener->compilationFailed($this->source, $e);
-        throw new CompilationException('Unknown error', $e);
+        // Start run
+        $this->listener->compilationStarted($source);
+        try {
+          $this->emitter->clearMessages();
+          $tree= $this->manager->parseFile($source, null, /* messages */ $this->emitter);
+          $this->done[$source]= $this->partialType($tree);
+
+          // We can omit emitting if the target exists and the source's modification
+          // date lies before the target's.
+          $ext= $this->emitter->extension();
+          $type= $this->done[$source]->name();
+          $target= $this->manager->targetOf($type, $ext, $source);
+          if ($target->exists() && $source->lastModified()->isBefore(new \util\Date($target->lastModified()))) {
+            $cl= \lang\ClassLoader::registerPath(substr(
+              $target->getURI(),
+              0,
+              -strlen($type) - strlen($ext)
+            ));
+            $this->done[$source]= new \xp\compiler\types\TypeReflection($cl->loadClass($type));
+            $this->listener->compilationSkipped($source, $target, $this->emitter->messages());
+          } else {
+            $result= $this->emitter->emit($tree, $scope);
+            $this->manager->write($result, $target);
+            $this->done[$source]= clone $result->type();
+            $this->listener->compilationSucceeded($source, $target, $this->emitter->messages());
+          }
+        } catch (\text\parser\generic\ParseException $e) {
+          $this->listener->parsingFailed($source, $e);
+          throw new CompilationException('Parse error', $e);
+        } catch (\lang\FormatException $e) {
+          $this->listener->emittingFailed($source, $e);
+          throw new CompilationException('Emitting error', $e);
+        } catch (\io\IOException $e) {
+          $this->listener->compilationFailed($source, $e);
+          throw new CompilationException('I/O error', $e);
+        } catch (\lang\Throwable $e) {
+          $this->listener->compilationFailed($source, $e);
+          throw new CompilationException('Unknown error', $e);
+        }
       }
-
-      // Register type as done. 
-      //
-      // XXX TODO: Find out why cloning is necessary?! If we don't clone but instead 
-      // store a reference, we end up with the value occasionally being overwritten.
-      $this->done[$this->source]= clone $result->type();
     }
-    return $this->done[$this->source];
+    return $this->done[$source];
   }
   
   /**

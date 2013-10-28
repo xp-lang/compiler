@@ -151,16 +151,28 @@ class FileManager extends \lang\Object {
    * @return  io.File target
    */
   public function getTarget($r, Source $source= null) {
-    $mapped= strtr($r->type()->name(), '.', DIRECTORY_SEPARATOR);
+    return $this->targetOf($r->type()->name(), $r->extension(), $source);
+  }
+
+  /**
+   * Gets target
+   *
+   * @param   string $type
+   * @param   string $extension
+   * @param   xp.compiler.io.Source $source
+   * @return  io.File target
+   */
+  public function targetOf($type, $extension, Source $source= null) {
+    $mapped= strtr($type, '.', DIRECTORY_SEPARATOR);
     if ($this->output) {
       $base= $this->output;
     } else if ($source) {
       $name= str_replace('/', DIRECTORY_SEPARATOR, $source->getURI());
-      return new File(str_replace(strstr(basename($name), '.'), $r->extension(), $name));
+      return new File(str_replace(strstr(basename($name), '.'), $extension, $name));
     } else {
       $base= new Folder('.');
     }
     
-    return new File($base, $mapped.$r->extension());
+    return new File($base, $mapped.$extension);
   }
 }

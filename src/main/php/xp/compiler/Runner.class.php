@@ -2,10 +2,6 @@
 
 use io\File;
 use io\Folder;
-use io\collections\FileCollection;
-use io\collections\iterate\FilteredIOCollectionIterator;
-use io\collections\iterate\ExtensionEqualsFilter;
-use io\collections\iterate\AnyOfFilter;
 use util\Properties;
 use lang\ResourceProvider;
 use lang\reflect\Package;
@@ -13,7 +9,9 @@ use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\diagnostic\DefaultDiagnosticListener;
 use xp\compiler\diagnostic\QuietDiagnosticListener;
 use xp\compiler\diagnostic\VerboseDiagnosticListener;
-use xp\compiler\io\FileSource;
+use xp\compiler\task\FileArgument;
+use xp\compiler\task\FolderArgument;
+use xp\compiler\task\CommandLineArgument;
 use xp\compiler\io\CommandLineSource;
 use xp\compiler\io\FileManager;
 use util\log\Logger;
@@ -118,31 +116,6 @@ class Runner extends \lang\Object {
   }
   
   /**
-   * Returns file targets from a folder
-   *
-   * @param   string uri
-   * @param   bool recursive
-   * @return  xp.compiler.io.FileSource[]
-   */
-  protected static function fromFolder($uri, $recursive) {
-    static $filter= null;
-
-    if (null === $filter) {
-      $filter= new AnyOfFilter();
-      foreach (Syntax::available() as $ext => $syntax) {
-        $filter->add(new ExtensionEqualsFilter($ext));
-      }
-    }
-    
-    $files= array();
-    $it= new FilteredIOCollectionIterator(new FileCollection($uri), $filter, $recursive);
-    foreach ($it as $element) {
-      $files[]= new FileSource(new File($element->getURI()));
-    }
-    return $files;
-  } 
-
-  /**
    * Creates and returns a file manager which publically exposed compiled
    * types via the "declared" member, indexed by their name.
    *
@@ -208,12 +181,12 @@ class Runner extends \lang\Object {
         $folder->exists() || $folder->create();
         $manager->setOutput($folder);
       } else if ('-N' == $args[$i]) {
-        $files= array_merge($files, self::fromFolder($args[++$i], false));
+        $files[]= new FolderArgument(new Folder($args[++$i]), false);
       } else if (is_dir($args[$i])) {
-        $files= array_merge($files, self::fromFolder($args[$i], true));
+        $files[]= new FolderArgument(new Folder($args[$i++]), true);
       } else if ('-e' == $args[$i]) {
         $listener= new QuietDiagnosticListener(Console::$out);
-        $files[]= new CommandLineSource($args[++$i], $args[++$i], false);
+        $files[]= new CommandLineArgument($args[++$i], $args[++$i], false);
         $manager= self::declaringFileManager();
         $result= function($success, $argv) use($manager) {
           if (!$success) return 1;
@@ -222,7 +195,7 @@ class Runner extends \lang\Object {
         break;
       } else if ('-w' == $args[$i]) {
         $listener= new QuietDiagnosticListener(Console::$out);
-        $files[]= new CommandLineSource($args[++$i], $args[++$i], true);
+        $files[]= new CommandLineArgument($args[++$i], $args[++$i], true);
         $manager= self::declaringFileManager();
         $result= function($success, $argv) use($manager) {
           if (!$success) return 1;

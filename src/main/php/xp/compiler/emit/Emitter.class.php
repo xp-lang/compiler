@@ -805,7 +805,16 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
     }
     return $r;
   }
-  
+
+  /**
+   * Return file extension including the leading dot
+   *
+   * @return  string
+   */
+  public function extension() {
+    return \xp::CLASS_FILE_EXT;
+  }
+ 
   /**
    * Set a trace for debugging
    *

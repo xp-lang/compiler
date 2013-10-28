@@ -1,6 +1,7 @@
 <?php namespace xp\compiler\io;
 
 use io\File;
+use util\Date;
 use xp\compiler\Syntax;
 use lang\IllegalArgumentException;
 
@@ -53,6 +54,15 @@ class FileSource extends \lang\Object implements Source {
    */
   public function getURI() {
     return $this->file->getURI();
+  }
+
+  /**
+   * Get when this input source was last modified
+   *
+   * @return  util.Date
+   */
+  public function lastModified() {
+    return new Date($this->file->lastModified());
   }
 
   /**

@@ -28,4 +28,11 @@ interface Source {
    * @return  string
    */
   public function getURI();
+
+  /**
+   * Get when this input source was last modified
+   *
+   * @return  util.Date
+   */
+  public function lastModified();
 }

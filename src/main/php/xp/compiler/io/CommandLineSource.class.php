@@ -1,5 +1,9 @@
 <?php namespace xp\compiler\io;
 
+use lang\IllegalArgumentException;
+use util\Date;
+use xp\compiler\Syntax;
+
 /**
  * Source implementation
  *
@@ -9,6 +13,7 @@ class CommandLineSource extends \lang\Object implements Source {
   protected $fragment= null;
   protected $syntax= null;
   protected $template= '';
+  protected $modified= null;
 
   public static $NAME= '_Generated';
   public static $TEMPLATE= array(
@@ -19,13 +24,13 @@ class CommandLineSource extends \lang\Object implements Source {
   /**
    * Constructor
    *
-   * @param   string syntax
+   * @param   xp.compiler.Syntax syntax
    * @param   string fragment
    * @param   bool return whether to add return statement if not present in fragment
    * @throws  lang.IllegalArgumentException
    */
-  public function __construct($syntax, $fragment, $return= false) {
-    $this->syntax= \xp\compiler\Syntax::forName($syntax);
+  public function __construct(Syntax $syntax, $fragment, $return= false) {
+    $this->syntax= $syntax;
 
     // Add "return" statement if not present. TODO: If other languages are added
     // in which the string "return" is not the return statement, then this needs
@@ -38,9 +43,10 @@ class CommandLineSource extends \lang\Object implements Source {
     // Verify template
     $name= $this->syntax->name();
     if (!isset(self::$TEMPLATE[$name])) {
-      throw new \lang\IllegalArgumentException('No command line code template for syntax "'.$name.'"');
+      throw new IllegalArgumentException('No command line code template for syntax "'.$name.'"');
     }
     $this->template= self::$TEMPLATE[$name];
+    $this->modified= Date::now();
   }
   
   /**
@@ -74,6 +80,15 @@ class CommandLineSource extends \lang\Object implements Source {
    */
   public function getURI() {
     return 'Command line argument';
+  }
+
+  /**
+   * Get when this input source was last modified
+   *
+   * @return  util.Date
+   */
+  public function lastModified() {
+    return $this->modified;
   }
 
   /**

@@ -15,20 +15,20 @@ class Compiler extends \lang\Object implements \util\log\Traceable {
   /**
    * Compile a set of files
    *
-   * @param   xp.compiler.io.Source[] sources
+   * @param   xp.compiler.task.Argument[] sources
    * @param   xp.compiler.diagnostic.DiagnosticListener listener
    * @param   xp.compiler.io.FileManager manager
    * @param   xp.compiler.emit.Emitter emitter
    * @return  bool success if all files compiled correctly, true, false otherwise
    */
-  public function compile(array $sources, DiagnosticListener $listener, FileManager $manager, Emitter $emitter) {
+  public function compile(array $args, DiagnosticListener $listener, FileManager $manager, Emitter $emitter) {
     $emitter->setTrace($this->cat);
     $listener->runStarted();
     $errors= 0;
     $done= create('new util.collections.HashTable<xp.compiler.io.Source, xp.compiler.types.Types>()');
-    foreach ($sources as $source) {
+    foreach ($args as $arg) {
       try {
-        create(new CompilationTask($source, $listener, $manager, $emitter, $done))->run();
+        create(new CompilationTask($arg, $listener, $manager, $emitter, $done))->run();
       } catch (CompilationException $e) {
         $errors++;
       }

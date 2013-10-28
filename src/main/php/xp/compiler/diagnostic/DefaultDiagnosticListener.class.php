@@ -36,6 +36,20 @@ class DefaultDiagnosticListener extends \lang\Object implements DiagnosticListen
   }
 
   /**
+   * Called when a compilation is skipped.
+   *
+   * @param   xp.compiler.io.Source src
+   * @param   io.File compiled
+   * @param   string[] messages
+   */
+  public function compilationSkipped(Source $src, \io\File $compiled, array $messages= array()) {
+    $this->writer->write('S');
+    if (!empty($messages)) {
+      $this->messages[$src->getURI()]= $messages;
+    }
+  }
+
+  /**
    * Called when a compilation finishes successfully.
    *
    * @param   xp.compiler.io.Source src
