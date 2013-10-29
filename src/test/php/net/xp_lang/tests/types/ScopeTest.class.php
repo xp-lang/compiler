@@ -24,8 +24,8 @@ use xp\compiler\ast\ComparisonNode;
 use xp\compiler\ast\BracedExpressionNode;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\io\FileManager;
-use xp\compiler\io\FileSource;
 use xp\compiler\task\CompilationTask;
+use xp\compiler\task\FileArgument;
 use xp\compiler\Syntax;
 use io\File;
 use lang\XPClass;
@@ -44,7 +44,7 @@ class ScopeTest extends \unittest\TestCase {
    */
   public function setUp() {
     $this->fixture= new TaskScope(new CompilationTask(
-      new FileSource(new File(__FILE__), Syntax::forName('xp')),
+      new FileArgument(new File(__FILE__), Syntax::forName('xp')),
       new NullDiagnosticListener(),
       new FileManager(),
       new V53Emitter()

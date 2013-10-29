@@ -3,7 +3,7 @@
 use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\types\TaskScope;
 use xp\compiler\io\FileManager;
-use xp\compiler\io\FileSource;
+use xp\compiler\task\FileArgument;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\task\CompilationTask;
 use xp\compiler\Syntax;
@@ -47,7 +47,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
     // Compile sourcecode
     $emitter= new V53Emitter();
     $scope= new TaskScope(new CompilationTask(
-      new FileSource(new File(__FILE__), self::$syntax),
+      new FileArgument(new File(__FILE__), self::$syntax),
       new NullDiagnosticListener(),
       new FileManager(),
       $emitter

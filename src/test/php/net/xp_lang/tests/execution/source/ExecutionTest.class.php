@@ -2,9 +2,9 @@
 
 use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\task\CompilationTask;
+use xp\compiler\task\FileArgument;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\io\FileManager;
-use xp\compiler\io\FileSource;
 use xp\compiler\types\TypeReflection;
 use xp\compiler\types\TaskScope;
 use xp\compiler\checks\Check;
@@ -98,7 +98,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
     $syntax= Syntax::forName('xp');
     $class= 'Source'.$class;
     $scope= new TaskScope(new CompilationTask(
-      new FileSource(new File(__FILE__), $syntax),
+      new FileArgument(new File(__FILE__), $syntax),
       new NullDiagnosticListener(),
       new FileManager(),
       $emitter

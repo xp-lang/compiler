@@ -3,9 +3,9 @@
 use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\types\TaskScope;
 use xp\compiler\io\FileManager;
-use xp\compiler\io\StringSource;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\task\CompilationTask;
+use xp\compiler\task\StringArgument;
 use xp\compiler\Syntax;
 
 /**
@@ -42,7 +42,7 @@ class PrimitiveExtensionMethodsIntegrationTest extends \unittest\TestCase {
   
     $emitter= new V53Emitter();
     $task= new CompilationTask(
-      new StringSource(sprintf($decl, $this->counter++, $source), self::$syntax, $this->name),
+      new StringArgument(sprintf($decl, $this->counter++, $source), self::$syntax, $this->name)),
       new NullDiagnosticListener(),
       newinstance('xp.compiler.io.FileManager', array($this->getClass()->getClassLoader()), '{
         protected $cl;

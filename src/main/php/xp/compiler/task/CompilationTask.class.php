@@ -26,28 +26,20 @@ class CompilationTask extends \lang\Object {
   /**
    * Constructor
    *
-   * @param   var arg
+   * @param   xp.compiler.task.Argument arg
    * @param   xp.compiler.diagnostic.DiagnosticListener listener
    * @param   xp.compiler.io.FileManager manager
    * @param   xp.compiler.emit.Emitter emitter
    * @param   util.collections.HashTable<xp.compiler.io.Source, xp.compiler.types.Types> done
    */
   public function __construct(
-    $arg, 
+    Argument $arg, 
     \xp\compiler\diagnostic\DiagnosticListener $listener, 
     \xp\compiler\io\FileManager $manager, 
     \xp\compiler\emit\Emitter $emitter,
     $done= null
   ) {
-    if ($arg instanceof Source) {
-      $this->arg= newinstance('xp.compiler.task.Argument', array($arg), '{
-        public $sources;
-        public function __construct($source) { $this->sources= array($source); }
-        public function getSources() { return $this->sources; }
-      }');
-    } else {
-      $this->arg= $arg;
-    }
+    $this->arg= $arg;
     $this->manager= $manager;
     $this->listener= $listener;
     $this->emitter= $emitter;
@@ -109,7 +101,7 @@ class CompilationTask extends \lang\Object {
     } else {
       throw new \lang\IllegalArgumentException('Expected either a string or a Source object');
     }
-    return new self($source, $this->listener, $this->manager, $this->emitter, $this->done);
+    return new self(new SourceArgument($source), $this->listener, $this->manager, $this->emitter, $this->done);
   }
   
   /**

@@ -3,9 +3,9 @@
 use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\types\TaskScope;
 use xp\compiler\io\FileManager;
-use xp\compiler\io\FileSource;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\task\CompilationTask;
+use xp\compiler\task\FileArgument;
 use xp\compiler\Syntax;
 use io\Folder;
 use io\IOException;
@@ -33,7 +33,7 @@ class ExtensionMethodsIntegrationTest extends \unittest\TestCase {
     $files= new FileManager();
     $files->setOutput(self::$temp);
     $task= new CompilationTask(
-      new FileSource(ClassLoader::getDefault()->getResourceAsStream('net/xp_lang/tests/integration/src/StringExtensions.xp')),
+      new FileArgument(ClassLoader::getDefault()->getResourceAsStream('net/xp_lang/tests/integration/src/StringExtensions.xp')),
       new NullDiagnosticListener(),
       $files,
       $emitter

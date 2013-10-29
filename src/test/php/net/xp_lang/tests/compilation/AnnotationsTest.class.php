@@ -4,8 +4,8 @@ use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\types\TypeName;
 use xp\compiler\types\TaskScope;
 use xp\compiler\io\FileManager;
-use xp\compiler\io\FileSource;
 use xp\compiler\task\CompilationTask;
+use xp\compiler\task\FileArgument;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\Syntax;
 use io\File;
@@ -26,7 +26,7 @@ abstract class AnnotationsTest extends \unittest\TestCase {
   public function setUp() {
     $this->emitter= new V53Emitter();
     $this->scope= new TaskScope(new CompilationTask(
-      new FileSource(new File(__FILE__), Syntax::forName('xp')),
+      new FileArgument(new File(__FILE__), Syntax::forName('xp')),
       new NullDiagnosticListener(),
       new FileManager(),
       $this->emitter

@@ -3,9 +3,9 @@
 use xp\compiler\emit\php\V53Emitter;
 use xp\compiler\types\TaskScope;
 use xp\compiler\io\FileManager;
-use xp\compiler\io\FileSource;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\task\CompilationTask;
+use xp\compiler\task\FileArgument;
 use xp\compiler\Syntax;
 
 /**
@@ -36,7 +36,7 @@ class CircularDependencyTest extends \unittest\TestCase {
    */
   protected function compileSource($resource) {
     $task= new CompilationTask(
-      new FileSource($this->getClass()->getPackage()->getPackage('src')->getResourceAsStream($resource)),
+      new FileArgument($this->getClass()->getPackage()->getPackage('src')->getResourceAsStream($resource)),
       new NullDiagnosticListener(),
       $this->files,
       $this->emitter

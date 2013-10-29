@@ -6,8 +6,8 @@ use xp\compiler\types\TypeReflection;
 use xp\compiler\types\Property;
 use xp\compiler\types\TaskScope;
 use xp\compiler\io\FileManager;
-use xp\compiler\io\FileSource;
 use xp\compiler\task\CompilationTask;
+use xp\compiler\task\FileArgument;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\Syntax;
 use io\File;
@@ -29,7 +29,7 @@ use lang\reflect\Modifiers;
   public function setUp() {
     $this->emitter= new V53Emitter();
     $this->scope= new TaskScope(new CompilationTask(
-      new FileSource(new File(__FILE__), Syntax::forName('xp')),
+      new FileArgument(new File(__FILE__), Syntax::forName('xp')),
       new NullDiagnosticListener(),
       new FileManager(),
       $this->emitter
