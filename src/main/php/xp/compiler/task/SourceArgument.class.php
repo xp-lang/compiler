@@ -4,7 +4,7 @@
  * Source implementation based on command line input
  */
 class SourceArgument extends \lang\Object implements Argument {
-  protected $source= nill;
+  protected $source= null;
 
   /**
    * Constructor
