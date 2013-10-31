@@ -51,28 +51,19 @@ class CircularDependencyTest extends \unittest\TestCase {
     delete($this->emitter);
     delete($this->files);
   }
-  
-  /**
-   * Test class A which requires class B which requires class A
-   */
+
   #[@test]
-  public function compileA() {
+  public function compileA_which_requires_B_which_requires_A() {
     $this->compileSource('A.xp')->name();
   }
 
-  /**
-   * Test class B which requires class A
-   */
   #[@test]
-  public function compileB() {
+  public function compileB_which_requires_A() {
     $this->compileSource('B.xp')->name();
   }
 
-  /**
-   * Test class C which requires class B and class A
-   */
   #[@test]
-  public function compileC() {
+  public function compileC_which_requires_B_and_A() {
     $this->compileSource('C.xp')->name();
   }
 }
