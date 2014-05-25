@@ -217,10 +217,10 @@ class VisitorTest extends \unittest\TestCase {
   public function visitCatch() {
     $node= new \xp\compiler\ast\CatchNode(array(
       'type'       => new TypeName('int'),
-      'variable'   => new VariableNode('a'), 
+      'variable'   => 'a',
       'statements' => array(new VariableNode('a'), new \xp\compiler\ast\BreakNode())
     ));
-    $this->assertVisited(array($node, $node->variable, $node->statements[0], $node->statements[1]), $node);
+    $this->assertVisited(array($node, new VariableNode('a'), $node->statements[0], $node->statements[1]), $node);
   }
 
   /**
@@ -231,10 +231,10 @@ class VisitorTest extends \unittest\TestCase {
   public function visitCatchWithEmptyStatements() {
     $node= new \xp\compiler\ast\CatchNode(array(
       'type'       => new TypeName('int'),
-      'variable'   => new VariableNode('a'), 
+      'variable'   => 'a',
       'statements' => array()
     ));
-    $this->assertVisited(array($node, $node->variable), $node);
+    $this->assertVisited(array($node, new VariableNode('a')), $node);
   }
 
   /**
