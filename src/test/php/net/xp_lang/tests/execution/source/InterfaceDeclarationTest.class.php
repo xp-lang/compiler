@@ -34,7 +34,7 @@ class InterfaceDeclarationTest extends ExecutionTest {
     with ($method= $class->getMethod('compareTo')); {
       $this->assertEquals('compareTo', $method->getName());
       $this->assertEquals(MODIFIER_PUBLIC | MODIFIER_ABSTRACT, $method->getModifiers());
-      $this->assertEquals(Primitive::$INTEGER, $method->getReturnType());
+      $this->assertEquals(Primitive::$INT, $method->getReturnType());
       
       with ($params= $method->getParameters()); {
         $this->assertEquals(1, sizeof($params));
