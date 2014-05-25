@@ -115,7 +115,7 @@ class GenericType extends Types {
       }
       return substr($literal, 0, -1);
     } else {
-      return  $type->name;
+      return $type->name;
     }
   }
 
