@@ -108,7 +108,7 @@ class ExtensionMethodsTest extends ExecutionTest {
     }');
     $instance= $class->newInstance();
     $this->assertEquals(
-      array('XPClass:lang.Object', 'XPClass:lang.Generic'),
+      array(XPClass::forName('lang.Object')->hashCode(), XPClass::forName('lang.Generic')->hashCode()),
       $instance->run(array(XPClass::forName('lang.Object'), XPClass::forName('lang.Generic')))
     );
   }
