@@ -17,7 +17,7 @@ class InstanceCreationTest extends ExecutionTest {
    * @throws  unittest.AssertionFailedError
    */
   protected function assertAnonymousInstanceOf($name, \lang\Generic $instance) {
-    $this->assertSubclass($instance, $name);
+    $this->assertInstanceOf($name, $instance);
     $this->assertTrue((bool)strstr($instance->getClassName(), '··'), $instance->getClassName());
   }
   
