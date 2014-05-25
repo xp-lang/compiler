@@ -119,7 +119,7 @@ class RunnerTest extends \unittest\TestCase {
   public function select_userdefined_emitter() {
     \lang\ClassLoader::defineClass('xp.compiler.emit.test.Emitter', 'xp.compiler.emit.php.V53Emitter', array(), '{
       public function emit(\xp\compiler\ast\ParseTree $tree, xp\compiler\types\Scope $scope) {
-        Console::writeLine("Test emitter emitting...");
+        \util\cmd\Console::writeLine("Test emitter emitting...");
         return parent::emit($tree, $scope);
       }
     }');
