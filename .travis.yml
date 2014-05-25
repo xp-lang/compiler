@@ -8,7 +8,7 @@ php:
   - 5.5
 
 before_script:
-  - wget 'http://xp-framework.net/setup/5.9.1' -O - | php -- -d .
+  - wget 'http://xp-framework.net/setup/5.9.1' -O - | php -- -d . -f
 
 script:
   - ./unittest src/test/config/*ini
