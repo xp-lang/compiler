@@ -128,7 +128,7 @@ abstract class Visitor extends \lang\Object {
    * @param   xp.compiler.ast.Node node
    */
   protected function visitCatch(CatchNode $node) {
-    $node->variable= $this->visitOne($node->variable);
+    $node->variable= $this->visitOne(new VariableNode($node->variable))->name;
     $node->statements= $this->visitAll($node->statements);
     return $node;
   }
