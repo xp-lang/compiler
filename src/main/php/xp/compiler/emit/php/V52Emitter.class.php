@@ -67,6 +67,60 @@ class V52Emitter extends Emitter {
   }
 
   /**
+   * Emit a lambda
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.LambdaNode lambda
+   * @see     http://cr.openjdk.java.net/~mcimadamore/lambda_trans.pdf
+   */
+  protected function emitLambda($b, $lambda) {
+    $unique= new TypeName('Lambda··'.strtr(uniqid('', true), '.', '·'));
+
+    // Visit all statements, promoting local variable used within tp members
+    $promoter= new LocalsToMemberPromoter();
+    $parameters= $replaced= array();
+    foreach ($lambda->parameters as $parameter) {
+      $parameters[]= array('name' => $parameter->name, 'type' => TypeName::$VAR);
+      $promoter->exclude($parameter->name);
+    }
+    $promoted= $promoter->promote($lambda);
+
+    // Generate constructor
+    $cparameters= $cstmt= $fields= array();
+    foreach ($promoted['replaced'] as $name => $member) {
+      $cparameters[]= array('name' => substr($name, 1), 'type' => TypeName::$VAR);
+      $cstmt[]= new AssignmentNode(array(
+        'variable'    => $member,
+        'expression'  => new VariableNode(substr($name, 1)),
+        'op'          => '='
+      ));
+      $fields[]= new FieldNode(array(
+        'name'        => substr($name, 1),
+        'type'        => TypeName::$VAR)
+      );
+    }
+
+    // Generate an anonymous lambda class
+    $decl= new ClassNode(0, null, $unique, null, null, array_merge($fields, array(
+      new ConstructorNode(array(
+        'parameters' => $cparameters,
+        'body'       => $cstmt
+      )),
+      new MethodNode(array(
+        'name'        => 'invoke',
+        'parameters'  => $parameters,
+        'body'        => $promoted['node']->statements,
+        'returns'     => TypeName::$VAR
+      ))
+    )));
+    $decl->synthetic= true;
+    $this->scope[0]->declarations[]= $decl;
+
+    // Finally emit array(new [UNIQUE]([CAPTURE]), "method")
+    $b->append('array(new '.$unique->name.'('.implode(',', array_keys($promoted['replaced'])).'), \'invoke\')');
+  }
+
+  /**
    * Emit uses statements for a given list of types
    *
    * @param   xp.compiler.emit.Buffer b

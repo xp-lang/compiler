@@ -75,4 +75,33 @@ class V53Emitter extends Emitter {
       }
     }
   }
+
+  /**
+   * Emit a lambda
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.LambdaNode lambda
+   * @see     http://de3.php.net/manual/de/functions.anonymous.php
+   */
+  protected function emitLambda($b, $lambda) {
+    $finder= new \xp\compiler\ast\LocalVariableFinder();
+
+    $b->append('function(');
+    $s= sizeof($lambda->parameters)- 1;
+    foreach ($lambda->parameters as $i => $param) {
+      $b->append('$')->append($param->name);
+      $finder->excluding($param->name);
+      $i < $s && $b->append(',');
+    }
+    $b->append(')');
+
+    $capture= $finder->variablesIn($lambda->statements);
+    if (!empty($capture)) {
+      $b->append(' use($')->append(implode(', $', $capture))->append(')');
+    }
+
+    $b->append('{');
+    $this->emitAll($b, $lambda->statements);
+    $b->append('}');
+  }
 }
