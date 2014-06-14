@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Changed PHP 5.3 emitter to emit PHP 5.3 anonymous functions for lambdas
+  (@thekid)
 * Merged pull request #37 to solve issue #36: Support "new T()", "T::const"
   and "T::$static" inside annotations - (@thekid)
 * Added backwards compatible emitter (-E php5.2) to create non-namespaced
