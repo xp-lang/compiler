@@ -25,12 +25,16 @@ class ParseErrorTest extends ParserTestCase {
   }
 
   /**
-   * Test PHP object operator ("->")
+   * Test PHP object operator ("->") chains
    *
    */
-  #[@test, @expect(class= 'lang.FormatException', withMessage= '/Unexpected T_ARROW/')]
-  public function phpObjectOperator() {
-    $this->parse('$hello->world();');
+  #[@test, @expect(class= 'lang.FormatException', withMessage= '/Unexpected T_ARROW/'), @values([
+  #  '$hello->world->result;',
+  #  '$hello->world()->result;',
+  #  '$hello->world()->emit();'
+  #])]
+  public function phpObjectOperator($code) {
+    $this->parse($code);
   }
 
   /**

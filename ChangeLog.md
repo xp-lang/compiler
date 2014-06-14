@@ -3,6 +3,11 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Changed syntax for lambdas from `#{ $a -> $a + 1 };` to `$a -> $a + 1;`,
+  after resolving the grammar conflicts the former was avoiding. The old
+  form is still supported but will raise compile-time warnings. It will be
+  removed in the next major release.
+  (@thekid)
 * Changed PHP 5.3 emitter to emit PHP 5.3 anonymous functions for lambdas
   (@thekid)
 * Merged pull request #37 to solve issue #36: Support "new T()", "T::const"
