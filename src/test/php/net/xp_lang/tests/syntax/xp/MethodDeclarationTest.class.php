@@ -190,26 +190,6 @@ class MethodDeclarationTest extends ParserTestCase {
   }
 
   #[@test]
-  public function noRuntimeTypeCheck() {
-    $this->assertEquals(new MethodNode(array(
-      'modifiers'  => MODIFIER_PUBLIC,
-      'annotations'=> null,
-      'name'       => 'equals',
-      'returns'    => new TypeName('bool'),
-      'parameters' => array(array(
-        'name'  => 'cmp',
-        'type'  => new TypeName('Generic'),
-        'check' => false
-      )),
-      'throws'     => null,
-      'body'       => array(),
-      'extension'  => null
-    )), $this->parse(
-      'public bool equals(Generic? $cmp) { }'
-    ));
-  }
-
-  #[@test]
   public function mapMethodWithAnnotations() {
     $this->assertEquals(new MethodNode(array(
       'modifiers'  => 0,
@@ -255,5 +235,20 @@ class MethodDeclarationTest extends ParserTestCase {
     )), $this->parse(
       'public static bool endsWith(this string $self, string $end) { }'
     ));
+  }
+
+  #[@test, @values([
+  #  ['bool equals($cmp) { }', [['var', false]]],
+  #  ['bool equals(Generic $cmp) { }', [['Generic', true]]],
+  #  ['bool equals(Generic? $cmp) { }', [['Generic', false]]],
+  #  ['string pos(string $subject, $test) { }', [['string', true], ['var', false]]],
+  #  ['int compare($a, $b) { }', [['var', false], ['var', false]]]
+  #])]
+  public function parameters2($src, $result) {
+    $cmp= array();
+    foreach ($this->parse($src)->parameters as $param) {
+      $cmp[]= [$param['type']->compoundName(), $param['check']];
+    }
+    $this->assertEquals($result, $cmp);
   }
 }

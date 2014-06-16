@@ -521,6 +521,7 @@ parameter:
 	paramtyperef T_VARIABLE initialization_opt { $$= array_merge(array('name' => $2), $1); $3 && $$['default']= $3; }
   | paramtyperef T_DOTS T_VARIABLE { $$= array_merge(array('name' => $3, 'vararg' => TRUE), $1); }
   | T_VARIABLE '.' T_WORD initialization_opt { $$= array('assign' => $3); $4 && $$['default']= $4; }
+  | T_VARIABLE initialization_opt { $$= array('name' => $1, 'type' => TypeName::$VAR, 'check' => FALSE); $2 && $$['default']= $2; }
 ;
 
 paramtyperef:

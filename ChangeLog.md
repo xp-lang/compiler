@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Allowed omitting the parameter type inside method declarations. The type
+  will then be set to `var` and will be unchecked at runtime (@thekid)
 * Changed syntax for lambdas from `#{ $a -> $a + 1 };` to `$a -> $a + 1;`,
   after resolving the grammar conflicts the former was avoiding. The old
   form is still supported but will raise compile-time warnings. It will be
