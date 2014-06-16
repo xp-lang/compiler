@@ -1,35 +1,28 @@
 <?php namespace net\xp_lang\tests\syntax\xp;
 
-use xp\compiler\syntax\xp\Lexer;
-use xp\compiler\syntax\xp\Parser;
 use xp\compiler\ast\MethodNode;
 use xp\compiler\ast\OperatorNode;
 use xp\compiler\ast\AnnotationNode;
 use xp\compiler\types\TypeName;
 
 /**
- * TestCase
- *
+ * TestCase for method declarations
  */
 class MethodDeclarationTest extends ParserTestCase {
 
   /**
-   * Parse method source and return statements inside this method.
+   * Parse method source and return method declaration
    *
-   * @param   string src
-   * @return  xp.compiler.Node[]
+   * @param   string $decl The method declaration
+   * @return  xp.compiler.ast.MethodNode
    */
-  protected function parse($src) {
-    return create(new Parser())->parse(new Lexer($src, '<string:'.$this->name.'>'))->declaration->body;
+  protected function parse($decl) {
+    return $this->parseTree('class Test { '.$decl.' }')->declaration->body[0];
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function toStringMethod() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'toString',
@@ -38,18 +31,14 @@ class MethodDeclarationTest extends ParserTestCase {
       'throws'     => null,
       'body'       => array(),
       'extension'  => null
-    ))), $this->parse('class Null { 
-      public string toString() { }
-    }'));
+    )), $this->parse(
+      'public string toString() { }'
+    ));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function equalsMethod() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'equals',
@@ -62,18 +51,14 @@ class MethodDeclarationTest extends ParserTestCase {
       'throws'     => null,
       'body'       => array(),
       'extension'  => null
-    ))), $this->parse('class Null { 
-      public bool equals(Object $cmp) { }
-    }'));
+    )), $this->parse(
+      'public bool equals(Object $cmp) { }'
+    ));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function abstractMethod() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC | MODIFIER_ABSTRACT,
       'annotations'=> null,
       'name'       => 'setTrace',
@@ -86,18 +71,14 @@ class MethodDeclarationTest extends ParserTestCase {
       'throws'     => null,
       'body'       => null,
       'extension'  => null
-    ))), $this->parse('class Null { 
-      public abstract void setTrace(util.log.LogCategory $cat);
-    }'));
+    )), $this->parse(
+      'public abstract void setTrace(util.log.LogCategory $cat);'
+    ));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function interfaceMethod() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'compareTo',
@@ -108,20 +89,16 @@ class MethodDeclarationTest extends ParserTestCase {
         'check' => true
       )),
       'throws'     => null,
-      'body'       => array(),
+      'body'       => null,
       'extension'  => null
-    ))), $this->parse('interface Comparable { 
-      public int compareTo(Object $other) { }
-    }'));
+    )), $this->parse( 
+      'public int compareTo(Object $other);'
+    ));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function staticMethod() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'annotations'=> null,
       'name'       => 'loadClass',
@@ -134,18 +111,14 @@ class MethodDeclarationTest extends ParserTestCase {
       'throws'     => array(new TypeName('ClassNotFoundException'), new TypeName('SecurityException')),
       'body'       => array(),
       'extension'  => null
-    ))), $this->parse('class Class<T> { 
-      public static Class<T> loadClass(string $name) throws ClassNotFoundException, SecurityException { }
-    }'));
+    )), $this->parse(
+      'public static Class<T> loadClass(string $name) throws ClassNotFoundException, SecurityException { }'
+    ));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function printfMethod() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals(new MethodNode(array(
       'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'annotations' => null,
       'name'        => 'printf',
@@ -163,20 +136,14 @@ class MethodDeclarationTest extends ParserTestCase {
       'throws'      => null,
       'body'        => array(),
       'extension'   => null
-    ))), $this->parse('class Format { 
-      public static string printf(string $format, string... $args) {
-      
-      }
-    }'));
+    )), $this->parse(
+      'public static string printf(string $format, string... $args) { }'
+    ));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function addAllMethod() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'addAll',
@@ -189,9 +156,9 @@ class MethodDeclarationTest extends ParserTestCase {
       'throws'     => null,
       'body'       => array(),
       'extension'  => null
-    ))), $this->parse('class List { 
-      public void addAll(T[] $elements) { }
-    }'));
+    )), $this->parse(
+      'public void addAll(T[] $elements) { }'
+    ));
   }
 
   /**
@@ -200,7 +167,7 @@ class MethodDeclarationTest extends ParserTestCase {
    */
   #[@test]
   public function plusOperator() {
-    $this->assertEquals(array(new OperatorNode(array(
+    $this->assertEquals(new OperatorNode(array(
       'modifiers'  => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'annotations'=> null,
       'symbol'     => '+',
@@ -216,27 +183,19 @@ class MethodDeclarationTest extends ParserTestCase {
       )),
       'throws'     => null,
       'body'       => array()
-    ))), $this->parse('class Integer { 
-      public static self operator + (self $a, self $b) { }
-    }'));
+    )), $this->parse(
+      'public static self operator + (self $a, self $b) { }'
+    ));
   }
 
-  /**
-   * Test missing return type yields a parse error
-   *
-   */
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(class= 'lang.FormatException', withMessage= '/Method "run" requires a return type/')]
   public function missingReturnType() {
-    $this->parse('class Broken { public run() { }}');
+    $this->parse('public run() { }');
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function noRuntimeTypeCheck() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'equals',
@@ -249,18 +208,14 @@ class MethodDeclarationTest extends ParserTestCase {
       'throws'     => null,
       'body'       => array(),
       'extension'  => null
-    ))), $this->parse('class Test { 
-      public bool equals(Generic? $cmp) { }
-    }'));
+    )), $this->parse(
+      'public bool equals(Generic? $cmp) { }'
+    ));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function mapMethodWithAnnotations() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals(new MethodNode(array(
       'modifiers'  => 0,
       'annotations'=> array(
         new AnnotationNode(array(
@@ -274,8 +229,8 @@ class MethodDeclarationTest extends ParserTestCase {
       'throws'     => null,
       'body'       => array(),
       'extension'  => null
-    ))), $this->parse('class Any { 
-      [@test] [:string] map() { }
-    }'));
+    )), $this->parse(
+      '[@test] [:string] map() { }'
+    ));
   }
 }
