@@ -161,10 +161,6 @@ class MethodDeclarationTest extends ParserTestCase {
     ));
   }
 
-  /**
-   * Test operator declaration
-   *
-   */
   #[@test]
   public function plusOperator() {
     $this->assertEquals(new OperatorNode(array(
@@ -231,6 +227,33 @@ class MethodDeclarationTest extends ParserTestCase {
       'extension'  => null
     )), $this->parse(
       '[@test] [:string] map() { }'
+    ));
+  }
+
+  #[@test]
+  public function extensionMethod() {
+    $this->assertEquals(new MethodNode(array(
+      'modifiers'  => MODIFIER_PUBLIC | MODIFIER_STATIC,
+      'annotations'=> null,
+      'name'       => 'endsWith',
+      'returns'    => new TypeName('bool'),
+      'parameters' => array(
+        array(
+          'name'   => 'self',
+          'type'   => new TypeName('string'),
+          'check'  => true
+        ),
+        array(
+          'name'   => 'end',
+          'type'   => new TypeName('string'),
+          'check'  => true
+        )
+      ),
+      'throws'     => null,
+      'body'       => array(),
+      'extension'  => new TypeName('string')
+    )), $this->parse(
+      'public static bool endsWith(this string $self, string $end) { }'
     ));
   }
 }
