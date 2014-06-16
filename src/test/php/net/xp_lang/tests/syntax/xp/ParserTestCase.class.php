@@ -14,6 +14,7 @@ abstract class ParserTestCase extends \unittest\TestCase {
    *
    * @param   string src Complete sourcecode
    * @return  xp.compiler.ast.ParseTree
+   * @throws  lang.XPException In case of a parse error, the cause is raised
    */
   protected function parseTree($src) {
     try {
