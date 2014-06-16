@@ -1,7 +1,5 @@
 <?php namespace net\xp_lang\tests\syntax\xp;
 
-use xp\compiler\syntax\xp\Lexer;
-use xp\compiler\syntax\xp\Parser;
 use xp\compiler\ast\MethodNode;
 use xp\compiler\ast\ConstructorNode;
 use xp\compiler\ast\ReturnNode;
@@ -20,13 +18,13 @@ use xp\compiler\types\TypeName;
 class CompactSyntaxTest extends ParserTestCase {
 
   /**
-   * Parse method source and return statements inside this method.
+   * Parse method source and return method declaration
    *
-   * @param   string src
-   * @return  xp.compiler.Node[]
+   * @param   string $decl The method declaration
+   * @return  xp.compiler.ast.MethodNode
    */
-  protected function parse($src) {
-    return create(new Parser())->parse(new Lexer($src, '<string:'.$this->name.'>'))->declaration->body;
+  protected function parse($decl) {
+    return $this->parseTree('class Test { '.$decl.' }')->declaration->body[0];
   }
 
   /**
@@ -34,7 +32,7 @@ class CompactSyntaxTest extends ParserTestCase {
    */
   #[@test]
   public function compact_return() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'getName',
@@ -45,9 +43,9 @@ class CompactSyntaxTest extends ParserTestCase {
         new ReturnNode(new MemberAccessNode(new VariableNode('this'), 'name'))
       ),
       'extension'  => null
-    ))), $this->parse('class Null { 
-      public string getName() -> $this.name;
-    }'));
+    )), $this->parse(
+      'public string getName() -> $this.name;'
+    ));
   }
 
   /**
@@ -55,7 +53,7 @@ class CompactSyntaxTest extends ParserTestCase {
    */
   #[@test]
   public function compact_assignment() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'setName',
@@ -68,9 +66,9 @@ class CompactSyntaxTest extends ParserTestCase {
       'throws'     => null,
       'body'       => array(),
       'extension'  => null
-    ))), $this->parse('class Null { 
-      public void setName($this.name) { }
-    }'));
+    )), $this->parse(
+      'public void setName($this.name) { }'
+    ));
   }
 
   /**
@@ -78,7 +76,7 @@ class CompactSyntaxTest extends ParserTestCase {
    */
   #[@test]
   public function compact_assignment_with_default() {
-    $this->assertEquals(array(new ConstructorNode(array(
+    $this->assertEquals(new ConstructorNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'parameters' => array(
@@ -89,9 +87,9 @@ class CompactSyntaxTest extends ParserTestCase {
       ),
       'throws'     => null,
       'body'       => array()
-    ))), $this->parse('class Null { 
-      public __construct($this.name= null) { }
-    }'));
+    )), $this->parse(
+      'public __construct($this.name= null) { }'
+    ));
   }
 
   /**
@@ -99,7 +97,7 @@ class CompactSyntaxTest extends ParserTestCase {
    */
   #[@test]
   public function compact_fluent_return_this() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals(new MethodNode(array(
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'withName',
@@ -112,8 +110,8 @@ class CompactSyntaxTest extends ParserTestCase {
       'throws'     => null,
       'body'       => array(),
       'extension'  => null
-    ))), $this->parse('class Null { 
-      public this withName($this.name) { }
-    }'));
+    )), $this->parse(
+      'public this withName($this.name) { }'
+    ));
   }
 }
