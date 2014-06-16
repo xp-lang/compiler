@@ -247,7 +247,7 @@ class MethodDeclarationTest extends ParserTestCase {
   public function parameters($src, $result) {
     $cmp= array();
     foreach ($this->parse($src)->parameters as $param) {
-      $cmp[]= [$param['type']->compoundName(), $param['check']];
+      $cmp[]= array($param['type']->compoundName(), $param['check']);
     }
     $this->assertEquals($result, $cmp);
   }
