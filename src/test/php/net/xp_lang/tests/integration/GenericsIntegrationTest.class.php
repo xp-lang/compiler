@@ -41,7 +41,7 @@ class GenericsIntegrationTest extends \unittest\TestCase {
     return $task->run();
   }
 
-  #[@test, @ignore('')]
+  #[@test]
   public function static_method_returning_generic() {
     $this->compile('net.xp_lang.tests.integration.Sequence::of([1, 2, 3]).toArray();');
   }

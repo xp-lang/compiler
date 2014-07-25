@@ -16,30 +16,18 @@ use lang\ClassLoader;
  */
 class TypeReflectionTest extends \unittest\TestCase {
 
-  /**
-   * Test name() method
-   *
-   */
   #[@test]
   public function name() {
     $decl= new TypeReflection(XPClass::forName('unittest.TestCase'));
     $this->assertEquals('unittest.TestCase', $decl->name());
   }
 
-  /**
-   * Test literal() method
-   *
-   */
   #[@test]
   public function literal() {
     $decl= new TypeReflection(XPClass::forName('unittest.TestCase'));
     $this->assertEquals('TestCase', $decl->literal());
   }
 
-  /**
-   * Test hasMethod() method
-   *
-   */
   #[@test]
   public function objectClassHasMethod() {
     $decl= new TypeReflection(XPClass::forName('lang.Object'));
@@ -47,100 +35,60 @@ class TypeReflectionTest extends \unittest\TestCase {
     $this->assertFalse($decl->hasMethod('getName'), 'getName');
   }
 
-  /**
-   * Test hasConstructor() method
-   *
-   */
   #[@test]
   public function objectClassHasNoConstructor() {
     $decl= new TypeReflection(XPClass::forName('lang.Object'));
     $this->assertFalse($decl->hasConstructor());
   }
 
-  /**
-   * Test getConstructor() method
-   *
-   */
   #[@test]
   public function objectClassNoConstructor() {
     $decl= new TypeReflection(XPClass::forName('lang.Object'));
     $this->assertNull($decl->getConstructor());
   }
 
-  /**
-   * Test hasConstructor() method
-   *
-   */
   #[@test]
   public function testCaseClassHasConstructor() {
     $decl= new TypeReflection(XPClass::forName('unittest.TestCase'));
     $this->assertTrue($decl->hasConstructor());
   }
 
-  /**
-   * Test getConstructor() method
-   *
-   */
   #[@test]
   public function testCaseClassConstructor() {
     $decl= new TypeReflection(XPClass::forName('unittest.TestCase'));
     $this->assertInstanceOf('xp.compiler.types.Constructor', $decl->getConstructor());
   }
 
-  /**
-   * Test kind() method
-   *
-   */
   #[@test]
   public function classKind() {
     $decl= new TypeReflection(XPClass::forName('lang.Object'));
     $this->assertEquals(Types::CLASS_KIND, $decl->kind());
   }
 
-  /**
-   * Test kind() method
-   *
-   */
   #[@test]
   public function interfaceKind() {
     $decl= new TypeReflection(XPClass::forName('lang.Generic'));
     $this->assertEquals(Types::INTERFACE_KIND, $decl->kind());
   }
 
-  /**
-   * Test hasMethod() method for inherited methods
-   *
-   */
   #[@test]
   public function stringClassHasEqualsMethod() {
     $decl= new TypeReflection(XPClass::forName('lang.types.String'));
     $this->assertTrue($decl->hasMethod('equals'));
   }
 
-  /**
-   * Test hasMethod() method for instance methods
-   *
-   */
   #[@test]
   public function stringClassHasSubstringMethod() {
     $decl= new TypeReflection(XPClass::forName('lang.types.String'));
     $this->assertTrue($decl->hasMethod('substring'));
   }
 
-  /**
-   * Test hasMethod() method for nonexistant methods
-   *
-   */
   #[@test]
   public function stringClassDoesNotHaveGetNameMethod() {
     $decl= new TypeReflection(XPClass::forName('lang.types.String'));
     $this->assertFalse($decl->hasMethod('getName'));
   }
 
-  /**
-   * Test getMethod()
-   *
-   */
   #[@test]
   public function stringClassSubstringMethod() {
     $method= create(new TypeReflection(XPClass::forName('lang.types.String')))->getMethod('substring');
@@ -156,30 +104,18 @@ class TypeReflectionTest extends \unittest\TestCase {
     $this->assertEquals(MODIFIER_PUBLIC, $method->modifiers);
   }
 
-  /**
-   * Test hasField() method for instance fields
-   *
-   */
   #[@test]
   public function stringClassHasLengthField() {
     $decl= new TypeReflection(XPClass::forName('lang.types.String'));
     $this->assertTrue($decl->hasField('length'));
   }
 
-  /**
-   * Test hasField() method for nonexistant fields
-   *
-   */
   #[@test]
   public function stringClassDoesNotHaveCharsField() {
     $decl= new TypeReflection(XPClass::forName('lang.types.String'));
     $this->assertFalse($decl->hasField('chars'));
   }
 
-  /**
-   * Test getField()
-   *
-   */
   #[@test]
   public function stringClassLengthField() {
     $field= create(new TypeReflection(XPClass::forName('lang.types.String')))->getField('length');
@@ -188,30 +124,18 @@ class TypeReflectionTest extends \unittest\TestCase {
     $this->assertEquals(MODIFIER_PROTECTED, $field->modifiers);
   }
 
-  /**
-   * Test hasIndexer() method
-   *
-   */
   #[@test]
   public function stringClassHasIndexer() {
     $decl= new TypeReflection(XPClass::forName('lang.types.String'));
     $this->assertTrue($decl->hasIndexer());
   }
 
-  /**
-   * Test hasIndexer() method
-   *
-   */
   #[@test]
   public function objectClassDoesNotHaveIndexer() {
     $decl= new TypeReflection(XPClass::forName('lang.Object'));
     $this->assertFalse($decl->hasIndexer());
   }
 
-  /**
-   * Test getIndexer() method
-   *
-   */
   #[@test]
   public function stringClassIndexer() {
     $indexer= create(new TypeReflection(XPClass::forName('lang.types.String')))->getIndexer();
@@ -219,30 +143,18 @@ class TypeReflectionTest extends \unittest\TestCase {
     $this->assertEquals(new TypeName('int'), $indexer->parameter);
   }
 
-  /**
-   * Test hasConstant() method
-   *
-   */
   #[@test]
   public function objectClassDoesNotHaveConstant() {
     $decl= new TypeReflection(XPClass::forName('lang.Object'));
     $this->assertFalse($decl->hasConstant('STATUS_OK'));
   }
 
-  /**
-   * Test hasConstant() method
-   *
-   */
   #[@test]
   public function httpConstantsClassDoesNotHaveConstant() {
     $decl= new TypeReflection(XPClass::forName('peer.http.HttpConstants'));
     $this->assertTrue($decl->hasConstant('STATUS_OK'));
   }
 
-  /**
-   * Test hasConstant() method
-   *
-   */
   #[@test]
   public function httpConstantsConstant() {
     $const= create(new TypeReflection(XPClass::forName('peer.http.HttpConstants')))->getConstant('STATUS_OK');
@@ -250,20 +162,12 @@ class TypeReflectionTest extends \unittest\TestCase {
     $this->assertEquals(200, $const->value);
   }
 
-  /**
-   * Test isEnumerable() method
-   *
-   */
   #[@test]
   public function objectClassIsNotEnumerable() {
     $decl= new TypeReflection(XPClass::forName('lang.Object'));
     $this->assertFalse($decl->isEnumerable());
   }
 
-  /**
-   * Test getEnumerator() method
-   *
-   */
   #[@test]
   public function arrayListClassEnumerator() {
     $enum= create(new TypeReflection(XPClass::forName('lang.types.ArrayList')))->getEnumerator();
@@ -271,10 +175,6 @@ class TypeReflectionTest extends \unittest\TestCase {
     $this->assertEquals(new TypeName('var'), $enum->value);
   }
 
-  /**
-   * Test getExtensions() method
-   *
-   */
   #[@test]
   public function objectClassHasNoExtensionMethods() {
     $this->assertEquals(
@@ -283,10 +183,6 @@ class TypeReflectionTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test getExtensions() method
-   *
-   */
   #[@test]
   public function extensionMethod() {
     $extensions= create(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.ArraySortingExtensions')))->getExtensions();
@@ -296,10 +192,6 @@ class TypeReflectionTest extends \unittest\TestCase {
     $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
   }
 
-  /**
-   * Test "self" used in return type
-   *
-   */
   #[@test]
   public function selfReturnType() {
     $builder= create(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.Builder')));
@@ -380,4 +272,13 @@ class TypeReflectionTest extends \unittest\TestCase {
       create(new TypeReflection($cl))->getField('a')->type
     );
   }
+
+  #[@test]
+  public function generic_return_type() {
+    $this->assertEquals(
+      new TypeName('self', array(new TypeName('R'))),
+      create(new TypeReflection(XPClass::forName('net.xp_lang.tests.integration.Sequence')))->getMethod('of')->returns
+    );
+  }
+
 }

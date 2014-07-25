@@ -3,6 +3,7 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Fixed compiler choking on methods with generic return types (@thekid)
 * Allowed omitting the parameter type inside method declarations. The type
   will then be set to `var` and will be unchecked at runtime (@thekid)
 * Changed syntax for lambdas from `#{ $a -> $a + 1 };` to `$a -> $a + 1;`,

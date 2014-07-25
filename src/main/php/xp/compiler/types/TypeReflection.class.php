@@ -140,14 +140,29 @@ class TypeReflection extends Types {
    * @return  xp.compiler.types.TypeName
    */
   protected function typeNameOf($t) {
-    if ('mixed' === $t || '*' === $t || null === $t || 'resource' === $t) {
+    if (false !== ($p= strpos($t, '<'))) {
+      $base= substr($t, 0, $p);
+      $components= array();
+      for ($args= substr($t, $p+ 1, -1).',', $o= 0, $brackets= 0, $i= 0, $s= strlen($args); $i < $s; $i++) {
+        if (',' === $args{$i} && 0 === $brackets) {
+          $components[]= $this->typeNameOf(ltrim(substr($args, $o, $i- $o)));
+          $o= $i+ 1;
+        } else if ('<' === $args{$i}) {
+          $brackets++;
+        } else if ('>' === $args{$i}) {
+          $brackets--;
+        }
+      }
+      return new TypeName($base, $components);
+    } else if ('mixed' === $t || '*' === $t || null === $t || 'resource' === $t) {
       return TypeName::$VAR;
     } else if ('self' === $t) {
       return new TypeName($this->class->getName());
     } else if (0 == strncmp($t, 'array', 5)) {
       return new TypeName('var[]');
+    } else {
+      return new TypeName($t);
     }
-    return new TypeName($t);
   }
 
   /**
