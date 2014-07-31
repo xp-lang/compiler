@@ -3,6 +3,7 @@
 use xp\compiler\ast\MemberAccessNode;
 use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\InstanceCreationNode;
+use xp\compiler\ast\InstanceCallNode;
 use xp\compiler\ast\MethodCallNode;
 use xp\compiler\ast\StaticMethodCallNode;
 use xp\compiler\ast\BracedExpressionNode;
@@ -18,10 +19,6 @@ use xp\compiler\types\TypeName;
  */
 class ChainingTest extends ParserTestCase {
 
-  /**
-   * Test field access
-   *
-   */
   #[@test]
   public function fieldAccess() {
     $this->assertEquals(
@@ -30,10 +27,6 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test field access
-   *
-   */
   #[@test]
   public function chainedFieldAccess() {
     $this->assertEquals(
@@ -42,10 +35,6 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test field access
-   *
-   */
   #[@test]
   public function fieldNamedClassAccess() {
     $this->assertEquals(
@@ -54,36 +43,24 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test simple method call on an object
-   *
-   */
   #[@test]
-  public function methodCall() {
+  public function method_call() {
     $this->assertEquals(
-      array(new MethodCallNode(new VariableNode('m'), 'invoke', array(new VariableNode('args')))),
-      $this->parse('$m.invoke($args);')
+      array(new MethodCallNode(new VariableNode('m'), 'func', array(new VariableNode('args')))),
+      $this->parse('$m.func($args);')
     );
   }
 
-  /**
-   * Test simple method call on chained fields
-   *
-   */
   #[@test]
-  public function methodCallOnChainedFields() {
+  public function method_call_on_chained_fields() {
     $this->assertEquals(
       array(new MethodCallNode(new MemberAccessNode(new MemberAccessNode(new VariableNode('m'), 'member'), 'data'), 'invoke', array(new VariableNode('args')))),
       $this->parse('$m.member.data.invoke($args);')
     );
   }
 
-  /**
-   * Test chained method calls
-   *
-   */
   #[@test]
-  public function chainedMethodCalls() {
+  public function method_call_on_chained_method_call() {
     $this->assertEquals(
       array(new MethodCallNode(
         new MethodCallNode(new VariableNode('l'), 'withAppender'),
@@ -93,10 +70,22 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test chained method calls
-   *
-   */
+  #[@test]
+  public function member_instance_call() {
+    $this->assertEquals(
+      array(new InstanceCallNode(new MemberAccessNode(new VariableNode('m'), 'func'), array(new VariableNode('args')))),
+      $this->parse('$m.func.($args);')
+    );
+  }
+
+  #[@test]
+  public function member_instance_call_chained_to_method_call() {
+    $this->assertEquals(
+      array(new InstanceCallNode(new MethodCallNode(new VariableNode('m'), 'func', array(new VariableNode('args'))), array(new VariableNode('n')))),
+      $this->parse('$m.func($args)($n);')
+    );
+  }
+
   #[@test]
   public function chainedAfterNew() {
     $this->assertEquals(
@@ -111,10 +100,6 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test chained method calls
-   *
-   */
   #[@test]
   public function arrayOffsetOnMethod() {
     $this->assertEquals(
@@ -129,10 +114,6 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test chained method calls
-   *
-   */
   #[@test]
   public function chainedAfterStaticMethod() {
     $this->assertEquals(
@@ -145,10 +126,6 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test chaining after function calls
-   *
-   */
   #[@test]
   public function chainedAfterFunction() {
     $this->assertEquals(
@@ -161,10 +138,6 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test chained after bracing
-   *
-   */
   #[@test]
   public function chainedAfterBraced() {
     $this->assertEquals(
