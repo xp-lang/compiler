@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Added possibility to add default values to lambda parameters. See 
+  xp-lang/compiler#38 - (@thekid)
 * Fixed compiler choking on methods with generic return types (@thekid)
 * Allowed omitting the parameter type inside method declarations. The type
   will then be set to `var` and will be unchecked at runtime (@thekid)
