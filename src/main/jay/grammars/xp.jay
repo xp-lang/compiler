@@ -1016,9 +1016,6 @@ chain:
   | nav member '(' { $1= $yyLex->create(new MethodCallNode(NULL, $2, NULL, $1)); } expressionlist_opt ')' { 
       $1->arguments= $5;
     }
-  | nav '(' { $1= $yyLex->create(new InstanceCallNode(NULL, NULL, $1)); } expressionlist_opt ')' { 
-      $1->arguments= $4;
-    }
   | '(' { $1= $yyLex->create(new InstanceCallNode(NULL, NULL, FALSE)); } expressionlist_opt ')' { 
       $1->arguments= $3;
     }

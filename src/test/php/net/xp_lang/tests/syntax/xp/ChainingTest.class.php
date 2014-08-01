@@ -73,8 +73,8 @@ class ChainingTest extends ParserTestCase {
   #[@test]
   public function member_instance_call() {
     $this->assertEquals(
-      array(new InstanceCallNode(new MemberAccessNode(new VariableNode('m'), 'func'), array(new VariableNode('args')))),
-      $this->parse('$m.func.($args);')
+      array(new InstanceCallNode(new BracedExpressionNode(new MemberAccessNode(new VariableNode('m'), 'func')), array(new VariableNode('args')))),
+      $this->parse('($m.func)($args);')
     );
   }
 
