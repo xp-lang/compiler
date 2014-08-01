@@ -893,7 +893,7 @@ lambda_input_parameters:
 
 lambda_input_parameter:
     T_VARIABLE { $$= array('name' => $1); }
-  | typeref T_VARIABLE initialization_opt { $$= array('name' => $2, 'type' => $1); $3 && $$['default']= $3; }
+  | paramtyperef T_VARIABLE initialization_opt { $$= array_merge(array('name' => $2), $1); $3 && $$['default']= $3; }
 ;
 
 literal:

@@ -214,4 +214,15 @@ class LambdaTest extends ParserTestCase {
       $this->parse('(string $a= null) -> { };')
     );
   }
+
+  #[@test]
+  public function with_unchecked_default_value() {
+    $this->assertEquals(
+      array(new LambdaNode(
+        array(array('name' => 'a', 'type' => new TypeName('string'), 'default' => new NullNode())),
+        array()
+      )), 
+      $this->parse('(string? $a= null) -> { };')
+    );
+  }
 }
