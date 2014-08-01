@@ -208,10 +208,10 @@ class LambdaTest extends ParserTestCase {
   public function with_default_value() {
     $this->assertEquals(
       array(new LambdaNode(
-        array(array('name' => 'a', 'default' => new NullNode())),
+        array(array('name' => 'a', 'type' => new TypeName('string'), 'default' => new NullNode())),
         array()
       )), 
-      $this->parse('($a= null) -> { };')
+      $this->parse('(string $a= null) -> { };')
     );
   }
 }

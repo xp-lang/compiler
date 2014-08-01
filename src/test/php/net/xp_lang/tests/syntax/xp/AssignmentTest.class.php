@@ -9,18 +9,14 @@ use xp\compiler\ast\StringNode;
 use xp\compiler\ast\ArrayAccessNode;
 use xp\compiler\ast\StaticMemberAccessNode;
 use xp\compiler\ast\NullNode;
+use xp\compiler\ast\BracedExpressionNode;
 use xp\compiler\types\TypeName;
 
 /**
- * TestCase
- *
+ * TestCase for assignments
  */
 class AssignmentTest extends ParserTestCase {
 
-  /**
-   * Test assigning to a variable
-   *
-   */
   #[@test]
   public function toVariable() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -30,10 +26,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$i= 0;'));
   }
 
-  /**
-   * Test assigning to a variable via "+="
-   *
-   */
   #[@test]
   public function addAssign() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -43,10 +35,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$i += 1;'));
   }
 
-  /**
-   * Test assigning to a variable via "-="
-   *
-   */
   #[@test]
   public function subAssign() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -56,10 +44,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$i -= 1;'));
   }
 
-  /**
-   * Test assigning to a variable via "-="
-   *
-   */
   #[@test]
   public function mulAssign() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -82,10 +66,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$i /= 2;'));
   }
 
-  /**
-   * Test assigning to a variable via "%="
-   *
-   */
   #[@test]
   public function modAssign() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -95,10 +75,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$i %= 2;'));
   }
 
-  /**
-   * Test assigning to a variable via "~="
-   *
-   */
   #[@test]
   public function concatAssign() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -108,10 +84,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$s ~= ".";'));
   }
 
-  /**
-   * Test assigning to a variable via ">>="
-   *
-   */
   #[@test]
   public function shiftRightAssign() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -121,10 +93,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$s >>= 2;'));
   }
 
-  /**
-   * Test assigning to a variable via "<<="
-   *
-   */
   #[@test]
   public function shiftLeftAssign() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -134,10 +102,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$s <<= 2;'));
   }
 
-  /**
-   * Test assigning to a variable via "|="
-   *
-   */
   #[@test]
   public function orAssign() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -147,10 +111,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$s |= 2;'));
   }
 
-  /**
-   * Test assigning to a variable via "&="
-   *
-   */
   #[@test]
   public function andAssign() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -160,10 +120,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$s &= 2;'));
   }
 
-  /**
-   * Test assigning to a variable via "|="
-   *
-   */
   #[@test]
   public function xorAssign() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -173,10 +129,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$s ^= 2;'));
   }
 
-  /**
-   * Test assigning to a variable with array offset
-   *
-   */
   #[@test]
   public function toArrayOffset() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -186,10 +138,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$i[0]= 0;'));
   }
 
-  /**
-   * Test assigning to a variable with array offset
-   *
-   */
   #[@test]
   public function appendToArray() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -199,10 +147,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$i[]= 0;'));
   }
 
-  /**
-   * Test assigning to an instance member
-   *
-   */
   #[@test]
   public function toInstanceMember() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -212,10 +156,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('$class.member= 0;'));
   }
 
-  /**
-   * Test assigning to a class member
-   *
-   */
   #[@test]
   public function toClassMember() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -225,10 +165,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('self::$instance= null;'));
   }
 
-  /**
-   * Test assigning to a class member
-   *
-   */
   #[@test]
   public function toChain() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -245,11 +181,6 @@ class AssignmentTest extends ParserTestCase {
     ))), $this->parse('self::$instance.addAppender().flags= 0;'));
   }
 
-
-  /**
-   * Test chained assignment to variable
-   *
-   */
   #[@test]
   public function toAssignment() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -261,5 +192,18 @@ class AssignmentTest extends ParserTestCase {
       )),
       'op'            => '='
     ))), $this->parse('$i= $j= 0;'));
+  }
+
+  #[@test]
+  public function toBracedAssignment() {
+    $this->assertEquals(array(new AssignmentNode(array(
+      'variable'      => new VariableNode('i'),
+      'expression'    => new BracedExpressionNode(new AssignmentNode(array(
+        'variable'    => new VariableNode('j'),
+        'expression'  => new IntegerNode('0'),
+        'op'          => '='
+      ))),
+      'op'            => '='
+    ))), $this->parse('$i= ($j= 0);'));
   }
 }
