@@ -80,8 +80,8 @@ class V52Emitter extends Emitter {
     $promoter= new LocalsToMemberPromoter();
     $parameters= $replaced= array();
     foreach ($lambda->parameters as $parameter) {
-      $parameters[]= array('name' => $parameter->name, 'type' => TypeName::$VAR);
-      $promoter->exclude($parameter->name);
+      $parameters[]= $parameter;
+      $promoter->exclude($parameter['name']);
     }
     $promoted= $promoter->promote($lambda);
 

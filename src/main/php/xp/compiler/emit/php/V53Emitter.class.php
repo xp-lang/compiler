@@ -89,8 +89,12 @@ class V53Emitter extends Emitter {
     $b->append('function(');
     $s= sizeof($lambda->parameters)- 1;
     foreach ($lambda->parameters as $i => $param) {
-      $b->append('$')->append($param->name);
-      $finder->excluding($param->name);
+      $b->append('$')->append($param['name']);
+      if (isset($param['default'])) {
+        $b->append('=');
+        $this->emitOne($b, $param['default']);
+      }
+      $finder->excluding($param['name']);
       $i < $s && $b->append(',');
     }
     $b->append(')');

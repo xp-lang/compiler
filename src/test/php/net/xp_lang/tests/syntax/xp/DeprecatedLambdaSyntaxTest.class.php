@@ -22,7 +22,7 @@ class DeprecatedLambdaSyntaxTest extends ParserTestCase {
   public function expression() {
     $this->assertEquals(
       array(new LambdaNode(
-        array(new VariableNode('a')),
+        array(array('name' => 'a')),
         array(new ReturnNode(new BinaryOpNode(array(
           'lhs' => new VariableNode('a'),
           'rhs' => new IntegerNode('1'),
@@ -37,7 +37,7 @@ class DeprecatedLambdaSyntaxTest extends ParserTestCase {
   public function statement() {
     $this->assertEquals(
       array(new LambdaNode(
-        array(new VariableNode('a')),
+        array(array('name' => 'a')),
         array(new ReturnNode(new BinaryOpNode(array(
           'lhs' => new VariableNode('a'),
           'rhs' => new IntegerNode('1'),
@@ -52,7 +52,7 @@ class DeprecatedLambdaSyntaxTest extends ParserTestCase {
   public function multipleStatements() {
     $this->assertEquals(
       array(new LambdaNode(
-        array(new VariableNode('a')),
+        array(array('name' => 'a')),
         array(
           new AssignmentNode(array(
             'variable'    => new VariableNode('a'),
@@ -70,7 +70,7 @@ class DeprecatedLambdaSyntaxTest extends ParserTestCase {
   public function noStatements() {
     $this->assertEquals(
       array(new LambdaNode(
-        array(new VariableNode('a')),
+        array(array('name' => 'a')),
         array()
       )), 
       $this->parse('#{ $a -> { } };')
@@ -81,7 +81,7 @@ class DeprecatedLambdaSyntaxTest extends ParserTestCase {
   public function typedParameterWithBrackets() {
     $this->assertEquals(
       array(new LambdaNode(
-        array(new VariableNode('a')),
+        array(array('name' => 'a')),
         array(new ReturnNode(new BinaryOpNode(array(
           'lhs' => new VariableNode('a'),
           'rhs' => new IntegerNode('1'),
@@ -96,7 +96,7 @@ class DeprecatedLambdaSyntaxTest extends ParserTestCase {
   public function parametersWithBrackets() {
     $this->assertEquals(
       array(new LambdaNode(
-        array(new VariableNode('a'), new VariableNode('b')),
+        array(array('name' => 'a'), array('name' => 'b')),
         array(new ReturnNode(new BinaryOpNode(array(
           'lhs' => new VariableNode('a'),
           'rhs' => new VariableNode('b'),
@@ -111,7 +111,7 @@ class DeprecatedLambdaSyntaxTest extends ParserTestCase {
   public function typedParametersWithBrackets() {
     $this->assertEquals(
       array(new LambdaNode(
-        array(new VariableNode('a'), new VariableNode('b')),
+        array(array('name' => 'a', 'type' => new TypeName('int')), array('name' => 'b', 'type' => new TypeName('int'))),
         array(new ReturnNode(new BinaryOpNode(array(
           'lhs' => new VariableNode('a'),
           'rhs' => new VariableNode('b'),
@@ -148,7 +148,7 @@ class DeprecatedLambdaSyntaxTest extends ParserTestCase {
           array(new StringNode('Hello'))
         )))
       ))), 
-      $this->parse('#{ -> Console::write("Hello") }.();')
+      $this->parse('#{ -> Console::write("Hello") }();')
     );
   }
 }

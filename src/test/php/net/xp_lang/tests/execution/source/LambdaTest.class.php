@@ -32,14 +32,14 @@ class LambdaTest extends ExecutionTest {
   #[@test]
   public function execution() {
     $this->assertEquals(3, $this->run(
-      'return ($a -> $a + 1).(2);'
+      'return ($a -> $a + 1)(2);'
     ));
   }
 
   #[@test]
   public function execution_via_variable() {
     $this->assertEquals(3, $this->run(
-      '$plusone= $a -> $a + 1; return $plusone.(2);'
+      '$plusone= $a -> $a + 1; return $plusone(2);'
     ));
   }
 }
