@@ -768,8 +768,8 @@ staticmember:
 ;
 
 expression:
-    T_VARIABLE { $1= array('name' => $1); } T_ARROW lambda_body {
-      $$= $yyLex->create(new LambdaNode(array($1), $4));
+    T_VARIABLE { $1= array('name' => $1); } lambda_body {
+      $$= $yyLex->create(new LambdaNode(array($1), $3));
     }
   | T_VARIABLE { $1= $yyLex->create(new VariableNode($1)); } chain_opt {
       if ($3) {
@@ -785,8 +785,8 @@ expression:
         $$= new BracedExpressionNode($2); 
       }
     }
-  | '(' lambda_input ')' T_ARROW lambda_body {
-      $$= $yyLex->create(new LambdaNode($2, $5));
+  | '(' lambda_input ')' lambda_body {
+      $$= $yyLex->create(new LambdaNode($2, $4));
     }
   | literal chain_opt {
       if ($2) {
@@ -867,18 +867,18 @@ expression:
       $$->expression= $1; 
       $$->type= $3; 
     }
-  | '#' '{' lambda_input T_ARROW lambda_body '}' { $1= $yyLex->create(new LambdaNode($3, $5)); } chain_opt {
+  | '#' '{' lambda_input lambda_body '}' { $1= $yyLex->create(new LambdaNode($3, $4)); } chain_opt {
       $this->error(E_WARNING, 'Deprecated lambda syntax used', array('#{ ... }'));
-      if ($8) {
-        $$= $8[0];
-        $8[1]->target= $1;
+      if ($7) {
+        $$= $7[0];
+        $7[1]->target= $1;
       }
     }
 ;
 
 lambda_body:
-    expression { $$= array(new ReturnNode($1)); }
-  | '{' statements_opt '}' { $$= (array)$2; }
+    T_ARROW expression { $$= array(new ReturnNode($2)); }
+  | T_ARROW '{' statements_opt '}' { $$= (array)$3; }
 ;
 
 lambda_input:
