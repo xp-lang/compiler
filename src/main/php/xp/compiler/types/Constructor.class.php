@@ -19,7 +19,7 @@ class Constructor extends \lang\Object {
   public function toString() {
     $signature= '';
     foreach ($this->parameters as $parameter) {
-      $signature.= ', '.$parameter->compoundName();
+      $signature.= ', '.$parameter->toString();
     }
     return sprintf(
       '%s<%s __construct(%s)>',
