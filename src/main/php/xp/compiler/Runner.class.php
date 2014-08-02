@@ -21,6 +21,7 @@ use util\log\LogCategory;
 use util\log\LogLevel;
 use util\log\ConsoleAppender;
 use util\cmd\Console;
+use lang\ClassLoader;
 
 /**
  * XP Compiler, version {{VERSION}}
@@ -167,6 +168,10 @@ class Runner extends \lang\Object {
     if (empty($args)) {
       self::showUsage();
       return 2;
+    }
+
+    foreach (ClassLoader::getLoaders() as $loader) {
+      if ($loader instanceof JitClassLoader) ClassLoader::removeLoader($loader);
     }
 
     // Set up compiler
