@@ -2088,7 +2088,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     // Register type info
     $this->types[0]->name= $thisType->name();
     $this->types[0]->kind= Types::CLASS_KIND;
-    $this->types[0]->literal= $declaration->literal;
+    $this->types[0]->literal= $this->declaration($declaration);
     $this->types[0]->parent= $parentType;
     $this->types[0]->modifiers= $declaration->modifiers;
   }
@@ -2234,7 +2234,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     // Register type info
     $this->types[0]->name= $thisType->name();
     $this->types[0]->kind= Types::ENUM_KIND;
-    $this->types[0]->literal= $declaration->literal;
+    $this->types[0]->literal= $this->declaration($declaration);
     $this->types[0]->parent= $parentType;
     $this->types[0]->modifiers= $declaration->modifiers;
   }
@@ -2285,7 +2285,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     // Register type info
     $this->types[0]->name= $thisType->name();
     $this->types[0]->kind= Types::INTERFACE_KIND;
-    $this->types[0]->literal= $declaration->literal;
+    $this->types[0]->literal= $this->declaration($declaration);
     $this->types[0]->parent= null;
     $this->types[0]->modifiers= $declaration->modifiers;
   }
