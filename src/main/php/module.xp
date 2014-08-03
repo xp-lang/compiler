@@ -7,7 +7,8 @@ use lang\ClassLoader;
  */
 module xp-lang/compiler {
 
-  static function __static() {
+  /** @return void */
+  public function initialize() {
     ClassLoader::registerLoader(JitClassLoader::instanceFor(realpath('.')), true);
   }
 }
