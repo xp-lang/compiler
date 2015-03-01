@@ -17,7 +17,7 @@ matrix:
     - php: hhvm-nightly
 
 before_script:
-  - wget 'https://github.com/xp-framework/xp-runners/releases/download/v5.2.1/setup' -O - | php
+  - wget 'https://github.com/xp-framework/xp-runners/releases/download/v5.2.2/setup' -O - | php
   - composer install --prefer-dist
   - echo "vendor/autoload.php" > composer.pth
   - echo "use=vendor/xp-framework/core" > xp.ini
