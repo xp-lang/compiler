@@ -191,7 +191,7 @@ class CompiledType extends Types {
    * @return  bool
    */
   public function hasOperator($symbol) {
-    return isset($this->operators[$symbol]) || ($this->parent && $this->parent->hasOperator($name));
+    return isset($this->operators[$symbol]) || ($this->parent && $this->parent->hasOperator($symbol));
   }
   
   /**
