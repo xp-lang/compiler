@@ -8,22 +8,6 @@ XP Language
 
 XP language is a feature-rich, typed and compiled programming language, based on the popular PHP language and designed to syntactically support features of the XP Framework. The source you write and compile with it can make use of the XP Framework's foundation classes. As the language itself is written in the XP Framework, no binary or proprietary extensions are needed! 
 
-Installing
-----------
-Use the XP Installer to add this module as follows:
-
-```sh
-$ cd ~/.xp
-
-# First installation
-$ xpi add xp-lang/compiler
-
-# Later on
-$ xpi upgrade xp-lang/compiler
-```
-
-*Note: It is assumed you are using `~./xp` as path for your globally available XP modules, and have this path inside your xp.ini's `use` statement.*
-
 Getting started
 ---------------
 Like in the XP framework, the entry point is always a class. In their most simple form, these classes have a static main() method. To try it out, create a file called `HelloWorld.xp` with the following contents:
@@ -39,9 +23,6 @@ public class HelloWorld {
 Then compile and run it!
 
 ```sh
-$ xcc HelloWorld.xp
-...
-
 $ xp HelloWorld
 Hello World!
 ```
@@ -81,7 +62,7 @@ In order to change XP Language and/or the Compiler **itself**, you need to clone
 
 ```sh
 $ cd [path]
-$ git clone git://github.com/xp-framework/xp-language.git
+$ git clone git://github.com/xp-lang/compiler.git
 ```
 
 ### Directory structure
@@ -102,8 +83,8 @@ $ git clone git://github.com/xp-framework/xp-language.git
 Add that path to your `use` setting before the global module path inside your `xp.ini`, e.g.:
 
 ```ini
-use=~/devel/xp-framework/core:~/devel/compiler:~/.xp
-                              ^^^^^^^^^^^^^^^^
+use=~/devel/xp-framework/core:~/devel/xp-lang/compiler
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
 *On Windows systems, use `;` as separator*
