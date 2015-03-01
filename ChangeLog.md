@@ -3,6 +3,7 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Made available via Composer (@thekid)
 * **Heads up**: Changed minimum XP version to run the XP compiler to XP
   6.0.0. It can still generated code to run on XP 5.X-SERIES, but will
   require 6.X-SERIES to run itself (@thekid)

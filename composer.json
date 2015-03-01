@@ -1,0 +1,20 @@
+{
+  "name" : "xp-lang/compiler",
+  "type" : "library",
+  "homepage" : "http://xp-framework.net/",
+  "license" : "BSD-3-Clause",
+  "description" : "XP Compiler",
+  "keywords": ["xp"],
+  "require" : {
+    "xp-framework/core": "~6.0",
+    "xp-framework/parser": "~6.0",
+    "php" : ">=5.4.0"
+  },
+  "require-dev" : {
+    "xp-framework/xm": "~6.0",
+    "xp-framework/core": "~6.0"
+  },
+  "autoload" : {
+    "files" : ["src/main/php/autoload.php"]
+  }
+}

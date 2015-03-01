@@ -1,15 +1,28 @@
-# Dependency: XP 5.9.1
+# xp-lang/compiler
 
 language: php
 
 php:
-  - 5.3
   - 5.4
   - 5.5
   - 5.6
+  - nightly
+  - hhvm
+  - hhvm-nightly
+
+matrix:
+  allow_failures:
+    - php: nightly
+    - php: hhvm
+    - php: hhvm-nightly
 
 before_script:
-  - wget 'http://xp-framework.net/setup/5.9.9' -O - | php -- -d . -f
+  - wget 'https://github.com/xp-framework/xp-runners/releases/download/v5.2.1/setup' -O - | php
+  - composer install --prefer-dist
+  - echo "vendor/autoload.php" > composer.pth
+  - echo "use=vendor/xp-framework/core" > xp.ini
+  - echo "[runtime]" >> xp.ini
+  - echo "date.timezone=Europe/Berlin" >> xp.ini
 
 script:
   - ./unittest src/test/config/*ini
