@@ -1637,7 +1637,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       foreach ($this->inits[0][true] as $init) {
         $b->append($init);
       }
-      unset($this->inits[0][true]);
+      $this->inits[0][true]= [];
     }
     $this->emitAll($b, (array)$initializer->statements);
     $b->append('}');
@@ -1672,7 +1672,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         foreach ($this->inits[0][false] as $init) {
           $b->append($init);
         }
-        unset($this->inits[0][false]);
+        $this->inits[0][false]= [];
       }
       $this->emitAll($b, $constructor->body);
       $b->append('}');
@@ -2026,14 +2026,14 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $i < $s && $b->append(', ');
       }
     }
-    
+
     // Members
     $b->append('{');
     foreach ((array)$declaration->body as $node) {
       $this->emitOne($b, $node);
     }
     $this->emitProperties($b, $this->properties[0]);
-    
+
     // Generate a constructor if initializations are available.
     // They will have already been emitted if a constructor exists!
     if ($this->inits[0][false]) {
@@ -2041,10 +2041,10 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       $parameters= [];
       if ($parentType->hasConstructor()) {
         foreach ($parentType->getConstructor()->parameters as $i => $parameter) {
-          $parameters[]= array('name' => '··a'.$i, 'type' => $parameter->type, 'default' => $parameter->default);
+          $parameters[]= ['name' => '··a'.$i, 'type' => $parameter->type, 'default' => $parameter->default];
           $arguments[]= new VariableNode('··a'.$i);
         }
-        $body= array(new StaticMethodCallNode(new TypeName('parent'), '__construct', $arguments));
+        $body= [new StaticMethodCallNode(new TypeName('parent'), '__construct', $arguments)];
       } else {
         $body= [];
       }
