@@ -1,6 +1,7 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
 use lang\Enum;
+use lang\Primitive;
 
 /**
  * Tests enum declaration:
@@ -43,12 +44,12 @@ class WeekDayEnumDeclarationTest extends ExecutionTest {
 
   #[@test]
   public function weekend_method_declaration() {
-    with ($method= self::$fixture->getMethod('isWeekend')); {
+    with (self::$fixture->getMethod('isWeekend'), function($method) {
       $this->assertEquals('isWeekend', $method->getName());
       $this->assertEquals(MODIFIER_PUBLIC, $method->getModifiers());
-      $this->assertEquals(\lang\Primitive::$BOOLEAN, $method->getReturnType());
+      $this->assertEquals(Primitive::$BOOL, $method->getReturnType());
       $this->assertEquals(0, $method->numParameters());
-    }
+    });
   }
 
   /**
@@ -57,15 +58,15 @@ class WeekDayEnumDeclarationTest extends ExecutionTest {
    * @return  var[]
    */
   public function members() {
-    return array(
-      array('MON', 0),
-      array('TUE', 1),
-      array('WED', 2),
-      array('THU', 3),
-      array('FRI', 4),
-      array('SAT', 5),
-      array('SUN', 6)
-    );
+    return [
+      ['MON', 0],
+      ['TUE', 1],
+      ['WED', 2],
+      ['THU', 3],
+      ['FRI', 4],
+      ['SAT', 5],
+      ['SUN', 6]
+    ];
   }
 
   #[@test, @values('members')]
