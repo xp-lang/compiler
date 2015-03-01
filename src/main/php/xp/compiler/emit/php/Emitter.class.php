@@ -47,6 +47,7 @@ use xp\compiler\ast\ConstantAccessNode;
 use xp\compiler\emit\Buffer;
 use lang\reflect\Modifiers;
 use lang\Throwable;
+use lang\FormatException;
 
 /**
  * Emits sourcecode using PHP sourcecode
@@ -127,7 +128,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    * @param   xp.compiler.ast.TypeDeclarationNode declaration
    */
   protected function emitTypeName($b, $type, TypeDeclarationNode $declaration, $prefix= '') {
-    $this->metadata[0]['class']= array();
+    $this->metadata[0]['class']= [];
     $declaration->literal= $this->declaration($declaration, $package= false);
 
     // Emit abstract and final modifiers
@@ -1215,7 +1216,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         // If the interface we implement is generic, we need to
         // make the generated class a generic instance.
         if ($new->type->components) {
-          $components= array();
+          $components= [];
           foreach ($new->type->components as $component) {
             $components[]= $this->resolveType($component, false)->name();
           }
@@ -1233,7 +1234,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       $decl= new ClassNode(0, null, $unique, $p['parent'], $p['implements'], $new->body);
       $decl->synthetic= true;
       $generic && $decl->generic= $generic;
-      $ptr= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $decl), $parent);
+      $ptr= new TypeDeclaration(new ParseTree($this->scope[0]->package, [], $decl), $parent);
       $this->scope[0]->declarations[]= $decl;
       $this->scope[0]->setType($new, $unique);
     } else {
@@ -1347,9 +1348,9 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     // Meta data
     $return= $this->resolveType($operator->returns);
     $this->metadata[0][1][$name]= $this->meta($operator->comment, $operator->annotations, array(
-      DETAIL_ARGUMENTS => array(),
+      DETAIL_ARGUMENTS => [],
       DETAIL_RETURNS   => $return->name(),
-      DETAIL_THROWS    => array()
+      DETAIL_THROWS    => []
     ));
 
     $b->append('public static function ')->append($name);
@@ -1378,10 +1379,10 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    * @return  xp.compiler.TypeName[] the signature
    */
   protected function emitParameters($b, array $parameters, $delim) {
-    $signature= array();
+    $signature= [];
     $b->append('(');
     $s= sizeof($parameters)- 1;
-    $defer= array();
+    $defer= [];
     $usesGenerics= false;
     $genericParams= '';
     foreach ($parameters as $i => $param) {
@@ -1488,14 +1489,14 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    * @param  [:var] $merge
    * @return [:var] meta data
    */
-  protected function meta($comment, $annotations, $merge= array()) {
+  protected function meta($comment, $annotations, $merge= []) {
     $meta= $merge + array(
       DETAIL_COMMENT => $comment
         ? trim(preg_replace('/\n\s+\* ?/', "\n", "\n ".substr($comment, 4, strpos($comment, '* @')- 2)))
         : null
       ,
-      DETAIL_ANNOTATIONS  => array(),
-      DETAIL_TARGET_ANNO  => array()
+      DETAIL_ANNOTATIONS  => [],
+      DETAIL_TARGET_ANNO  => []
     );
     foreach ((array)$annotations as $annotation) {
 
@@ -1505,7 +1506,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       } else if (isset($annotation->parameters['default'])) {
         $value= $this->resolveAnnotationValue($annotation->parameters['default']);
       } else {
-        $value= array();
+        $value= [];
         foreach ($annotation->parameters as $name => $parameter) {
           $value[$name]= $this->resolveAnnotationValue($parameter);
         }
@@ -1531,7 +1532,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       return $this->resolveType($value->class)->name();
     } else if ($value instanceof InstanceCreationNode) {
       $type= $this->literal($this->resolveType($value->type));
-      $params= array();
+      $params= [];
       foreach ($value->parameters as $param) {
         $params[]= $this->export($this->resolveAnnotationValue($param));
       }
@@ -1545,13 +1546,13 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       $name= $value->name;
       return function() use($type, $name) { return $type.'::'.$name; };
     } else if ($value instanceof ArrayNode) {
-      $r= array();
+      $r= [];
       foreach ($value->values as $element) {
         $r[]= $this->resolveAnnotationValue($element);
       }
       return $r;
     } else if ($value instanceof MapNode) {
-      $r= array();
+      $r= [];
       foreach ($value->elements as $pair) {
         $r[$this->resolveAnnotationValue($pair[0])]= $this->resolveAnnotationValue($pair[1]);
       }
@@ -1590,9 +1591,9 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     // Meta data
     $return= $this->resolveType($method->returns, false);
     $this->metadata[0][1][$method->name]= $this->meta($method->comment, $method->annotations, array(
-      DETAIL_ARGUMENTS => array(),
+      DETAIL_ARGUMENTS => [],
       DETAIL_RETURNS   => $return->name(),
-      DETAIL_THROWS    => array()
+      DETAIL_THROWS    => []
     ));
 
     // Parameters, body
@@ -1659,9 +1660,9 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
 
     // Meta data
     $this->metadata[0][1]['__construct']= $this->meta($constructor->comment, $constructor->annotations, array(
-      DETAIL_ARGUMENTS => array(),
+      DETAIL_ARGUMENTS => [],
       DETAIL_RETURNS   => null,
-      DETAIL_THROWS    => array()
+      DETAIL_THROWS    => []
     ));
 
     // Arguments, initializations, body
@@ -1811,7 +1812,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   protected function emitProperties($b, array $properties) {
     static $mangled= '··name';
     
-    $auto= array();
+    $auto= [];
     if (!empty($properties['get'])) {
       $b->append('function __get($'.$mangled.') {');
       $this->enter(new MethodScope('__get'));
@@ -1980,19 +1981,19 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   protected function emitClass($b, $declaration) {
     $parent= $declaration->parent ?: new TypeName('lang.Object');
     $parentType= $this->resolveType($parent);
-    $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $declaration), $parentType);
+    $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, [], $declaration), $parentType);
     $this->scope[0]->addResolved('self', $thisType);
     $this->scope[0]->addResolved('parent', $parentType);
     
     $this->enter(new TypeDeclarationScope());    
     $this->emitTypeName($b, 'class', $declaration);
     $b->append(' extends '.$this->literal($parentType, true));
-    array_unshift($this->metadata, array(array(), array()));
-    array_unshift($this->properties, array());
-    array_unshift($this->inits, array(false => array(), true => array(), 2 => false));
+    array_unshift($this->metadata, [[], []]);
+    array_unshift($this->properties, []);
+    array_unshift($this->inits, [false => [], true => [], 2 => false]);
 
     // Meta data
-    $this->metadata[0]['class']= $this->meta($declaration->comment, $declaration->annotations, array());
+    $this->metadata[0]['class']= $this->meta($declaration->comment, $declaration->annotations, []);
 
     // Generics
     if ($declaration->name->isGeneric()) {
@@ -2036,8 +2037,8 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     // Generate a constructor if initializations are available.
     // They will have already been emitted if a constructor exists!
     if ($this->inits[0][false]) {
-      $arguments= array();
-      $parameters= array();
+      $arguments= [];
+      $parameters= [];
       if ($parentType->hasConstructor()) {
         foreach ($parentType->getConstructor()->parameters as $i => $parameter) {
           $parameters[]= array('name' => '··a'.$i, 'type' => $parameter->type, 'default' => $parameter->default);
@@ -2045,7 +2046,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         }
         $body= array(new StaticMethodCallNode(new TypeName('parent'), '__construct', $arguments));
       } else {
-        $body= array();
+        $body= [];
       }
       $this->emitOne($b, new ConstructorNode(array(
         'modifiers'    => MODIFIER_PUBLIC,
@@ -2126,7 +2127,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   protected function emitEnum($b, $declaration) {
     $parent= $declaration->parent ?: new TypeName('lang.Enum');
     $parentType= $this->resolveType($parent);
-    $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $declaration), $parentType);
+    $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, [], $declaration), $parentType);
     $this->scope[0]->addResolved('self', $thisType);
     $this->scope[0]->addResolved('parent', $parentType);
     
@@ -2139,12 +2140,12 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     // Ensure parent class and interfaces are loaded
     $this->emitTypeName($b, 'class', $declaration);
     $b->append(' extends '.$this->literal($parentType, true));
-    array_unshift($this->metadata, array(array(), array()));
-    array_unshift($this->properties, array('get' => array(), 'set' => array()));
+    array_unshift($this->metadata, array([], []));
+    array_unshift($this->properties, array('get' => [], 'set' => []));
     $abstract= Modifiers::isAbstract($declaration->modifiers);
 
     // Meta data
-    $this->metadata[0]['class']= $this->meta($declaration->comment, $declaration->annotations, array());
+    $this->metadata[0]['class']= $this->meta($declaration->comment, $declaration->annotations, []);
 
     // Generics
     if ($declaration->name->isGeneric()) {
@@ -2206,9 +2207,9 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         }
         
         $unique= new TypeName($declaration->name->name.'··'.$member->name);
-        $decl= new ClassNode(0, null, $unique, $declaration->name, array(), $member->body);
+        $decl= new ClassNode(0, null, $unique, $declaration->name, [], $member->body);
         $decl->synthetic= true;
-        $ptr= new TypeDeclaration(new ParseTree(null, array(), $decl), $thisType);
+        $ptr= new TypeDeclaration(new ParseTree(null, [], $decl), $thisType);
         $this->scope[0]->declarations[]= $decl;
         $b->append('new '.$unique->name.'(');
       } else {
@@ -2246,15 +2247,15 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    * @param   xp.compiler.ast.InterfaceNode declaration
    */
   protected function emitInterface($b, $declaration) {
-    $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, array(), $declaration));
+    $thisType= new TypeDeclaration(new ParseTree($this->scope[0]->package, [], $declaration));
     $this->scope[0]->addResolved('self', $thisType);
 
     $this->enter(new TypeDeclarationScope());    
     $this->emitTypeName($b, 'interface', $declaration);
-    array_unshift($this->metadata, array(array(), array()));
+    array_unshift($this->metadata, array([], []));
 
     // Meta data
-    $this->metadata[0]['class']= $this->meta($declaration->comment, $declaration->annotations, array());
+    $this->metadata[0]['class']= $this->meta($declaration->comment, $declaration->annotations, []);
 
     // Generics
     if ($declaration->name->isGeneric()) {
@@ -2453,16 +2454,16 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   public function emit(ParseTree $tree, Scope $scope) {
     $bytes= new Buffer('', 1);
     
-    array_unshift($this->local, array());
+    array_unshift($this->local, []);
     array_unshift($this->temp, 0);
     array_unshift($this->scope, $scope->enter(new CompilationUnitScope()));
     $this->scope[0]->importer= new NativeImporter();
-    $this->scope[0]->declarations= array($tree->declaration);
+    $this->scope[0]->declarations= [$tree->declaration];
     $this->scope[0]->package= $tree->package;
     
     // Functions from lang.base.php
-    $this->scope[0]->statics= array(
-      0             => array(),
+    $this->scope[0]->statics= [
+      0             => [],
       'newinstance' => true,
       'with'        => true,
       'create'      => true,
@@ -2479,7 +2480,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       'require'     => true,
       'include_once'=> true,
       'require_once'=> true,
-    );
+    ];
 
     $this->cat && $this->cat->infof('== Enter %s ==', basename($tree->origin));
 
@@ -2513,7 +2514,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       sizeof($this->messages['warnings'])
     );
     if ($this->messages['errors']) {
-      throw new \lang\FormatException('Errors emitting '.$tree->origin.': '.\xp::stringOf($this->messages));
+      throw new FormatException('Errors emitting '.$tree->origin.': '.\xp::stringOf($this->messages));
     }
 
     // Finalize
