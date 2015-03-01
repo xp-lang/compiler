@@ -3,6 +3,9 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* **Heads up**: Changed minimum XP version to run the XP compiler to XP
+  6.0.0. It can still generated code to run on XP 5.X-SERIES, but will
+  require 6.X-SERIES to run itself (@thekid)
 * Added possibility to add default values to lambda parameters. See 
   xp-lang/compiler#38 - (@thekid)
 * Fixed compiler choking on methods with generic return types (@thekid)
