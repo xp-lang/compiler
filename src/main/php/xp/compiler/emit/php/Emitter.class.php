@@ -1412,7 +1412,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
           $defer[]= create(new Buffer('', $b->line))
             ->append('if (NULL !== $')->append($param['name'])->append(' && !is("'.$t->name.'", $')
             ->append($param['name'])
-            ->append(')) throw new IllegalArgumentException("Argument ')
+            ->append(')) throw new \lang\IllegalArgumentException("Argument ')
             ->append($i + 1)
             ->append(' passed to ".__METHOD__." must be of ')
             ->append($t->name)
