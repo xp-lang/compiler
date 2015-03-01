@@ -1402,7 +1402,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         if (!$usesGenerics && $this->scope[0]->declarations[0]->name->isPlaceHolder($param['type'])) $usesGenerics= true;
         $t= $param['type'];
         $ptr= $this->resolveType($t);
-        if (!$param['check'] || isset($param['vararg'])) {
+        if (!isset($param['check']) || !$param['check'] || isset($param['vararg'])) {
           // No runtime type checks
         } else if ($t->isArray() || $t->isMap()) {
           $b->append('array ');
