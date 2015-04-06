@@ -24,7 +24,7 @@ class StaticImportTest extends ExecutionTest {
    */
   public function tearDown() {
     Console::$out->setStream($this->out);
-    delete($this->stream);
+    unset($this->stream);
   }
 
   /**

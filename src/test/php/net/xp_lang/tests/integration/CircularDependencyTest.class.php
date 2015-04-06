@@ -48,8 +48,7 @@ class CircularDependencyTest extends \unittest\TestCase {
    * Tears down 
    */
   public function tearDown() {
-    delete($this->emitter);
-    delete($this->files);
+    unset($this->emitter, $this->files);
   }
 
   #[@test]
