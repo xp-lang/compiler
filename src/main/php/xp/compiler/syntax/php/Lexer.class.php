@@ -4,6 +4,7 @@ use text\StringTokenizer;
 use text\StreamTokenizer;
 use xp\compiler\emit\Strings;
 use lang\IllegalStateException;
+use lang\XPClass;
 
 /**
  * Lexer for PHP
@@ -164,7 +165,7 @@ class Lexer extends \text\parser\generic\AbstractLexer {
    * @throws  lang.Throwable
    */
   protected function raise($class, $message) {
-    raise($class, $message.' starting at line '.$this->position[0].', offset '.$this->position[1]);
+    throw XPClass::forName($class)->newInstance($message.' starting at line '.$this->position[0].', offset '.$this->position[1]);
   }
 
   /**
