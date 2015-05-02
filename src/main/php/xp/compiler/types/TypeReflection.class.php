@@ -11,6 +11,14 @@ use lang\Primitive;
  */
 class TypeReflection extends Types {
   protected $class= null;
+  public static $ovl= array(
+    '~'   => 'concat',
+    '-'   => 'minus',
+    '+'   => 'plus',
+    '*'   => 'times',
+    '/'   => 'div',
+    '%'   => 'mod',
+  );
   
   /**
    * Constructor
@@ -326,15 +334,6 @@ class TypeReflection extends Types {
     unset(\xp::$ext[0]);
     return $r;
   }
-
-  public static $ovl= array(
-    '~'   => 'concat',
-    '-'   => 'minus',
-    '+'   => 'plus',
-    '*'   => 'times',
-    '/'   => 'div',
-    '%'   => 'mod',
-  );
 
   /**
    * Returns whether an operator by a given symbol exists
