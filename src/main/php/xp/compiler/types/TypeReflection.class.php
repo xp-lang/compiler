@@ -78,7 +78,7 @@ class TypeReflection extends Types {
   /**
    * Checks whether a given type instance is a subclass of this class.
    *
-   * @param   xp.compiler.types.Types
+   * @param   xp.compiler.types.Types $t
    * @return  bool
    */
   public function isSubclassOf(Types $t) {
