@@ -25,7 +25,7 @@ use lang\ClassLoader;
 
 /**
  * XP Compiler, version {{VERSION}}
- * Copyright (c) 2008-2013 the XP group
+ * Copyright (c) 2008-2015 the XP group
  *
  * Usage:
  * <pre>
