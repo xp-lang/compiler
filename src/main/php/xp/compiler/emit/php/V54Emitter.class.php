@@ -17,9 +17,9 @@ use xp\compiler\emit\Buffer;
 use lang\reflect\Modifiers;
 
 /**
-* Emits sourcecode using PHP 5.3 sourcecode
+* Emits sourcecode using PHP 5.4 sourcecode
  */
-class V53Emitter extends Emitter {
+class V54Emitter extends Emitter {
   protected $core= '\\xp';
 
   /**
