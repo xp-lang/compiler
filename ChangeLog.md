@@ -3,6 +3,12 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Added support for PHP7
+  . Replaced String classes used in test suite as "string" is reserved as
+    [type name in PHP7](https://wiki.php.net/rfc/scalar_type_hints_v5).
+  . Rewrote tests verifying exceptions are raised for argument type
+    mismatches to work in both PHP 5.x *and* PHP 7.X.
+  (@thekid)
 * Fixed issue #39: HHVM support
   . Fixed sscanf() incompatibilities - HHVM doesn't support `%*` for not
     assigning variables. Worked around by supplying dummy variables.

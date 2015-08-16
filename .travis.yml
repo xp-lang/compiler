@@ -11,10 +11,6 @@ php:
   - nightly
   - hhvm
 
-matrix:
-  allow_failures:
-    - php: nightly
-
 before_script:
   - wget 'https://github.com/xp-framework/xp-runners/releases/download/v5.5.0/setup' -O - | php
   - composer install --prefer-dist
