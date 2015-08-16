@@ -504,9 +504,12 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     } else {
 
       // Rewrite for unsupported syntax
-      // - new Date().toString() to create(new Date()).toString()
-      // - (<expr>).toString to create(<expr>).toString()
-      if (
+      // - new Date().toString() to (new Date()).toString()
+      // - (<expr>).toString to an inline ternary
+      if ($call->target instanceof InstanceCreationNode) {
+        $b->insert('(', $mark);
+        $b->append(')');
+      } else if (
         !$call->target instanceof ArrayAccessNode && 
         !$call->target instanceof MethodCallNode &&
         !$call->target instanceof MemberAccessNode &&
@@ -514,8 +517,9 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         !$call->target instanceof StaticMemberAccessNode &&
         !$call->target instanceof StaticMethodCallNode
       ) {
-        $b->insert('create(', $mark);
-        $b->append(')');
+        $var= $this->tempVar();
+        $b->insert('(NULL === ('.$var.'=', $mark);
+        $b->append(')) ? NULL : '.$var);
       }
 
       $b->append('->'.$call->name);
@@ -573,9 +577,12 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     } else {
 
       // Rewrite for unsupported syntax
-      // - new Person().name to create(new Person()).name
-      // - (<expr>).name to create(<expr>).name
-      if (
+      // - new Person().name to (new Person()).name
+      // - (<expr>).name to an inline ternary
+      if ($access->target instanceof InstanceCreationNode) {
+        $b->insert('(', $mark);
+        $b->append(')');
+      } else if (
         !$access->target instanceof ArrayAccessNode && 
         !$access->target instanceof MethodCallNode &&
         !$access->target instanceof MemberAccessNode &&
@@ -583,8 +590,9 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         !$access->target instanceof StaticMemberAccessNode &&
         !$access->target instanceof StaticMethodCallNode
       ) {
-        $b->insert('create(', $mark);
-        $b->append(')');
+        $var= $this->tempVar();
+        $b->insert('(NULL === ('.$var.'=', $mark);
+        $b->append(')) ? NULL : '.$var);
       }
 
       $b->append('->'.$access->name);
