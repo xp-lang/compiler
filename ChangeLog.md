@@ -3,6 +3,14 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 2.1.0 / 2015-08-16
+
+* Adopted to newer XP versions by no longer using deprecated functionality:
+  . Replaced `uses()` call with class loader API call
+  . Replaced `raise()` with reflection-based creation statement
+  . Changed `delete()` call to use `unset` language construct.
+  (@thekid)
+
 ## 2.0.0 / 2015-03-01
 
 * Made available via Composer (@thekid)
