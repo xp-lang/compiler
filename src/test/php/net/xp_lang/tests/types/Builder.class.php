@@ -13,7 +13,7 @@ class Builder extends \lang\Object {
    * @param   self self
    * @return  self
    */
-  public static function (self $self= null) {
+  public static function create(self $self= null) {
     $copy= clone $self;
     // TBI
     return $copy;
