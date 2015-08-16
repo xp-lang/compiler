@@ -85,7 +85,7 @@ class ExtensionMethodsIntegrationTest extends \unittest\TestCase {
   /**
    * Test non-existant extension method
    */
-  #[@test, @expect(class= 'lang.IllegalStateException', withMessage= '/undefined method lang.types.String::nonExistant/')]
+  #[@test, @expect(class= 'lang.IllegalStateException', withMessage= '/undefined method .+nonExistant/')]
   public function nonExistantMethod() {
     $this->run('return (new \lang\types\String(" Hello "))->nonExistant();');
   }
