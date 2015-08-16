@@ -14,6 +14,7 @@ module xp-lang/compiler {
 
   /** @return void */
   public function initialize() {
+    ClassLoader::getDefault()->loadClass('xp.compiler.Syntax');
     ClassLoader::registerLoader(JitClassLoader::instanceFor(realpath('.')), true);
   }
 }
