@@ -24,10 +24,6 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
   protected $emitter= null;
   protected $debug= false;
 
-  static function __static() {
-    uses('xp.compiler.Syntax', 'io.File');   // HACK: Ensure Syntax and File classes are loaded
-  }
-
   /**
    * Creates a JIT Class loader instances for a given path
    *
