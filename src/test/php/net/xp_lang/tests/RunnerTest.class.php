@@ -104,16 +104,16 @@ class RunnerTest extends \unittest\TestCase {
   }
 
   #[@test]
-  public function select_v53_emitter() {
+  public function select_v54_emitter() {
     $this->assertEquals(
       "Test\n",
-      $this->run(['-E', 'php5.3', '-w', 'xp', '"Test"'])['out']
+      $this->run(['-E', 'php5.4', '-w', 'xp', '"Test"'])['out']
     );
   }
 
   #[@test]
   public function select_userdefined_emitter() {
-    ClassLoader::defineClass('xp.compiler.emit.test.Emitter', 'xp.compiler.emit.php.V53Emitter', [], [
+    ClassLoader::defineClass('xp.compiler.emit.test.Emitter', 'xp.compiler.emit.php.V54Emitter', [], [
       'emit' => function(ParseTree $tree, Scope $scope) {
         Console::writeLine('Test emitter emitting...');
         return parent::emit($tree, $scope);

@@ -1,7 +1,7 @@
 <?php namespace net\xp_lang\tests\compilation;
 
 use xp\compiler\Syntax;
-use xp\compiler\emit\php\V53Emitter;
+use xp\compiler\emit\php\V54Emitter;
 use xp\compiler\types\TypeDeclarationScope;
 
 /**
@@ -50,7 +50,7 @@ class CoreFunctionalityTest extends \unittest\TestCase {
   public function emitted_without_error($func) {
     $this->assertInstanceOf(
       'xp.compiler.emit.php.Result',
-      (new V53Emitter())->emit($this->parse(sprintf(self::TEMPLATE, $func)), new TypeDeclarationScope())
+      (new V54Emitter())->emit($this->parse(sprintf(self::TEMPLATE, $func)), new TypeDeclarationScope())
     );
   }
 }

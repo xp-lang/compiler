@@ -1,6 +1,6 @@
 <?php namespace net\xp_lang\tests\integration;
 
-use xp\compiler\emit\php\V53Emitter;
+use xp\compiler\emit\php\V54Emitter;
 use xp\compiler\types\TaskScope;
 use xp\compiler\io\FileManager;
 use xp\compiler\io\FileSource;
@@ -21,7 +21,7 @@ class CircularDependencyTest extends \unittest\TestCase {
    * Sets up test case
    */
   public function setUp() {
-    $this->emitter= new V53Emitter();
+    $this->emitter= new V54Emitter();
     $this->files= new FileManager();
     $this->files->addSourcePath(dirname(__FILE__).'/src');    // FIXME: ClassPathManager?
     $this->files->setOutput(new \io\Folder(\lang\System::tempDir()));

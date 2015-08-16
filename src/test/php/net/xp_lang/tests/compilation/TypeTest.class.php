@@ -1,6 +1,6 @@
 <?php namespace net\xp_lang\tests\compilation;
 
-use xp\compiler\emit\php\V53Emitter;
+use xp\compiler\emit\php\V54Emitter;
 use xp\compiler\types\TypeName;
 use xp\compiler\types\Parameter;
 use xp\compiler\types\TaskScope;
@@ -25,7 +25,7 @@ class TypeTest extends \unittest\TestCase {
    * Sets up test case
    */
   public function setUp() {
-    $this->emitter= new V53Emitter();
+    $this->emitter= new V54Emitter();
     $this->scope= new TaskScope(new CompilationTask(
       new FileSource(new File(__FILE__), Syntax::forName('xp')),
       new NullDiagnosticListener(),

@@ -7,7 +7,7 @@ use xp\compiler\io\ClassLoaderSource;
 use xp\compiler\task\CompilationTask;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\Syntax;
-use xp\compiler\emit\php\V53Emitter;
+use xp\compiler\emit\php\V54Emitter;
 use text\parser\generic\ParseException;
 use lang\ClassNotFoundException;
 use lang\ClassFormatException;
@@ -32,7 +32,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    */
   public function __construct($path, $debug= false) {
     $this->files= new FileManager();
-    $this->emitter= new V53Emitter();
+    $this->emitter= new V54Emitter();
     $this->debug= $debug;
 
     // Maven conventions

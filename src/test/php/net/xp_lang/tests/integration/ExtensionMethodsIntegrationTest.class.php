@@ -1,6 +1,6 @@
 <?php namespace net\xp_lang\tests\integration;
 
-use xp\compiler\emit\php\V53Emitter;
+use xp\compiler\emit\php\V54Emitter;
 use xp\compiler\types\TaskScope;
 use xp\compiler\io\FileManager;
 use xp\compiler\io\FileSource;
@@ -29,7 +29,7 @@ class ExtensionMethodsIntegrationTest extends \unittest\TestCase {
     self::$temp= new Folder(\lang\System::tempDir());
   
     // Compiler
-    $emitter= new V53Emitter();
+    $emitter= new V54Emitter();
     $files= new FileManager();
     $files->setOutput(self::$temp);
     $task= new CompilationTask(

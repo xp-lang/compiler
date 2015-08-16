@@ -9,7 +9,7 @@ use io\collections\iterate\AnyOfFilter;
 use util\Properties;
 use lang\ResourceProvider;
 use lang\reflect\Package;
-use xp\compiler\emit\php\V53Emitter;
+use xp\compiler\emit\php\V54Emitter;
 use xp\compiler\diagnostic\DefaultDiagnosticListener;
 use xp\compiler\diagnostic\QuietDiagnosticListener;
 use xp\compiler\diagnostic\VerboseDiagnosticListener;
