@@ -17,7 +17,7 @@ abstract class ParserTestCase extends \unittest\TestCase {
    */
   protected function parse($src) {
     try {
-      return create(new Parser())->parse(new Lexer('<?php class Container {
+      return (new Parser())->parse(new Lexer('<?php class Container {
         public function method() {
           '.$src.'
         }

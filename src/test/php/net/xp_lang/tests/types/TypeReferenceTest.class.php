@@ -107,7 +107,7 @@ class TypeReferenceTest extends \unittest\TestCase {
    */
   #[@test]
   public function arrayEnumerator() {
-    $enum= create(new TypeReference(new TypeName('int[]')))->getEnumerator();
+    $enum= (new TypeReference(new TypeName('int[]')))->getEnumerator();
     $this->assertEquals(new TypeName('int'), $enum->key);
     $this->assertEquals(new TypeName('int'), $enum->value);
   }
@@ -118,7 +118,7 @@ class TypeReferenceTest extends \unittest\TestCase {
    */
   #[@test]
   public function mapEnumerator() {
-    $enum= create(new TypeReference(new TypeName('[:string]')))->getEnumerator();
+    $enum= (new TypeReference(new TypeName('[:string]')))->getEnumerator();
     $this->assertEquals(new TypeName('string'), $enum->key);
     $this->assertEquals(new TypeName('string'), $enum->value);
   }
@@ -159,7 +159,7 @@ class TypeReferenceTest extends \unittest\TestCase {
    */
   #[@test]
   public function arrayIndexer() {
-    $indexer= create(new TypeReference(new TypeName('int[]')))->getIndexer();
+    $indexer= (new TypeReference(new TypeName('int[]')))->getIndexer();
     $this->assertEquals(new TypeName('int'), $indexer->type);
     $this->assertEquals(new TypeName('int'), $indexer->parameter);
   }
@@ -170,7 +170,7 @@ class TypeReferenceTest extends \unittest\TestCase {
    */
   #[@test]
   public function mapIndexer() {
-    $indexer= create(new TypeReference(new TypeName('[:string]')))->getIndexer();
+    $indexer= (new TypeReference(new TypeName('[:string]')))->getIndexer();
     $this->assertEquals(new TypeName('string'), $indexer->type);
     $this->assertEquals(new TypeName('string'), $indexer->parameter);
   }

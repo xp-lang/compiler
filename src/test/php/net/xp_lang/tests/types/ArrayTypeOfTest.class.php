@@ -53,7 +53,7 @@ class ArrayTypeOfTest extends \unittest\TestCase {
    */
   #[@test]
   public function objectArrayHasNoParent() {
-    $this->assertNull(create(new ArrayTypeOf(new TypeReflection(XPClass::forName('lang.Object'))))->parent());
+    $this->assertNull((new ArrayTypeOf(new TypeReflection(XPClass::forName('lang.Object'))))->parent());
   }
 
   /**

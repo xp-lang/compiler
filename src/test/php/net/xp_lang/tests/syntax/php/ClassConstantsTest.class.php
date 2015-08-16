@@ -21,7 +21,7 @@ class ClassConstantsTest extends ParserTestCase {
    * @return  xp.compiler.Node[]
    */
   protected function parse($src) {
-    return create(new Parser())->parse(new Lexer('<?php '.$src.' ?>', '<string:'.$this->name.'>'))->declaration->body;
+    return (new Parser())->parse(new Lexer('<?php '.$src.' ?>', '<string:'.$this->name.'>'))->declaration->body;
   }
 
   /**

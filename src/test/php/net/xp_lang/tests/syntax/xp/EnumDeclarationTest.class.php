@@ -21,7 +21,7 @@ class EnumDeclarationTest extends ParserTestCase {
    * @return  xp.compiler.Node
    */
   protected function parse($src) {
-    return create(new Parser())->parse(new Lexer($src, '<string:'.$this->name.'>'))->declaration;
+    return (new Parser())->parse(new Lexer($src, '<string:'.$this->name.'>'))->declaration;
   }
 
   /**

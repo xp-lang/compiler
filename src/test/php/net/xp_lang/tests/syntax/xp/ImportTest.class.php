@@ -18,7 +18,7 @@ class ImportTest extends ParserTestCase {
    * @return  xp.compiler.Node
    */
   protected function parse($src) {
-    return create(new Parser())->parse(new Lexer($src, '<string:'.$this->name.'>'))->imports;
+    return (new Parser())->parse(new Lexer($src, '<string:'.$this->name.'>'))->imports;
   }
 
   /**

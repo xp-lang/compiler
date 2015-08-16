@@ -106,7 +106,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
     
     // Parent class
     if ($parent instanceof XPClass) {
-      $extends= create(new XPClass(__CLASS__))->getPackage()->getName().'.'.$parent->getName();
+      $extends= (new XPClass(__CLASS__))->getPackage()->getName().'.'.$parent->getName();
       $scope->addResolved($extends, new TypeReflection($parent));
       $scope->addTypeImport($extends);
     } else {

@@ -28,7 +28,7 @@ class AnnotationTest extends ParserTestCase {
    * @return  xp.compiler.Node[]
    */
   protected function parseMethodWithAnnotations($annotations) {
-    return create(new Parser())->parse(new Lexer('<?php abstract class Container {
+    return (new Parser())->parse(new Lexer('<?php abstract class Container {
       '.$annotations.'
       public abstract function method();
     } ?>', '<string:'.$this->name.'>'))->declaration->body[0]->annotations;

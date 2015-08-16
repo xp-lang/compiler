@@ -103,7 +103,7 @@ class TypeRestrictionTest extends ExecutionTest {
    */
   #[@test]
   public function genericVsGenericHashTable() {
-    $this->assertTrue($this->signature('HashTable<string, string> $arg')->accept(create('new util.collections.HashTable<string, string>')));
+    $this->assertTrue($this->signature('HashTable<string, string> $arg')->accept(('new util.collections.HashTable<string, string>')));
   }
 
   /**
@@ -112,7 +112,7 @@ class TypeRestrictionTest extends ExecutionTest {
    */
   #[@test]
   public function genericHashTableVsGenericMap() {
-    $this->assertTrue($this->signature('Map<string, string> $arg')->accept(create('new util.collections.HashTable<string, string>')));
+    $this->assertTrue($this->signature('Map<string, string> $arg')->accept(('new util.collections.HashTable<string, string>')));
   }
 
   /**
@@ -130,7 +130,7 @@ class TypeRestrictionTest extends ExecutionTest {
    */
   #[@test, @ignore('Broken for the moment')]
   public function genericOfGenericsVsGenericOfGenericsHashTable() {
-    $this->assertTrue($this->signature('HashTable<string, Vector<int>> $arg')->accept(create('new util.collections.HashTable<string, util.collections.Vector<int>>')));
+    $this->assertTrue($this->signature('HashTable<string, Vector<int>> $arg')->accept(('new util.collections.HashTable<string, util.collections.Vector<int>>')));
   }
 
   /**

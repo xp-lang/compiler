@@ -91,7 +91,7 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function stringClassSubstringMethod() {
-    $method= create(new TypeReflection(XPClass::forName('lang.types.String')))->getMethod('substring');
+    $method= (new TypeReflection(XPClass::forName('lang.types.String')))->getMethod('substring');
     $this->assertEquals(new TypeName('lang.types.String'), $method->returns);
     $this->assertEquals('substring', $method->name);
     $this->assertEquals(
@@ -118,7 +118,7 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function stringClassLengthField() {
-    $field= create(new TypeReflection(XPClass::forName('lang.types.String')))->getField('length');
+    $field= (new TypeReflection(XPClass::forName('lang.types.String')))->getField('length');
     $this->assertEquals(TypeName::$VAR, $field->type);
     $this->assertEquals('length', $field->name);
     $this->assertEquals(MODIFIER_PROTECTED, $field->modifiers);
@@ -138,7 +138,7 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function stringClassIndexer() {
-    $indexer= create(new TypeReflection(XPClass::forName('lang.types.String')))->getIndexer();
+    $indexer= (new TypeReflection(XPClass::forName('lang.types.String')))->getIndexer();
     $this->assertEquals(new TypeName('lang.types.Character'), $indexer->type);
     $this->assertEquals(new TypeName('int'), $indexer->parameter);
   }
@@ -157,7 +157,7 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function httpConstantsConstant() {
-    $const= create(new TypeReflection(XPClass::forName('peer.http.HttpConstants')))->getConstant('STATUS_OK');
+    $const= (new TypeReflection(XPClass::forName('peer.http.HttpConstants')))->getConstant('STATUS_OK');
     $this->assertEquals(new TypeName('int'), $const->type);
     $this->assertEquals(200, $const->value);
   }
@@ -170,7 +170,7 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function arrayListClassEnumerator() {
-    $enum= create(new TypeReflection(XPClass::forName('lang.types.ArrayList')))->getEnumerator();
+    $enum= (new TypeReflection(XPClass::forName('lang.types.ArrayList')))->getEnumerator();
     $this->assertEquals(new TypeName('int'), $enum->key);
     $this->assertEquals(new TypeName('var'), $enum->value);
   }
@@ -179,13 +179,13 @@ class TypeReflectionTest extends \unittest\TestCase {
   public function objectClassHasNoExtensionMethods() {
     $this->assertEquals(
       array(), 
-      create(new TypeReflection(XPClass::forName('lang.Object')))->getExtensions()
+      (new TypeReflection(XPClass::forName('lang.Object')))->getExtensions()
     );
   }
 
   #[@test]
   public function extensionMethod() {
-    $extensions= create(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.ArraySortingExtensions')))->getExtensions();
+    $extensions= (new TypeReflection(XPClass::forName('net.xp_lang.tests.types.ArraySortingExtensions')))->getExtensions();
 
     $this->assertEquals(1, sizeof($extensions));
     $this->assertEquals('lang.types.ArrayList', key($extensions));
@@ -194,7 +194,7 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function selfReturnType() {
-    $builder= create(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.Builder')));
+    $builder= (new TypeReflection(XPClass::forName('net.xp_lang.tests.types.Builder')));
     $this->assertEquals(
       new TypeName('net.xp_lang.tests.types.Builder'),
       $builder->getMethod('create')->returns
@@ -203,7 +203,7 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function selfParameterType() {
-    $builder= create(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.Builder')));
+    $builder= (new TypeReflection(XPClass::forName('net.xp_lang.tests.types.Builder')));
     $this->assertEquals(
       new Parameter('self', new TypeName('net.xp_lang.tests.types.Builder'), new NullNode()),
       $builder->getMethod('create')->parameters[0]
@@ -221,7 +221,7 @@ class TypeReflectionTest extends \unittest\TestCase {
         'type'   => new TypeName('string[]'),
         'values' => array()
       ))),
-      create(new TypeReflection($cl))->getMethod('fixture')->parameters[0]
+      (new TypeReflection($cl))->getMethod('fixture')->parameters[0]
     );
   }
 
@@ -236,7 +236,7 @@ class TypeReflectionTest extends \unittest\TestCase {
         'type'     => new TypeName('[:string]'),
         'elements' => array()
       ))),
-      create(new TypeReflection($cl))->getMethod('fixture')->parameters[0]
+      (new TypeReflection($cl))->getMethod('fixture')->parameters[0]
     );
   }
 
@@ -247,7 +247,7 @@ class TypeReflectionTest extends \unittest\TestCase {
     }');
     $this->assertEquals(
       new TypeName($cl->getField('b')->get(null)->getClassName()),
-      create(new TypeReflection($cl))->getField('b')->type
+      (new TypeReflection($cl))->getField('b')->type
     );
   }
 
@@ -269,7 +269,7 @@ class TypeReflectionTest extends \unittest\TestCase {
     }');
     $this->assertEquals(
       new TypeName($cl->getName()),
-      create(new TypeReflection($cl))->getField('a')->type
+      (new TypeReflection($cl))->getField('a')->type
     );
   }
 
@@ -277,7 +277,7 @@ class TypeReflectionTest extends \unittest\TestCase {
   public function generic_return_type() {
     $this->assertEquals(
       new TypeName('self', array(new TypeName('R'))),
-      create(new TypeReflection(XPClass::forName('net.xp_lang.tests.integration.Sequence')))->getMethod('of')->returns
+      (new TypeReflection(XPClass::forName('net.xp_lang.tests.integration.Sequence')))->getMethod('of')->returns
     );
   }
 

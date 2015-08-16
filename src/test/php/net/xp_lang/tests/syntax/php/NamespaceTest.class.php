@@ -19,7 +19,7 @@ class NamespaceTest extends ParserTestCase {
    * @return  xp.compiler.ast.ParseTree
    */
   protected function parse($src) {
-    return create(new Parser())->parse(new Lexer($src, '<string:'.$this->name.'>'));
+    return (new Parser())->parse(new Lexer($src, '<string:'.$this->name.'>'));
   }
 
   /**

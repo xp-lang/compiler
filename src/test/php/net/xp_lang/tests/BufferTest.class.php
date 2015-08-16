@@ -53,7 +53,7 @@ class BufferTest extends \unittest\TestCase {
    */
   #[@test]
   public function line_one_default() {
-    $this->assertEquals(1, create(new Buffer())->line);
+    $this->assertEquals(1, (new Buffer())->line);
   }
 
   /**
@@ -62,7 +62,7 @@ class BufferTest extends \unittest\TestCase {
    */
   #[@test]
   public function line_number_passable() {
-    $this->assertEquals(10, create(new Buffer('', 10))->line);
+    $this->assertEquals(10, (new Buffer('', 10))->line);
   }
 
   /**
@@ -71,7 +71,7 @@ class BufferTest extends \unittest\TestCase {
    */
   #[@test]
   public function mark_when_empty() {
-    $this->assertEquals(0, create(new Buffer(''))->mark());
+    $this->assertEquals(0, (new Buffer(''))->mark());
   }
 
   /**
@@ -80,7 +80,7 @@ class BufferTest extends \unittest\TestCase {
    */
   #[@test]
   public function mark() {
-    $this->assertEquals(4, create(new Buffer('Test'))->mark());
+    $this->assertEquals(4, (new Buffer('Test'))->mark());
   }
 
   /**

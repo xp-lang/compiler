@@ -56,7 +56,7 @@ class FileManagerTest extends \unittest\TestCase {
    */
   protected function assertTarget($expected, File $target) {
     $this->assertEquals(
-      create(new File(strtr($expected, '/', DIRECTORY_SEPARATOR)))->getURI(),
+      (new File(strtr($expected, '/', DIRECTORY_SEPARATOR)))->getURI(),
       str_replace(rtrim(realpath('.'), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR, '', $target->getURI())
     );
   }

@@ -29,7 +29,7 @@ class AnnotationTest extends ParserTestCase {
    * @return  xp.compiler.Node[]
    */
   protected function parseMethodWithAnnotations($annotations) {
-    return create(new Parser())->parse(new Lexer('abstract class Container {
+    return (new Parser())->parse(new Lexer('abstract class Container {
       '.$annotations.'
       public abstract void method();
     }', '<string:'.$this->name.'>'))->declaration->body[0]->annotations;

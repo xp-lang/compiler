@@ -18,7 +18,7 @@ abstract class ParserTestCase extends \unittest\TestCase {
    */
   protected function parseTree($src) {
     try {
-      return create(new Parser())->parse(new Lexer($src, '<string:'.$this->name.'>'));
+      return (new Parser())->parse(new Lexer($src, '<string:'.$this->name.'>'));
     } catch (ParseException $e) {
       throw $e->getCause();
     }

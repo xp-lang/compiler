@@ -66,7 +66,7 @@ class StringSourceTest extends \unittest\TestCase {
   public function getURIWithNameOmitted() {
     $this->assertEquals(
       'Compiled source #0', 
-      create(new StringSource(null, self::$syntax))->getURI()
+      (new StringSource(null, self::$syntax))->getURI()
     );
   }
 }

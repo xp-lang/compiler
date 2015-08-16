@@ -50,7 +50,7 @@ class CoreFunctionalityTest extends \unittest\TestCase {
   public function emitted_without_error($func) {
     $this->assertInstanceOf(
       'xp.compiler.emit.php.Result',
-      create(new V53Emitter())->emit($this->parse(sprintf(self::TEMPLATE, $func)), new TypeDeclarationScope())
+      (new V53Emitter())->emit($this->parse(sprintf(self::TEMPLATE, $func)), new TypeDeclarationScope())
     );
   }
 }

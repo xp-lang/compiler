@@ -34,7 +34,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function objectIsNotVariable() {
-    $this->assertFalse(create(new TypeName('lang.Object'))->isVariable());
+    $this->assertFalse((new TypeName('lang.Object'))->isVariable());
   }
 
   /**
@@ -61,7 +61,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function objectIsNotVoid() {
-    $this->assertFalse(create(new TypeName('lang.Object'))->isVoid());
+    $this->assertFalse((new TypeName('lang.Object'))->isVoid());
   }
 
   /**
@@ -70,7 +70,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function intIsPrimitive() {
-    $this->assertTrue(create(new TypeName('int'))->isPrimitive());
+    $this->assertTrue((new TypeName('int'))->isPrimitive());
   }
 
   /**
@@ -79,7 +79,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function objectIsNotPrimitive() {
-    $this->assertFalse(create(new TypeName('lang.Object'))->isPrimitive());
+    $this->assertFalse((new TypeName('lang.Object'))->isPrimitive());
   }
 
   /**
@@ -88,7 +88,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function intArrayIsArray() {
-    $this->assertTrue(create(new TypeName('int[]'))->isArray());
+    $this->assertTrue((new TypeName('int[]'))->isArray());
   }
 
   /**
@@ -97,7 +97,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function intIsNotArray() {
-    $this->assertFalse(create(new TypeName('int'))->isArray());
+    $this->assertFalse((new TypeName('int'))->isArray());
   }
 
   /**
@@ -106,7 +106,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function intMapIsMap() {
-    $this->assertTrue(create(new TypeName('[:int]'))->isMap());
+    $this->assertTrue((new TypeName('[:int]'))->isMap());
   }
 
   /**
@@ -115,7 +115,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function intIsNotMap() {
-    $this->assertFalse(create(new TypeName('int'))->isMap());
+    $this->assertFalse((new TypeName('int'))->isMap());
   }
 
   /**
@@ -124,7 +124,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function intArrayIsNotMap() {
-    $this->assertFalse(create(new TypeName('int[]'))->isMap());
+    $this->assertFalse((new TypeName('int[]'))->isMap());
   }
 
   /**
@@ -133,7 +133,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function genericListIsGeneric() {
-    $this->assertTrue(create(new TypeName('List', array(new TypeName('T'))))->isGeneric());
+    $this->assertTrue((new TypeName('List', array(new TypeName('T'))))->isGeneric());
   }
 
   /**
@@ -142,7 +142,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function arrayIsNotGeneric() {
-    $this->assertFalse(create(new TypeName('T[]'))->isGeneric());
+    $this->assertFalse((new TypeName('T[]'))->isGeneric());
   }
 
   /**
@@ -151,7 +151,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function intPrimitiveCompoundName() {
-    $this->assertEquals('int', create(new TypeName('int'))->compoundName());
+    $this->assertEquals('int', (new TypeName('int'))->compoundName());
   }
 
   /**
@@ -160,7 +160,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function stringArrayCompoundName() {
-    $this->assertEquals('string[]', create(new TypeName('string[]'))->compoundName());
+    $this->assertEquals('string[]', (new TypeName('string[]'))->compoundName());
   }
 
   /**
@@ -169,7 +169,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function objectClassCompoundName() {
-    $this->assertEquals('lang.Object', create(new TypeName('lang.Object'))->compoundName());
+    $this->assertEquals('lang.Object', (new TypeName('lang.Object'))->compoundName());
   }
 
   /**
@@ -178,7 +178,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function genericListCompoundName() {
-    $this->assertEquals('List<T>', create(new TypeName('List', array(new TypeName('T'))))->compoundName());
+    $this->assertEquals('List<T>', (new TypeName('List', array(new TypeName('T'))))->compoundName());
   }
 
   /**
@@ -187,7 +187,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function arrayComponentType() {
-    $this->assertEquals(new TypeName('string'), create(new TypeName('string[]'))->arrayComponentType());
+    $this->assertEquals(new TypeName('string'), (new TypeName('string[]'))->arrayComponentType());
   }
 
   /**
@@ -196,7 +196,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function arrayComponentTypeOfNonArray() {
-    $this->assertEquals(null, create(new TypeName('string'))->arrayComponentType());
+    $this->assertEquals(null, (new TypeName('string'))->arrayComponentType());
   }
 
   /**
@@ -207,7 +207,7 @@ class TypeNameTest extends \unittest\TestCase {
   public function mapComponentType() {
     $this->assertEquals(
       new TypeName('int'), 
-      create(new TypeName('[:int]'))->mapComponentType()
+      (new TypeName('[:int]'))->mapComponentType()
     );
   }
 
@@ -217,7 +217,7 @@ class TypeNameTest extends \unittest\TestCase {
    */
   #[@test]
   public function mapComponentTypeOfNonMap() {
-    $this->assertEquals(null, create(new TypeName('string'))->mapComponentType());
+    $this->assertEquals(null, (new TypeName('string'))->mapComponentType());
   }
 
   /**
