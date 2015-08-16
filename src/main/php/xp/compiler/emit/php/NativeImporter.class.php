@@ -87,10 +87,9 @@ class NativeImporter extends \xp\compiler\emit\NativeImporter {
    * @throws  lang.IllegalArgumentException if extension or function don't exist
    */
   public function hasFunction($extension, $function) {
-    if ('core' === $extension && !self::$coreExtAvailable) {
-      return function_exists($function);
-    } else if ($list= get_extension_funcs($extension)) {
-      return in_array($function, $list);
+    if (function_exists($function)) {
+      $e= $this->functionsExtension(new \ReflectionFunction($function));
+      return $extension === ($e ? strtolower($e->getName()) : null);
     } else {
       return false;
     }
