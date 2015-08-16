@@ -78,7 +78,7 @@ class ExtensionMethodsIntegrationTest extends \unittest\TestCase {
   public function trimMethod() {
     $this->assertEquals(
       new String('Hello'), 
-      $this->run('return (new String(" Hello "))->trim(" ");')
+      $this->run('return (new \lang\types\String(" Hello "))->trim(" ");')
     );
   }
 
@@ -87,6 +87,6 @@ class ExtensionMethodsIntegrationTest extends \unittest\TestCase {
    */
   #[@test, @expect(class= 'lang.IllegalStateException', withMessage= '/undefined method lang.types.String::nonExistant/')]
   public function nonExistantMethod() {
-    $this->run('return (new String(" Hello "))->nonExistant();');
+    $this->run('return (new \lang\types\String(" Hello "))->nonExistant();');
   }
 }
