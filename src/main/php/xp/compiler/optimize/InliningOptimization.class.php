@@ -19,8 +19,7 @@ abstract class InliningOptimization extends \lang\Object implements Optimization
   protected static $rewriter= null;
   
   static function __static() {
-    uses('xp.compiler.ast.Visitor');    // FIXME: ClassLoader::define(*) should load parents & interfaces
-    self::$rewriter= \lang\ClassLoader::defineClass('InliningOptimization··Rewriter', 'xp.compiler.ast.Visitor', array(), '{
+    self::$rewriter= \lang\ClassLoader::defineClass('InliningOptimization··Rewriter', 'xp.compiler.ast.Visitor', [], '{
       protected $replacements;
       protected $protect;
 
