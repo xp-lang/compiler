@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 3.0.0 / 2015-08-16
+
 * Added support for PHP7
   . Replaced String classes used in test suite as "string" is reserved as
     [type name in PHP7](https://wiki.php.net/rfc/scalar_type_hints_v5).
