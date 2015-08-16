@@ -104,14 +104,6 @@ class RunnerTest extends \unittest\TestCase {
   }
 
   #[@test]
-  public function select_v52_emitter() {
-    $this->assertEquals(
-      "Test\n",
-      $this->run(['-E', 'php5.2', '-w', 'xp', '"Test"'])['out']
-    );
-  }
-
-  #[@test]
   public function select_v53_emitter() {
     $this->assertEquals(
       "Test\n",
