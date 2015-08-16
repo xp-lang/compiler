@@ -1,19 +1,20 @@
 <?php namespace net\xp_lang\tests;
 
+use xp\compiler\emit\php\NativeImporter;
+use unittest\actions\VerifyThat;
+
 /**
  * TestCase
  *
  * @see      xp://xp.compiler.emit.php.NativeImporter
  */
+#[@action(new VerifyThat(function() { return !defined('HHVM_VERSION'); }))]
 class SourceNativeImporterTest extends \unittest\TestCase {
   protected $fixture= null;
 
-  /**
-   * Sets up test case
-   *
-   */
+  /** @return void */
   public function setUp() {
-    $this->fixture= new \xp\compiler\emit\php\NativeImporter();
+    $this->fixture= new NativeImporter();
   }
 
   /**
