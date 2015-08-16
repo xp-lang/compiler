@@ -106,7 +106,11 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    */
   public function __construct() {
     parent::__construct();
-    $this->nativeImporter= new NativeImporter();
+    if (defined('HHVM_VERSION')) {
+      $this->nativeImporter= new HHVMImporter();
+    } else {
+      $this->nativeImporter= new NativeImporter();
+    }
   }
 
   /**
