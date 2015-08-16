@@ -1,17 +1,28 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
-use lang\types\String;
+use lang\ClassLoader;
 
 /**
  * Tests chaining
- *
  */
 class ChainingTest extends ExecutionTest {
 
-  /**
-   * Test
-   *
-   */
+  #[@beforeClass]
+  public static function fixture() {
+    ClassLoader::defineClass('net.xp_lang.tests.execution.source.StringBuffer', 'lang.Object', ['\ArrayAccess'], '{
+      private $buffer= "";
+      public $length;
+      public function __construct($initial= "") { $this->buffer= $initial; $this->length= strlen($this->buffer); }
+      public static function valueOf($initial) { return new self($initial); }
+      public function concat($string) { $this->buffer.= $string; return $this; }
+      public function equals($cmp) { return $cmp instanceof self && $cmp->buffer === $this->buffer; }
+      public function offsetGet($pos) { return $this->buffer[$pos]; }
+      public function offsetExists($pos) { return $pos < $this->length; }
+      public function offsetSet($pos, $value) { /* TBI */ }
+      public function offsetUnset($pos) { /* TBI */ }
+    }');
+  }
+
   #[@test]
   public function parentOfTestClass() {
     $this->assertEquals(
@@ -20,10 +31,6 @@ class ChainingTest extends ExecutionTest {
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function firstMethodOfTestClass() {
     $this->assertEquals(
@@ -32,10 +39,6 @@ class ChainingTest extends ExecutionTest {
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function methodCallAfterNewObject() {
     $this->assertEquals(
@@ -44,10 +47,6 @@ class ChainingTest extends ExecutionTest {
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function chainedMethodCallAfterNewObject() {
     $this->assertEquals(
@@ -56,46 +55,30 @@ class ChainingTest extends ExecutionTest {
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function chainedNestedMethodCallAfterNewObject() {
     $this->assertEquals(
-      new String('Test'), 
-      $this->run('return new lang.types.String($this.member).concat("Test");')
+      new StringBuffer('Test'), 
+      $this->run('return new net.xp_lang.tests.execution.source.StringBuffer().concat("Test");')
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function arrayAccessAfterNew() {
     $this->assertEquals(
-      6,
-      $this->run('return new lang.types.ArrayList(5, 6, 7)[1];')
+      'e',
+      $this->run('return new net.xp_lang.tests.execution.source.StringBuffer("Test")[1];')
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function arrayAccessAfterStaticMethod() {
     $this->assertEquals(
-      6,
-      $this->run('return lang.types.ArrayList::newInstance([5, 6, 7])[1];')
+      'e',
+      $this->run('return net.xp_lang.tests.execution.source.StringBuffer::valueOf("Test")[1];')
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function arrayAccessAfterNewTypedArray() {
     $this->assertEquals(
@@ -104,10 +87,6 @@ class ChainingTest extends ExecutionTest {
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function arrayAccessAfterNewUntypedArray() {
     $this->assertEquals(
@@ -116,10 +95,6 @@ class ChainingTest extends ExecutionTest {
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function memberAfterNewTypedArray() {
     $this->assertEquals(
@@ -128,10 +103,6 @@ class ChainingTest extends ExecutionTest {
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function memberAfterNewUntypedArray() {
     $this->assertEquals(
@@ -140,10 +111,6 @@ class ChainingTest extends ExecutionTest {
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function arrayOfArrays() {
     $this->assertEquals(
@@ -152,22 +119,13 @@ class ChainingTest extends ExecutionTest {
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function staticMemberArrayAccess() {
     $this->assertFalse($this->run('return isset(xp::$errors[__FILE__]);'));
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function afterBracedExpression() {
-    $this->assertEquals(3, $this->run('return (1 ? new lang.types.ArrayList(1, 2, 3) : null).length;'));
+    $this->assertEquals(4, $this->run('return (1 ? new net.xp_lang.tests.execution.source.StringBuffer("Test") : null).length;'));
   }
 }
-?>
