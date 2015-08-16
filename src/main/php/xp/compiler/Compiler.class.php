@@ -28,7 +28,7 @@ class Compiler extends \lang\Object implements \util\log\Traceable {
     $done= create('new util.collections.HashTable<xp.compiler.io.Source, xp.compiler.types.Types>()');
     foreach ($sources as $source) {
       try {
-        create(new CompilationTask($source, $listener, $manager, $emitter, $done))->run();
+        (new CompilationTask($source, $listener, $manager, $emitter, $done))->run();
       } catch (CompilationException $e) {
         $errors++;
       }

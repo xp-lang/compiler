@@ -1410,7 +1410,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         } else if ($t->isClass() && !$this->scope[0]->declarations[0]->name->isPlaceHolder($t)) {
           $b->append($this->literal($ptr))->append(' ');
         } else if ('{' === $delim) {
-          $defer[]= create(new Buffer('', $b->line))
+          $defer[]= (new Buffer('', $b->line))
             ->append('if (NULL !== $')->append($param['name'])->append(' && !is("'.$t->name.'", $')
             ->append($param['name'])
             ->append(')) throw new \lang\IllegalArgumentException("Argument ')
