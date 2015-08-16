@@ -1,6 +1,7 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
 use util\collections\HashTable;
+use lang\IllegalArgumentException;
 
 /**
  * Tests type restrictions in parameters
@@ -26,6 +27,23 @@ class TypeRestrictionTest extends ExecutionTest {
   }
 
   /**
+   * Assert executing a block will yield a type mismatch
+   *
+   * @param  function(): void $block
+   * @throws unittest.AssertionFailedError
+   */
+  protected function assertTypeMismatch($block) {
+    try {
+      $block();
+      $this->fail('No exception raised', null, ['lang.IllegalArgumentException', 'TypeError']);
+    } catch (IllegalArgumentException $expected) {
+      // OK, PHP 5.X
+    } catch (\TypeError $expected) {
+      // OK, PHP 7.X
+    }
+  }
+
+  /**
    * Test passing a string to a string type hint
    *
    */
@@ -38,18 +56,22 @@ class TypeRestrictionTest extends ExecutionTest {
    * Test passing a string to an Object type hint
    *
    */
-  #[@test, @expect('lang.IllegalArgumentException')]
+  #[@test]
   public function primitiveVsObject() {
-    $this->signature('Object $arg')->accept('string');
+    $this->assertTypeMismatch(function() {
+      $this->signature('Object $arg')->accept('string');
+    });
   }
 
   /**
    * Test passing null to an Object type hint
    *
    */
-  #[@test, @expect('lang.IllegalArgumentException')]
+  #[@test]
   public function nullVsObject() {
-    $this->signature('Object $arg')->accept(null);
+    $this->assertTypeMismatch(function() {
+      $this->signature('Object $arg')->accept(null);
+    });
   }
 
   /**
@@ -83,18 +105,22 @@ class TypeRestrictionTest extends ExecutionTest {
    * Test passing a string to a string[] type hint
    *
    */
-  #[@test, @expect('lang.IllegalArgumentException')]
+  #[@test]
   public function primitiveVsArray() {
-    $this->signature('string[] $arg')->accept('string');
+    $this->assertTypeMismatch(function() {
+      $this->signature('string[] $arg')->accept('string');
+    });
   }
 
   /**
    * Test passing an object to a string[] type hint
    *
    */
-  #[@test, @expect('lang.IllegalArgumentException')]
+  #[@test]
   public function objectVsArray() {
-    $this->signature('string[] $arg')->accept($this);
+    $this->assertTypeMismatch(function() {
+      $this->signature('string[] $arg')->accept($this);
+    });
   }
 
   /**
@@ -119,9 +145,11 @@ class TypeRestrictionTest extends ExecutionTest {
    * Test non-generic vs. generic version of util.collections.HashTable
    *
    */
-  #[@test, @expect('lang.IllegalArgumentException')]
+  #[@test]
   public function nonGenericVsGenericHashTable() {
-    $this->signature('HashTable<string, string> $arg')->accept(new HashTable());
+    $this->assertTypeMismatch(function() {
+      $this->signature('HashTable<string, string> $arg')->accept(new HashTable());
+    });
   }
 
   /**
