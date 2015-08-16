@@ -722,7 +722,7 @@ class VisitorTest extends \unittest\TestCase {
    */
   #[@test]
   public function visitImport() {
-    $node= new \xp\compiler\ast\ImportNode(array('name' => 'lang.types.String'));
+    $node= new \xp\compiler\ast\ImportNode(array('name' => 'net.xp_lang.tests.StringBuffer'));
     $this->assertVisited(array($node), $node);
   }
 

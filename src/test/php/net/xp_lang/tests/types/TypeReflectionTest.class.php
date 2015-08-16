@@ -73,32 +73,29 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function stringClassHasEqualsMethod() {
-    $decl= new TypeReflection(XPClass::forName('lang.types.String'));
+    $decl= new TypeReflection(XPClass::forName('net.xp_lang.tests.StringBuffer'));
     $this->assertTrue($decl->hasMethod('equals'));
   }
 
   #[@test]
-  public function stringClassHasSubstringMethod() {
-    $decl= new TypeReflection(XPClass::forName('lang.types.String'));
-    $this->assertTrue($decl->hasMethod('substring'));
+  public function stringClassHasAppendMethod() {
+    $decl= new TypeReflection(XPClass::forName('net.xp_lang.tests.StringBuffer'));
+    $this->assertTrue($decl->hasMethod('append'));
   }
 
   #[@test]
   public function stringClassDoesNotHaveGetNameMethod() {
-    $decl= new TypeReflection(XPClass::forName('lang.types.String'));
+    $decl= new TypeReflection(XPClass::forName('net.xp_lang.tests.StringBuffer'));
     $this->assertFalse($decl->hasMethod('getName'));
   }
 
   #[@test]
   public function stringClassSubstringMethod() {
-    $method= (new TypeReflection(XPClass::forName('lang.types.String')))->getMethod('substring');
-    $this->assertEquals(new TypeName('lang.types.String'), $method->returns);
-    $this->assertEquals('substring', $method->name);
+    $method= (new TypeReflection(XPClass::forName('net.xp_lang.tests.StringBuffer')))->getMethod('append');
+    $this->assertEquals(new TypeName('net.xp_lang.tests.StringBuffer'), $method->returns);
+    $this->assertEquals('append', $method->name);
     $this->assertEquals(
-      array(
-        new Parameter('start', new TypeName('int')),
-        new Parameter('length', new TypeName('int'), new IntegerNode(0))
-      ),
+      [new Parameter('string', new TypeName('string'))],
       $method->parameters
     );
     $this->assertEquals(MODIFIER_PUBLIC, $method->modifiers);
@@ -106,27 +103,27 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function stringClassHasLengthField() {
-    $decl= new TypeReflection(XPClass::forName('lang.types.String'));
+    $decl= new TypeReflection(XPClass::forName('net.xp_lang.tests.StringBuffer'));
     $this->assertTrue($decl->hasField('length'));
   }
 
   #[@test]
   public function stringClassDoesNotHaveCharsField() {
-    $decl= new TypeReflection(XPClass::forName('lang.types.String'));
+    $decl= new TypeReflection(XPClass::forName('net.xp_lang.tests.StringBuffer'));
     $this->assertFalse($decl->hasField('chars'));
   }
 
   #[@test]
   public function stringClassLengthField() {
-    $field= (new TypeReflection(XPClass::forName('lang.types.String')))->getField('length');
+    $field= (new TypeReflection(XPClass::forName('net.xp_lang.tests.StringBuffer')))->getField('length');
     $this->assertEquals(TypeName::$VAR, $field->type);
     $this->assertEquals('length', $field->name);
-    $this->assertEquals(MODIFIER_PROTECTED, $field->modifiers);
+    $this->assertEquals(MODIFIER_PUBLIC, $field->modifiers);
   }
 
   #[@test]
   public function stringClassHasIndexer() {
-    $decl= new TypeReflection(XPClass::forName('lang.types.String'));
+    $decl= new TypeReflection(XPClass::forName('net.xp_lang.tests.StringBuffer'));
     $this->assertTrue($decl->hasIndexer());
   }
 
@@ -138,8 +135,8 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function stringClassIndexer() {
-    $indexer= (new TypeReflection(XPClass::forName('lang.types.String')))->getIndexer();
-    $this->assertEquals(new TypeName('lang.types.Character'), $indexer->type);
+    $indexer= (new TypeReflection(XPClass::forName('net.xp_lang.tests.StringBuffer')))->getIndexer();
+    $this->assertEquals(new TypeName('string'), $indexer->type);
     $this->assertEquals(new TypeName('int'), $indexer->parameter);
   }
 

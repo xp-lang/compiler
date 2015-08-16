@@ -138,8 +138,8 @@ class MemberAccessVerificationTest extends \unittest\TestCase {
   #[@test]
   public function stringProtectedMemberAccess() {
     $this->assertEquals(
-      array('T403', 'Accessing protected lang.types.String::$buffer from Fixture'),
-      $this->verify(new MemberAccessNode($this->newInstance('lang.types.String'), 'buffer'))
+      array('T403', 'Accessing protected net.xp_lang.tests.StringBuffer::$buffer from Fixture'),
+      $this->verify(new MemberAccessNode($this->newInstance('net.xp_lang.tests.StringBuffer'), 'buffer'))
     );
   }
 
@@ -150,7 +150,7 @@ class MemberAccessVerificationTest extends \unittest\TestCase {
   #[@test]
   public function stringProtectedMemberAccessIfSubclass() {
     $this->assertNull(
-      $this->verify(new MemberAccessNode($this->newInstance('lang.types.String'), 'buffer'), new TypeName('lang.types.String'))
+      $this->verify(new MemberAccessNode($this->newInstance('net.xp_lang.tests.StringBuffer'), 'buffer'), new TypeName('net.xp_lang.tests.StringBuffer'))
     );
   }
 

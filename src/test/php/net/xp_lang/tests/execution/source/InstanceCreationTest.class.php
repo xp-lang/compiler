@@ -38,9 +38,9 @@ class InstanceCreationTest extends ExecutionTest {
 
   #[@test]
   public function new_generic_hashtable() {
-    $hash= $this->run('return new util.collections.HashTable<lang.types.String, lang.Generic>();');
+    $hash= $this->run('return new util.collections.HashTable<string, lang.Generic>();');
     $this->assertEquals(
-      array(XPClass::forName('lang.types.String'), XPClass::forName('lang.Generic')), 
+      array(Primitive::$STRING, XPClass::forName('lang.Generic')), 
       $hash->getClass()->genericArguments()
     );
   }

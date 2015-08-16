@@ -247,8 +247,8 @@ class LiteralTest extends ParserTestCase {
   #[@test]
   public function classLiteral() {
     $this->assertEquals(
-      array(new ClassAccessNode(new TypeName('lang.types.String'))),
-      $this->parse('lang.types.String::class;')
+      array(new ClassAccessNode(new TypeName('net.xp_lang.tests.StringBuffer'))),
+      $this->parse('net.xp_lang.tests.StringBuffer::class;')
     );
   }
 

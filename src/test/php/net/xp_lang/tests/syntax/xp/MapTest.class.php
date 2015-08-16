@@ -83,16 +83,16 @@ class MapTest extends ParserTestCase {
   }
 
   /**
-   * Test "[:util.Vector<lang.types.String>]"
+   * Test "[:util.Vector<net.xp_lang.tests.StringBuffer>]"
    *
    */
   #[@test]
   public function stringToGeneric() {
     $this->assertEquals(array(new MapNode(array(
       'elements'      => array(),
-      'type'          => new TypeName('[:util.Vector<lang.types.String>]'),
+      'type'          => new TypeName('[:util.Vector<net.xp_lang.tests.StringBuffer>]'),
     ))), $this->parse('
-      new [:util.Vector<lang.types.String>] {:};
+      new [:util.Vector<net.xp_lang.tests.StringBuffer>] {:};
     '));
   }
 

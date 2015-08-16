@@ -101,8 +101,8 @@ class ExceptionExpressionTest extends ParserTestCase {
       'statements' => array(
         new ReturnNode(new InstanceCreationNode(array(
           'type'       => new TypeName('util.collections.HashTable', array(
-            new TypeName('lang.types.String'), 
-            new TypeName('Object')
+            new TypeName('string'), 
+            new TypeName('lang.Object')
           )),
           'parameters' => null
         )))
@@ -128,7 +128,7 @@ class ExceptionExpressionTest extends ParserTestCase {
       )
     ))), $this->parse('
       try {
-        return new util.collections.HashTable<lang.types.String, Object>();
+        return new util.collections.HashTable<string, lang.Object>();
       } catch (IllegalArgumentException $e) {
       } catch (SecurityException $e) {
         throw $e;
@@ -147,8 +147,8 @@ class ExceptionExpressionTest extends ParserTestCase {
       'statements' => array(
         new ReturnNode(new InstanceCreationNode(array(
           'type'       => new TypeName('util.collections.HashTable', array(
-            new TypeName('lang.types.String'), 
-            new TypeName('Object')
+            new TypeName('string'), 
+            new TypeName('lang.Object')
           )),
           'parameters' => null
         )))
@@ -171,7 +171,7 @@ class ExceptionExpressionTest extends ParserTestCase {
       )
     ))), $this->parse('
       try {
-        return new util.collections.HashTable<lang.types.String, Object>();
+        return new util.collections.HashTable<string, lang.Object>();
       } catch (IllegalArgumentException | SecurityException $e) {
         throw $e;
       }

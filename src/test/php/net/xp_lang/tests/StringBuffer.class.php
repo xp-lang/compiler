@@ -1,7 +1,7 @@
 <?php namespace net\xp_lang\tests;
 
 class StringBuffer extends \lang\Object implements \ArrayAccess {
-  private $buffer= '';
+  protected $buffer= '';
   public $length;
 
   /**
@@ -10,7 +10,11 @@ class StringBuffer extends \lang\Object implements \ArrayAccess {
    * @param  string $initial
    */
   public function __construct($initial= '') {
-    $this->buffer= $initial;
+    $this->set($initial);
+  }
+
+  protected function set($buffer) {
+    $this->buffer= $buffer;
     $this->length= strlen($this->buffer);
   }
 
@@ -21,7 +25,6 @@ class StringBuffer extends \lang\Object implements \ArrayAccess {
    * @return self
    */
   public static function valueOf($initial) { return new self($initial); }
-
 
   /**
    * Append another string

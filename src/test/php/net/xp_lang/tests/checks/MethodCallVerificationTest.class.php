@@ -138,8 +138,8 @@ class MethodCallVerificationTest extends \unittest\TestCase {
   #[@test]
   public function stringProtectedMethodCall() {
     $this->assertEquals(
-      array('T403', 'Invoking protected lang.types.String::asIntern() from Fixture'),
-      $this->verify(new MethodCallNode($this->newInstance('lang.types.String'), 'asIntern'))
+      array('T403', 'Invoking protected net.xp_lang.tests.StringBuffer::set() from Fixture'),
+      $this->verify(new MethodCallNode($this->newInstance('net.xp_lang.tests.StringBuffer'), 'set'))
     );
   }
 
@@ -150,7 +150,7 @@ class MethodCallVerificationTest extends \unittest\TestCase {
   #[@test]
   public function stringProtectedMethodCallIfSubclass() {
     $this->assertNull(
-      $this->verify(new MethodCallNode($this->newInstance('lang.types.String'), 'asIntern'), new TypeName('lang.types.String'))
+      $this->verify(new MethodCallNode($this->newInstance('net.xp_lang.tests.StringBuffer'), 'set'), new TypeName('net.xp_lang.tests.StringBuffer'))
     );
   }
 

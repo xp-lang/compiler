@@ -132,9 +132,9 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function genericMemberTypeDeclarationGetsUsed() {
     $this->assertUses(
-      array('lang.Object', 'util.collections.IList'),// TBD: 'lang.types.String',
+      array('lang.Object', 'util.collections.IList'),// TBD: 'net.xp_lang.tests.StringBuffer',
       'public class %s { 
-        util.collections.IList<lang.types.String> $list;
+        util.collections.IList<net.xp_lang.tests.StringBuffer> $list;
       }'
     );
   }
@@ -145,9 +145,9 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function indexerTypeDeclarationGetsUsed() {
     $this->assertUses(
-      array('lang.Object', 'lang.types.String'),
+      array('lang.Object', 'net.xp_lang.tests.StringBuffer'),
       'public class %s { 
-        lang.types.String this[int $index] {
+        net.xp_lang.tests.StringBuffer this[int $index] {
           get { return $this.strings[$index]; }
           set { $this.strings[$index]= $value; }
         }
@@ -162,9 +162,9 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function propertyTypeDeclarationGetsUsed() {
     $this->assertUses(
-      array('lang.Object', 'lang.types.String'),
+      array('lang.Object', 'net.xp_lang.tests.StringBuffer'),
       'public class %s { 
-        lang.types.String current {
+        net.xp_lang.tests.StringBuffer current {
           get { return $this.strings[$this.offset]; }
           set { $this.strings[$this.offset]= $value; }
         }
@@ -403,9 +403,9 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function methodDeclarationsArgumentTypesGetUsed() {
     $this->assertUses(
-      array('lang.Object', 'lang.types.String'),
+      array('lang.Object', 'net.xp_lang.tests.StringBuffer'),
       'public class %s { 
-        static void deleteFrom(lang.types.String $string, int? $pos, int? $length) {
+        static void deleteFrom(net.xp_lang.tests.StringBuffer $string, int? $pos, int? $length) {
           // TBI
         }
       }'
@@ -418,9 +418,9 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function constructorDeclarationsArgumentTypesGetUsed() {
     $this->assertUses(
-      array('lang.Object', 'lang.types.String'),
+      array('lang.Object', 'net.xp_lang.tests.StringBuffer'),
       'public class %s { 
-        public __construct(lang.types.String $string) {
+        public __construct(net.xp_lang.tests.StringBuffer $string) {
           // TBI
         }
       }'
@@ -433,9 +433,9 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function extensionMethodDeclarationsExtensionGetUsed() {
     $this->assertUses(
-      array('lang.Object', 'lang.types.String'),
+      array('lang.Object', 'net.xp_lang.tests.StringBuffer'),
       'public class %s { 
-        static void delete(this lang.types.String $self, int? $pos, int? $length) {
+        static void delete(this net.xp_lang.tests.StringBuffer $self, int? $pos, int? $length) {
           // TBI
         }
       }'
