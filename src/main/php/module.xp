@@ -1,6 +1,7 @@
 <?php namespace xp\compiler;
 
 use lang\ClassLoader;
+use lang\reflect\Package;
 
 define('MODIFIER_PACKAGE',  2048);
 define('MODIFIER_INLINE',   4096);
@@ -14,7 +15,7 @@ module xp-lang/compiler {
 
   /** @return void */
   public function initialize() {
-    ClassLoader::getDefault()->loadClass('xp.compiler.Syntax');
+    Syntax::registerAll(Package::forName('xp.compiler.syntax')->getPackages());
     ClassLoader::registerLoader(JitClassLoader::instanceFor(realpath('.')), true);
   }
 }

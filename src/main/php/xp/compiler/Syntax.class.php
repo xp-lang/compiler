@@ -1,7 +1,6 @@
 <?php namespace xp\compiler;
 
 use io\streams\InputStream;
-use lang\reflect\Package;
 
 /**
  * Syntax base class
@@ -10,14 +9,7 @@ abstract class Syntax extends \lang\Object {
   private static $syntaxes= array();
   protected $parser= null;
   protected $name;
-  
-  static function __static() {
-    foreach (Package::forName('xp.compiler.syntax')->getPackages() as $syntax) {
-      $name= $syntax->getSimpleName();
-      self::$syntaxes[$name]= $syntax->loadClass('Syntax')->newInstance($name);
-    }
-  }
-  
+
   /**
    * Constructor
    *
@@ -25,7 +17,6 @@ abstract class Syntax extends \lang\Object {
    */
   public function __construct($name) {
     $this->name= $name;
-    $this->parser= $this->newParser();
   }
 
   /**
@@ -36,7 +27,20 @@ abstract class Syntax extends \lang\Object {
   public function name() {
     return $this->name;
   }
-  
+
+  /**
+   * Register syntaxes
+   *
+   * @param  lang.reflect.Package[] $packages
+   * @return void
+   */
+  public static function registerAll($packages) {
+    foreach ($packages as $package) {
+      $name= $package->getSimpleName();
+      self::$syntaxes[$name]= $package->loadClass('Syntax')->newInstance($name);
+    }
+  }
+
   /**
    * Retrieve a syntax for a given name
    *
@@ -68,6 +72,10 @@ abstract class Syntax extends \lang\Object {
    * @return  xp.compiler.ast.ParseTree tree
    */
   public function parse(InputStream $in, $source= null, $messages= null) {
+    if (null === $this->parser) {
+      $this->parser= $this->newParser();
+    }
+
     $result= $this->parser->parse($this->newLexer($in, $source ? $source : $in->toString()));
     if ($messages) foreach ($this->parser->getWarnings() as $warning) {
       $messages->warn(
