@@ -1,7 +1,7 @@
 <?php namespace net\xp_lang\tests\integration;
 
 use util\cmd\Console;
-new \import('StringExtensions');
+new \import('StringBufferExtensions');
 
 /**
  * Test fixture

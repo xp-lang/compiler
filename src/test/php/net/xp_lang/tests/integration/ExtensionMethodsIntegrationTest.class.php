@@ -11,7 +11,7 @@ use io\Folder;
 use io\IOException;
 use lang\Runtime;
 use lang\ClassLoader;
-use lang\types\String;
+use net\xp_lang\tests\StringBuffer;
 
 /**
  * TestCase
@@ -33,7 +33,7 @@ class ExtensionMethodsIntegrationTest extends \unittest\TestCase {
     $files= new FileManager();
     $files->setOutput(self::$temp);
     $task= new CompilationTask(
-      new FileSource(ClassLoader::getDefault()->getResourceAsStream('net/xp_lang/tests/integration/src/StringExtensions.xp')),
+      new FileSource(ClassLoader::getDefault()->getResourceAsStream('net/xp_lang/tests/integration/src/StringBufferExtensions.xp')),
       new NullDiagnosticListener(),
       $files,
       $emitter
@@ -77,8 +77,8 @@ class ExtensionMethodsIntegrationTest extends \unittest\TestCase {
   #[@test]
   public function trimMethod() {
     $this->assertEquals(
-      new String('Hello'), 
-      $this->run('return (new \lang\types\String(" Hello "))->trim(" ");')
+      new StringBuffer('Hello'), 
+      $this->run('return (new \net\xp_lang\tests\StringBuffer(" Hello "))->trim(" ");')
     );
   }
 
@@ -87,6 +87,6 @@ class ExtensionMethodsIntegrationTest extends \unittest\TestCase {
    */
   #[@test, @expect(class= 'lang.IllegalStateException', withMessage= '/undefined method .+nonExistant/')]
   public function nonExistantMethod() {
-    $this->run('return (new \lang\types\String(" Hello "))->nonExistant();');
+    $this->run('return (new \net\xp_lang\tests\StringBuffer(" Hello "))->nonExistant();');
   }
 }
