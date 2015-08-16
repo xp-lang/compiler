@@ -3,6 +3,14 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* **Removed support for PHP 5.2 and PHP 5.3**:
+  . Added new PHP 5.4 the default emitter, which emits `new T().method()`
+    as `(new T())->method()` instead of wrapping it in the deprecated
+    `create` core functionality.
+  . Removed PHP 5.2 and 5.3 emitters, using `-E php5.2` or `-E php5.3`
+    on the command line will produce an error!
+  (@thekid)
+
 ## 2.1.0 / 2015-08-16
 
 * Adopted to newer XP versions by no longer using deprecated functionality:
