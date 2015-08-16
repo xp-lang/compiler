@@ -277,12 +277,12 @@ class Lexer extends \text\parser\generic\AbstractLexer {
             $ahead= $this->nextToken();
             if ('+' === $ahead{0} || '-' === $ahead{0}) {
               $this->value.= $ahead.$this->nextToken();
-              $format= '%d.%d%*1[eE]'.$ahead.'%*d';
+              $format= '%d.%d%1[eE]'.$ahead.'%d';
             } else {
-              $format= '%d.%d%*1[eE]%*d';
+              $format= '%d.%d%1[eE]%d';
               $this->pushBack($ahead);
             }
-            if (4 !== sscanf($this->value, $format, $n, $f)) {
+            if (sscanf($this->value, $format, $number, $fraction, $_, $exponent) < 4) {
               $this->raise('lang.FormatException', 'Illegal decimal number <'.$this->value.'>');
             }
           } else {
@@ -310,15 +310,15 @@ class Lexer extends \text\parser\generic\AbstractLexer {
           } else if ($length !== strcspn($token, 'eE')) {
             if ('+' === $ahead{0} || '-' === $ahead{0}) {
               $exponent= $ahead.$this->nextToken();
-              $format= '%d%*1[eE]'.$ahead.'%*d';
+              $format= '%d%1[eE]'.$ahead.'%d';
               $p= false;
             } else {
-              $format= '%d%*1[eE]%*d';
+              $format= '%d%1[eE]%d';
               $exponent= '';
             }
             $this->token= Parser::T_DECIMAL;
             $this->value= $token.$exponent;
-            if (3 !== sscanf($this->value, $format, $n)) {
+            if (sscanf($this->value, $format, $number, $_, $exponent) < 3) {
               $this->raise('lang.FormatException', 'Illegal decimal number <'.$this->value.'>');
             }
           } else {
