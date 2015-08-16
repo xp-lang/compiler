@@ -36,15 +36,16 @@ class NativeImporter extends \xp\compiler\emit\NativeImporter {
    */
   public function importSelected($extension, $function) {
     try {
-      $e= new \ReflectionExtension($extension);
       $f= new \ReflectionFunction($function);
     } catch (\ReflectionException $e) {
       throw new IllegalArgumentException($e->getMessage());
     }
-    if ($e != ($fe= $f->getExtension())) {
-      throw new IllegalArgumentException('Function '.$function.' is not inside extension '.$extension.' (but '.($fe ? $fe->getName() : '(n/a)').')');
+
+    if ($extension === strtolower(($fe= $f->getExtensionName()))) {
+      return [$function => true];
+    } else {
+      throw new IllegalArgumentException('Function '.$function.' is not inside extension '.$extension.' (but '.($fe ?: '(n/a)').')');
     }
-    return [$function => true];
   }
 
   /**
@@ -57,8 +58,8 @@ class NativeImporter extends \xp\compiler\emit\NativeImporter {
    */
   public function hasFunction($extension, $function) {
     if (function_exists($function)) {
-      $e= (new \ReflectionFunction($function))->getExtension();
-      return $extension === ($e ? strtolower($e->getName()) : null);
+      $e= (new \ReflectionFunction($function))->getExtensionName();
+      return $extension === strtolower($e);
     } else {
       return false;
     }
