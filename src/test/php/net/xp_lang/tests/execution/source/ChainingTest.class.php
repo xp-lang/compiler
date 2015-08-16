@@ -1,27 +1,12 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
 use lang\ClassLoader;
+use net\xp_lang\tests\StringBuffer;
 
 /**
  * Tests chaining
  */
 class ChainingTest extends ExecutionTest {
-
-  #[@beforeClass]
-  public static function fixture() {
-    ClassLoader::defineClass('net.xp_lang.tests.execution.source.StringBuffer', 'lang.Object', ['\ArrayAccess'], '{
-      private $buffer= "";
-      public $length;
-      public function __construct($initial= "") { $this->buffer= $initial; $this->length= strlen($this->buffer); }
-      public static function valueOf($initial) { return new self($initial); }
-      public function concat($string) { $this->buffer.= $string; return $this; }
-      public function equals($cmp) { return $cmp instanceof self && $cmp->buffer === $this->buffer; }
-      public function offsetGet($pos) { return $this->buffer[$pos]; }
-      public function offsetExists($pos) { return $pos < $this->length; }
-      public function offsetSet($pos, $value) { /* TBI */ }
-      public function offsetUnset($pos) { /* TBI */ }
-    }');
-  }
 
   #[@test]
   public function parentOfTestClass() {
@@ -59,7 +44,7 @@ class ChainingTest extends ExecutionTest {
   public function chainedNestedMethodCallAfterNewObject() {
     $this->assertEquals(
       new StringBuffer('Test'), 
-      $this->run('return new net.xp_lang.tests.execution.source.StringBuffer().concat("Test");')
+      $this->run('return new net.xp_lang.tests.StringBuffer().append("Test");')
     );
   }
 
@@ -67,7 +52,7 @@ class ChainingTest extends ExecutionTest {
   public function arrayAccessAfterNew() {
     $this->assertEquals(
       'e',
-      $this->run('return new net.xp_lang.tests.execution.source.StringBuffer("Test")[1];')
+      $this->run('return new net.xp_lang.tests.StringBuffer("Test")[1];')
     );
   }
 
@@ -75,7 +60,7 @@ class ChainingTest extends ExecutionTest {
   public function arrayAccessAfterStaticMethod() {
     $this->assertEquals(
       'e',
-      $this->run('return net.xp_lang.tests.execution.source.StringBuffer::valueOf("Test")[1];')
+      $this->run('return net.xp_lang.tests.StringBuffer::valueOf("Test")[1];')
     );
   }
 
@@ -126,6 +111,6 @@ class ChainingTest extends ExecutionTest {
 
   #[@test]
   public function afterBracedExpression() {
-    $this->assertEquals(4, $this->run('return (1 ? new net.xp_lang.tests.execution.source.StringBuffer("Test") : null).length;'));
+    $this->assertEquals(4, $this->run('return (1 ? new net.xp_lang.tests.StringBuffer("Test") : null).length;'));
   }
 }
