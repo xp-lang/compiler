@@ -92,15 +92,22 @@ use lang\FormatException;
  * @see      xp://xp.compiler.ast.ParseTree
  */
 abstract class Emitter extends \xp\compiler\emit\Emitter {
-  protected 
-    $temp         = array(null),
-    $method       = array(null),
-    $finalizers   = array(null),
-    $metadata     = array(null),
-    $properties   = array(null),
-    $inits        = array(null),
-    $local        = array(null),
-    $types        = array(null);
+  protected $temp       = [null];
+  protected $method     = [null];
+  protected $finalizers = [null];
+  protected $metadata   = [null];
+  protected $properties = [null];
+  protected $inits      = [null];
+  protected $local      = [null];
+  protected $types      = [null];
+
+  /**
+   * Constructor.
+   */
+  public function __construct() {
+    parent::__construct();
+    $this->nativeImporter= new NativeImporter();
+  }
 
   /**
    * Returns the literal for a given type
@@ -2465,7 +2472,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     array_unshift($this->local, []);
     array_unshift($this->temp, 0);
     array_unshift($this->scope, $scope->enter(new CompilationUnitScope()));
-    $this->scope[0]->importer= new NativeImporter();
+    $this->scope[0]->importer= $this->nativeImporter;
     $this->scope[0]->declarations= [$tree->declaration];
     $this->scope[0]->package= $tree->package;
     

@@ -22,11 +22,11 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
   );
   protected $optimizations= null;
   protected $checks= null;
+  protected $nativeImporter= null;
   protected $scope= array(null);
 
   /**
    * Constructor.
-   *
    */
   public function __construct() {
     $this->optimizations= new Optimizations();
