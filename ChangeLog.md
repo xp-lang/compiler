@@ -10,6 +10,9 @@ XP Compiler ChangeLog
   . Removed PHP 5.2 and 5.3 emitters, using `-E php5.2` or `-E php5.3`
     on the command line will produce an error!
   (@thekid)
+* Improved performance when loading supported syntaxes by deferring
+  parser and lexer instantiation until when first needed.
+  (@thekid)
 
 ## 2.1.0 / 2015-08-16
 
