@@ -3,6 +3,12 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Fixed issue #39: HHVM support
+  . Fixed sscanf() incompatibilities - HHVM doesn't support `%*` for not
+    assigning variables. Worked around by supplying dummy variables.
+  . Added a native importer which doesn't verify extensions. HHVM does
+    not group functions into extensions like PHP does.
+  (@thekid)
 * **Removed support for PHP 5.2 and PHP 5.3**:
   . Added new PHP 5.4 the default emitter, which emits `new T().method()`
     as `(new T())->method()` instead of wrapping it in the deprecated
