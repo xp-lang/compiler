@@ -8,18 +8,13 @@ use lang\IllegalArgumentException;
  * @test    xp://net.xp_lang.tests.SourceNativeImporterTest
  */
 class NativeImporter extends \xp\compiler\emit\NativeImporter {
-  protected static $coreExtAvailable= false;
-  
-  static function __static() {
-    self::$coreExtAvailable= extension_loaded('core');
-  }
   
   /**
    * Import all functions from a given extension
    *
    * @param   string extension
    * @param   string function
-   * @return  array<var, var> import
+   * @return  [:bool] import
    * @throws  lang.IllegalArgumentException if extension or function don't exist
    */
   public function importAll($extension) {
@@ -28,54 +23,28 @@ class NativeImporter extends \xp\compiler\emit\NativeImporter {
     } catch (\ReflectionException $e) {
       throw new IllegalArgumentException('Extension '.$extension.' does not exist');
     }
-    return array(0 => array($extension => true));
+    return [0 => [$extension => true]];
   }
   
-  /**
-   * Returns a PHP function's extension
-   *
-   * @param   php.ReflectionFunction func
-   * @return  php.ReflectionExtension
-   */
-  protected function functionsExtension($func) {
-    if (method_exists($func, 'getExtension')) return $func->getExtension();
-    
-    // BC with older PHP versions
-    foreach (get_loaded_extensions() as $name) {
-      $r= new \ReflectionExtension($name);
-      $f= $r->getFunctions(); 
-      if (isset($f[$func->getName()])) return $r;
-    }
-    return null;
-  }
-
   /**
    * Import a single function
    *
    * @param   string extension
    * @param   string function
-   * @return  array<var, var> import
+   * @return  [:bool] import
    * @throws  lang.IllegalArgumentException if extension or function don't exist
    */
   public function importSelected($extension, $function) {
-    if ('core' === $extension && !self::$coreExtAvailable) {
-      $e= null;
-    } else {
-      try {
-        $e= new \ReflectionExtension($extension);
-      } catch (\ReflectionException $e) {
-        throw new \lang\IllegalArgumentException('Extension '.$extension.' does not exist');
-      }
-    }
     try {
+      $e= new \ReflectionExtension($extension);
       $f= new \ReflectionFunction($function);
     } catch (\ReflectionException $e) {
-      throw new \lang\IllegalArgumentException('Function '.$function.' does not exist');
+      throw new IllegalArgumentException($e->getMessage());
     }
-    if ($e != ($fe= $this->functionsExtension($f))) {
+    if ($e != ($fe= $f->getExtension())) {
       throw new IllegalArgumentException('Function '.$function.' is not inside extension '.$extension.' (but '.($fe ? $fe->getName() : '(n/a)').')');
     }
-    return array($function => true);
+    return [$function => true];
   }
 
   /**
@@ -83,12 +52,12 @@ class NativeImporter extends \xp\compiler\emit\NativeImporter {
    *
    * @param   string extension
    * @param   string function
-   * @return  array<var, var> import
+   * @return  bool
    * @throws  lang.IllegalArgumentException if extension or function don't exist
    */
   public function hasFunction($extension, $function) {
     if (function_exists($function)) {
-      $e= $this->functionsExtension(new \ReflectionFunction($function));
+      $e= (new \ReflectionFunction($function))->getExtension();
       return $extension === ($e ? strtolower($e->getName()) : null);
     } else {
       return false;
@@ -111,7 +80,7 @@ class NativeImporter extends \xp\compiler\emit\NativeImporter {
    * </code>
    *
    * @param   string pattern
-   * @return  array<var, var> import
+   * @return  [:bool] import
    * @throws  lang.IllegalArgumentException in case errors occur during importing
    * @throws  lang.FormatException in case the input string is malformed
    */
