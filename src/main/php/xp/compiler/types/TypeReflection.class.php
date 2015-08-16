@@ -125,7 +125,7 @@ class TypeReflection extends Types {
       return $e;
     } else if ($this->class->_reflect->implementsInterface('IteratorAggregate')) {
       $it= $this->class->getMethod('getIterator')->getReturnTypeName();
-      if (2 === sscanf($it, '%*[^<]<%[^>]>', $types)) {
+      if (2 === sscanf($it, '%[^<]<%[^>]>', $_, $types)) {
         $components= explode(',', $types);
       } else {
         $components= array('var', 'var');
