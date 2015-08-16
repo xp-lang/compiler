@@ -1,5 +1,7 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
+use net\xp_lang\tests\StringBuffer;
+
 /**
  * Tests annotations
  *
@@ -32,24 +34,24 @@ class AnnotationTest extends ExecutionTest {
   #[@test]
   public function newinstance_annotation() {
     $this->assertEquals(
-      new \lang\types\String('Hello'),
-      $this->methodAnnotatedWith('[@value(new lang.types.String("Hello"))]')->getAnnotation('value')
+      new StringBuffer('Hello'),
+      $this->methodAnnotatedWith('[@value(new net.xp_lang.tests.StringBuffer("Hello"))]')->getAnnotation('value')
     );
   }
 
   #[@test]
   public function newinstance_annotation_with_array() {
     $this->assertEquals(
-      array(new \lang\types\String('Hello')),
-      $this->methodAnnotatedWith('[@value([new lang.types.String("Hello")])]')->getAnnotation('value')
+      array(new StringBuffer('Hello')),
+      $this->methodAnnotatedWith('[@value([new net.xp_lang.tests.StringBuffer("Hello")])]')->getAnnotation('value')
     );
   }
 
   #[@test]
   public function newinstance_annotation_with_map() {
     $this->assertEquals(
-      array('hello' => new \lang\types\String('Hello')),
-      $this->methodAnnotatedWith('[@value([hello : new lang.types.String("Hello")])]')->getAnnotation('value')
+      array('hello' => new StringBuffer('Hello')),
+      $this->methodAnnotatedWith('[@value([hello : new net.xp_lang.tests.StringBuffer("Hello")])]')->getAnnotation('value')
     );
   }
 

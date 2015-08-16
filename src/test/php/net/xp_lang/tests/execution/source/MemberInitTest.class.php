@@ -1,6 +1,7 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
 use lang\XPClass;
+use net\xp_lang\tests\StringBuffer;
 
 /**
  * Tests member initialization
@@ -61,8 +62,8 @@ class MemberInitTest extends ExecutionTest {
   #[@test]
   public function toMapOfObjects() {
     $this->assertEquals(
-      array('one' => new \lang\types\String('one')),
-      $this->newInstance('{ public [:lang.types.String] $map= [ one : new lang.types.String("one") ]; }')->map
+      array('one' => new StringBuffer('one')),
+      $this->newInstance('{ public [:net.xp_lang.tests.StringBuffer] $map= [ one : new net.xp_lang.tests.StringBuffer("one") ]; }')->map
     );
   }
 
@@ -74,8 +75,8 @@ class MemberInitTest extends ExecutionTest {
   #[@test]
   public function toArrayOfObjects() {
     $this->assertEquals(
-      array(new \lang\types\String('one')),
-      $this->newInstance('{ public lang.types.String[] $list= [new lang.types.String("one")]; }')->list
+      array(new StringBuffer('one')),
+      $this->newInstance('{ public net.xp_lang.tests.StringBuffer[] $list= [new net.xp_lang.tests.StringBuffer("one")]; }')->list
     );
   }
 
@@ -166,10 +167,10 @@ class MemberInitTest extends ExecutionTest {
    */
   #[@test]
   public function complexExample() {
-    $this->assertEquals(array(1, 2, 3), $this->newInstance('{ 
-      public static XPClass $arrayClass= lang.types.ArrayList::class;  
-      public int[] $elements= self::$arrayClass.newInstance(1, 2, 3).values;
-    }')->elements);
+    $this->assertEquals(4, $this->newInstance('{ 
+      public static XPClass $class= net.xp_lang.tests.StringBuffer::class;  
+      public int $length= self::$class.newInstance("Test").length;
+    }')->length);
   }
 
   /**
@@ -181,14 +182,14 @@ class MemberInitTest extends ExecutionTest {
     $i= $this->newInstance('{ 
       public Object newAnonymousInstance() {
         return new Object() {
-          public static XPClass $arrayClass= lang.types.ArrayList::class;
+          public static XPClass $class= net.xp_lang.tests.StringBuffer::class;
 
-          public XPClass getMember() { return self::$arrayClass; }
+          public XPClass getMember() { return self::$class; }
         };
       }
     }');
     $this->assertEquals(
-      XPClass::forName('lang.types.ArrayList'), 
+      XPClass::forName('net.xp_lang.tests.StringBuffer'), 
       $i->newAnonymousInstance()->getMember()
     );
   }
