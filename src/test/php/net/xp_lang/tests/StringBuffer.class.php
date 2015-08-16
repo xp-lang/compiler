@@ -39,11 +39,39 @@ class StringBuffer extends \lang\Object implements \ArrayAccess {
    */
   public function equals($cmp) { return $cmp instanceof self && $cmp->buffer === $this->buffer; }
 
-
+  /** @return string */
   public function __toString() { return $this->buffer; }
 
+  /**
+   * = $this[]
+   *
+   * @param  int $pos
+   * @return string
+   */
   public function offsetGet($pos) { return $this->buffer[$pos]; }
+
+  /**
+   * isset($this[])
+   *
+   * @param  int $pos
+   * @return bool
+   */
   public function offsetExists($pos) { return $pos < $this->length; }
+
+  /**
+   * $this[]= 
+   *
+   * @param  int $pos
+   * @param  var $value
+   * @return string
+   */
   public function offsetSet($pos, $value) { /* TBI */ }
-  public function offsetUnset($pos) { /* TBI */ }
+
+  /**
+   * unset($this[])
+   *
+   * @param  int $pos
+   * @return void
+   */
+   public function offsetUnset($pos) { /* TBI */ }
 }
