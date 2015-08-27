@@ -181,10 +181,9 @@ class TypeReflection extends Types {
    * @return  xp.compiler.ast.Node
    */
   protected function nodeOf($value, $t) {
-    if (null === $value) return new \xp\compiler\ast\NullNode();
-
-    // Switch on type
-    if (Primitive::$INT->equals($t)) {
+    if (null === $value) {
+      return new \xp\compiler\ast\NullNode();
+    } else if (Primitive::$INT->equals($t)) {
       return new \xp\compiler\ast\IntegerNode($value);
     } else if (Primitive::$DOUBLE->equals($t)) {
       return new \xp\compiler\ast\DecimalNode($value);
@@ -198,6 +197,13 @@ class TypeReflection extends Types {
       $n= new \xp\compiler\ast\ArrayNode();
       $c= $t->componentType();
       $n->type= new TypeName($t->getName());
+      foreach ($value as $element) {
+        $n->values[]= $this->nodeOf($value, $c);
+      }
+      return $n;
+    } else if ($t instanceof \lang\NativeArrayType) {
+      $n= new \xp\compiler\ast\ArrayNode();
+      $n->type= TypeName::$VAR;
       foreach ($value as $element) {
         $n->values[]= $this->nodeOf($value, $c);
       }
