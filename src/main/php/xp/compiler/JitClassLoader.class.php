@@ -185,7 +185,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
       throw new ClassFormatException('Cannot compile '.$source->getURI().': '.$e->formattedErrors(''), $e);
     } catch (FormatException $e) {
       $this->debug && $e->printStackTrace();
-      throw new JitCompilationError($class, array($this), $this->emitter->messages());
+      throw new JitCompilationError($class, array($this), $this->emitter->messages(), $e);
     }
 
     // Clean up
