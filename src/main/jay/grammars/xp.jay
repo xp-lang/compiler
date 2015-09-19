@@ -70,14 +70,17 @@ use xp\compiler\ast\LambdaNode;
 use xp\compiler\ast\WithNode;
 use xp\compiler\ast\ArmNode;
 use xp\compiler\ast\BracedExpressionNode;
+use xp\compiler\ast\YieldNode;
 %}
 
 %left ','
 %nonassoc T_ARROW
+%right T_YIELD
 %left T_BOOLEAN_OR
 %left T_BOOLEAN_AND
 %right '=' T_ADD_EQUAL T_SUB_EQUAL T_MUL_EQUAL T_DIV_EQUAL T_CONCAT_EQUAL T_MOD_EQUAL T_AND_EQUAL T_OR_EQUAL T_XOR_EQUAL
-%left '?' ':'
+%left '?'
+%nonassoc ':'
 %left '|'
 %left '^'
 %left '&'
@@ -90,7 +93,7 @@ use xp\compiler\ast\BracedExpressionNode;
 %nonassoc T_INSTANCEOF
 %right '~' T_INC T_DEC
 %right '['
-%right T_AS 
+%right T_AS
 %nonassoc T_NEW T_CLONE
 
 %token T_WORD 260
@@ -143,6 +146,7 @@ use xp\compiler\ast\BracedExpressionNode;
 %token T_IN 364
 %token T_BREAK 365
 %token T_CONTINUE 366
+%token T_YIELD 367
 
 %token T_IF 370
 %token T_ELSE 371
@@ -823,7 +827,16 @@ expression:
       }
     }
   | T_CLONE expression { 
-      $$= $yyLex->create(new CloneNode($2)); break;
+      $$= $yyLex->create(new CloneNode($2));
+    }
+  | T_YIELD {
+      $$= $yyLex->create(new YieldNode());
+    }
+  | T_YIELD expression {
+      $$= $yyLex->create(new YieldNode($2));
+    }
+  | T_YIELD expression ':' expression {
+      $$= $yyLex->create(new YieldNode($4, $2));
     }
   | expression T_AS paramtyperef { 
       $$= $yyLex->create(new CastNode(array_merge($3, array('expression' => $1)))); 
