@@ -30,6 +30,14 @@ class LambdaTest extends ExecutionTest {
   }
 
   #[@test]
+  public function closure_local_variables_not_captured() {
+    $this->assertEquals(array(3, 6, 9), $this->run(
+      'return apply([1, 2, 3], $a -> { $mul= 3; return $a * $mul; });',
+      array('import static net.xp_lang.tests.execution.source.Functions::apply;')
+    ));
+  }
+
+  #[@test]
   public function execution() {
     $this->assertEquals(3, $this->run(
       'return ($a -> $a + 1)(2);'

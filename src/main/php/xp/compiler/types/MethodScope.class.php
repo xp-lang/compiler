@@ -1,20 +1,20 @@
 <?php namespace xp\compiler\types;
 
 /**
- * Represents the method scope
+ * Represents the routine scope
  *
  * @see     xp://xp.compiler.Scope
  */
 class MethodScope extends Scope {
-  public $name= null;
+  public $routine= null;
 
   /**
    * Constructor
    *
-   * @param   string name
+   * @param   xp.compiler.ast.RoutineNode $routine
    */
-  public function __construct($name= null) {
-    $this->name= $name;
+  public function __construct($routine= null) {
+    $this->routine= $routine;
     parent::__construct();
   }
 }

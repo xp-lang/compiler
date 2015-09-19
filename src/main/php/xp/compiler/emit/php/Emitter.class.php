@@ -1361,7 +1361,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     );
     
     $name= 'operator··'.$ovl[$operator->symbol];
-    $this->enter(new MethodScope($name));
+    $this->enter(new MethodScope($operator));
     array_unshift($this->method, $name);
 
     // Meta data
@@ -1601,7 +1601,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $b->append(' function '.$method->name);
     
     // Begin
-    $this->enter(new MethodScope($method->name));
+    $this->enter(new MethodScope($method));
     array_unshift($this->method, $method->name);
     if (!Modifiers::isStatic($method->modifiers)) {
       $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
@@ -1673,7 +1673,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $b->append(' function __construct');
     
     // Begin
-    $this->enter(new MethodScope('__construct'));
+    $this->enter(new MethodScope($constructor));
     $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
     array_unshift($this->method, '__construct');
 

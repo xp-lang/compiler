@@ -84,8 +84,19 @@ class V54Emitter extends Emitter {
    * @see     http://de3.php.net/manual/de/functions.anonymous.php
    */
   protected function emitLambda($b, $lambda) {
-    $finder= new \xp\compiler\ast\LocalVariableFinder();
 
+    // Capture all local variables and parameters of containing scope which
+    // are also used inside the lambda by value.
+    $finder= new \xp\compiler\ast\LocalVariableFinder();
+    foreach ($finder->variablesIn($this->scope[0]->routine->body) as $variable) {
+      $finder->including($variable);
+    }
+    foreach ($this->scope[0]->routine->parameters as $param) {
+      $finder->including($param['name']);
+    }
+    $finder->excluding('*');
+
+    // Parameters
     $b->append('function(');
     $s= sizeof($lambda->parameters)- 1;
     foreach ($lambda->parameters as $i => $param) {
@@ -94,13 +105,12 @@ class V54Emitter extends Emitter {
         $b->append('=');
         $this->emitOne($b, $param['default']);
       }
-      $finder->excluding($param['name']);
       $i < $s && $b->append(',');
     }
     $b->append(')');
 
-    $capture= $finder->variablesIn($lambda->statements);
-    if (!empty($capture)) {
+    // Use variables
+    if ($capture= $finder->variablesIn($lambda->statements)) {
       $b->append(' use($')->append(implode(', $', $capture))->append(')');
     }
 
