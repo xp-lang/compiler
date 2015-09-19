@@ -681,6 +681,14 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.ast.SilenceOperatorNode silenced
    */
   protected abstract function emitSilenceOperator($b, $silenced);
+
+  /**
+   * Emit a yield node
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.YieldNode yield
+   */
+  protected abstract function emitYield($b, $yield);
   
   /**
    * Emit a single node
@@ -742,7 +750,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
       $pos= $context->position;
     } else {                      // Try to determine last context node from backtrace
       $pos= array(0, 0);
-      foreach (create(new \lang\Throwable(null))->getStackTrace() as $element) {
+      foreach ((new \lang\Throwable(null))->getStackTrace() as $element) {
         if (
           'emit' == substr($element->method, 0, 4) &&
           sizeof($element->args) > 1 &&

@@ -55,6 +55,7 @@ class Lexer extends \text\parser\generic\AbstractLexer {
       'while'         => Parser::T_WHILE,
       'break'         => Parser::T_BREAK,
       'continue'      => Parser::T_CONTINUE,
+      'yield'         => Parser::T_YIELD,
 
       'with'          => Parser::T_WITH,
 
