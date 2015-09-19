@@ -47,7 +47,7 @@ use lang\ClassLoader;
  *     Adds path to source path (source path will equal classpath initially)
  *   </li>
  *   <li>-E [emitter]: 
- *     Use emitter, defaults to "php5.4"
+ *     Use emitter, defaults to "php5.5"
  *   </li>
  *   <li>-p [profile[,profile[,...]]]:
  *     Use compiler profiles (defaults to ["default"]) - xp/compiler/{profile}.xcp.ini
@@ -180,8 +180,8 @@ class Runner extends \lang\Object {
     $manager->setSourcePaths(\xp::$classpath);
     
     // Handle arguments
-    $profiles= array('default');
-    $emitter= 'php5.4';
+    $profiles= ['default'];
+    $emitter= 'php5.5';
     $result= function($success) { return $success ? 0 : 1; };
     $files= array();
     $listener= new DefaultDiagnosticListener(Console::$out);
