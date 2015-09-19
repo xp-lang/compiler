@@ -1,6 +1,6 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
-use xp\compiler\emit\php\V54Emitter;
+use xp\compiler\emit\php\V55Emitter;
 use xp\compiler\task\CompilationTask;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\io\FileManager;
@@ -24,10 +24,10 @@ abstract class ExecutionTest extends \unittest\TestCase {
   /**
    * Gets emitter
    *
-   * @return   xp.compiler.emit.V54Emitter
+   * @return   xp.compiler.emit.Emitter
    */
   protected static function emitter() {
-    return self::$emitter ?: self::$emitter= new V54Emitter();
+    return self::$emitter ?: self::$emitter= new V55Emitter();
   }
 
   /**

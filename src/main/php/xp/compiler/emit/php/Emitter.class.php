@@ -2430,6 +2430,16 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   }
 
   /**
+   * Emit a yield node
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.YieldNode yield
+   */
+  protected function emitYield($b, $yield) {
+    $this->error('V505', 'Yield not supported in '.$this->getClassName());
+  }
+
+  /**
    * Emit all given nodes
    *
    * @param   xp.compiler.emit.Buffer b
