@@ -1940,7 +1940,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
 
       if (!$initializable) {
         $init= new Buffer('', $b->line);
-        $this->enter(new MethodScope('<init>'));
+        $this->enter(new MethodScope(new MethodNode(['name' => '<init>'])));
         if ($static) {
           $variable= new StaticMemberAccessNode(new TypeName('self'), $field->name);
         } else {

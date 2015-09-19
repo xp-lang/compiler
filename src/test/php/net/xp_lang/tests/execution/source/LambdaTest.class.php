@@ -69,4 +69,13 @@ class LambdaTest extends ExecutionTest {
     }');
     $this->assertEquals(2, $class->newInstance()->test(1));
   }
+
+  #[@test]
+  public function inside_field_initializer() {
+    $class= self::define('class', 'LambdaInsideFieldInitializer', null, '{
+      public var $inc= $a -> $a + 1;
+      public int test(int $param) { return ($this.inc)($param); } 
+    }');
+    $this->assertEquals(2, $class->newInstance()->test(1));
+  }
 }
