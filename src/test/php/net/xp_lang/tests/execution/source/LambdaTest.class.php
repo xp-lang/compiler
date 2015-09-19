@@ -50,4 +50,23 @@ class LambdaTest extends ExecutionTest {
       '$plusone= $a -> $a + 1; return $plusone(2);'
     ));
   }
+
+  #[@test]
+  public function inside_property_getter() {
+    $class= self::define('class', 'LambdaInsidePropertyGetter', null, '{
+      public var inc { get { return $a -> ++$a; } }
+      public int test(int $param) { return ($this.inc)($param); } 
+    }');
+    $this->assertEquals(2, $class->newInstance()->test(1));
+  }
+
+  #[@test]
+  public function inside_property_setter() {
+    $class= self::define('class', 'LambdaInsidePropertySetter', null, '{
+      private var $func;
+      public var inc { set { $this.func= $a -> $a + $value; } }
+      public int test(int $param) { $this.inc= $param; return ($this.func)($param); } 
+    }');
+    $this->assertEquals(2, $class->newInstance()->test(1));
+  }
 }

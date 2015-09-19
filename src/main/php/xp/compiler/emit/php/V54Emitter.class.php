@@ -88,7 +88,7 @@ class V54Emitter extends Emitter {
     // Capture all local variables and parameters of containing scope which
     // are also used inside the lambda by value.
     $finder= new \xp\compiler\ast\LocalVariableFinder();
-    foreach ($finder->variablesIn($this->scope[0]->routine->body) as $variable) {
+    foreach ($finder->variablesIn((array)$this->scope[0]->routine->body) as $variable) {
       $finder->including($variable);
     }
     foreach ($this->scope[0]->routine->parameters as $param) {

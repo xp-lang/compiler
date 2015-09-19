@@ -1834,7 +1834,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $auto= [];
     if (!empty($properties['get'])) {
       $b->append('function __get($'.$mangled.') {');
-      $this->enter(new MethodScope('__get'));
+      $this->enter(new MethodScope(new MethodNode(['name' => '__get'])));
       $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
       foreach ($properties['get'] as $name => $definition) {
         $b->append('if (\''.$name.'\' === $'.$mangled.') {');
@@ -1851,7 +1851,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     }
     if (!empty($properties['set'])) {
       $b->append('function __set($'.$mangled.', $value) {');
-      $this->enter(new MethodScope('__set'));
+      $this->enter(new MethodScope(new MethodNode(['name' => '__set', 'parameters' => [['name' => 'value']]])));
       $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
       foreach ($properties['set'] as $name => $definition) {
         $this->scope[0]->setType(new VariableNode('value'), $definition[0]);
