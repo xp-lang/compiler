@@ -1412,10 +1412,14 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       
       if (isset($param['vararg'])) {
         $genericParams.= '...';
-        if ($i > 0) {
-          $defer[]= '$'.$param['name'].'= array_slice(func_get_args(), '.$i.');';
+        if (static::$UNPACK_REWRITE) {
+          if ($i > 0) {
+            $defer[]= '$'.$param['name'].'= array_slice(func_get_args(), '.$i.');';
+          } else {
+            $defer[]= '$'.$param['name'].'= func_get_args();';
+          }
         } else {
-          $defer[]= '$'.$param['name'].'= func_get_args();';
+          $b->append('...$'.$param['name']);
         }
         $this->scope[0]->setType(new VariableNode($param['name']), new TypeName($t->name.'[]'));
         break;
