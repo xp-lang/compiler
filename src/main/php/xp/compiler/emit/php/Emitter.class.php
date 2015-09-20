@@ -517,6 +517,21 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $b->append(', ');
         $this->emitInvocationArguments($b, $call->arguments, false);
       }
+    } else if (static::$UNPACK_REWRITE && $this->needsUnpacking((array)$call->arguments)) {
+      $b->append('call_user_func_array(');
+      $this->emitOne($b, $call->target);
+      $b->append(', array_merge(');
+      $s= sizeof($call->arguments) - 1;
+      foreach ($call->arguments as $i => $argument) {
+        if ($argument instanceof UnpackNode) {
+          $this->emitOne($b, $argument->expression);
+        } else {
+          $b->append('[');
+          $this->emitOne($b, $argument);
+          $b->append(']');
+        }
+        $i < $s && $b->append(',');
+      }
       $b->append('))');
     } else {
       $b->append('call_user_func(');
