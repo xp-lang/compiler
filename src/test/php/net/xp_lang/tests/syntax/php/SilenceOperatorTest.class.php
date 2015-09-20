@@ -7,16 +7,8 @@ use xp\compiler\ast\IntegerNode;
 use xp\compiler\ast\CastNode;
 use xp\compiler\types\TypeName;
 
-/**
- * TestCase
- *
- */
 class SilenceOperatorTest extends ParserTestCase {
 
-  /**
-   * Test @$a[0]
-   *
-   */
   #[@test]
   public function arrayGet() {
     $this->assertEquals(
@@ -25,10 +17,6 @@ class SilenceOperatorTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test @(string)$a
-   *
-   */
   #[@test]
   public function stringCast() {
     $this->assertEquals(

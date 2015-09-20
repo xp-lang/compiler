@@ -8,18 +8,14 @@ use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\ReturnNode;
 use xp\compiler\Syntax;
 use io\streams\MemoryInputStream;
+use lang\ClassLoader;
 
-/**
- * TestCase
- *
- * @see   xp://xp.compiler.ast.Visitor
- */
 class VisitorTest extends \unittest\TestCase {
-  protected static $visitor;
+  private static $visitor;
 
   #[@beforeClass]
   public static function defineVisitor() {
-    self::$visitor= \lang\ClassLoader::defineClass('VisitorTest··Visitor', 'xp.compiler.ast.Visitor', array(), '{
+    self::$visitor= ClassLoader::defineClass('VisitorTest··Visitor', 'xp.compiler.ast.Visitor', [], '{
       public $visited= array();
       public function visitOne($node) {
         $this->visited[]= $node;
@@ -29,32 +25,34 @@ class VisitorTest extends \unittest\TestCase {
   }
 
   /**
+   * Parse sourcecode
+   *
+   * @param  string $source
+   * @return xp.compiler.ast.TypeDeclarationNode
+   */
+  private function parse($source) {
+    return Syntax::forName('xp')->parse(new MemoryInputStream($source))->declaration;
+  }
+
+  /**
    * Assertion helper
    *
-   * @param   xp.compiler.ast.Node[] nodes
-   * @param   xp.compiler.ast.Node toVisit
-   * @throws  unittest.AssertionFailedError
+   * @param  xp.compiler.ast.Node[] $nodes
+   * @param  xp.compiler.ast.Node $toVisit
+   * @throws unittest.AssertionFailedError
    */
-  protected function assertVisited(array $nodes, Node $toVisit) {
+  private function assertVisited(array $nodes, Node $toVisit) {
     $visitor= self::$visitor->newInstance();
     $visitor->visitOne($toVisit);
     $this->assertEquals($nodes, $visitor->visited);
   }
 
-  /**
-   * Test visitAnnotation()
-   *
-   */
   #[@test]
   public function visitAnnotation() {
     $node= new \xp\compiler\ast\AnnotationNode(array('type' => 'deprecated', 'parameters' => array()));
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitAnnotation()
-   *
-   */
   #[@test]
   public function visitAnnotationWithParameters() {
     $node= new \xp\compiler\ast\AnnotationNode(array('type' => 'deprecated', 'parameters' => array(
@@ -63,10 +61,6 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->parameters[0]), $node);
   }
 
-  /**
-   * Test visitArm()
-   *
-   */
   #[@test]
   public function visitArm() {
     $node= new \xp\compiler\ast\ArmNode(
@@ -80,50 +74,30 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitArrayAccess()
-   *
-   */
   #[@test]
   public function visitArrayAccess() {
     $node= new \xp\compiler\ast\ArrayAccessNode(new VariableNode('a'), new IntegerNode(0));
     $this->assertVisited(array($node, $node->target, $node->offset), $node);
   }
 
-  /**
-   * Test visitArrayAccess()
-   *
-   */
   #[@test]
   public function visitArrayAccessWithoutOffset() {
     $node= new \xp\compiler\ast\ArrayAccessNode(new VariableNode('a'), null);
     $this->assertVisited(array($node, $node->target), $node);
   }
 
-  /**
-   * Test visitArray()
-   *
-   */
   #[@test]
   public function visitArray() {
     $node= new \xp\compiler\ast\ArrayNode(array('values' => array(new IntegerNode(0), new IntegerNode(1))));
     $this->assertVisited(array($node, $node->values[0], $node->values[1]), $node);
   }
 
-  /**
-   * Test visitArray()
-   *
-   */
   #[@test]
   public function visitEmptyArray() {
     $node= new \xp\compiler\ast\ArrayNode(array('values' => array()));
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitAssignment()
-   *
-   */
   #[@test]
   public function visitAssignment() {
     $node= new \xp\compiler\ast\AssignmentNode(array(
@@ -134,10 +108,6 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->variable, $node->expression), $node);
   }
 
-  /**
-   * Test visitBinaryOp()
-   *
-   */
   #[@test]
   public function visitBinaryOp() {
     $node= new \xp\compiler\ast\BinaryOpNode(array(
@@ -148,20 +118,12 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->lhs, $node->rhs), $node);
   }
 
-  /**
-   * Test visitBoolean()
-   *
-   */
   #[@test]
   public function visitBoolean() {
     $node= new \xp\compiler\ast\BooleanNode(true);
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitBooleanOp()
-   *
-   */
   #[@test]
   public function visitBooleanOp() {
     $node= new \xp\compiler\ast\BooleanOpNode(array(
@@ -172,20 +134,12 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->lhs, $node->rhs), $node);
   }
 
-  /**
-   * Test visitBreak()
-   *
-   */
   #[@test]
   public function visitBreak() {
     $node= new \xp\compiler\ast\BreakNode();
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitCase()
-   *
-   */
   #[@test]
   public function visitCase() {
     $node= new \xp\compiler\ast\CaseNode(array(
@@ -195,10 +149,6 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->expression, $node->statements[0], $node->statements[1]), $node);
   }
 
-  /**
-   * Test visitCast()
-   *
-   */
   #[@test]
   public function visitCast() {
     $node= new \xp\compiler\ast\CastNode(array(
@@ -209,10 +159,6 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->expression), $node);
   }
 
-  /**
-   * Test visitCatch()
-   *
-   */
   #[@test]
   public function visitCatch() {
     $node= new \xp\compiler\ast\CatchNode(array(
@@ -223,10 +169,6 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, new VariableNode('a'), $node->statements[0], $node->statements[1]), $node);
   }
 
-  /**
-   * Test visitCatch()
-   *
-   */
   #[@test]
   public function visitCatchWithEmptyStatements() {
     $node= new \xp\compiler\ast\CatchNode(array(
@@ -237,140 +179,84 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, new VariableNode('a')), $node);
   }
 
-  /**
-   * Test visitMemberAccess()
-   *
-   */
   #[@test]
   public function visitMemberAccess() {
     $node= new \xp\compiler\ast\MemberAccessNode(new VariableNode('this'), 'member'); 
     $this->assertVisited(array($node, $node->target), $node);
   }
 
-  /**
-   * Test visitMethodCall()
-   *
-   */
   #[@test]
   public function visitMethodCall() {
     $node= new \xp\compiler\ast\MethodCallNode(new VariableNode('this'), 'method', array(new VariableNode('a'))); 
     $this->assertVisited(array($node, $node->target, $node->arguments[0]), $node);
   }
 
-  /**
-   * Test visitMethodCall()
-   *
-   */
   #[@test]
   public function visitMethodCallWithEmptyArgumentList() {
     $node= new \xp\compiler\ast\MethodCallNode(new VariableNode('this'), 'method', array()); 
     $this->assertVisited(array($node, $node->target), $node);
   }
 
-  /**
-   * Test visitMethodCall()
-   *
-   */
   #[@test]
   public function visitMethodCallWithNullArgumentList() {
     $node= new \xp\compiler\ast\MethodCallNode(new VariableNode('this'), 'method', null); 
     $this->assertVisited(array($node, $node->target), $node);
   }
 
-  /**
-   * Test visitInstanceCall()
-   *
-   */
   #[@test]
   public function visitInstanceCall() {
     $node= new \xp\compiler\ast\InstanceCallNode(new VariableNode('this'), array(new VariableNode('a'))); 
     $this->assertVisited(array($node, $node->target, $node->arguments[0]), $node);
   }
 
-  /**
-   * Test visitInstanceCall()
-   *
-   */
   #[@test]
   public function visitInstanceCallWithEmptyArgumentList() {
     $node= new \xp\compiler\ast\InstanceCallNode(new VariableNode('this'), array()); 
     $this->assertVisited(array($node, $node->target), $node);
   }
 
-  /**
-   * Test visitInstanceCall()
-   *
-   */
   #[@test]
   public function visitInstanceCallWithNullArgumentList() {
     $node= new \xp\compiler\ast\InstanceCallNode(new VariableNode('this'), null); 
     $this->assertVisited(array($node, $node->target), $node);
   }
 
-  /**
-   * Test visitStaticMemberAccess()
-   *
-   */
   #[@test]
   public function visitStaticMemberAccess() {
     $node= new \xp\compiler\ast\StaticMemberAccessNode(new TypeName('self'), 'member'); 
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitStaticMethodCall()
-   *
-   */
   #[@test]
   public function visitStaticMethodCall() {
     $node= new \xp\compiler\ast\StaticMethodCallNode(new TypeName('self'), 'method', array(new VariableNode('a'))); 
     $this->assertVisited(array($node, $node->arguments[0]), $node);
   }
 
-  /**
-   * Test visitStaticMethodCall()
-   *
-   */
   #[@test]
   public function visitStaticMethodCallWithEmptyArgumentList() {
     $node= new \xp\compiler\ast\StaticMethodCallNode(new TypeName('self'), 'method', array()); 
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitStaticMethodCall()
-   *
-   */
   #[@test]
   public function visitStaticMethodCallWithNullArgumentList() {
     $node= new \xp\compiler\ast\StaticMethodCallNode(new TypeName('self'), 'method', null); 
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitConstantAccess()
-   *
-   */
   #[@test]
   public function visitConstantAccess() {
     $node= new \xp\compiler\ast\ConstantAccessNode(new TypeName('self'), 'CONSTANT');
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitClassAccess()
-   *
-   */
   #[@test]
   public function visitClassAccess() {
     $node= new \xp\compiler\ast\ClassAccessNode(new TypeName('self'));
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitClass()
-   *
-   */
   #[@test]
   public function visitClass() {
     $node= new \xp\compiler\ast\ClassNode(MODIFIER_PUBLIC, array(), new TypeName('self'), null, array(), array(
@@ -380,30 +266,18 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->body[0], $node->body[1]), $node);
   }
 
-  /**
-   * Test visitClass()
-   *
-   */
   #[@test]
   public function visitClassWithEmptyBody() {
     $node= new \xp\compiler\ast\ClassNode(MODIFIER_PUBLIC, array(), new TypeName('self'), null, array());
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitClone()
-   *
-   */
   #[@test]
   public function visitClone() {
     $node= new \xp\compiler\ast\CloneNode(new VariableNode('this')); 
     $this->assertVisited(array($node, $node->expression), $node);
   }
 
-  /**
-   * Test visitComparison()
-   *
-   */
   #[@test]
   public function visitComparison() {
     $node= new \xp\compiler\ast\ComparisonNode(array(
@@ -414,20 +288,12 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->lhs, $node->rhs), $node);
   }
 
-  /**
-   * Test visitConstant()
-   *
-   */
   #[@test]
   public function visitConstant() {
     $node= new \xp\compiler\ast\ConstantNode('STDERR');
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitConstructor()
-   *
-   */
   #[@test]
   public function visitConstructor() {
     $node= new \xp\compiler\ast\ConstructorNode(array(
@@ -441,80 +307,48 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->body[0], $node->body[1]), $node);
   }
 
-  /**
-   * Test visitContinue()
-   *
-   */
   #[@test]
   public function visitContinue() {
     $node= new \xp\compiler\ast\ContinueNode();
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitDefault()
-   *
-   */
   #[@test]
   public function visitDefault() {
     $node= new \xp\compiler\ast\DefaultNode(array('statements' => array(new ReturnNode())));
     $this->assertVisited(array($node, $node->statements[0]), $node);
   }
 
-  /**
-   * Test visitDecimal()
-   *
-   */
   #[@test]
   public function visitDecimal() {
     $node= new \xp\compiler\ast\DecimalNode(1.0);
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitDo()
-   *
-   */
   #[@test]
   public function visitDo() {
     $node= new \xp\compiler\ast\DoNode(new VariableNode('continue'), array(new VariableNode('a'), new ReturnNode()));
     $this->assertVisited(array($node, $node->statements[0], $node->statements[1], $node->expression), $node);
   }
 
-  /**
-   * Test visitElse()
-   *
-   */
   #[@test]
   public function visitElse() {
     $node= new \xp\compiler\ast\ElseNode(array('statements' => array(new VariableNode('a'), new ReturnNode())));
     $this->assertVisited(array($node, $node->statements[0], $node->statements[1]), $node);
   }
 
-  /**
-   * Test visitEnumMember()
-   *
-   */
   #[@test]
   public function visitEnumMember() {
     $node= new \xp\compiler\ast\EnumMemberNode(array('name' => 'penny', 'body' => array(new VariableNode('a'), new ReturnNode())));
     $this->assertVisited(array($node, $node->body[0], $node->body[1]), $node);
   }
 
-  /**
-   * Test visitEnumMember()
-   *
-   */
   #[@test]
   public function visitEnumMemberWithEmptyBody() {
     $node= new \xp\compiler\ast\EnumMemberNode(array('name' => 'penny'));
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitEnum()
-   *
-   */
   #[@test]
   public function visitEnum() {
     $node= new \xp\compiler\ast\EnumNode(MODIFIER_PUBLIC, array(), new TypeName('Coin'), null, array(), array(
@@ -524,20 +358,12 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->body[0], $node->body[1]), $node);
   }
 
-  /**
-   * Test visitField()
-   *
-   */
   #[@test]
   public function visitField() {
     $node= new \xp\compiler\ast\FieldNode(array('name' => 'type', 'modifiers' => MODIFIER_PUBLIC));
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitField()
-   *
-   */
   #[@test]
   public function visitFieldWithInitialization() {
     $node= new \xp\compiler\ast\FieldNode(array(
@@ -548,30 +374,18 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->initialization), $node);
   }
 
-  /**
-   * Test visitFinally()
-   *
-   */
   #[@test]
   public function visitFinally() {
     $node= new \xp\compiler\ast\FinallyNode(array('statements' => array(new ReturnNode())));
     $this->assertVisited(array($node, $node->statements[0]), $node);
   }
 
-  /**
-   * Test visitFinally()
-   *
-   */
   #[@test]
   public function visitFinallyWithEmptyStatements() {
     $node= new \xp\compiler\ast\FinallyNode(array('statements' => array()));
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitFor()
-   *
-   */
   #[@test]
   public function visitFor() {
     $node= new \xp\compiler\ast\ForNode(array(
@@ -586,10 +400,6 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitFor()
-   *
-   */
   #[@test]
   public function visitForWithEmptyStatements() {
     $node= new \xp\compiler\ast\ForNode(array(
@@ -604,10 +414,6 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitForeach()
-   *
-   */
   #[@test]
   public function visitForeachWithKey() {
     $node= new \xp\compiler\ast\ForeachNode(array(
@@ -621,10 +427,6 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitForeach()
-   *
-   */
   #[@test]
   public function visitForeachWithKeyAndValue() {
     $node= new \xp\compiler\ast\ForeachNode(array(
@@ -638,10 +440,6 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitForeach()
-   *
-   */
   #[@test]
   public function visitForeachWithEmptyStatements() {
     $node= new \xp\compiler\ast\ForeachNode(array(
@@ -655,20 +453,12 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitHex()
-   *
-   */
   #[@test]
   public function visitHex() {
     $node= new \xp\compiler\ast\HexNode('0xFFFF');
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitIf()
-   *
-   */
   #[@test]
   public function visitIf() {
     $node= new \xp\compiler\ast\IfNode(array(
@@ -682,10 +472,6 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitIf()
-   *
-   */
   #[@test]
   public function visitIfWithElse() {
     $node= new \xp\compiler\ast\IfNode(array(
@@ -699,10 +485,6 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitIf()
-   *
-   */
   #[@test]
   public function visitIfWithEmptyStatements() {
     $node= new \xp\compiler\ast\IfNode(array(
@@ -716,20 +498,12 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitImport()
-   *
-   */
   #[@test]
   public function visitImport() {
     $node= new \xp\compiler\ast\ImportNode(array('name' => 'net.xp_lang.tests.StringBuffer'));
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitIndexer()
-   *
-   */
   #[@test]
   public function visitIndexer() {
     $node= new \xp\compiler\ast\IndexerNode(array(
@@ -749,10 +523,6 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->handlers['get'][0], $node->handlers['set'][0]), $node);
   }
 
-  /**
-   * Test visitIndexer()
-   *
-   */
   #[@test]
   public function visitIndexerWithEmptyHandlerBodies() {
     $node= new \xp\compiler\ast\IndexerNode(array(
@@ -772,10 +542,6 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitInstanceCreation()
-   *
-   */
   #[@test]
   public function visitInstanceCreation() {
     $node= new \xp\compiler\ast\InstanceCreationNode(array(
@@ -785,20 +551,12 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->parameters[0]), $node);
   }
 
-  /**
-   * Test visitInteger()
-   *
-   */
   #[@test]
   public function visitInteger() {
     $node= new IntegerNode(1);
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitInterface()
-   *
-   */
   #[@test]
   public function visitInterface() {
     $node= new \xp\compiler\ast\InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Strings'), array(), array(
@@ -811,20 +569,12 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitInterface()
-   *
-   */
   #[@test]
   public function visitInterfaceWithEmptyBody() {
     $node= new \xp\compiler\ast\InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Strings'), array());
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitInstanceCreation()
-   *
-   */
   #[@test]
   public function visitInstanceCreationWithBody() {
     $node= new \xp\compiler\ast\InstanceCreationNode(array(
@@ -835,20 +585,12 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->parameters[0], $node->body[0]), $node);
   }
 
-  /**
-   * Test visitInvocation()
-   *
-   */
   #[@test]
   public function visitInvocation() {
     $node= new \xp\compiler\ast\InvocationNode('create', array(new StringNode('new HashTable<string, string>')));
     $this->assertVisited(array($node, $node->arguments[0]), $node);
   }
 
-  /**
-   * Test visitLambda()
-   *
-   */
   #[@test]
   public function visitLambda() {
     $node= new \xp\compiler\ast\LambdaNode(array(['name' => 'a']), array(new ReturnNode()));
@@ -858,10 +600,6 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitLambda()
-   *
-   */
   #[@test]
   public function visitLambdaWithEmptyStatements() {
     $node= new \xp\compiler\ast\LambdaNode(array(['name' => 'a']), array());
@@ -871,20 +609,12 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitMap()
-   *
-   */
   #[@test]
   public function visitEmptyMap() {
     $node= new \xp\compiler\ast\MapNode(array('elements' => null));
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitMap()
-   *
-   */
   #[@test]
   public function visitMap() {
     $node= new \xp\compiler\ast\MapNode(array('elements' => array(
@@ -899,10 +629,6 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitMethod()
-   *
-   */
   #[@test]
   public function visitMethod() {
     $node= new \xp\compiler\ast\MethodNode(array(
@@ -922,10 +648,6 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->body[0]), $node);
   }
 
-  /**
-   * Test visitMethod()
-   *
-   */
   #[@test]
   public function visitMethodWithEmptyBody() {
     $node= new \xp\compiler\ast\MethodNode(array(
@@ -945,40 +667,24 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitNativeImport()
-   *
-   */
   #[@test]
   public function visitNativeImport() {
     $node= new \xp\compiler\ast\NativeImportNode(array('name' => 'pcre.*'));
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitNoop()
-   *
-   */
   #[@test]
   public function visitNoop() {
     $node= new \xp\compiler\ast\NoopNode();
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitNull()
-   *
-   */
   #[@test]
   public function visitNull() {
     $node= new \xp\compiler\ast\NullNode();
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitOperator()
-   *
-   */
   #[@test]
   public function visitOperator() {
     $node= new \xp\compiler\ast\OperatorNode(array(
@@ -997,10 +703,6 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->body[0]), $node);
   }
 
-  /**
-   * Test visitOperator()
-   *
-   */
   #[@test]
   public function visitOperatorWithEmptyBody() {
     $node= new \xp\compiler\ast\OperatorNode(array(
@@ -1019,20 +721,12 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitPackage()
-   *
-   */
   #[@test]
   public function visitPackage() {
     $node= new \xp\compiler\ast\PackageNode(array('name' => 'com.example.*'));
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitProperty()
-   *
-   */
   #[@test]
   public function visitProperty() {
     $node= new \xp\compiler\ast\PropertyNode(array(
@@ -1047,10 +741,6 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->handlers['get'][0]), $node);
   }
 
-  /**
-   * Test visitProperty()
-   *
-   */
   #[@test]
   public function visitPropertyWithEmptyHandlerBody() {
     $node= new \xp\compiler\ast\PropertyNode(array(
@@ -1065,80 +755,48 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitReturn()
-   *
-   */
   #[@test]
   public function visitReturn() {
     $node= new ReturnNode();
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitReturn()
-   *
-   */
   #[@test]
   public function visitReturnWithExpression() {
     $node= new ReturnNode(new VariableNode('a'));
     $this->assertVisited(array($node, $node->expression), $node);
   }
 
-  /**
-   * Test visitStatements()
-   *
-   */
   #[@test]
   public function visitStatements() {
     $node= new \xp\compiler\ast\StatementsNode(array(new VariableNode('a'), new ReturnNode()));
     $this->assertVisited(array($node, $node->list[0], $node->list[1]), $node);
   }
- 
-  /**
-   * Test visitStatements()
-   *
-   */
+
   #[@test]
   public function visitStatementsWithEmptyList() {
     $node= new \xp\compiler\ast\StatementsNode();
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitStaticImport()
-   *
-   */
   #[@test]
   public function visitStaticImport() {
     $node= new \xp\compiler\ast\StaticImportNode(array('name' => 'util.cmd.Console.*'));
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitStaticInitializer()
-   *
-   */
   #[@test]
   public function visitStaticInitializer() {
     $node= new \xp\compiler\ast\StaticInitializerNode(array(new VariableNode('a'), new ReturnNode()));
     $this->assertVisited(array($node, $node->statements[0], $node->statements[1]), $node);
   }
 
-  /**
-   * Test visitStaticInitializer()
-   *
-   */
   #[@test]
   public function visitStaticInitializerWithEmptyStatements() {
     $node= new \xp\compiler\ast\StaticInitializerNode(array());
     $this->assertVisited(array($node), $node);
   }
- 
-  /**
-   * Test visitTernary()
-   *
-   */
+
   #[@test]
   public function visitTernary() {
     $node= new \xp\compiler\ast\TernaryNode(array(
@@ -1152,20 +810,12 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitString()
-   *
-   */
   #[@test]
   public function visitString() {
     $node= new \xp\compiler\ast\StringNode('Hello World');
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitSwitch()
-   *
-   */
   #[@test]
   public function visitSwitch() {
     $node= new \xp\compiler\ast\SwitchNode(array(
@@ -1180,10 +830,6 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitTernary()
-   *
-   */
   #[@test]
   public function visitTernaryWithoutExpression() {
     $node= new \xp\compiler\ast\TernaryNode(array(
@@ -1196,20 +842,12 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitThrow()
-   *
-   */
   #[@test]
   public function visitThrow() {
     $node= new \xp\compiler\ast\ThrowNode(array('expression' => new VariableNode('i')));
     $this->assertVisited(array($node, $node->expression), $node);
   }
 
-  /**
-   * Test visitTry()
-   *
-   */
   #[@test]
   public function visitTry() {
     $node= new \xp\compiler\ast\TryNode(array(
@@ -1222,10 +860,6 @@ class VisitorTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test visitUnaryOp()
-   *
-   */
   #[@test]
   public function visitUnaryOp() {
     $node= new \xp\compiler\ast\UnaryOpNode(array(
@@ -1236,70 +870,36 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertVisited(array($node, $node->expression), $node);
   }
 
-  /**
-   * Test visitVariable()
-   *
-   */
   #[@test]
   public function visitVariable() {
     $node= new VariableNode('i');
     $this->assertVisited(array($node), $node);
   }
 
-  /**
-   * Test visitWhile()
-   *
-   */
   #[@test]
   public function visitWhile() {
     $node= new \xp\compiler\ast\WhileNode(new VariableNode('continue'), array(new VariableNode('a'), new ReturnNode()));
     $this->assertVisited(array($node, $node->expression, $node->statements[0], $node->statements[1]), $node);
   }
-  
-  /**
-   * Test visitWith()
-   *
-   */
+
   #[@test]
   public function visitWith() {
     $node= new \xp\compiler\ast\WithNode(array(new VariableNode('o')), array(new ReturnNode()));
     $this->assertVisited(array($node, $node->assignments[0], $node->statements[0]), $node);
   }
 
-  /**
-   * Test visitWith()
-   *
-   */
   #[@test]
   public function visitWithWithEmptyStatements() {
     $node= new \xp\compiler\ast\WithNode(array(new VariableNode('o')), array());
     $this->assertVisited(array($node, $node->assignments[0]), $node);
   }
 
-  /**
-   * Test visitBracedExpression()
-   *
-   */
   #[@test]
   public function visitBracedExpression() {
     $node= new \xp\compiler\ast\BracedExpressionNode(new VariableNode('o'));
     $this->assertVisited(array($node, $node->expression), $node);
   }
 
-  /**
-   * Parse sourcecode
-   *
-   * @param   string source
-   * @return  xp.compiler.ast.TypeDeclarationNode
-   */
-  protected function parse($source) {
-    return Syntax::forName('xp')->parse(new MemoryInputStream($source))->declaration;
-  }
-
-  /**
-   * Test finding variables
-   *
-   */
   #[@test]
   public function findVariables() {
     $visitor= newinstance('xp.compiler.ast.Visitor', array(), '{
@@ -1321,10 +921,6 @@ class VisitorTest extends \unittest\TestCase {
     $this->assertEquals(array('a', 'b'), array_keys($visitor->variables));
   }
 
-  /**
-   * Test renaming variables
-   *
-   */
   #[@test]
   public function renameVariables() {
     $visitor= newinstance('xp.compiler.ast.Visitor', array(), '{

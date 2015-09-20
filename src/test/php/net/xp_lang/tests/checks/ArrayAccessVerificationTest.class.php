@@ -12,17 +12,13 @@ use xp\compiler\ast\StringNode;
 use xp\compiler\ast\InstanceCreationNode;
 use xp\compiler\ast\Node;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.ArrayAccessVerification
- */
 class ArrayAccessVerificationTest extends \unittest\TestCase {
-  protected $fixture= null;
+  private $fixture;
 
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new ArrayAccessVerification();
@@ -34,14 +30,10 @@ class ArrayAccessVerificationTest extends \unittest\TestCase {
    * @param   xp.compiler.ast.Node call
    * @return  var
    */
-  protected function verify(Node $target) {
+  private function verify(Node $target) {
     return $this->fixture->verify(new ArrayAccessNode($target, new IntegerNode(0)), new MethodScope());
   }
   
-  /**
-   * Test array access on a string[]
-   *
-   */
   #[@test]
   public function stringArray() {
     $this->assertNull(
@@ -49,10 +41,6 @@ class ArrayAccessVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test array access on a [:string]
-   *
-   */
   #[@test]
   public function stringMap() {
     $this->assertNull(
@@ -60,10 +48,6 @@ class ArrayAccessVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test array access on an int primitive
-   *
-   */
   #[@test]
   public function int() {
     $this->assertEquals(
@@ -72,10 +56,6 @@ class ArrayAccessVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test array access on an undeclared variable (type: var)
-   *
-   */
   #[@test]
   public function undeclared() {
     $this->assertEquals(
@@ -84,10 +64,6 @@ class ArrayAccessVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test array access on a string primitive
-   *
-   */
   #[@test]
   public function string() {
     $this->assertNull(
@@ -95,10 +71,6 @@ class ArrayAccessVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test array access on an object that supports indexers
-   *
-   */
   #[@test]
   public function arrayList() {
     $this->assertNull(
@@ -106,10 +78,6 @@ class ArrayAccessVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test array access on an interface that supports indexers
-   *
-   */
   #[@test]
   public function anonymousIListInstance() {
     $this->assertNull(
@@ -119,10 +87,6 @@ class ArrayAccessVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test array access on an object that does not support indexers
-   *
-   */
   #[@test]
   public function object() {
     $this->assertEquals(

@@ -9,18 +9,14 @@ use xp\compiler\ast\InstanceCreationNode;
 use xp\compiler\ast\AssignmentNode;
 use xp\compiler\ast\ArmNode;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.ArmTypesAreCloseable
- */
 class ArmTypesAreCloseableTest extends \unittest\TestCase {
-  protected $fixture= null;
-  protected $scope= null;
+  private $fixture;
+  private $scope;
 
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new ArmTypesAreCloseable();
@@ -34,7 +30,7 @@ class ArmTypesAreCloseableTest extends \unittest\TestCase {
    * @param   string[] types
    * @return  xp.compiler.ast.ArmNode
    */
-  protected function newArmNode($types) {
+  private function newArmNode($types) {
     $assignments= $variables= array();
     foreach ($types as $i => $name) {
       $var= new VariableNode('a'.$i);
@@ -61,14 +57,10 @@ class ArmTypesAreCloseableTest extends \unittest\TestCase {
    * @param   xp.compiler.ast.ArmNode field
    * @return  var
    */
-  protected function verify(ArmNode $field) {
+  private function verify(ArmNode $field) {
     return $this->fixture->verify($field, $this->scope);
   }
   
-  /**
-   * Test io.streams.TextReader
-   *
-   */
   #[@test]
   public function textReaderIsCloseable() {
     $this->assertNull(
@@ -76,10 +68,6 @@ class ArmTypesAreCloseableTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test lang.Object
-   *
-   */
   #[@test]
   public function objectIsNotCloseable() {
     $this->assertEquals(
@@ -88,10 +76,6 @@ class ArmTypesAreCloseableTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test io.streams.TextReader and lang.Object
-   *
-   */
   #[@test]
   public function oneIsNotCloseable() {
     $this->assertEquals(

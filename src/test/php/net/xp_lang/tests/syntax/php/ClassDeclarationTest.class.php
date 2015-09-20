@@ -10,10 +10,6 @@ use xp\compiler\ast\NullNode;
 use xp\compiler\ast\MethodNode;
 use xp\compiler\types\TypeName;
 
-/**
- * TestCase
- *
- */
 class ClassDeclarationTest extends ParserTestCase {
 
   /**
@@ -26,10 +22,6 @@ class ClassDeclarationTest extends ParserTestCase {
     return (new Parser())->parse(new Lexer($src, '<string:'.$this->name.'>'))->declaration;
   }
 
-  /**
-   * Test class declaration
-   *
-   */
   #[@test]
   public function emtpyClass() {
     $this->assertEquals(
@@ -45,10 +37,6 @@ class ClassDeclarationTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test class constant declaration
-   *
-   */
   #[@test]
   public function classConstant() {
     $this->assertEquals(array(new ClassConstantNode(
@@ -60,10 +48,6 @@ class ClassDeclarationTest extends ParserTestCase {
     } ?>')->body);
   }
 
-  /**
-   * Test class constant declaration
-   *
-   */
   #[@test]
   public function classConstants() {
     $this->assertEquals(array(
@@ -81,10 +65,6 @@ class ClassDeclarationTest extends ParserTestCase {
     } ?>')->body);
   }
 
-  /**
-   * Test field declaration
-   *
-   */
   #[@test]
   public function methodAndField() {
     $this->assertEquals(array(new FieldNode(array(

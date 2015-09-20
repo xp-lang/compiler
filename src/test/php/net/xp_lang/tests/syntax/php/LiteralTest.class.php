@@ -11,34 +11,18 @@ use xp\compiler\ast\ArrayNode;
 use xp\compiler\ast\MapNode;
 use xp\compiler\ast\BracedExpressionNode;
 
-/**
- * TestCase
- *
- */
 class LiteralTest extends ParserTestCase {
 
-  /**
-   * Test double-quoted string
-   *
-   */
   #[@test]
   public function doubleQuotedStringLiteral() {
     $this->assertEquals(array(new StringNode('Hello World')), $this->parse('"Hello World";'));
   }
 
-  /**
-   * Test single-quoted string
-   *
-   */
   #[@test]
   public function singleQuotedStringLiteral() {
     $this->assertEquals(array(new StringNode('Hello World')), $this->parse("'Hello World';"));
   }
 
-  /**
-   * Test empty strings
-   *
-   */
   #[@test]
   public function emptyStrings() {
     $this->assertEquals(array(
@@ -47,10 +31,6 @@ class LiteralTest extends ParserTestCase {
     ), $this->parse('""; \'\';'));
   }
 
-  /**
-   * Test double-quoted string
-   *
-   */
   #[@test]
   public function doubleQuotedStringWithEscapes() {
     $this->assertEquals(
@@ -58,10 +38,7 @@ class LiteralTest extends ParserTestCase {
       $this->parse('"\"Hello\", he said";')
     );
   }
-  /**
-   * Test single-quoted string
-   *
-   */
+
   #[@test]
   public function singleQuotedStringWithEscapes() {
     $this->assertEquals(
@@ -70,10 +47,6 @@ class LiteralTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test single-quoted string
-   *
-   */
   #[@test]
   public function multiLineString() {
     $this->assertEquals(array(new StringNode('This
@@ -90,19 +63,11 @@ class LiteralTest extends ParserTestCase {
     "));
   }
 
-  /**
-   * Test number
-   *
-   */
   #[@test]
   public function numberLiteral() {
     $this->assertEquals(array(new IntegerNode('1')), $this->parse('1;'));
   }
 
-  /**
-   * Test negative number
-   *
-   */
   #[@test]
   public function negativeInt() {
     $this->assertEquals(array(new UnaryOpNode(array(
@@ -113,10 +78,6 @@ class LiteralTest extends ParserTestCase {
     "));
   }
 
-  /**
-   * Test negative number
-   *
-   */
   #[@test]
   public function negativeDecimal() {
     $this->assertEquals(array(new UnaryOpNode(array(
@@ -127,28 +88,16 @@ class LiteralTest extends ParserTestCase {
     "));
   }
 
-  /**
-   * Test hex
-   *
-   */
   #[@test]
   public function hexLiteral() {
     $this->assertEquals(array(new HexNode('0x0')), $this->parse('0x0;'));
   }
 
-  /**
-   * Test decimal
-   *
-   */
   #[@test]
   public function decimalLiteral() {
     $this->assertEquals(array(new DecimalNode('1.0')), $this->parse('1.0;'));
   }
 
-  /**
-   * Test true
-   *
-   */
   #[@test]
   public function booleantrueLiteral() {
     $this->assertEquals(
@@ -157,10 +106,6 @@ class LiteralTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test true
-   *
-   */
   #[@test, @ignore('Recognized as cast')]
   public function booleantrueLiteralInBraces() {
     $this->assertEquals(
@@ -169,10 +114,6 @@ class LiteralTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test true
-   *
-   */
   #[@test]
   public function booleanfalseLiteral() {
     $this->assertEquals(
@@ -181,10 +122,6 @@ class LiteralTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test null
-   *
-   */
   #[@test]
   public function nullLiteral() {
     $this->assertEquals(
@@ -193,10 +130,6 @@ class LiteralTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test array
-   *
-   */
   #[@test]
   public function arrayLiteral() {
     $this->assertEquals(array(new ArrayNode(array(
@@ -210,10 +143,6 @@ class LiteralTest extends ParserTestCase {
     "));
   }
 
-  /**
-   * Test map
-   *
-   */
   #[@test]
   public function mapLiteral() {
     $this->assertEquals(array(new MapNode(array(

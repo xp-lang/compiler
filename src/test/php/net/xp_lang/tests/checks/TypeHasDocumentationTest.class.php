@@ -7,11 +7,6 @@ use xp\compiler\ast\ClassNode;
 use xp\compiler\ast\InterfaceNode;
 use xp\compiler\ast\EnumNode;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.TypeHasDocumentation
- */
 class TypeHasDocumentationTest extends \unittest\TestCase {
   protected $fixture= null;
   protected $scope= null;
@@ -19,16 +14,13 @@ class TypeHasDocumentationTest extends \unittest\TestCase {
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new TypeHasDocumentation();
     $this->scope= new CompilationUnitScope();
   }
   
-  /**
-   * Test interfaces
-   *
-   */
   #[@test]
   public function interfaceWithoutApidoc() {
     $this->assertEquals(
@@ -37,10 +29,6 @@ class TypeHasDocumentationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test interfaces
-   *
-   */
   #[@test]
   public function interfaceWithApidoc() {
     $i= new InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Runnable'));
@@ -48,10 +36,6 @@ class TypeHasDocumentationTest extends \unittest\TestCase {
     $this->assertNull($this->fixture->verify($i, $this->scope));
   }
 
-  /**
-   * Test classes
-   *
-   */
   #[@test]
   public function syntheticInterface() {
     $i= new InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Runnable'));
@@ -59,10 +43,6 @@ class TypeHasDocumentationTest extends \unittest\TestCase {
     $this->assertNull($this->fixture->verify($i, $this->scope));
   }
 
-  /**
-   * Test classes
-   *
-   */
   #[@test]
   public function classWithoutApidoc() {
     $this->assertEquals(
@@ -71,10 +51,6 @@ class TypeHasDocumentationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test classes
-   *
-   */
   #[@test]
   public function classWithApidoc() {
     $c= new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner'));
@@ -82,10 +58,6 @@ class TypeHasDocumentationTest extends \unittest\TestCase {
     $this->assertNull($this->fixture->verify($c, $this->scope));
   }
 
-  /**
-   * Test classes
-   *
-   */
   #[@test]
   public function syntheticClass() {
     $c= new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner'));
@@ -93,10 +65,6 @@ class TypeHasDocumentationTest extends \unittest\TestCase {
     $this->assertNull($this->fixture->verify($c, $this->scope));
   }
 
-  /**
-   * Test enums
-   *
-   */
   #[@test]
   public function enumWithoutApidoc() {
     $this->assertEquals(
@@ -105,10 +73,6 @@ class TypeHasDocumentationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test classes
-   *
-   */
   #[@test]
   public function enumWithApidoc() {
     $e= new EnumNode(MODIFIER_PUBLIC, array(), new TypeName('Runners'));
@@ -116,10 +80,6 @@ class TypeHasDocumentationTest extends \unittest\TestCase {
     $this->assertNull($this->fixture->verify($e, $this->scope));
   }
 
-  /**
-   * Test classes
-   *
-   */
   #[@test]
   public function syntheticEnums() {
     $e= new EnumNode(MODIFIER_PUBLIC, array(), new TypeName('Runners'));

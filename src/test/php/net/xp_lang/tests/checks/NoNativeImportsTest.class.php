@@ -4,28 +4,20 @@ use xp\compiler\checks\NoNativeImports;
 use xp\compiler\types\CompilationUnitScope;
 use xp\compiler\ast\NativeImportNode;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.NoNativeImports
- */
 class NoNativeImportsTest extends \unittest\TestCase {
-  protected $fixture= null;
-  protected $scope= null;
+  private $fixture;
+  private $scope;
 
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new NoNativeImports();
     $this->scope= new CompilationUnitScope();
   }
   
-  /**
-   * Test importing a function (namespace.function)
-   *
-   */
   #[@test]
   public function functionImport() {
     $this->assertEquals(
@@ -34,10 +26,6 @@ class NoNativeImportsTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test importing on demand (namespace.*) 
-   *
-   */
   #[@test]
   public function importOnDemand() {
     $this->assertEquals(

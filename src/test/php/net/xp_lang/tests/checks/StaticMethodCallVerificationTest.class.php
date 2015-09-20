@@ -7,17 +7,13 @@ use xp\compiler\ast\ClassNode;
 use xp\compiler\ast\MethodNode;
 use xp\compiler\ast\StaticMethodCallNode;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.StaticMethodCallVerification
- */
 class StaticMethodCallVerificationTest extends \unittest\TestCase {
   protected $fixture= null;
 
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new StaticMethodCallVerification();
@@ -68,10 +64,6 @@ class StaticMethodCallVerificationTest extends \unittest\TestCase {
     return new InstanceCreationNode(array('type' => new TypeName($type)));
   }
 
-  /**
-   * Test method call to a public method on this class
-   *
-   */
   #[@test]
   public function nonExistantMethodCall() {
     $this->assertEquals(
@@ -80,10 +72,6 @@ class StaticMethodCallVerificationTest extends \unittest\TestCase {
     );
   }
   
-  /**
-   * Test method call to a public method on this class
-   *
-   */
   #[@test]
   public function thisPublicMethodCall() {
     $this->assertNull(
@@ -91,10 +79,6 @@ class StaticMethodCallVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test method call to a protected method on this class
-   *
-   */
   #[@test]
   public function thisProtectedMethodCall() {
     $this->assertNull(
@@ -102,10 +86,6 @@ class StaticMethodCallVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test method call to a private method on this class
-   *
-   */
   #[@test]
   public function thisPrivateMethodCall() {
     $this->assertNull(
@@ -113,10 +93,6 @@ class StaticMethodCallVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test method call to public static XPClass::forName()
-   *
-   */
   #[@test]
   public function classPublicMethodCall() {
     $this->assertNull(
@@ -124,10 +100,6 @@ class StaticMethodCallVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test method call to protected static Enum::membersOf()
-   *
-   */
   #[@test]
   public function enumProtectedMethodCall() {
     $this->assertEquals(
@@ -136,10 +108,6 @@ class StaticMethodCallVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test method call to a protected method on the string sclass
-   *
-   */
   #[@test]
   public function enumProtectedMethodCallIfSubclass() {
     $this->assertNull(

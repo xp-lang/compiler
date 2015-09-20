@@ -11,11 +11,12 @@ use io\streams\MemoryInputStream;
  * @see   xp://xp.compiler.CompilationProfileReader
  */
 class CompilationProfileReaderTest extends \unittest\TestCase {
-  protected $fixture= null;
+  private $fixture= null;
 
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new CompilationProfileReader();
@@ -27,14 +28,10 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
    * @param   string source
    * @return  util.Properties
    */
-  protected function newProperties($source) {
+  private function newProperties($source) {
     return Properties::fromString(preg_replace('/^\s*/', '', $source));
   }
 
-  /**
-   * Test warnings section parsing
-   *
-   */
   #[@test]
   public function noWarningsMissingSection() {
     $this->fixture->addSource($this->newProperties('
@@ -43,10 +40,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     $this->assertEquals(array(), array_keys($this->fixture->getProfile()->warnings));
   }
 
-  /**
-   * Test warnings section parsing
-   *
-   */
   #[@test]
   public function noWarningsEmptySection() {
     $this->fixture->addSource($this->newProperties('
@@ -56,10 +49,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     $this->assertEquals(array(), array_keys($this->fixture->getProfile()->warnings));
   }
   
-  /**
-   * Test warnings section parsing
-   *
-   */
   #[@test]
   public function oneWarning() {
     $this->fixture->addSource($this->newProperties('
@@ -73,10 +62,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test warnings section parsing
-   *
-   */
   #[@test]
   public function twoWarnings() {
     $this->fixture->addSource($this->newProperties('
@@ -91,10 +76,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test warnings section parsing
-   *
-   */
   #[@test]
   public function twoWarningsViaTwoSources() {
     $this->fixture->addSource($this->newProperties('
@@ -112,10 +93,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test warnings section parsing
-   *
-   */
   #[@test]
   public function sameWarningViaTwoSources() {
     $this->fixture->addSource($this->newProperties('
@@ -133,10 +110,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test errors section parsing
-   *
-   */
   #[@test]
   public function noErrorsMissingSection() {
     $this->fixture->addSource($this->newProperties('
@@ -145,10 +118,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     $this->assertEquals(array(), array_keys($this->fixture->getProfile()->errors));
   }
 
-  /**
-   * Test errors section parsing
-   *
-   */
   #[@test]
   public function noErrorsEmptySection() {
     $this->fixture->addSource($this->newProperties('
@@ -158,10 +127,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     $this->assertEquals(array(), array_keys($this->fixture->getProfile()->errors));
   }
 
-  /**
-   * Test errors section parsing
-   *
-   */
   #[@test]
   public function oneError() {
     $this->fixture->addSource($this->newProperties('
@@ -175,10 +140,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test errors section parsing
-   *
-   */
   #[@test]
   public function twoErrors() {
     $this->fixture->addSource($this->newProperties('
@@ -193,10 +154,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test errors section parsing
-   *
-   */
   #[@test]
   public function twoErrorsViaTwoSources() {
     $this->fixture->addSource($this->newProperties('
@@ -214,10 +171,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test errors section parsing
-   *
-   */
   #[@test]
   public function sameErrorViaTwoSources() {
     $this->fixture->addSource($this->newProperties('
@@ -235,10 +188,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test optimizations section parsing
-   *
-   */
   #[@test]
   public function noOptimizationsMissingSection() {
     $this->fixture->addSource($this->newProperties('
@@ -247,10 +196,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     $this->assertEquals(array(), array_keys($this->fixture->getProfile()->optimizations));
   }
 
-  /**
-   * Test optimizations section parsing
-   *
-   */
   #[@test]
   public function noOptimizationsEmptySection() {
     $this->fixture->addSource($this->newProperties('
@@ -260,10 +205,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     $this->assertEquals(array(), array_keys($this->fixture->getProfile()->optimizations));
   }
 
-  /**
-   * Test optimizations section parsing
-   *
-   */
   #[@test]
   public function oneOptimization() {
     $this->fixture->addSource($this->newProperties('
@@ -277,10 +218,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test optimizations section parsing
-   *
-   */
   #[@test]
   public function twoOptimizations() {
     $this->fixture->addSource($this->newProperties('
@@ -295,10 +232,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test optimizations section parsing
-   *
-   */
   #[@test]
   public function twoOptimizationsViaTwoSources() {
     $this->fixture->addSource($this->newProperties('
@@ -316,10 +249,6 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test optimizations section parsing
-   *
-   */
   #[@test]
   public function sameOptimizationViaTwoSources() {
     $this->fixture->addSource($this->newProperties('

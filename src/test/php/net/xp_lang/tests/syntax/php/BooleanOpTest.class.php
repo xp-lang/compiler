@@ -5,55 +5,49 @@ use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\IntegerNode;
 use xp\compiler\ast\AssignmentNode;
 
-/**
- * TestCase
- *
- */
 class BooleanOpTest extends ParserTestCase {
 
   /**
-   * Test boolean "or" operator (||)
+   * Assertion helper
    *
+   * @param  xp.compiler.ast.Node $offset
+   * @param  string $syntax
+   * @throws unittest.AssertionFailedError
    */
+  private function assertBooleanOp($operator, $syntax) {
+    $this->assertEquals(
+      [new BooleanOpNode([
+        'lhs'           => new VariableNode('a'),
+        'rhs'           => new VariableNode('b'),
+        'op'            => $operator
+      ])],
+      $this->parse($syntax)
+    );
+  }
+
   #[@test]
   public function booleanOr() {
-    $this->assertEquals(array(new BooleanOpNode(array(
-      'lhs'           => new VariableNode('a'),
-      'rhs'           => new VariableNode('b'),
-      'op'            => '||'
-    ))), $this->parse('$a || $b;'));
+    $this->assertBooleanOp('||', '$a || $b;');
   }
 
-  /**
-   * Test boolean "and" operator (&&)
-   *
-   */
   #[@test]
   public function booleanAnd() {
-    $this->assertEquals(array(new BooleanOpNode(array(
-      'lhs'           => new VariableNode('a'),
-      'rhs'           => new VariableNode('b'),
-      'op'            => '&&'
-    ))), $this->parse('$a && $b;'));
+    $this->assertBooleanOp('&&', '$a && $b;');
   }
 
-  /**
-   * Test the following code:
-   *
-   * <code>
-   *   $a && $b+= 1;
-   * </code>
-   */
   #[@test]
   public function conditionalAssignment() {
-    $this->assertEquals(array(new BooleanOpNode(array(
-      'lhs'           => new VariableNode('a'),
-      'rhs'           => new AssignmentNode(array(
-        'variable'      => new VariableNode('b'),
-        'expression'    => new IntegerNode('1'),
-        'op'            => '+='
-      )),
-      'op'            => '&&'
-    ))), $this->parse('$a && $b+= 1;'));
+    $this->assertEquals(
+      [new BooleanOpNode([
+        'lhs'           => new VariableNode('a'),
+        'rhs'           => new AssignmentNode([
+          'variable'      => new VariableNode('b'),
+          'expression'    => new IntegerNode('1'),
+          'op'            => '+='
+        ]),
+        'op'            => '&&'
+      ])],
+      $this->parse('$a && $b+= 1;')
+    );
   }
 }

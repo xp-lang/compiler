@@ -6,14 +6,8 @@ use xp\compiler\ast\IntegerNode;
 use xp\compiler\ast\AssignmentNode;
 use xp\compiler\ast\BracedExpressionNode;
 
-/**
- * TestCase for the ternary operator
- */
 class TernaryTest extends ParserTestCase {
 
-  /**
-   * Test ternary - expr ? expr : expr
-   */
   #[@test]
   public function ternary() {
     $this->assertEquals(array(new TernaryNode(array(
@@ -25,9 +19,6 @@ class TernaryTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test ternary - expr ?: expr
-   */
   #[@test]
   public function assignment() {
     $this->assertEquals(array(new AssignmentNode(array(
@@ -43,9 +34,6 @@ class TernaryTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test ternary - expr ?: expr
-   */
   #[@test]
   public function withoutExpression() {
     $this->assertEquals(array(new TernaryNode(array(
@@ -57,9 +45,6 @@ class TernaryTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test ternary - expr ?: (expr ? expr : expr)
-   */
   #[@test]
   public function nested() {
     $this->assertEquals(array(new TernaryNode(array(
@@ -75,4 +60,3 @@ class TernaryTest extends ParserTestCase {
     '));
   }
 }
-?>

@@ -8,17 +8,13 @@ use xp\compiler\ast\ClassNode;
 use xp\compiler\ast\InterfaceNode;
 use xp\compiler\ast\TypeDeclarationNode;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.FieldsVerification
- */
 class FieldsVerificationTest extends \unittest\TestCase {
-  protected $fixture= null;
+  private $fixture;
 
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new FieldsVerification();
@@ -31,16 +27,12 @@ class FieldsVerificationTest extends \unittest\TestCase {
    * @param   xp.compiler.ast.TypeDeclarationNode type
    * @return  var
    */
-  protected function verify(FieldNode $field, TypeDeclarationNode $type) {
+  private function verify(FieldNode $field, TypeDeclarationNode $type) {
     $scope= new TypeDeclarationScope();
     $scope->declarations[0]= $type;
     return $this->fixture->verify($field, $scope);
   }
   
-  /**
-   * Test fields inside classes
-   *
-   */
   #[@test]
   public function classesMayHaveFieldDeclarations() {
     $f= new FieldNode(array(
@@ -54,10 +46,6 @@ class FieldsVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test fields inside classes
-   *
-   */
   #[@test]
   public function interfacesMayNotHaveFieldDeclarations() {
     $f= new FieldNode(array(

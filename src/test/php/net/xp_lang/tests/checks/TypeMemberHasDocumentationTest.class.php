@@ -10,17 +10,13 @@ use xp\compiler\ast\EnumNode;
 use xp\compiler\ast\RoutineNode;
 use xp\compiler\ast\MethodNode;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.TypeMemberHasDocumentation
- */
 class TypeMemberHasDocumentationTest extends \unittest\TestCase {
   protected $fixture= null;
 
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new TypeMemberHasDocumentation();
@@ -39,10 +35,6 @@ class TypeMemberHasDocumentationTest extends \unittest\TestCase {
     return $this->fixture->verify($routine, $scope);
   }
   
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function methodWithoutApidoc() {
     $m= new MethodNode(array(
@@ -58,10 +50,6 @@ class TypeMemberHasDocumentationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function methodsInSyntheticClassesNotChecked() {
     $c= new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Lambda··4b70075bd9164'));

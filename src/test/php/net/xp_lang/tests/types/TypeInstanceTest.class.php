@@ -7,11 +7,6 @@ use xp\compiler\types\Types;
 use xp\compiler\types\Parameter;
 use lang\XPClass;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.types.TypeInstance
- */
 class TypeInstanceTest extends \unittest\TestCase {
 
   #[@test]

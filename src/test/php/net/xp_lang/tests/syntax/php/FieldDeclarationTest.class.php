@@ -6,10 +6,6 @@ use xp\compiler\ast\FieldNode;
 use xp\compiler\ast\NullNode;
 use xp\compiler\types\TypeName;
 
-/**
- * TestCase
- *
- */
 class FieldDeclarationTest extends ParserTestCase {
 
   /**
@@ -22,10 +18,6 @@ class FieldDeclarationTest extends ParserTestCase {
     return (new Parser())->parse(new Lexer('<?php '.$src.' ?>', '<string:'.$this->name.'>'))->declaration->body;
   }
 
-  /**
-   * Test field declaration
-   *
-   */
   #[@test]
   public function publicField() {
     $this->assertEquals(array(new FieldNode(array(
@@ -39,10 +31,6 @@ class FieldDeclarationTest extends ParserTestCase {
     }'));
   }
 
-  /**
-   * Test field declaration
-   *
-   */
   #[@test]
   public function privateStaticField() {
     $this->assertEquals(array(new FieldNode(array(

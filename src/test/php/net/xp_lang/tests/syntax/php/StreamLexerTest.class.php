@@ -1,9 +1,8 @@
 <?php namespace net\xp_lang\tests\syntax\php;
 
-/**
- * Tests the lexer tokenizing a stream
- *
- */
+use xp\compiler\syntax\php\Lexer;
+use io\streams\MemoryInputStream;
+
 class StreamLexerTest extends LexerTest {
 
   /**
@@ -12,7 +11,5 @@ class StreamLexerTest extends LexerTest {
    * @param   string $in
    * @return  xp.compiler.syntax.php.Lexer
    */
-  protected function newLexer($in) {
-    return new \xp\compiler\syntax\php\Lexer(new \io\streams\MemoryInputStream($in), $this->name);
-  }
+  protected function newLexer($in) { return new Lexer(new MemoryInputStream($in), $this->name); }
 }

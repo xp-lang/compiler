@@ -3,17 +3,13 @@
 use xp\compiler\io\StringSource;
 use io\streams\Streams;
 
-/**
- * TestCase
- *
- * @see   xp://xp.compiler.io.StringSource
- */
 class StringSourceTest extends \unittest\TestCase {
   protected static $syntax;
 
   /**
    * Use XP language
    *
+   * @return void
    */
   #[@beforeClass]
   public static function useXpSyntax() {
@@ -30,38 +26,22 @@ class StringSourceTest extends \unittest\TestCase {
     return new StringSource($source, self::$syntax, $this->name);
   }
 
-  /**
-   * Test getInputStream()
-   *
-   */
   #[@test]
   public function getInputStream() {
     $source= 'Console::writeLine("Hello");';
     $this->assertEquals($source, Streams::readAll($this->newInstance($source)->getInputStream()));
   }
 
-  /**
-   * Test getSyntax()
-   *
-   */
   #[@test]
   public function getSyntax() {
     $this->assertEquals(self::$syntax, $this->newInstance()->getSyntax());
   }
 
-  /**
-   * Test getURI()
-   *
-   */
   #[@test]
   public function getURI() {
     $this->assertEquals($this->name, $this->newInstance()->getURI());
   }
 
-  /**
-   * Test getURI()
-   *
-   */
   #[@test]
   public function getURIWithNameOmitted() {
     $this->assertEquals(

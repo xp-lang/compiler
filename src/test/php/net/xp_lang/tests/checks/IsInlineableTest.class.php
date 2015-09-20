@@ -8,17 +8,13 @@ use xp\compiler\ast\UnaryOpNode;
 use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\IfNode;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.IsInlineable
- */
 class IsInlineableTest extends \unittest\TestCase {
-  protected $fixture= null;
+  private $fixture;
 
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new IsInlineable();
@@ -30,16 +26,10 @@ class IsInlineableTest extends \unittest\TestCase {
    * @param   xp.compiler.ast.MethodNode declaration
    * @return  var
    */
-  protected function verify(MethodNode $declaration) {
+  private function verify(MethodNode $declaration) {
     return $this->fixture->verify($declaration, new TypeDeclarationScope());
   }
   
-  /**
-   * Tests the following is inlineable:
-   * <code>
-   *   inline T inc(T $in) { return ++$in; }
-   * </code>
-   */
   #[@test]
   public function oneLineMethodIsInlineable() {
     $this->assertNull(
@@ -56,12 +46,6 @@ class IsInlineableTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Tests the following is not inlineable:
-   * <code>
-   *   inline T inc(T $in) { if ($in) { } }
-   * </code>
-   */
   #[@test]
   public function ifInsideMethodIsNotInlineable() {
     $this->assertEquals(
@@ -77,13 +61,6 @@ class IsInlineableTest extends \unittest\TestCase {
     );
   }
 
-
-  /**
-   * Tests the following is not inlineable:
-   * <code>
-   *   inline T inc(T $in) { $in++; return $in; }
-   * </code>
-   */
   #[@test]
   public function twoLineMethodIsNotInlineable() {
     $this->assertEquals(

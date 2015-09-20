@@ -5,16 +5,8 @@ use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\IntegerNode;
 use xp\compiler\ast\UnaryOpNode;
 
-/**
- * TestCase
- *
- */
 class ComparisonTest extends ParserTestCase {
 
-  /**
-   * Test equality comparison <tt>$i == 10</tt>
-   *
-   */
   #[@test]
   public function equality() {
     $this->assertEquals(array(new ComparisonNode(array(
@@ -26,10 +18,6 @@ class ComparisonTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test identity comparison <tt>$i === 10</tt>
-   *
-   */
   #[@test]
   public function identity() {
     $this->assertEquals(array(new ComparisonNode(array(
@@ -41,10 +29,6 @@ class ComparisonTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test negative identity comparison <tt>$i !== 10</tt>
-   *
-   */
   #[@test]
   public function notIdentity() {
     $this->assertEquals(array(new ComparisonNode(array(
@@ -56,10 +40,6 @@ class ComparisonTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test equality comparison <tt>-10 == $i</tt>
-   *
-   */
   #[@test]
   public function equalityToNegativeLhs() {
     $this->assertEquals(array(new ComparisonNode(array(
@@ -74,10 +54,6 @@ class ComparisonTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test unequality comparison
-   *
-   */
   #[@test]
   public function unEquality() {
     $this->assertEquals(array(new ComparisonNode(array(
@@ -89,10 +65,6 @@ class ComparisonTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test smaller than comparison
-   *
-   */
   #[@test]
   public function smallerThan() {
     $this->assertEquals(array(new ComparisonNode(array(
@@ -104,10 +76,6 @@ class ComparisonTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test smaller than or equal to comparison
-   *
-   */
   #[@test]
   public function smallerThanOrEqualTo() {
     $this->assertEquals(array(new ComparisonNode(array(
@@ -119,10 +87,6 @@ class ComparisonTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test greater than comparison
-   *
-   */
   #[@test]
   public function greaterThan() {
     $this->assertEquals(array(new ComparisonNode(array(
@@ -134,10 +98,6 @@ class ComparisonTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test greather than or equal to comparison
-   *
-   */
   #[@test]
   public function greaterThanOrEqualTo() {
     $this->assertEquals(array(new ComparisonNode(array(

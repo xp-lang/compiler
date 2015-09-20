@@ -2,12 +2,9 @@
 
 use xp\compiler\emit\php\NativeImporter;
 use unittest\actions\VerifyThat;
+use lang\IllegalArgumentException;
+use lang\FormatException;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.emit.php.NativeImporter
- */
 #[@action(new VerifyThat(function() { return !defined('HHVM_VERSION'); }))]
 class SourceNativeImporterTest extends \unittest\TestCase {
   protected $fixture= null;
@@ -17,10 +14,6 @@ class SourceNativeImporterTest extends \unittest\TestCase {
     $this->fixture= new NativeImporter();
   }
 
-  /**
-   * Test hasFunction()
-   *
-   */
   #[@test]
   public function hasFunction() {
     $this->assertTrue($this->fixture->hasFunction('standard', 'array_keys'), 'standard.array_keys');
@@ -28,10 +21,6 @@ class SourceNativeImporterTest extends \unittest\TestCase {
     $this->assertTrue($this->fixture->hasFunction('core', 'strlen'), 'core.strlen');
   }
   
-  /**
-   * Test importing array_keys from ext/standard
-   *
-   */
   #[@test]
   public function importArray_keys() {
     $this->assertEquals(
@@ -40,10 +29,6 @@ class SourceNativeImporterTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test importing preg_match from ext/pcre
-   *
-   */
   #[@test]
   public function importPreg_match() {
     $this->assertEquals(
@@ -52,10 +37,6 @@ class SourceNativeImporterTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test importing strlen from core
-   *
-   */
   #[@test]
   public function importStrlen() {
     $this->assertEquals(
@@ -64,10 +45,6 @@ class SourceNativeImporterTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test importing all functions from ext/standard
-   *
-   */
   #[@test]
   public function importAllFromStandard() {
     $this->assertEquals(
@@ -76,65 +53,37 @@ class SourceNativeImporterTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test importing from a nonexistant extension
-   *
-   */
-  #[@test, @expect('lang.IllegalArgumentException')]
+  #[@test, @expect(IllegalArgumentException::class)]
   public function importFromNonexistantExtension() {
    $this->fixture->import('nonexistant.extension');
   }
 
-  /**
-   * Test importing all functions from a nonexistant extension
-   *
-   */
-  #[@test, @expect('lang.IllegalArgumentException')]
+  #[@test, @expect(IllegalArgumentException::class)]
   public function importAllFromNonexistantExtension() {
    $this->fixture->import('nonexistant.*');
   }
 
-  /**
-   * Test importing a non-existant function in the standard extension
-   *
-   */
-  #[@test, @expect('lang.IllegalArgumentException')]
+  #[@test, @expect(IllegalArgumentException::class)]
   public function importNonexistantFunction() {
    $this->fixture->import('standard.nonexistant');
   }
 
-  /**
-   * Test importing a function from an incorrect extension
-   *
-   */
-  #[@test, @expect('lang.IllegalArgumentException')]
+  #[@test, @expect(IllegalArgumentException::class)]
   public function importFunctionFromIncorrectExtension() {
    $this->fixture->import('standard.preg_match');
   }
 
-  /**
-   * Test import() with '.*' as argument
-   *
-   */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function importEverything() {
    $this->fixture->import('.');
   }
 
-  /**
-   * Test import() with '*' as argument
-   *
-   */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function importStar() {
    $this->fixture->import('*');
   }
 
-  /**
-   * Test import() with an empty string
-   *
-   */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function importEmpty() {
    $this->fixture->import('');
   }

@@ -13,17 +13,13 @@ use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\StringNode;
 use xp\compiler\ast\CastNode;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.MethodCallVerification
- */
 class MethodCallVerificationTest extends \unittest\TestCase {
-  protected $fixture= null;
+  private $fixture;
 
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new MethodCallVerification();
@@ -36,7 +32,7 @@ class MethodCallVerificationTest extends \unittest\TestCase {
    * @param   xp.compiler.types.TypeName parent
    * @return  var
    */
-  protected function verify(MethodCallNode $call, $parent= null) {
+  private function verify(MethodCallNode $call, $parent= null) {
     $scope= new TypeDeclarationScope();
     $scope->declarations[0]= new ClassNode(
       MODIFIER_PUBLIC, 
@@ -71,14 +67,10 @@ class MethodCallVerificationTest extends \unittest\TestCase {
    * @param   string type
    * @return  xp.compiler.ast.InstanceCreationNode
    */
-  protected function newInstance($type) {
+  private function newInstance($type) {
     return new InstanceCreationNode(array('type' => new TypeName($type)));
   }
 
-  /**
-   * Test method call to a public method on this class
-   *
-   */
   #[@test]
   public function nonExistantMethodCall() {
     $this->assertEquals(
@@ -87,10 +79,6 @@ class MethodCallVerificationTest extends \unittest\TestCase {
     );
   }
   
-  /**
-   * Test method call to a public method on this class
-   *
-   */
   #[@test]
   public function thisPublicMethodCall() {
     $this->assertNull(
@@ -98,10 +86,6 @@ class MethodCallVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test method call to a public method on this class
-   *
-   */
   #[@test]
   public function thisProtectedMethodCall() {
     $this->assertNull(
@@ -109,10 +93,6 @@ class MethodCallVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test method call to a public method on this class
-   *
-   */
   #[@test]
   public function thisPrivateMethodCall() {
     $this->assertNull(
@@ -120,10 +100,6 @@ class MethodCallVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test method call to a public method on the object class
-   *
-   */
   #[@test]
   public function objectPublicMethodCall() {
     $this->assertNull(
@@ -131,10 +107,6 @@ class MethodCallVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test method call to a protected method on the string sclass
-   *
-   */
   #[@test]
   public function stringProtectedMethodCall() {
     $this->assertEquals(
@@ -143,10 +115,6 @@ class MethodCallVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test method call to a protected method on the string sclass
-   *
-   */
   #[@test]
   public function stringProtectedMethodCallIfSubclass() {
     $this->assertNull(
@@ -154,10 +122,6 @@ class MethodCallVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test method call on an unsupported type (string)
-   *
-   */
   #[@test]
   public function unsupportedType() {
     $this->assertEquals(
@@ -166,10 +130,6 @@ class MethodCallVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test method call on var type
-   *
-   */
   #[@test]
   public function varType() {
     $this->assertEquals(

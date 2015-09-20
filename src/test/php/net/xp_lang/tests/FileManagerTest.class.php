@@ -12,8 +12,8 @@ use io\Folder;
  * @see      xp://xp.compiler.io.FileManager
  */
 class FileManagerTest extends \unittest\TestCase {
-  protected $fixture= null;
-  protected static $result;
+  private $fixture= null;
+  private static $result;
 
   /**
    * Defines the xp.compiler.emit.EmitterResult used for testing
@@ -21,7 +21,7 @@ class FileManagerTest extends \unittest\TestCase {
    */
   #[@beforeClass]
   public static function defineResult() {
-    self::$result= \lang\ClassLoader::defineClass('FileManagerTestEmitterResult', 'lang.Object', array('xp.compiler.emit.EmitterResult'), '{
+    self::$result= \lang\ClassLoader::defineClass('FileManagerTestEmitterResult', 'lang.Object', ['xp.compiler.emit.EmitterResult'], '{
       protected $type= null;
       public function __construct($name) { $this->type= new \xp\compiler\types\TypeReference(new \xp\compiler\types\TypeName($name)); }
       public function type() { return $this->type; }
@@ -32,6 +32,7 @@ class FileManagerTest extends \unittest\TestCase {
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new FileManager();
@@ -40,10 +41,10 @@ class FileManagerTest extends \unittest\TestCase {
   /**
    * Creates a new type reference
    *
-   * @param   string name qualified name
-   * @return  xp.compiler.types.Types
+   * @param  string $name qualified name
+   * @return xp.compiler.types.Types
    */
-  protected function newResultWithType($name) {
+  private function newResultWithType($name) {
     return self::$result->newInstance($name);
   }
   
@@ -54,17 +55,13 @@ class FileManagerTest extends \unittest\TestCase {
    * @return  io.File target
    * @throws  unittest.AssertionFailedError
    */
-  protected function assertTarget($expected, File $target) {
+  private function assertTarget($expected, File $target) {
     $this->assertEquals(
       (new File(strtr($expected, '/', DIRECTORY_SEPARATOR)))->getURI(),
       str_replace(rtrim(realpath('.'), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR, '', $target->getURI())
     );
   }
   
-  /**
-   * Test getTarget() method
-   *
-   */
   #[@test]
   public function target() {
     $this->assertTarget(
@@ -73,10 +70,6 @@ class FileManagerTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test getTarget() method
-   *
-   */
   #[@test]
   public function targetWithOutputFolder() {
     $this->assertTarget(
@@ -85,10 +78,6 @@ class FileManagerTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test getTarget() method
-   *
-   */
   #[@test]
   public function targetWithSource() {
     $source= new FileSource(new File('src/de/thekid/demo/Value.xp'));
@@ -98,10 +87,6 @@ class FileManagerTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test getTarget() method
-   *
-   */
   #[@test]
   public function targetWithSourceWithoutPackage() {
     $source= new FileSource(new File('src/Value.xp'));
@@ -111,10 +96,6 @@ class FileManagerTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test getTarget() method
-   *
-   */
   #[@test]
   public function targetWithSourceMismatchingPackage() {
     $source= new FileSource(new File('src/com/thekid/demo/Value.xp'));

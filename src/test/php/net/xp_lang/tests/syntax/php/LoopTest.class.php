@@ -10,16 +10,8 @@ use xp\compiler\ast\ForeachNode;
 use xp\compiler\ast\WhileNode;
 use xp\compiler\ast\DoNode;
 
-/**
- * TestCase
- *
- */
 class LoopTest extends ParserTestCase {
 
-  /**
-   * Test for loop
-   *
-   */
   #[@test]
   public function forLoop() {
     $this->assertEquals(array(new ForNode(array(
@@ -44,10 +36,6 @@ class LoopTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test foreach loop
-   *
-   */
   #[@test]
   public function foreachLoop() {
     $this->assertEquals(array(new ForeachNode(array(
@@ -59,10 +47,6 @@ class LoopTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test foreach loop
-   *
-   */
   #[@test]
   public function foreachLoopWithKey() {
     $this->assertEquals(array(new ForeachNode(array(
@@ -74,10 +58,6 @@ class LoopTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test while loop
-   *
-   */
   #[@test]
   public function whileLoop() {
     $this->assertEquals(array(new WhileNode(
@@ -100,10 +80,6 @@ class LoopTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test do...while loop
-   *
-   */
   #[@test]
   public function doLoop() {
     $this->assertEquals(array(new DoNode(
@@ -126,29 +102,16 @@ class LoopTest extends ParserTestCase {
     '));
   }
 
-
-  /**
-   * Test while
-   *
-   */
   #[@test]
   public function whileLoopWithoutBody() {
     $this->parse('$a= 0; while ($a--);');
   }
 
-  /**
-   * Test foreach
-   *
-   */
   #[@test]
   public function foreachLoopWithoutBody() {
     $this->parse('foreach (array(1) as $v);');
   }
 
-  /**
-   * Test while
-   *
-   */
   #[@test]
   public function forLoopWithoutBody() {
     $this->parse('for ($i= 0; $i < 1; $i++);');

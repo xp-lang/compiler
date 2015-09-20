@@ -13,6 +13,7 @@ use xp\compiler\ast\StaticMethodCallNode;
 use xp\compiler\ast\ConstructorNode;
 use xp\compiler\ast\IndexerNode;
 use xp\compiler\ast\StaticInitializerNode;
+use xp\compiler\ast\ThrowNode;
 use xp\compiler\ast\CatchNode;
 use xp\compiler\ast\FinallyNode;
 use xp\compiler\emit\Buffer;

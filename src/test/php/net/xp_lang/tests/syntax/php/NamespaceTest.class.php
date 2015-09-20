@@ -2,8 +2,10 @@
 
 use xp\compiler\syntax\php\Parser;
 use xp\compiler\syntax\php\Lexer;
+use xp\compiler\ast\ParseTree;
 use xp\compiler\ast\PackageNode;
 use xp\compiler\ast\ImportNode;
+use text\parser\generic\ParseException;
 
 /**
  * Test namespaces
@@ -28,7 +30,7 @@ class NamespaceTest extends ParserTestCase {
    * @param  xp.compiler.ast.ParseTree $tree
    * @return xp.compiler.ast.ImportNode[]
    */
-  protected function importsIn(\xp\compiler\ast\ParseTree $tree) {
+  protected function importsIn(ParseTree $tree) {
     return array_filter($tree->imports, function($import) {
       return $import instanceof ImportNode;
     });
@@ -58,12 +60,12 @@ class NamespaceTest extends ParserTestCase {
     );
   }
 
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(ParseException::class)]
   public function absolute_namespace_not_allowed() {
     $this->parse('<?php namespace \\demo; class A { }');
   }
 
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(ParseException::class)]
   public function double_namespace_declaration_not_allowed() {
     $this->parse('<?php namespace demo; namespace illegal; class A { }');
   }
@@ -104,7 +106,7 @@ class NamespaceTest extends ParserTestCase {
     );
   }
 
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(ParseException::class)]
   public function absolute_use_not_allowed() {
     $this->parse('<?php namespace demo; use \\lang\\Object; class A { }');
   }

@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests;
 
+use xp\compiler\ast\LocalsToMemberPromoter;
 use xp\compiler\ast\StatementsNode;
 use xp\compiler\ast\AssignmentNode;
 use xp\compiler\ast\VariableNode;
@@ -12,30 +13,27 @@ use xp\compiler\ast\IntegerNode;
  * @see      xp://xp.compiler.ast.LocalsToMemberPromoter
  */
 class LocalsToMemberPromoterTest extends \unittest\TestCase {
-  protected $fixture= null;
+  private $fixture;
 
   /**
    * Creates fixture
    *
+   * @return void
    */
   public function setUp() {
-    $this->fixture= new \xp\compiler\ast\LocalsToMemberPromoter();
+    $this->fixture= new LocalsToMemberPromoter();
   }
   
   /**
    * Creates a member node
    *
-   * @param   string name
-   * @return  xp.compiler.ast.MemberAccessNode
+   * @param  string $name
+   * @return xp.compiler.ast.MemberAccessNode
    */
-  protected function memberNode($name) {
+  private function memberNode($name) {
     return new MemberAccessNode(new VariableNode('this'), $name);
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function basic() {
     $assignment= new AssignmentNode(array(
@@ -55,10 +53,6 @@ class LocalsToMemberPromoterTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function withExclusion() {
     $assignment= new AssignmentNode(array(
@@ -79,10 +73,6 @@ class LocalsToMemberPromoterTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
   public function memberNodesArentTouched() {
     $assignment= new AssignmentNode(array(

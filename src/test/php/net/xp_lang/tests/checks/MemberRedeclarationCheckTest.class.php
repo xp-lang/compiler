@@ -14,28 +14,20 @@ use xp\compiler\ast\EnumMemberNode;
 use xp\compiler\ast\StringNode;
 use xp\compiler\ast\StaticInitializerNode;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.MemberRedeclarationCheck
- */
 class MemberRedeclarationCheckTest extends \unittest\TestCase {
-  protected $fixture= null;
-  protected $scope= null;
+  private $fixture;
+  private $scope;
 
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new MemberRedeclarationCheck();
     $this->scope= new CompilationUnitScope();
   }
   
-  /**
-   * Test interface
-   *
-   */
   #[@test]
   public function interfaceWithDuplicateMethod() {
     $this->assertEquals(
@@ -50,10 +42,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test interface
-   *
-   */
   #[@test]
   public function interfaceWithTwoMethods() {
     $this->assertNull(
@@ -67,10 +55,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test class
-   *
-   */
   #[@test]
   public function classWithDuplicateMethod() {
     $this->assertEquals(
@@ -85,10 +69,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test class
-   *
-   */
   #[@test]
   public function classWithTwoMethods() {
     $this->assertNull(
@@ -102,10 +82,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test class
-   *
-   */
   #[@test]
   public function classWithDuplicateField() {
     $this->assertEquals(
@@ -120,10 +96,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test class
-   *
-   */
   #[@test]
   public function classWithFieldAndPropertyWithSameName() {
     $this->assertEquals(
@@ -138,10 +110,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test class
-   *
-   */
   #[@test]
   public function classWithTwoFields() {
     $this->assertNull(
@@ -155,10 +123,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test class
-   *
-   */
   #[@test]
   public function classWithFieldAndMethodWithSameName() {
     $this->assertNull(
@@ -172,10 +136,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test class
-   *
-   */
   #[@test]
   public function classWithDuplicateConstant() {
     $this->assertEquals(
@@ -190,10 +150,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test enum
-   *
-   */
   #[@test]
   public function enumWithDuplicateMember() {
     $this->assertEquals(
@@ -208,10 +164,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test enum
-   *
-   */
   #[@test]
   public function enumWithTwoMembers() {
     $this->assertNull(
@@ -225,10 +177,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test enum
-   *
-   */
   #[@test]
   public function enumWithConflictingFieldAndMember() {
     $this->assertEquals(
@@ -243,10 +191,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test class with static initializer
-   *
-   */
   #[@test]
   public function classWithStaticInitializer() {
     $this->assertNull(
@@ -260,10 +204,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test class with static initializer and __static() method
-   *
-   */
   #[@test]
   public function classWithStaticInitializerAndConflictingMethod() {
     $this->assertEquals(
@@ -278,10 +218,6 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test class with static initializers
-   *
-   */
   #[@test]
   public function classWithTwoStaticInitializers() {
     $this->assertEquals(

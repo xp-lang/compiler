@@ -12,14 +12,9 @@ use xp\compiler\types\Constant;
 use xp\compiler\types\Operator;
 use lang\XPClass;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.types.CompiledType
- */
 class CompiledTypeTest extends \unittest\TestCase {
-  protected $fixture= null;
-  protected static $objectType;
+  private $fixture= null;
+  private static $objectType;
   
   static function __static() {
     self::$objectType= new TypeReflection(XPClass::forName('lang.Object'));
@@ -28,15 +23,23 @@ class CompiledTypeTest extends \unittest\TestCase {
   /**
    * Set up test case - creates fixture
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new CompiledType(ucfirst($this->name));
   }
 
   /**
-   * Test adding a method
+   * Returns fixture with a given parent class
    *
+   * @param   xp.compiler.types.Types parent
+   * @return  xp.compiler.types.Types fixture
    */
+  private function fixtureWithParent($parent) {
+    $this->fixture->parent= $parent;
+    return $this->fixture;
+  }
+
   #[@test]
   public function method() {
     $m= new Method('hello');
@@ -45,10 +48,6 @@ class CompiledTypeTest extends \unittest\TestCase {
     $this->assertEquals($m, $this->fixture->getMethod($m->name));
   }
 
-  /**
-   * Test adding a field
-   *
-   */
   #[@test]
   public function field() {
     $f= new Field('name');
@@ -57,10 +56,6 @@ class CompiledTypeTest extends \unittest\TestCase {
     $this->assertEquals($f, $this->fixture->getField($f->name));
   }
 
-  /**
-   * Test adding a constant
-   *
-   */
   #[@test]
   public function constant() {
     $f= new Constant('name');
@@ -69,10 +64,6 @@ class CompiledTypeTest extends \unittest\TestCase {
     $this->assertEquals($f, $this->fixture->getConstant($f->name));
   }
 
-  /**
-   * Test adding a property
-   *
-   */
   #[@test]
   public function property() {
     $f= new Property('name');
@@ -81,10 +72,6 @@ class CompiledTypeTest extends \unittest\TestCase {
     $this->assertEquals($f, $this->fixture->getProperty($f->name));
   }
 
-  /**
-   * Test adding a operator
-   *
-   */
   #[@test]
   public function operator() {
     $o= new Operator('+');
@@ -93,60 +80,30 @@ class CompiledTypeTest extends \unittest\TestCase {
     $this->assertEquals($o, $this->fixture->getOperator($o->symbol));
   }
 
-  /**
-   * Test isSubclassOf()
-   *
-   */
   #[@test]
   public function isNotSubclassOfSelf() {
     $this->fixture->parent= new TypeReflection(XPClass::forName('unittest.TestCase'));
     $this->assertFalse($this->fixture->isSubclassOf($this->fixture));
   }
 
-  /**
-   * Test isSubclassOf()
-   *
-   */
   #[@test]
   public function isSubclassOfParent() {
     $this->fixture->parent= new TypeReflection(XPClass::forName('unittest.TestCase'));
     $this->assertTrue($this->fixture->isSubclassOf($this->fixture->parent));
   }
 
-  /**
-   * Test isSubclassOf()
-   *
-   */
+
   #[@test]
   public function isSubclassOfParentsParent() {
     $this->fixture->parent= new TypeReflection(XPClass::forName('unittest.TestCase'));
     $this->assertTrue($this->fixture->isSubclassOf(new TypeReflection(XPClass::forName('lang.Object'))));
   }
   
-  /**
-   * Returns fixture with a given parent class
-   *
-   * @param   xp.compiler.types.Types parent
-   * @return  xp.compiler.types.Types fixture
-   */
-  protected function fixtureWithParent($parent) {
-    $this->fixture->parent= $parent;
-    return $this->fixture;
-  }
-
-  /**
-   * Test hasMethod() returning parent class' method
-   *
-   */
   #[@test]
   public function hasParentMethod() {
     $this->assertTrue($this->fixtureWithParent(self::$objectType)->hasMethod('getClassName'));
   }
 
-  /**
-   * Test getMethod() returning parent class' method
-   *
-   */
   #[@test]
   public function getParentMethod() {
     $m= $this->fixtureWithParent(self::$objectType)->getMethod('getClassName');
@@ -154,10 +111,6 @@ class CompiledTypeTest extends \unittest\TestCase {
     $this->assertEquals($this->fixture->parent(), $m->holder);
   }
 
-  /**
-   * Test hasMethod() returning this class' method
-   *
-   */
   #[@test]
   public function hasOverwrittenMethod() {
     $m= new Method('getClassName');
@@ -166,10 +119,6 @@ class CompiledTypeTest extends \unittest\TestCase {
     $this->assertTrue($this->fixture->hasMethod('getClassName'));
   }
 
-  /**
-   * Test getMethod() returning parent class' method
-   *
-   */
   #[@test]
   public function getOverwrittenMethod() {
     $m= new Method('getClassName');
@@ -180,37 +129,21 @@ class CompiledTypeTest extends \unittest\TestCase {
     $this->assertEquals($this->fixture, $m->holder);
   }
 
-  /**
-   * Test hasMethod() when no parent is set
-   *
-   */
   #[@test]
   public function noParentHasMethod() {
     $this->assertFalse($this->fixtureWithParent(null)->hasMethod('getClassName'));
   }
 
-  /**
-   * Test getMethod() when no parent is set
-   *
-   */
   #[@test]
   public function noParentParentMethod() {
     $this->assertNull($this->fixtureWithParent(null)->getMethod('getClassName'));
   }
 
-  /**
-   * Test getExtensions()
-   *
-   */
   #[@test]
   public function emptyTypeHasNoExtensions() {
     $this->assertEquals(array(), $this->fixture->getExtensions());
   }
 
-  /**
-   * Test getExtensions()
-   *
-   */
   #[@test]
   public function getExtensions() {
     $m= new Method('sorted');

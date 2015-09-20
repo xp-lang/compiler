@@ -30,17 +30,13 @@ use xp\compiler\Syntax;
 use io\File;
 use lang\XPClass;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.types.Scope
- */
 class ScopeTest extends \unittest\TestCase {
-  protected $fixture= null;
+  private $fixture;
   
   /**
    * Sets up this testcase
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new TaskScope(new CompilationTask(
@@ -51,19 +47,11 @@ class ScopeTest extends \unittest\TestCase {
     ));
   }
   
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function arrayType() {
     $this->assertEquals(new TypeName('var[]'), $this->fixture->typeOf(new ArrayNode()));
   }
 
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function typedArrayType() {
     $this->assertEquals(new TypeName('string[]'), $this->fixture->typeOf(new ArrayNode(array(
@@ -72,19 +60,11 @@ class ScopeTest extends \unittest\TestCase {
     ))));
   }
   
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function mapType() {
     $this->assertEquals(new TypeName('[:var]'), $this->fixture->typeOf(new MapNode()));
   }
 
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function typedMapType() {
     $this->assertEquals(new TypeName('[:string]'), $this->fixture->typeOf(new MapNode(array(
@@ -93,92 +73,52 @@ class ScopeTest extends \unittest\TestCase {
     ))));
   }
   
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function stringType() {
     $this->assertEquals(new TypeName('string'), $this->fixture->typeOf(new StringNode('')));
   }
   
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function intType() {
     $this->assertEquals(new TypeName('int'), $this->fixture->typeOf(new IntegerNode('')));
   }
   
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function hexType() {
     $this->assertEquals(new TypeName('int'), $this->fixture->typeOf(new HexNode('')));
   }
 
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function octalType() {
     $this->assertEquals(new TypeName('int'), $this->fixture->typeOf(new OctalNode('')));
   }
 
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function decimalType() {
     $this->assertEquals(new TypeName('double'), $this->fixture->typeOf(new DecimalNode('')));
   }
   
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function nullType() {
     $this->assertEquals(new TypeName('lang.Object'), $this->fixture->typeOf(new NullNode()));
   }
   
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function boolType() {
     $this->assertEquals(new TypeName('bool'), $this->fixture->typeOf(new BooleanNode(true)));
   }
   
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function typeOfAComparison() {
     $this->assertEquals(new TypeName('bool'), $this->fixture->typeOf(new ComparisonNode()));
   }
 
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function typeOfBracedExpressionNode() {
     $this->assertEquals(new TypeName('bool'), $this->fixture->typeOf(new BracedExpressionNode(new BooleanNode(true))));
     $this->assertEquals(new TypeName('string'), $this->fixture->typeOf(new BracedExpressionNode(new StringNode('Hello'))));
   }
 
-  /**
-   * Test setType() and typeOf() methods
-   *
-   */
   #[@test]
   public function registeredType() {
     with ($v= new VariableNode('h'), $t= new TypeName('util.collections.HashTable')); {
@@ -187,19 +127,11 @@ class ScopeTest extends \unittest\TestCase {
     }
   }
 
-  /**
-   * Test typeOf() method
-   *
-   */
   #[@test]
   public function unknownType() {
     $this->assertEquals(TypeName::$VAR, $this->fixture->typeOf(new VariableNode('v')));
   }
 
-  /**
-   * Test extension method API
-   *
-   */
   #[@test]
   public function objectExtension() {
     with (
@@ -214,10 +146,6 @@ class ScopeTest extends \unittest\TestCase {
     }
   }
 
-  /**
-   * Test extension method API
-   *
-   */
   #[@test]
   public function arrayExtension() {
     with (
@@ -232,10 +160,6 @@ class ScopeTest extends \unittest\TestCase {
     }
   }
 
-  /**
-   * Test extension method API
-   *
-   */
   #[@test]
   public function mapExtension() {
     with (
@@ -250,10 +174,6 @@ class ScopeTest extends \unittest\TestCase {
     }
   }
 
-  /**
-   * Test extension method API
-   *
-   */
   #[@test]
   public function objectExtensionInherited() {
     with (
@@ -269,28 +189,16 @@ class ScopeTest extends \unittest\TestCase {
     }
   }
 
-  /**
-   * Test addTypeImport()
-   *
-   */
   #[@test, @expect('xp.compiler.types.ResolveException')]
   public function importNonExistantType() {
     $this->fixture->addTypeImport('util.cmd.@@NON_EXISTANT@@');
   }
 
-  /**
-   * Test addPackageImport()
-   *
-   */
   #[@test, @expect('xp.compiler.types.ResolveException')]
   public function importNonExistantPackage() {
     $this->fixture->addPackageImport('util.cmd.@@NON_EXISTANT@@');
   }
 
-  /**
-   * Test resolve()
-   *
-   */
   #[@test]
   public function resolveFullyQualified() {
     $this->assertEquals(
@@ -299,10 +207,6 @@ class ScopeTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test resolve()
-   *
-   */
   #[@test]
   public function resolveUnqualified() {
     $this->fixture->addTypeImport('util.cmd.Command');
@@ -312,10 +216,6 @@ class ScopeTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test resolve()
-   *
-   */
   #[@test]
   public function resolveUnqualifiedByPackageImport() {
     $this->fixture->addPackageImport('util.cmd');
@@ -325,10 +225,6 @@ class ScopeTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test resolve()
-   *
-   */
   #[@test]
   public function resolveArrayType() {
     $this->assertEquals(
@@ -337,10 +233,6 @@ class ScopeTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test resolve()
-   *
-   */
   #[@test]
   public function resolveUnqualifiedArrayType() {
     $this->fixture->addPackageImport('util.cmd');
@@ -350,10 +242,6 @@ class ScopeTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test resolve()
-   *
-   */
   #[@test]
   public function resolveStringType() {
     $this->assertEquals(
@@ -362,10 +250,6 @@ class ScopeTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test resolve()
-   *
-   */
   #[@test]
   public function resolveStringArrayType() {
     $this->assertEquals(
@@ -374,10 +258,6 @@ class ScopeTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test resolving a generic type
-   *
-   */
   #[@test]
   public function resolveGenericType() {
     $components= array(new TypeName('string'), new TypeName('lang.Object'));
@@ -387,10 +267,6 @@ class ScopeTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test used list
-   *
-   */
   #[@test]
   public function usedAfterPackageImport() {
     $this->fixture->addPackageImport('util.cmd');
@@ -398,10 +274,6 @@ class ScopeTest extends \unittest\TestCase {
     $this->assertEquals(array(), $this->fixture->used);
   }
 
-  /**
-   * Test used list
-   *
-   */
   #[@test]
   public function usedAfterPackageAndTypeImport() {
     $this->fixture->addPackageImport('util.cmd');
@@ -410,10 +282,6 @@ class ScopeTest extends \unittest\TestCase {
     $this->assertEquals(array('util.cmd.Command' => true), $this->fixture->used);
   }
 
-  /**
-   * Test used list
-   *
-   */
   #[@test]
   public function usedAfterPackageAndMultipleTypeImport() {
     $this->fixture->addPackageImport('util.cmd');
@@ -423,10 +291,6 @@ class ScopeTest extends \unittest\TestCase {
     $this->assertEquals(array('util.cmd.Command' => true), $this->fixture->used);
   }
 
-  /**
-   * Test used list
-   *
-   */
   #[@test]
   public function usedAfterTypeImport() {
     $this->fixture->addTypeImport('util.cmd.Command');
@@ -434,10 +298,6 @@ class ScopeTest extends \unittest\TestCase {
     $this->assertEquals(array('util.cmd.Command' => true), $this->fixture->used);
   }
 
-  /**
-   * Test used list
-   *
-   */
   #[@test]
   public function usedAfterMultipleTypeImport() {
     $this->fixture->addTypeImport('util.cmd.Command');
