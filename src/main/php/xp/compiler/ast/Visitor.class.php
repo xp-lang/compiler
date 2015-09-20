@@ -486,7 +486,6 @@ abstract class Visitor extends \lang\Object {
    * @param   xp.compiler.ast.Node node
    */
   protected function visitLambda(LambdaNode $node) {
-    $node->parameters= $this->visitAll((array)$node->parameters);
     $node->statements= $this->visitAll((array)$node->statements);
     return $node;
   }

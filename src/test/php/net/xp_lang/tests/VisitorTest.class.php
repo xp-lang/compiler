@@ -851,9 +851,9 @@ class VisitorTest extends \unittest\TestCase {
    */
   #[@test]
   public function visitLambda() {
-    $node= new \xp\compiler\ast\LambdaNode(array(new VariableNode('a')), array(new ReturnNode()));
+    $node= new \xp\compiler\ast\LambdaNode(array(['name' => 'a']), array(new ReturnNode()));
     $this->assertVisited(
-      array($node, $node->parameters[0], $node->statements[0]), 
+      array($node, $node->statements[0]), 
       $node
     );
   }
@@ -864,9 +864,9 @@ class VisitorTest extends \unittest\TestCase {
    */
   #[@test]
   public function visitLambdaWithEmptyStatements() {
-    $node= new \xp\compiler\ast\LambdaNode(array(new VariableNode('a')), array());
+    $node= new \xp\compiler\ast\LambdaNode(array(['name' => 'a']), array());
     $this->assertVisited(
-      array($node, $node->parameters[0]), 
+      array($node), 
       $node
     );
   }

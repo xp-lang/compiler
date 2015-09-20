@@ -1361,7 +1361,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     );
     
     $name= 'operator··'.$ovl[$operator->symbol];
-    $this->enter(new MethodScope($name));
+    $this->enter(new MethodScope($operator));
     array_unshift($this->method, $name);
 
     // Meta data
@@ -1601,7 +1601,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $b->append(' function '.$method->name);
     
     // Begin
-    $this->enter(new MethodScope($method->name));
+    $this->enter(new MethodScope($method));
     array_unshift($this->method, $method->name);
     if (!Modifiers::isStatic($method->modifiers)) {
       $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
@@ -1673,7 +1673,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $b->append(' function __construct');
     
     // Begin
-    $this->enter(new MethodScope('__construct'));
+    $this->enter(new MethodScope($constructor));
     $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
     array_unshift($this->method, '__construct');
 
@@ -1834,7 +1834,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $auto= [];
     if (!empty($properties['get'])) {
       $b->append('function __get($'.$mangled.') {');
-      $this->enter(new MethodScope('__get'));
+      $this->enter(new MethodScope(new MethodNode(['name' => '__get'])));
       $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
       foreach ($properties['get'] as $name => $definition) {
         $b->append('if (\''.$name.'\' === $'.$mangled.') {');
@@ -1851,7 +1851,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     }
     if (!empty($properties['set'])) {
       $b->append('function __set($'.$mangled.', $value) {');
-      $this->enter(new MethodScope('__set'));
+      $this->enter(new MethodScope(new MethodNode(['name' => '__set', 'parameters' => [['name' => 'value']]])));
       $this->scope[0]->setType(new VariableNode('this'), $this->scope[0]->declarations[0]->name);
       foreach ($properties['set'] as $name => $definition) {
         $this->scope[0]->setType(new VariableNode('value'), $definition[0]);
@@ -1940,7 +1940,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
 
       if (!$initializable) {
         $init= new Buffer('', $b->line);
-        $this->enter(new MethodScope('<init>'));
+        $this->enter(new MethodScope(new MethodNode(['name' => '<init>'])));
         if ($static) {
           $variable= new StaticMemberAccessNode(new TypeName('self'), $field->name);
         } else {
