@@ -6,10 +6,6 @@ use xp\compiler\ast\MethodNode;
 use xp\compiler\ast\AnnotationNode;
 use xp\compiler\types\TypeName;
 
-/**
- * TestCase
- *
- */
 class MethodDeclarationTest extends ParserTestCase {
 
   /**
@@ -22,10 +18,6 @@ class MethodDeclarationTest extends ParserTestCase {
     return (new Parser())->parse(new Lexer('<?php '.$src.'?>', '<string:'.$this->name.'>'))->declaration->body;
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function toStringMethod() {
     $this->assertEquals(array(new MethodNode(array(
@@ -42,10 +34,6 @@ class MethodDeclarationTest extends ParserTestCase {
     }'));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function toStringMethodWithReturnType() {
     $this->assertEquals(array(new MethodNode(array(
@@ -62,10 +50,6 @@ class MethodDeclarationTest extends ParserTestCase {
     }'));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function equalsMethod() {
     $this->assertEquals(array(new MethodNode(array(
@@ -86,10 +70,6 @@ class MethodDeclarationTest extends ParserTestCase {
     }'));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function abstractMethod() {
     $this->assertEquals(array(new MethodNode(array(
@@ -110,10 +90,6 @@ class MethodDeclarationTest extends ParserTestCase {
     }'));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function interfaceMethod() {
     $this->assertEquals(array(new MethodNode(array(
@@ -134,10 +110,6 @@ class MethodDeclarationTest extends ParserTestCase {
     }'));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function addAllMethod() {
     $this->assertEquals(array(new MethodNode(array(
@@ -158,19 +130,11 @@ class MethodDeclarationTest extends ParserTestCase {
     }'));
   }
 
-  /**
-   * Test missing return type yields a parse error
-   *
-   */
   #[@test, @expect('text.parser.generic.ParseException')]
   public function missingFunctionKeyword() {
     $this->parse('class Broken { public run() { }}');
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function noRuntimeTypeCheck() {
     $this->assertEquals(array(new MethodNode(array(
@@ -191,10 +155,6 @@ class MethodDeclarationTest extends ParserTestCase {
     }'));
   }
 
-  /**
-   * Test method declaration
-   *
-   */
   #[@test]
   public function mapMethodWithAnnotations() {
     $this->assertEquals(array(new MethodNode(array(

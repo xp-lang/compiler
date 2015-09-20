@@ -24,10 +24,6 @@ class ClassConstantsTest extends ParserTestCase {
     return (new Parser())->parse(new Lexer('<?php '.$src.' ?>', '<string:'.$this->name.'>'))->declaration->body;
   }
 
-  /**
-   * Test string constant
-   *
-   */
   #[@test]
   public function stringConstant() {
     $this->assertEquals(
@@ -36,10 +32,6 @@ class ClassConstantsTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test int constant
-   *
-   */
   #[@test]
   public function intConstant() {
     $this->assertEquals(
@@ -48,10 +40,6 @@ class ClassConstantsTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test var constant
-   *
-   */
   #[@test]
   public function varConstant() {
     $this->assertEquals(
@@ -60,28 +48,16 @@ class ClassConstantsTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test constant cannot be initialized to an object
-   *
-   */
   #[@test, @expect('text.parser.generic.ParseException')]
   public function constantsCanOnlyBePrimitives() {
     $this->parse('class Policy { const THRESHHOLD = new Object(); }');
   }
 
-  /**
-   * Test constant cannot be initialized to an object
-   *
-   */
   #[@test, @expect('text.parser.generic.ParseException')]
   public function noArraysAllowed() {
     $this->parse('class Numb3rs { const FIRST_THREE = array(1, 2, 3); }');
   }
 
-  /**
-   * Test constant cannot be initialized to an object
-   *
-   */
   #[@test, @expect('text.parser.generic.ParseException')]
   public function noMapsAllowed() {
     $this->parse('class Numb3rs { const FIRST_THREE = array(1 => "One", 2 => "Two", 3 => "Three"); }');

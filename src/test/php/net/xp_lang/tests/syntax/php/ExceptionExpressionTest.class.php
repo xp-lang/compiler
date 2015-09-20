@@ -9,16 +9,8 @@ use xp\compiler\ast\InstanceCreationNode;
 use xp\compiler\ast\ReturnNode;
 use xp\compiler\types\TypeName;
 
-/**
- * TestCase
- *
- */
 class ExceptionExpressionTest extends ParserTestCase {
 
-  /**
-   * Test try/catch
-   *
-   */
   #[@test]
   public function singleCatch() {
     $this->assertEquals(array(new TryNode(array(
@@ -39,10 +31,6 @@ class ExceptionExpressionTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test try/finally
-   *
-   */
   #[@test]
   public function singleThrow() {
     $this->assertEquals(array(new ThrowNode(array(
@@ -55,10 +43,6 @@ class ExceptionExpressionTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test try w/ multiple catches
-   *
-   */
   #[@test]
   public function multipleCatches() {
     $this->assertEquals(array(new TryNode(array(

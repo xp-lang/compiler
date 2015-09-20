@@ -6,16 +6,8 @@ use xp\compiler\ast\IntegerNode;
 use xp\compiler\ast\BracedExpressionNode;
 use xp\compiler\ast\StringNode;
 
-/**
- * TestCase
- *
- */
 class BinaryOpTest extends ParserTestCase {
 
-  /**
-   * Test addition operator
-   *
-   */
   #[@test]
   public function addition() {
     $this->assertEquals(array(new BinaryOpNode(array(
@@ -25,10 +17,6 @@ class BinaryOpTest extends ParserTestCase {
     ))), $this->parse('$i + 10;'));
   }
 
-  /**
-   * Test subtraction operator
-   *
-   */
   #[@test]
   public function subtraction() {
     $this->assertEquals(array(new BinaryOpNode(array(
@@ -38,10 +26,6 @@ class BinaryOpTest extends ParserTestCase {
     ))), $this->parse('$i - 10;'));
   }
 
-  /**
-   * Test multiplication operator
-   *
-   */
   #[@test]
   public function multiplication() {
     $this->assertEquals(array(new BinaryOpNode(array(
@@ -51,10 +35,6 @@ class BinaryOpTest extends ParserTestCase {
     ))), $this->parse('$i * 10;'));
   }
 
-  /**
-   * Test division operator
-   *
-   */
   #[@test]
   public function division() {
     $this->assertEquals(array(new BinaryOpNode(array(
@@ -64,10 +44,6 @@ class BinaryOpTest extends ParserTestCase {
     ))), $this->parse('$i / 10;'));
   }
 
-  /**
-   * Test modulo operator
-   *
-   */
   #[@test]
   public function modulo() {
     $this->assertEquals(array(new BinaryOpNode(array(
@@ -77,10 +53,6 @@ class BinaryOpTest extends ParserTestCase {
     ))), $this->parse('$i % 10;'));
   }
 
-  /**
-   * Test brackets used for precedence
-   *
-   */
   #[@test]
   public function bracketsUsedForPrecedence() {
     $this->assertEquals(
@@ -97,10 +69,6 @@ class BinaryOpTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test brackets used for precedence
-   *
-   */
   #[@test]
   public function bracketsUsedForPrecedenceWithVariable() {
     $this->assertEquals(
@@ -117,10 +85,6 @@ class BinaryOpTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test concatenation
-   *
-   */
   #[@test]
   public function concatenation() {
     $this->assertEquals(
@@ -133,10 +97,6 @@ class BinaryOpTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test concatenation
-   *
-   */
   #[@test]
   public function bracketsInConcatenation() {
     $this->assertEquals(
@@ -153,10 +113,6 @@ class BinaryOpTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test concatenation
-   *
-   */
   #[@test]
   public function concatenation_string_variable_and_string() {
     $this->assertEquals(

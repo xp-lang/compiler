@@ -5,16 +5,8 @@ use xp\compiler\ast\DynamicInstanceCreationNode;
 use xp\compiler\ast\DynamicVariableReferenceNode;
 use xp\compiler\ast\VariableNode;
 
-/**
- * TestCase
- *
- */
 class DynamicTest extends ParserTestCase {
 
-  /**
-   * Test instanceof a variable
-   *
-   */
   #[@test]
   public function instanceOfVariable() {
     $this->assertEquals(array(new DynamicInstanceOfNode(array(
@@ -23,10 +15,6 @@ class DynamicTest extends ParserTestCase {
     ))), $this->parse('$a instanceof $type;'));
   }
 
-  /**
-   * Test new $type
-   *
-   */
   #[@test]
   public function instanceCreation() {
     $this->assertEquals(
@@ -38,10 +26,6 @@ class DynamicTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test $this->$name
-   *
-   */
   #[@test]
   public function variableMemberAccess() {
     $this->assertEquals(
@@ -50,10 +34,6 @@ class DynamicTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test $this->$name
-   *
-   */
   #[@test]
   public function expressionMemberAccess() {
     $this->assertEquals(

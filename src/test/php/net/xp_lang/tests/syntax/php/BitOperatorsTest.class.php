@@ -5,17 +5,8 @@ use xp\compiler\ast\UnaryOpNode;
 use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\IntegerNode;
 
-/**
- * TestCase
- *
- * @see   php://language.operators.bitwise
- */
 class BitOperatorsTest extends ParserTestCase {
 
-  /**
-   * Test "|" operator
-   *
-   */
   #[@test]
   public function bitwiseOr() {
     $this->assertEquals(array(new BinaryOpNode(array(
@@ -27,10 +18,6 @@ class BitOperatorsTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test "&" operator
-   *
-   */
   #[@test]
   public function bitwiseAnd() {
     $this->assertEquals(array(new BinaryOpNode(array(
@@ -42,10 +29,6 @@ class BitOperatorsTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test "^" operator
-   *
-   */
   #[@test]
   public function bitwiseXOr() {
     $this->assertEquals(array(new BinaryOpNode(array(
@@ -57,10 +40,6 @@ class BitOperatorsTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test "~" prefix operator
-   *
-   */
   #[@test]
   public function bitwiseNot() {
     $this->assertEquals(array(new UnaryOpNode(array(
@@ -72,10 +51,6 @@ class BitOperatorsTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test "<<" operator
-   *
-   */
   #[@test]
   public function shiftLeft() {
     $this->assertEquals(array(new BinaryOpNode(array(
@@ -87,10 +62,6 @@ class BitOperatorsTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test ">>" operator
-   *
-   */
   #[@test]
   public function shiftRight() {
     $this->assertEquals(array(new BinaryOpNode(array(

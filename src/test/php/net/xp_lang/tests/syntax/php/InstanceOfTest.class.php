@@ -5,16 +5,8 @@ use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\MemberAccessNode;
 use xp\compiler\types\TypeName;
 
-/**
- * TestCase
- *
- */
 class InstanceOfTest extends ParserTestCase {
 
-  /**
-   * Test instanceof a type
-   *
-   */
   #[@test]
   public function instanceOfObject() {
     $this->assertEquals(array(new InstanceOfNode(array(
@@ -23,10 +15,6 @@ class InstanceOfTest extends ParserTestCase {
     ))), $this->parse('$a instanceof Object;'));
   }
 
-  /**
-   * Test instanceof a type
-   *
-   */
   #[@test]
   public function memberInstanceOfObject() {
     $this->assertEquals(array(new InstanceOfNode(array(

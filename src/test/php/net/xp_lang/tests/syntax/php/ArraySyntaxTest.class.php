@@ -5,16 +5,8 @@ use xp\compiler\ast\StringNode;
 use xp\compiler\ast\IntegerNode;
 use xp\compiler\ast\VariableNode;
 
-/**
- * TestCase
- *
- */
 class ArraySyntaxTest extends ParserTestCase {
 
-  /**
-   * Test [1]
-   *
-   */
   #[@test]
   public function integerOffset() {
     $this->assertEquals(
@@ -23,10 +15,6 @@ class ArraySyntaxTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test ["a"]
-   *
-   */
   #[@test]
   public function stringOffset() {
     $this->assertEquals(
@@ -35,10 +23,6 @@ class ArraySyntaxTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test []
-   *
-   */
   #[@test]
   public function noOffset() {
     $this->assertEquals(
@@ -47,10 +31,6 @@ class ArraySyntaxTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test $str{$i}
-   *
-   */
   #[@test]
   public function curlyBraces() {
     $this->assertEquals(

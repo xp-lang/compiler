@@ -4,14 +4,8 @@ use xp\compiler\ast\UnaryOpNode;
 use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\IntegerNode;
 
-/**
- * TestCase for unary operators !, ~, ++ and --
- */
 class UnaryOpTest extends ParserTestCase {
 
-  /**
-   * Test negation
-   */
   #[@test]
   public function negation() {
     $this->assertEquals(array(new UnaryOpNode(array(
@@ -22,9 +16,6 @@ class UnaryOpTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test complement
-   */
   #[@test]
   public function complement() {
     $this->assertEquals(array(new UnaryOpNode(array(
@@ -35,9 +26,6 @@ class UnaryOpTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test increment
-   */
   #[@test]
   public function increment() {
     $this->assertEquals(array(new UnaryOpNode(array(
@@ -48,9 +36,7 @@ class UnaryOpTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test decrement
-   */
+  
   #[@test]
   public function decrement() {
     $this->assertEquals(array(new UnaryOpNode(array(

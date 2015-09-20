@@ -5,48 +5,35 @@ use xp\compiler\ast\HexNode;
 use xp\compiler\ast\OctalNode;
 use xp\compiler\ast\IntegerNode;
 use xp\compiler\ast\DecimalNode;
+use lang\FormatException;
 
 /**
- * TestCase
+ * Testcase for number syntax
  *
+ * @see   http://me.veekun.com/blog/2012/04/09/php-a-fractal-of-bad-design/#numbers
  */
 class NumbersTest extends ParserTestCase {
 
-  /**
-   * Test "1.a" raises a parser exception
-   */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function illegalDecimalCharAfterDot() {
     $this->parse('1.a');
   }
 
-  /**
-   * Test "1.-" raises a parser exception
-   */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function illegalDecimalMinusAfterDot() {
     $this->parse('0.-');
   }
 
-  /**
-   * Test "0xZ" raises a parser exception
-   */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function illegalHexZ() {
     $this->parse('0xZ');
   }
 
-  /**
-   * Test "0x" raises a parser exception
-   */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function illegalHexMissingAfterX() {
     $this->parse('0x');
   }
 
-  /**
-   * Test "0x0+1"
-   */
   #[@test]
   public function php_bug_61256_0x0_plus_1() {
     $this->assertEquals(
@@ -59,9 +46,6 @@ class NumbersTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test "0x0-1"
-   */
   #[@test]
   public function php_bug_61256_0x0_minus_1() {
     $this->assertEquals(
@@ -74,9 +58,6 @@ class NumbersTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test "0x00+2"
-   */
   #[@test]
   public function php_bug_61095_0x00_plus_2() {
     $this->assertEquals(
@@ -89,9 +70,6 @@ class NumbersTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test "0x00+0x02"
-   */
   #[@test]
   public function php_bug_61095_0x00_plus_0x02() {
     $this->assertEquals(
@@ -104,11 +82,6 @@ class NumbersTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test "0x0+ 2"
-   *
-   * @see   http://me.veekun.com/blog/2012/04/09/php-a-fractal-of-bad-design/#numbers
-   */
   #[@test]
   public function hex_add_0x0_plus_2_with_space() {
     $this->assertEquals(
@@ -121,11 +94,6 @@ class NumbersTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test "0x0+2"
-   *
-   * @see   http://me.veekun.com/blog/2012/04/09/php-a-fractal-of-bad-design/#numbers
-   */
   #[@test]
   public function hex_add_0x0_plus_2() {
     $this->assertEquals(
@@ -138,221 +106,138 @@ class NumbersTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test octal numbers
-   */
   #[@test]
   public function octal_zero() {
     $this->assertEquals(array(new OctalNode('00')), $this->parse('00;'));
   }
 
-  /**
-   * Test octal numbers
-   */
   #[@test]
   public function octal_0000() {
     $this->assertEquals(array(new OctalNode('0000')), $this->parse('0000;'));
   }
 
-  /**
-   * Test octal numbers
-   */
   #[@test]
   public function octal_0777() {
     $this->assertEquals(array(new OctalNode('0777')), $this->parse('0777;'));
   }
 
-  /**
-   * Test octal numbers
-   *
-   * @see   http://me.veekun.com/blog/2012/04/09/php-a-fractal-of-bad-design/#numbers
-   */
-  #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal octal/')]
+  #[@test, @expect(class= FormatException::class, withMessage= '/Illegal octal/')]
   public function malformed_octal_09() {
     $this->parse('09');
   }
 
-  /**
-   * Test octal numbers
-   */
-  #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal octal/')]
+  #[@test, @expect(class= FormatException::class, withMessage= '/Illegal octal/')]
   public function malformed_octal_00X() {
     $this->parse('00X');
   }
 
-  /**
-   * Test octal numbers
-   */
-  #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal octal/')]
+  #[@test, @expect(class= FormatException::class, withMessage= '/Illegal octal/')]
   public function malformed_octal_01c() {
     $this->parse('01c');
   }
 
-  /**
-   * Test integer numbers
-   */
   #[@test]
   public function integer_zero() {
     $this->assertEquals(array(new IntegerNode('0')), $this->parse('0;'));
   }
 
-  /**
-   * Test integer numbers
-   */
   #[@test]
   public function integer_huge() {
     $this->assertEquals(array(new IntegerNode('58635272821786587286382824657568871098287278276543219876543')), $this->parse('58635272821786587286382824657568871098287278276543219876543;'));
   }
 
-  /**
-   * Test hex numbers
-   */
   #[@test]
   public function hex_zero() {
     $this->assertEquals(array(new HexNode('0x0')), $this->parse('0x0;'));
   }
 
-  /**
-   * Test hex numbers
-   */
   #[@test]
   public function hex_lowercase() {
     $this->assertEquals(array(new HexNode('0x61ae')), $this->parse('0x61ae;'));
   }
 
-  /**
-   * Test hex numbers
-   */
   #[@test]
   public function hex_uppercase() {
     $this->assertEquals(array(new HexNode('0X61AE')), $this->parse('0X61AE;'));
   }
 
 
-  /**
-   * Test hex numbers
-   */
   #[@test]
   public function hex_mixedcase() {
     $this->assertEquals(array(new HexNode('0xACe')), $this->parse('0xACe;'));
   }
 
-  /**
-   * Test decimal numbers
-   */
   #[@test]
   public function decimal_zero() {
     $this->assertEquals(array(new DecimalNode('0.0')), $this->parse('0.0;'));
   }
 
-  /**
-   * Test decimal numbers
-   */
   #[@test]
   public function decimal() {
     $this->assertEquals(array(new DecimalNode('6.100')), $this->parse('6.100;'));
   }
 
-  /**
-   * Test decimal numbers
-   */
   #[@test]
   public function decimal_exponent_lowercase() {
     $this->assertEquals(array(new DecimalNode('1e4')), $this->parse('1e4;'));
   }
 
-  /**
-   * Test decimal numbers
-   */
   #[@test]
   public function decimal_exponent_uppercase() {
     $this->assertEquals(array(new DecimalNode('1E4')), $this->parse('1E4;'));
   }
 
-  /**
-   * Test decimal numbers
-   */
   #[@test]
   public function decimal_fraction_exponent_uppercase() {
     $this->assertEquals(array(new DecimalNode('1.5e4')), $this->parse('1.5e4;'));
   }
 
-  /**
-   * Test decimal numbers
-   */
   #[@test]
   public function decimal_exponent_plus() {
     $this->assertEquals(array(new DecimalNode('1e+4')), $this->parse('1e+4;'));
   }
 
-  /**
-   * Test decimal numbers
-   */
   #[@test]
   public function decimal_exponent_minus() {
     $this->assertEquals(array(new DecimalNode('1e-4')), $this->parse('1e-4;'));
   }
 
-  /**
-   * Test decimal numbers
-   */
   #[@test]
   public function decimal_fraction_exponent_plus() {
     $this->assertEquals(array(new DecimalNode('1.5e+4')), $this->parse('1.5e+4;'));
   }
 
-  /**
-   * Test decimal numbers
-   */
   #[@test]
   public function decimal_fraction_exponent_minus() {
     $this->assertEquals(array(new DecimalNode('1.5e-4')), $this->parse('1.5e-4;'));
   }
 
-  /**
-   * Test decimal numbers
-   */
-  #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
+  #[@test, @expect(class= FormatException::class, withMessage= '/Illegal decimal/')]
   public function exponent_missing() {
     $this->parse('1E;');
   }
 
-  /**
-   * Test decimal numbers
-   */
-  #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
+  #[@test, @expect(class= FormatException::class, withMessage= '/Illegal decimal/')]
   public function exponent_double() {
     $this->parse('1EE2;');
   }
 
-  /**
-   * Test decimal numbers
-   */
-  #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
+  #[@test, @expect(class= FormatException::class, withMessage= '/Illegal decimal/')]
   public function exponent_missing_plus() {
     $this->parse('1E+;');
   }
 
-  /**
-   * Test decimal numbers
-   */
-  #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
+  #[@test, @expect(class= FormatException::class, withMessage= '/Illegal decimal/')]
   public function exponent_missing_minus() {
     $this->parse('1E-;');
   }
 
-  /**
-   * Test decimal numbers
-   */
-  #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
+  #[@test, @expect(class= FormatException::class, withMessage= '/Illegal decimal/')]
   public function exponent_fraction_missing() {
     $this->parse('1.5E;');
   }
 
-  /**
-   * Test decimal numbers
-   */
-  #[@test, @expect(class = 'lang.FormatException', withMessage= '/Illegal decimal/')]
+  #[@test, @expect(class= FormatException::class, withMessage= '/Illegal decimal/')]
   public function exponent_fraction_double() {
     $this->parse('1.5EE2;');
   }

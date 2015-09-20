@@ -13,16 +13,8 @@ use xp\compiler\ast\BreakNode;
 use xp\compiler\ast\DefaultNode;
 use xp\compiler\ast\StringNode;
 
-/**
- * TestCase
- *
- */
 class ControlStructuresTest extends ParserTestCase {
 
-  /**
-   * Test if statement without else
-   *
-   */
   #[@test]
   public function ifStatement() {
     $this->assertEquals(array(new IfNode(array(
@@ -34,10 +26,6 @@ class ControlStructuresTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test if statement without curly braces
-   *
-   */
   #[@test]
   public function ifStatementWithOutCurlies() {
     $this->assertEquals(array(new IfNode(array(
@@ -49,10 +37,6 @@ class ControlStructuresTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test if statement with else
-   *
-   */
   #[@test]
   public function ifElseStatement() {
     $this->assertEquals(array(new IfNode(array(
@@ -66,10 +50,6 @@ class ControlStructuresTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test if /else cascades
-   *
-   */
   #[@test]
   public function ifElseCascades() {
     $this->assertEquals(array(new IfNode(array(
@@ -97,10 +77,6 @@ class ControlStructuresTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test switch statement
-   *
-   */
   #[@test]
   public function emptySwitchStatement() {
     $this->assertEquals(array(new SwitchNode(array(
@@ -111,10 +87,6 @@ class ControlStructuresTest extends ParserTestCase {
     '));
   }
 
-  /**
-   * Test switch statement
-   *
-   */
   #[@test]
   public function switchStatement() {
     $this->assertEquals(array(new SwitchNode(array(
