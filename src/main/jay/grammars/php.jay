@@ -696,6 +696,7 @@ lambda_uses_opt:
 
 literal:
     scalar
+  | '[' { $p= $yyLex->position; } map_or_list ']' { $3->position= $p; $3->type= NULL; $$= $3; }
   | T_ARRAY '(' { $p= $yyLex->position; } map_or_list ')' { $4->position= $p; $4->type= NULL; $$= $4; }
 ;
 
