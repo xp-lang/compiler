@@ -296,7 +296,7 @@ class MethodDeclarationTest extends ParserTestCase {
       'body'       => array(),
       'extension'  => null
     )), $this->parse(
-      'public {Map, string -> int} grouping() { }'
+      'public {(Map, string) -> int} grouping() { }'
     ));
   }
 }

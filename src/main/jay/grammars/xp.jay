@@ -1078,9 +1078,10 @@ typeparameter:
 ;
 
 signature:
-    /* empty */ { $$= array(); }
+    '(' ')' { $$= array(); }
   | typeref { $$= array($1); }
-  | signature ',' typeref { $$= array_merge($1, array($3)); }
+  | '(' typeref ')' { $$= array($2); }
+  | '(' signature ',' typeref ')' { $$= array_merge($2, array($4)); }
 ;
 
 functiontype:
