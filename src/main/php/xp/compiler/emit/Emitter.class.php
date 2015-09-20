@@ -315,6 +315,14 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
   protected abstract function emitClassAccess($b, $access);
 
   /**
+   * Emit class name access
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.ClassNameAccessNode access
+   */
+  protected abstract function emitClassNameAccess($b, $access);
+
+  /**
    * Emit a braced expression
    *
    * @param   xp.compiler.emit.Buffer b
