@@ -31,19 +31,23 @@ class V55Emitter extends V54Emitter {
   protected function emitYieldFrom($b, $yield) {
     static $shim= '
       if ($iter instanceof \\Generator) {
-        $recv= null;
-        $send= true;
-        while ($iter->valid()) {
-          $next= $iter->current();
-          $send ? $iter->send($recv) : $iter->throw($recv);
-          try {
-            $recv= (yield $next);
-            $send= true;
-          } catch (\\Exception $e) {
-            $recv= $e;
-            $send= false;
+        defined(\'HHVM_VERSION\') && $iter->next();
+        $send= eval(\'return function() use($iter) {
+          $recv= null;
+          $send= true;
+          while ($iter->valid()) {
+            $next= $iter->current();
+            $send ? $iter->send($recv) : $iter->throw($recv);
+            try {
+              $recv= \'.(defined(\'HHVM_VERSION\') ? \'yield $next\' : \'(yield $next)\').\';
+              $send= true;
+            } catch (\\Exception $e) {
+              $recv= $e;
+              $send= false;
+            }
           }
-        }
+        };\');
+        foreach ($send() as $next) { yield $next; }
       } else {
         foreach ($iter as $next) { yield $next; }
       }
