@@ -6,44 +6,45 @@ use xp\compiler\ast\IntegerNode;
 
 class UnaryOpTest extends ParserTestCase {
 
+  /**
+   * Assertion helper
+   *
+   * @param  xp.compiler.ast.Node $offset
+   * @param  string $syntax
+   * @throws unittest.AssertionFailedError
+   */
+  private function assertUnaryOp($operator, $syntax) {
+    $this->assertEquals(
+      [new UnaryOpNode([
+        'expression'    => new VariableNode('i'),
+        'op'            => $operator
+      ])],
+      $this->parse($syntax)
+    );
+  }
+
   #[@test]
   public function negation() {
-    $this->assertEquals(array(new UnaryOpNode(array(
-      'expression'    => new VariableNode('i'),
-      'op'            => '!'
-    ))), $this->parse('
-      !$i;
-    '));
+    $this->assertUnaryOp('!', '!$i;');
   }
 
   #[@test]
   public function complement() {
-    $this->assertEquals(array(new UnaryOpNode(array(
-      'expression'    => new VariableNode('i'),
-      'op'            => '~'
-    ))), $this->parse('
-      ~$i;
-    '));
+    $this->assertUnaryOp('~', '~$i;');
   }
 
   #[@test]
   public function increment() {
-    $this->assertEquals(array(new UnaryOpNode(array(
-      'expression'    => new VariableNode('i'),
-      'op'            => '++'
-    ))), $this->parse('
-      ++$i;
-    '));
+    $this->assertUnaryOp('++', '++$i;');
   }
 
-  
   #[@test]
   public function decrement() {
-    $this->assertEquals(array(new UnaryOpNode(array(
-      'expression'    => new VariableNode('i'),
-      'op'            => '--'
-    ))), $this->parse('
-      --$i;
-    '));
+    $this->assertUnaryOp('--', '--$i;');
+  }
+
+  #[@test]
+  public function bitwise_not() {
+    $this->assertUnaryOp('~', '~$i;');
   }
 }

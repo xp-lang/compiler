@@ -8,49 +8,72 @@ use xp\compiler\ast\StringNode;
 
 class BinaryOpTest extends ParserTestCase {
 
+  /**
+   * Assertion helper
+   *
+   * @param  xp.compiler.ast.Node $offset
+   * @param  string $syntax
+   * @throws unittest.AssertionFailedError
+   */
+  private function assertBinaryOp($operator, $syntax) {
+    $this->assertEquals(
+      [new BinaryOpNode([
+        'lhs'           => new VariableNode('i'),
+        'rhs'           => new IntegerNode('2'),
+        'op'            => $operator
+      ])],
+      $this->parse($syntax)
+    );
+  }
+
   #[@test]
   public function addition() {
-    $this->assertEquals(array(new BinaryOpNode(array(
-      'lhs'           => new VariableNode('i'),
-      'rhs'           => new IntegerNode('10'),
-      'op'            => '+'
-    ))), $this->parse('$i + 10;'));
+    $this->assertBinaryOp('+', '$i + 2;');
   }
 
   #[@test]
   public function subtraction() {
-    $this->assertEquals(array(new BinaryOpNode(array(
-      'lhs'           => new VariableNode('i'),
-      'rhs'           => new IntegerNode('10'),
-      'op'            => '-'
-    ))), $this->parse('$i - 10;'));
+    $this->assertBinaryOp('-', '$i - 2;');
   }
 
   #[@test]
   public function multiplication() {
-    $this->assertEquals(array(new BinaryOpNode(array(
-      'lhs'           => new VariableNode('i'),
-      'rhs'           => new IntegerNode('10'),
-      'op'            => '*'
-    ))), $this->parse('$i * 10;'));
+    $this->assertBinaryOp('*', '$i * 2;');
   }
 
   #[@test]
   public function division() {
-    $this->assertEquals(array(new BinaryOpNode(array(
-      'lhs'           => new VariableNode('i'),
-      'rhs'           => new IntegerNode('10'),
-      'op'            => '/'
-    ))), $this->parse('$i / 10;'));
+    $this->assertBinaryOp('/', '$i / 2;');
   }
 
   #[@test]
   public function modulo() {
-    $this->assertEquals(array(new BinaryOpNode(array(
-      'lhs'           => new VariableNode('i'),
-      'rhs'           => new IntegerNode('10'),
-      'op'            => '%'
-    ))), $this->parse('$i % 10;'));
+    $this->assertBinaryOp('%', '$i % 2;');
+  }
+
+  #[@test]
+  public function bitwiseOr() {
+    $this->assertBinaryOp('|', '$i | 2;');
+  }
+
+  #[@test]
+  public function bitwiseAnd() {
+    $this->assertBinaryOp('&', '$i & 2;');
+  }
+
+  #[@test]
+  public function bitwiseXOr() {
+    $this->assertBinaryOp('^', '$i ^ 2;');
+  }
+
+  #[@test]
+  public function shiftLeft() {
+    $this->assertBinaryOp('<<', '$i << 2;');
+  }
+
+  #[@test]
+  public function shiftRight() {
+    $this->assertBinaryOp('>>', '$i >> 2;');
   }
 
   #[@test]

@@ -7,35 +7,42 @@ use xp\compiler\ast\VariableNode;
 
 class ArraySyntaxTest extends ParserTestCase {
 
-  #[@test]
-  public function integerOffset() {
+  /**
+   * Assertion helper
+   *
+   * @param  xp.compiler.ast.Node $offset
+   * @param  string $syntax
+   * @throws unittest.AssertionFailedError
+   */
+  private function assertArrayAccess($offset, $syntax) {
     $this->assertEquals(
-      array(new ArrayAccessNode(new VariableNode('b'), new IntegerNode('1'))),
-      $this->parse('$b[1];')
+      [new ArrayAccessNode(new VariableNode('fixture'), $offset)],
+      $this->parse($syntax)
     );
   }
 
   #[@test]
-  public function stringOffset() {
-    $this->assertEquals(
-      array(new ArrayAccessNode(new VariableNode('b'), new StringNode('a'))),
-      $this->parse('$b["a"];')
-    );
+  public function integer_offset() {
+    $this->assertArrayAccess(new IntegerNode('1'), '$fixture[1];');
   }
 
   #[@test]
-  public function noOffset() {
-    $this->assertEquals(
-      array(new ArrayAccessNode(new VariableNode('b'), null)),
-      $this->parse('$b[];')
-    );
+  public function string_offset() {
+    $this->assertArrayAccess(new StringNode('a'), '$fixture["a"];');
   }
 
   #[@test]
-  public function curlyBraces() {
-    $this->assertEquals(
-      array(new ArrayAccessNode(new VariableNode('str'), new VariableNode('i'))),
-      $this->parse('$str{$i};')
-    );
+  public function variable_offset() {
+    $this->assertArrayAccess(new VariableNode('i'), '$fixture[$i];');
+  }
+
+  #[@test]
+  public function no_offset() {
+    $this->assertArrayAccess(null, '$fixture[];');
+  }
+
+  #[@test]
+  public function curly_braces() {
+    $this->assertArrayAccess(new VariableNode('i'), '$fixture{$i};');
   }
 }

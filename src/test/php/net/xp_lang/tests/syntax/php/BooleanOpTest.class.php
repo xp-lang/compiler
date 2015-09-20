@@ -7,34 +7,47 @@ use xp\compiler\ast\AssignmentNode;
 
 class BooleanOpTest extends ParserTestCase {
 
+  /**
+   * Assertion helper
+   *
+   * @param  xp.compiler.ast.Node $offset
+   * @param  string $syntax
+   * @throws unittest.AssertionFailedError
+   */
+  private function assertBooleanOp($operator, $syntax) {
+    $this->assertEquals(
+      [new BooleanOpNode([
+        'lhs'           => new VariableNode('a'),
+        'rhs'           => new VariableNode('b'),
+        'op'            => $operator
+      ])],
+      $this->parse($syntax)
+    );
+  }
+
   #[@test]
   public function booleanOr() {
-    $this->assertEquals(array(new BooleanOpNode(array(
-      'lhs'           => new VariableNode('a'),
-      'rhs'           => new VariableNode('b'),
-      'op'            => '||'
-    ))), $this->parse('$a || $b;'));
+    $this->assertBooleanOp('||', '$a || $b;');
   }
 
   #[@test]
   public function booleanAnd() {
-    $this->assertEquals(array(new BooleanOpNode(array(
-      'lhs'           => new VariableNode('a'),
-      'rhs'           => new VariableNode('b'),
-      'op'            => '&&'
-    ))), $this->parse('$a && $b;'));
+    $this->assertBooleanOp('&&', '$a && $b;');
   }
 
   #[@test]
   public function conditionalAssignment() {
-    $this->assertEquals(array(new BooleanOpNode(array(
-      'lhs'           => new VariableNode('a'),
-      'rhs'           => new AssignmentNode(array(
-        'variable'      => new VariableNode('b'),
-        'expression'    => new IntegerNode('1'),
-        'op'            => '+='
-      )),
-      'op'            => '&&'
-    ))), $this->parse('$a && $b+= 1;'));
+    $this->assertEquals(
+      [new BooleanOpNode([
+        'lhs'           => new VariableNode('a'),
+        'rhs'           => new AssignmentNode([
+          'variable'      => new VariableNode('b'),
+          'expression'    => new IntegerNode('1'),
+          'op'            => '+='
+        ]),
+        'op'            => '&&'
+      ])],
+      $this->parse('$a && $b+= 1;')
+    );
   }
 }
