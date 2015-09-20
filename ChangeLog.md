@@ -3,7 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
-* Merged PR #44: Implemented short array syntax in PHP - @thekid
+* Merged PR #43: Add support for class Name Resolution As Scalar - @thekid
+* Merged PR #44: Implement short array and map syntax in PHP - @thekid
 * Merged PR #45: Make lambda capturing explicit when using PHP - @thekid
 * Allowed dereferencing of constant arrays and strings - @thekid
 * Changed ARM blocks to use try / finally in PHP 5.5+ - @thekid
