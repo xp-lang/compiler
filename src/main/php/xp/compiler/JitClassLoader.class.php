@@ -28,7 +28,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
   static function __static() {
     if (version_compare(PHP_VERSION, '7.0.0', 'gt')) {
       self::$emitterClass= XPClass::forName('xp.compiler.emit.php.V70Emitter');
-    } else if (version_compare(PHP_VERSION, '5.5.0', 'gt')) {
+    } else if (version_compare(PHP_VERSION, '5.5.0', 'gt') && !defined('HHVM_VERSION')) {
       self::$emitterClass= XPClass::forName('xp.compiler.emit.php.V55Emitter');
     } else {
       self::$emitterClass= XPClass::forName('xp.compiler.emit.php.V54Emitter');

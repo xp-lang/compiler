@@ -29,7 +29,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
    */
   protected static function emitter() {
     if (null === self::$emitter) {
-      if (version_compare(PHP_VERSION, '5.5.0', 'gt')) {
+      if (version_compare(PHP_VERSION, '5.5.0', 'gt') && !defined('HHVM_VERSION')) {
         self::$emitter= new V55Emitter();
       } else {
         self::$emitter= new V54Emitter();
