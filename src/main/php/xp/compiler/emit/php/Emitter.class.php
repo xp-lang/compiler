@@ -1050,33 +1050,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $this->emitAll($b, (array)$switch->cases);
     $b->append('}');
   }
-  
-  /**
-   * Emit an automatic resource management (ARM) block
-   *
-   * @param   xp.compiler.emit.Buffer b
-   * @param   xp.compiler.ast.ArmNode arm
-   */
-  protected function emitArm($b, $arm) {
-    static $mangled= '··e';
-    static $ignored= '··i';
 
-    $this->emitAll($b, $arm->initializations);
-
-    // Manually verify as we can then rely on call target type being available
-    if (!$this->checks->verify($arm, $this->scope[0], $this, true)) return;
-
-    $exceptionType= $this->literal($this->resolveType(new TypeName('php.Exception')));
-    $b->append('$'.$mangled.'= NULL; try {');
-    $this->emitAll($b, (array)$arm->statements);
-    $b->append('} catch (')->append($exceptionType)->append('$'.$mangled.') {}');
-    foreach ($arm->variables as $v) {
-      $b->append('try { $')->append($v->name)->append('->close(); } ');
-      $b->append('catch (')->append($exceptionType)->append(' $'.$ignored.') {}');
-    }
-    $b->append('if ($'.$mangled.') throw $'.$mangled.';'); 
-  }
-  
   /**
    * Emit a throw node
    *

@@ -2,6 +2,7 @@
 
 use xp\compiler\ast\FinallyNode;
 use xp\compiler\ast\VariableNode;
+use xp\compiler\types\TypeName;
 
 /**
  * Emits sourcecode using PHP 5.5 sourcecode
@@ -46,5 +47,30 @@ class V55Emitter extends V54Emitter {
       $this->emitAll($b, (array)$handling->statements);
       $b->append('}');
     }
+  }
+
+  /**
+   * Emit an automatic resource management (ARM) block
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.ArmNode arm
+   */
+  protected function emitArm($b, $arm) {
+    $this->emitAll($b, $arm->initializations);
+
+    // Manually verify as we can then rely on call target type being available
+    if (!$this->checks->verify($arm, $this->scope[0], $this, true)) return;
+
+    $exceptionType= $this->literal($this->resolveType(new TypeName('php.Exception')));
+    $ignored= $this->tempVar();
+
+    $b->append('try {');
+    $this->emitAll($b, (array)$arm->statements);
+    $b->append('} finally {');
+    foreach ($arm->variables as $v) {
+      $b->append('try { $')->append($v->name)->append('->close(); } ');
+      $b->append('catch (')->append($exceptionType)->append(' ')->append($ignored)->append(') {}');
+    }
+    $b->append('}');
   }
 }
