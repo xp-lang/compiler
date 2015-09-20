@@ -3,7 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
-* Merged pull request #40: support for generators / yield - @thekid
+* Merged PR #41: Fix capturing of local variables in lambdas - @thekid
+* Merged PR #40: support for generators / yield - @thekid
 * Changed default emitter to "php5.5" - @thekid
 
 ## 3.0.0 / 2015-08-16
