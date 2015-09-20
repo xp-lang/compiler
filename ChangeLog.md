@@ -25,25 +25,36 @@ XP Compiler ChangeLog
 
 ## 3.0.0 / 2015-08-16
 
-* Added support for PHP7
-  . Replaced String classes used in test suite as "string" is reserved as
-    [type name in PHP7](https://wiki.php.net/rfc/scalar_type_hints_v5).
-  . Rewrote tests verifying exceptions are raised for argument type
-    mismatches to work in both PHP 5.x *and* PHP 7.X.
+### Added support for PHP7
+
+* Replaced String classes used in test suite as "string" is reserved as
+  [type name in PHP7](https://wiki.php.net/rfc/scalar_type_hints_v5).
   (@thekid)
-* Fixed issue #39: HHVM support
-  . Fixed sscanf() incompatibilities - HHVM doesn't support `%*` for not
-    assigning variables. Worked around by supplying dummy variables.
-  . Added a native importer which doesn't verify extensions. HHVM does
-    not group functions into extensions like PHP does.
+* Rewrote tests verifying exceptions are raised for argument type
+  mismatches to work in both PHP 5.x *and* PHP 7.X.
   (@thekid)
-* **Removed support for PHP 5.2 and PHP 5.3**:
-  . Added new PHP 5.4 the default emitter, which emits `new T().method()`
-    as `(new T())->method()` instead of wrapping it in the deprecated
-    `create` core functionality.
-  . Removed PHP 5.2 and 5.3 emitters, using `-E php5.2` or `-E php5.3`
-    on the command line will produce an error!
+
+### Fixed issue #39: HHVM support
+
+* Fixed sscanf() incompatibilities - HHVM doesn't support `%*` for not
+  assigning variables. Worked around by supplying dummy variables.
   (@thekid)
+* Added a native importer which doesn't verify extensions. HHVM does
+  not group functions into extensions like PHP does.
+  (@thekid)
+
+### Removed support for PHP 5.2 and PHP 5.3
+
+* Added new PHP 5.4 the default emitter, which emits `new T().method()`
+  as `(new T())->method()` instead of wrapping it in the deprecated
+  `create` core functionality.
+  (@thekid)
+* Removed PHP 5.2 and 5.3 emitters, using `-E php5.2` or `-E php5.3`
+  on the command line will produce an error!
+  (@thekid)
+
+### Other improvements
+
 * Improved performance when loading supported syntaxes by deferring
   parser and lexer instantiation until when first needed.
   (@thekid)
