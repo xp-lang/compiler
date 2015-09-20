@@ -3,6 +3,7 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #45: Make lambda capturing explicit when using PHP - @thekid
 * Allowed dereferencing of constant arrays and strings - @thekid
 * Changed ARM blocks to use try / finally in PHP 5.5+ - @thekid
 * Changed code to emit native finally statement in PHP 5.5+ - @thekid

@@ -662,8 +662,8 @@ expression:
   | '@' expression {
       $$= $yyLex->create(new SilenceOperatorNode($2));
     }
-  | T_FUNCTION '(' lambda_input ')' '{' statements_opt '}' {
-      $$= $yyLex->create(new LambdaNode($3, (array)$6));
+  | T_FUNCTION '(' lambda_input ')' lambda_uses_opt '{' statements_opt '}' {
+      $$= $yyLex->create(new LambdaNode($3, (array)$7, $5));
     }
   | '(' expression ')' chain_opt { 
       if ($4) {
@@ -686,7 +686,12 @@ lambda_input_parameters:
 ;
 
 lambda_input_parameter:
-    T_VARIABLE { $$= new VariableNode($1); }
+    T_VARIABLE initialization_opt { $$= array('name' => $1); $2 && $$['default']= $2; }
+;
+
+lambda_uses_opt:
+    /* empty */ { $$= array(); }
+  | T_USE '(' lambda_input_parameters ')' { $$= $3; }
 ;
 
 literal:
@@ -821,6 +826,9 @@ chain:
     }
   | T_OBJECT_OPERATOR T_WORD '(' { $1= $yyLex->create(new MethodCallNode(NULL, $2)); } expressionlist_opt ')' { 
       $1->arguments= $5;
+    }
+  | '(' { $1= $yyLex->create(new InstanceCallNode(NULL, NULL, FALSE)); } expressionlist_opt ')' { 
+      $1->arguments= $3;
     }
 ;
 // }}}
