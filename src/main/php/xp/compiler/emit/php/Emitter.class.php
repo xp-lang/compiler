@@ -248,15 +248,37 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     }
     $ptr= $this->scope[0]->statics[$inv->name];
 
-    // Static method call vs. function call
-    if (true === $ptr) {
-      $b->append($inv->name);
-      $this->emitInvocationArguments($b, (array)$inv->arguments);
-      $this->scope[0]->setType($inv, TypeName::$VAR);
+    if (static::$UNPACK_REWRITE && $this->needsUnpacking((array)$inv->arguments)) {
+      if (true === $ptr) {
+        $b->append('call_user_func_array(\''.$inv->name.'\'');
+      } else {
+        $b->append('call_user_func_array([\''.$this->literal($ptr).'\', \''.$inv->name.'\']');
+      }
+      $b->append(', array_merge(');
+      $s= sizeof($inv->arguments) - 1;
+      foreach ($inv->arguments as $i => $argument) {
+        if ($argument instanceof UnpackNode) {
+          $this->emitOne($b, $argument->expression);
+        } else {
+          $b->append('[');
+          $this->emitOne($b, $argument);
+          $b->append(']');
+        }
+        $i < $s && $b->append(',');
+      }
+      $b->append('))');
     } else {
-      $b->append($this->literal($ptr->holder).'::'.$ptr->name());
-      $this->emitInvocationArguments($b, (array)$inv->arguments);
-      $this->scope[0]->setType($inv, $ptr->returns);
+
+      // Static method call vs. function call
+      if (true === $ptr) {
+        $b->append($inv->name);
+        $this->emitInvocationArguments($b, (array)$inv->arguments);
+        $this->scope[0]->setType($inv, TypeName::$VAR);
+      } else {
+        $b->append($this->literal($ptr->holder).'::'.$ptr->name());
+        $this->emitInvocationArguments($b, (array)$inv->arguments);
+        $this->scope[0]->setType($inv, $ptr->returns);
+      }
     }
   }
   
