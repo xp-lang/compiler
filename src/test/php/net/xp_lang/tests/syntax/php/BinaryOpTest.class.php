@@ -77,6 +77,11 @@ class BinaryOpTest extends ParserTestCase {
   }
 
   #[@test]
+  public function exponent() {
+    $this->assertBinaryOp('**', '$i ** 2;');
+  }
+
+  #[@test]
   public function bracketsUsedForPrecedence() {
     $this->assertEquals(
       array(new BinaryOpNode(array(

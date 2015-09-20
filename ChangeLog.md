@@ -3,6 +3,7 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Implemented power operator `**` in PHP syntax - @thekid
 * Merged PR #46: Add function type syntax - @thekid
 * Merged PR #43: Add support for class Name Resolution As Scalar - @thekid
 * Merged PR #44: Implement short array and map syntax in PHP - @thekid

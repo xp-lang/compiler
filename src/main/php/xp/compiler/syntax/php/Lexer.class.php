@@ -65,7 +65,7 @@ class Lexer extends \text\parser\generic\AbstractLexer {
       '<' => array('<=' => Parser::T_SE, '<<' => Parser::T_SHL),
       '.' => array('.=' => Parser::T_CONCAT_EQUAL),
       '+' => array('+=' => Parser::T_ADD_EQUAL, '++' => Parser::T_INC),
-      '*' => array('*=' => Parser::T_MUL_EQUAL),
+      '*' => array('*=' => Parser::T_MUL_EQUAL, '**' => Parser::T_EXP),
       '/' => array('/=' => Parser::T_DIV_EQUAL),
       '%' => array('%=' => Parser::T_MOD_EQUAL),
       '=' => array('==' => Parser::T_EQUALS, '=>' => Parser::T_DOUBLE_ARROW),

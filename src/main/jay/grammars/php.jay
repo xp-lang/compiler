@@ -94,6 +94,7 @@ use xp\compiler\ast\YieldNode;
 %right '.'
 %left '+' '-'
 %left '*' '/' '%'
+%left T_EXP
 %right '!'
 %nonassoc T_INSTANCEOF
 %right '~' T_INC T_DEC
@@ -175,6 +176,7 @@ use xp\compiler\ast\YieldNode;
 %token T_XOR_EQUAL 419
 %token T_SHR 420
 %token T_SHL 421
+%token T_EXP 422
 
 %%
 
@@ -787,6 +789,7 @@ binary_operation:
   | expression '^' expression { $$= array('lhs' => $1, 'rhs' => $3, 'op' => $2); }
   | expression T_SHR expression { $$= array('lhs' => $1, 'rhs' => $3, 'op' => $2); }
   | expression T_SHL expression { $$= array('lhs' => $1, 'rhs' => $3, 'op' => $2); }
+  | expression T_EXP expression { $$= array('lhs' => $1, 'rhs' => $3, 'op' => $2); }
 ;
 
 unary_prefix_operation:
