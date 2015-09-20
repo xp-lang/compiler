@@ -12,16 +12,8 @@ use xp\compiler\ast\InvocationNode;
 use xp\compiler\ast\BracedExpressionNode;
 use xp\compiler\types\TypeName;
 
-/**
- * TestCase
- *
- */
 class ChainingTest extends ParserTestCase {
 
-  /**
-   * Test simple method call on an object
-   *
-   */
   #[@test]
   public function methodCall() {
     $this->assertEquals(
@@ -30,10 +22,6 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test chained method calls
-   *
-   */
   #[@test]
   public function chainedMethodCalls() {
     $this->assertEquals(
@@ -46,29 +34,21 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test chained method calls
-   *
-   */
-  #[@test, @ignore('TBD: Implement?')]
+  #[@test]
   public function chainedAfterNew() {
     $this->assertEquals(
       array(new MethodCallNode(
-        new InstanceCreationNode(array(
+        new BracedExpressionNode(new InstanceCreationNode(array(
           'type'           => new TypeName('Date'),
           'parameters'     => null,
-        )),
+        ))),
         'toString',
         null
       )), 
-      $this->parse('new Date()->toString();')
+      $this->parse('(new Date())->toString();')
     );
   }
 
-  /**
-   * Test chained method calls
-   *
-   */
   #[@test]
   public function arrayOffsetOnMethod() {
     $this->assertEquals(
@@ -83,10 +63,6 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test chained method calls
-   *
-   */
   #[@test]
   public function chainedAfterStaticMethod() {
     $this->assertEquals(
@@ -99,10 +75,6 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test chaining after function calls
-   *
-   */
   #[@test]
   public function chainedAfterFunction() {
     $this->assertEquals(
@@ -115,10 +87,6 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  /**
-   * Test chained after bracing
-   *
-   */
   #[@test]
   public function chainedAfterBraced() {
     $this->assertEquals(
