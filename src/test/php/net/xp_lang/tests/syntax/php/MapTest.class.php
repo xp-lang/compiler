@@ -4,18 +4,24 @@ use xp\compiler\ast\MapNode;
 use xp\compiler\ast\IntegerNode;
 use xp\compiler\ast\StringNode;
 
-/**
- * TestCase
- *
- */
 class MapTest extends ParserTestCase {
 
-  /**
-   * Test a non-empty untyped map
-   *
-   */
-  #[@test]
-  public function untypedMap() {
+  #[@test, @values([
+  #  'array(:);',
+  #  '[:];'
+  #])]
+  public function emptyUntypedArray($syntax) {
+    $this->assertEquals(array(new MapNode(array(
+      'elements'      => null,
+      'type'          => null,
+    ))), $this->parse($syntax));
+  }
+
+  #[@test, @values([
+  #  'array(1 => "one", 2 => "two", 3 => "three");',
+  #  '[1 => "one", 2 => "two", 3 => "three"];'
+  #])]
+  public function untypedMap($syntax) {
     $this->assertEquals(
       array(new MapNode(array(
         'elements'      => array(
@@ -34,16 +40,15 @@ class MapTest extends ParserTestCase {
         ),
         'type'          => null,
       ))), 
-      $this->parse('array(1 => "one", 2 => "two", 3 => "three");')
+      $this->parse($syntax)
     );
   }
 
-  /**
-   * Test a non-empty untyped map
-   *
-   */
-  #[@test]
-  public function untypedMapWithDanglingComma() {
+  #[@test, @values([
+  #  'array(1 => "one", 2 => "two", 3 => "three", );',
+  #  '[1 => "one", 2 => "two", 3 => "three", ];'
+  #])]
+  public function untypedMapWithDanglingComma($syntax) {
     $this->assertEquals(
       array(new MapNode(array(
         'elements'      => array(
@@ -62,7 +67,7 @@ class MapTest extends ParserTestCase {
         ),
         'type'          => null,
       ))), 
-      $this->parse('array(1 => "one", 2 => "two", 3 => "three", );')
+      $this->parse($syntax)
     );
   }
 }
