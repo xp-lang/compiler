@@ -4,19 +4,15 @@ use xp\compiler\checks\Checks;
 use xp\compiler\types\MethodScope;
 use xp\compiler\ast\StringNode;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.Checks
- */
 class ChecksTest extends \unittest\TestCase {
-  protected static $check;
-  protected $fixture= null;
-  protected $scope= null;
-  protected $messages= array();
+  private static $check;
+  private $fixture= null;
+  private $scope= null;
+  private $messages= [];
 
-  static function __static() {
-    self::$check= newinstance('xp.compiler.checks.Check', array(), '{
+  #[@beforeClass]
+  public static function defineChecks() {
+    self::$check= newinstance('xp.compiler.checks.Check', [], '{
       public function node() { 
         return \lang\XPClass::forName("xp.compiler.ast.StringNode"); 
       }
@@ -34,6 +30,7 @@ class ChecksTest extends \unittest\TestCase {
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new Checks();
@@ -60,20 +57,12 @@ class ChecksTest extends \unittest\TestCase {
     $this->messages[]= array('error', $code, $message);
   }
 
-  /**
-   * Test verify()
-   *
-   */
   #[@test]
   public function withoutCheck() {
     $this->assertTrue($this->fixture->verify(new StringNode('Test'), $this->scope, $this));
     $this->assertEquals(array(), $this->messages);
   }
 
-  /**
-   * Test add() and verify()
-   *
-   */
   #[@test]
   public function withErrorCheck() {
     $this->fixture->add(self::$check, true);
@@ -81,10 +70,6 @@ class ChecksTest extends \unittest\TestCase {
     $this->assertEquals(array(array('error', 'C100', 'Test')), $this->messages);
   }
 
-  /**
-   * Test add() and verify()
-   *
-   */
   #[@test]
   public function withWarningCheck() {
     $this->fixture->add(self::$check, false);
@@ -92,10 +77,6 @@ class ChecksTest extends \unittest\TestCase {
     $this->assertEquals(array(array('warning', 'C100', 'Test')), $this->messages);
   }
 
-  /**
-   * Test add() and verify()
-   *
-   */
   #[@test]
   public function withWarningAndErrorChecks() {
     $this->fixture->add(self::$check, false);
@@ -107,10 +88,6 @@ class ChecksTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test add() and verify()
-   *
-   */
   #[@test]
   public function withTwoWarningChecks() {
     $this->fixture->add(self::$check, false);
@@ -122,10 +99,6 @@ class ChecksTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test add() and verify()
-   *
-   */
   #[@test]
   public function withTwoErrorsChecks() {
     $this->fixture->add(self::$check, true);
@@ -137,10 +110,6 @@ class ChecksTest extends \unittest\TestCase {
     );
   }
   
-  /**
-   * Test clear() and verify()
-   *
-   */
   #[@test]
   public function clearChecks() {
     $this->fixture->add(self::$check, true);

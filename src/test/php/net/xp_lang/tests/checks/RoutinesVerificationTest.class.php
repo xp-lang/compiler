@@ -9,17 +9,13 @@ use xp\compiler\ast\InterfaceNode;
 use xp\compiler\ast\RoutineNode;
 use xp\compiler\ast\MethodNode;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.RoutinesVerification
- */
 class RoutinesVerificationTest extends \unittest\TestCase {
-  protected $fixture= null;
+  private $fixture;
 
   /**
    * Sets up test case
    *
+   * @return void
    */
   public function setUp() {
     $this->fixture= new RoutinesVerification();
@@ -32,16 +28,12 @@ class RoutinesVerificationTest extends \unittest\TestCase {
    * @param   xp.compiler.ast.TypeDeclarationNode type
    * @return  var
    */
-  protected function verify(RoutineNode $routine, TypeDeclarationNode $type) {
+  private function verify(RoutineNode $routine, TypeDeclarationNode $type) {
     $scope= new TypeDeclarationScope();
     $scope->declarations[0]= $type;
     return $this->fixture->verify($routine, $scope);
   }
   
-  /**
-   * Test interface methods
-   *
-   */
   #[@test]
   public function interfaceMethodsMayNotHaveBodies() {
     $m= new MethodNode(array(
@@ -57,10 +49,6 @@ class RoutinesVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test interface methods
-   *
-   */
   #[@test]
   public function interfaceMethodsMayNotBePrivate() {
     $m= new MethodNode(array(
@@ -76,10 +64,6 @@ class RoutinesVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test interface methods
-   *
-   */
   #[@test]
   public function interfaceMethodsMayNotBeProtected() {
     $m= new MethodNode(array(
@@ -95,10 +79,6 @@ class RoutinesVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test interface methods
-   *
-   */
   #[@test]
   public function interfaceMethodsMayNotBeAbstract() {
     $m= new MethodNode(array(
@@ -114,10 +94,6 @@ class RoutinesVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test interface methods
-   *
-   */
   #[@test]
   public function interfaceMethodsMayNotBeFinal() {
     $m= new MethodNode(array(
@@ -133,10 +109,6 @@ class RoutinesVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test interface methods
-   *
-   */
   #[@test]
   public function interfaceMethodsMayOmitModifier() {
     $m= new MethodNode(array(
@@ -151,10 +123,6 @@ class RoutinesVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test class methods
-   *
-   */
   #[@test]
   public function abstractMethodsMayNotHaveBodies() {
     $m= new MethodNode(array(
@@ -170,10 +138,6 @@ class RoutinesVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test class methods
-   *
-   */
   #[@test]
   public function nonAbstractMethodsMustHaveBodies() {
     $m= new MethodNode(array(
@@ -189,10 +153,6 @@ class RoutinesVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test extension methods
-   *
-   */
   #[@test]
   public function extensionMethodsMustBeStatic() {
     $m= new MethodNode(array(
@@ -212,10 +172,6 @@ class RoutinesVerificationTest extends \unittest\TestCase {
     );
   }
 
-  /**
-   * Test extension methods
-   *
-   */
   #[@test]
   public function extensionMethods() {
     $m= new MethodNode(array(

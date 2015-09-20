@@ -4,14 +4,9 @@ use xp\compiler\checks\ConstantsAreDiscouraged;
 use xp\compiler\types\MethodScope;
 use xp\compiler\ast\ConstantNode;
 
-/**
- * TestCase
- *
- * @see      xp://xp.compiler.checks.ConstantsAreDiscouraged
- */
 class ConstantsAreDiscouragedTest extends \unittest\TestCase {
-  protected $fixture= null;
-  protected $scope= null;
+  private $fixture;
+  private $scope;
 
   /**
    * Sets up test case
@@ -22,10 +17,6 @@ class ConstantsAreDiscouragedTest extends \unittest\TestCase {
     $this->scope= new MethodScope();
   }
   
-  /**
-   * Test constants 
-   *
-   */
   #[@test]
   public function constantsAreDiscouraged() {
     $this->assertEquals(
