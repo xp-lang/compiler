@@ -6,6 +6,8 @@ use xp\compiler\ast\BooleanNode;
 use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\IntegerNode;
 use xp\compiler\ast\BinaryOpNode;
+use xp\compiler\ast\InstanceCallNode;
+use xp\compiler\ast\BracedExpressionNode;
 
 /**
  * TestCase
@@ -63,6 +65,20 @@ class LambdaTest extends ParserTestCase {
         ))))
       )), 
       $this->parse('function($a, $b) { return $a + $b; };')
+    );
+  }
+
+  #[@test]
+  public function invocation() {
+    $this->assertEquals(
+      array(new InstanceCallNode(
+        new BracedExpressionNode(new LambdaNode(
+          array(new VariableNode('a'), new VariableNode('b')),
+          array(/* TBI */)
+        )),
+        array(new IntegerNode('1'), new IntegerNode('2'))
+      )),
+      $this->parse('(function($a, $b) { /* TBI */ })(1, 2);')
     );
   }
 }

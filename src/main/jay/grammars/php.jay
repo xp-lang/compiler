@@ -686,7 +686,7 @@ lambda_input_parameters:
 ;
 
 lambda_input_parameter:
-    T_VARIABLE { $$= new VariableNode($1); }
+    T_VARIABLE initialization_opt { $$= array('name' => $1); $2 && $$['default']= $2; }
 ;
 
 literal:
@@ -820,6 +820,9 @@ chain:
     }
   | T_OBJECT_OPERATOR T_WORD '(' { $1= $yyLex->create(new MethodCallNode(NULL, $2)); } expressionlist_opt ')' { 
       $1->arguments= $5;
+    }
+  | '(' { $1= $yyLex->create(new InstanceCallNode(NULL, NULL, FALSE)); } expressionlist_opt ')' { 
+      $1->arguments= $3;
     }
 ;
 // }}}
