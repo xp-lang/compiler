@@ -2402,7 +2402,7 @@ class Parser extends \text\parser\generic\AbstractParser {
     } break;
 
     case 236:  #line 849 "src/main/jay/grammars/php.jay"
-    { $yyVal= new TypeName($yyVals[0+$yyTop]); } break;
+    { $yyVal= 'callable' === $yyVals[0+$yyTop] ? new TypeName('->var', null) : new TypeName($yyVals[0+$yyTop]); } break;
 
     case 237:  #line 853 "src/main/jay/grammars/php.jay"
     { $yyVal= new TypeName('var[]'); } break;

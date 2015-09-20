@@ -1312,6 +1312,8 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
           // No runtime type checks
         } else if ($t->isArray() || $t->isMap()) {
           $b->append('array ');
+        } else if ($t->isFunction()) {
+          $b->append('callable ');
         } else if ($t->isClass() && !$this->scope[0]->declarations[0]->name->isPlaceHolder($t)) {
           $b->append($this->literal($ptr))->append(' ');
         } else if ('{' === $delim) {
