@@ -100,14 +100,17 @@ class ChainingTest extends ParserTestCase {
     );
   }
 
-  #[@test]
-  public function arrayDereferencing() {
+  #[@test, @values([
+  #  'array(1, 2, 3)[0];',
+  #  '[1, 2, 3][0];'
+  #])]
+  public function arrayDereferencing($syntax) {
     $this->assertEquals(
       [new ArrayAccessNode(
         new ArrayNode(['values' => [new IntegerNode('1'), new IntegerNode('2'), new IntegerNode('3')]]),
         new IntegerNode('0')
       )],
-      $this->parse('array(1, 2, 3)[0];')
+      $this->parse($syntax)
     );
   }
 
