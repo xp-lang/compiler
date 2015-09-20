@@ -27,6 +27,52 @@ class V55Emitter extends V54Emitter {
   }
 
   /**
+   * Emit a yield from node
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.YieldFromNode yield
+   */
+  protected function emitYieldFrom($b, $yield) {
+    static $shim= '
+      if ($iter instanceof \\Generator) {
+        defined(\'HHVM_VERSION\') && $iter->next();
+        $send= eval(\'return function() use($iter) {
+          $recv= null;
+          $send= true;
+          while ($iter->valid()) {
+            $next= $iter->current();
+            $send ? $iter->send($recv) : $iter->throw($recv);
+            try {
+              $recv= \'.(defined(\'HHVM_VERSION\') ? \'yield $next\' : \'(yield $next)\').\';
+              $send= true;
+            } catch (\\Exception $e) {
+              $recv= $e;
+              $send= false;
+            }
+          }
+        };\');
+        foreach ($send() as $next) { yield $next; }
+      } else {
+        foreach ($iter as $next) { yield $next; }
+      }
+    ';
+
+    $iter= $this->tempVar();
+    $b->append($iter)->append('=');
+    $this->emitOne($b, $yield->expr);
+    $b->append(';');
+
+    $b->append(strtr($shim, [
+      "\n"    => '',
+      '  '    => '',
+      '$iter' => $iter,
+      '$recv' => $this->tempVar(),
+      '$send' => $this->tempVar(),
+      '$next' => $this->tempVar()
+    ]));
+  }
+
+  /**
    * Emit a try / catch block
    *
    * @param   xp.compiler.emit.Buffer b

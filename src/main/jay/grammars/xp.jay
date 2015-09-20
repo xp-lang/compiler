@@ -71,11 +71,12 @@ use xp\compiler\ast\WithNode;
 use xp\compiler\ast\ArmNode;
 use xp\compiler\ast\BracedExpressionNode;
 use xp\compiler\ast\YieldNode;
+use xp\compiler\ast\YieldFromNode;
 %}
 
 %left ','
 %nonassoc T_ARROW
-%right T_YIELD
+%right T_YIELD T_YIELD_FROM
 %left T_BOOLEAN_OR
 %left T_BOOLEAN_AND
 %right '=' T_ADD_EQUAL T_SUB_EQUAL T_MUL_EQUAL T_DIV_EQUAL T_CONCAT_EQUAL T_MOD_EQUAL T_AND_EQUAL T_OR_EQUAL T_XOR_EQUAL
@@ -147,6 +148,7 @@ use xp\compiler\ast\YieldNode;
 %token T_BREAK 365
 %token T_CONTINUE 366
 %token T_YIELD 367
+%token T_YIELD_FROM 368
 
 %token T_IF 370
 %token T_ELSE 371
@@ -837,6 +839,9 @@ expression:
     }
   | T_YIELD expression ':' expression {
       $$= $yyLex->create(new YieldNode($4, $2));
+    }
+  | T_YIELD_FROM expression {
+      $$= $yyLex->create(new YieldFromNode($2));
     }
   | expression T_AS paramtyperef { 
       $$= $yyLex->create(new CastNode(array_merge($3, array('expression' => $1)))); 

@@ -697,7 +697,15 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @param   xp.compiler.ast.YieldNode yield
    */
   protected abstract function emitYield($b, $yield);
-  
+
+  /**
+   * Emit a yield node
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.YieldFromNode yield
+   */
+  protected abstract function emitYieldFrom($b, $yield);
+
   /**
    * Emit a single node
    *

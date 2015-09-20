@@ -712,7 +712,28 @@ abstract class Visitor extends \lang\Object {
     $node->expression= $this->visitOne($node->expression);
     return $node;
   }
-  
+
+  /**
+   * Visit a yield statement
+   *
+   * @param   xp.compiler.ast.Node node
+   */
+  protected function visitYield(YieldNode $node) {
+    $node->key && $node->key= $this->visitOne($node->key);
+    $node->value && $node->value= $this->visitOne($node->value);
+    return $node;
+  }
+
+  /**
+   * Visit a yield statement
+   *
+   * @param   xp.compiler.ast.Node node
+   */
+  protected function visitYieldFrom(YieldFromNode $node) {
+    $node->expr= $this->visitOne($node->expr);
+    return $node;
+  }
+
   /**
    * Visit a node. Delegates to visit*() methods
    *

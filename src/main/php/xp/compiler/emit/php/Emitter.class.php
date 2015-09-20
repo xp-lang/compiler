@@ -2328,6 +2328,16 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   }
 
   /**
+   * Emit a yield from node
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.YieldFromNode yield
+   */
+  protected function emitYieldFrom($b, $yield) {
+    $this->error('V505', 'Yield not supported in '.$this->getClassName());
+  }
+
+  /**
    * Emit all given nodes
    *
    * @param   xp.compiler.emit.Buffer b
@@ -2450,6 +2460,8 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
           V54Emitter::emitTry($b, $try);
         }
       }');
+    } else if (version_compare(PHP_VERSION, '7.0.0', 'gt')) {
+      return new V70Emitter();
     } else if (version_compare(PHP_VERSION, '5.5.0', 'gt')) {
       return new V55Emitter();
     } else {
