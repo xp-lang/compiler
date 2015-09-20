@@ -1,62 +1,87 @@
 <?php namespace xp\compiler\types;
 
-/**
- * Abstract base class for all other types
- */
-abstract class Types extends \lang\Object {
-  const 
-    PRIMITIVE_KIND    = 0,
-    CLASS_KIND        = 1,
-    INTERFACE_KIND    = 2,
-    ENUM_KIND         = 3,
-    FUNCTION_KIND     = 4;
+class FunctionTypeOf extends Types {
+  protected $return= null;
+  protected $parameters= null;
   
-  const
-    UNKNOWN_KIND      = -1,
-    PARTIAL_KIND      = -2;
+  /**
+   * Constructor
+   *
+   * @param   xp.compiler.types.Types $return
+   * @param   xp.compiler.types.Types[] $parameters
+   */
+  public function __construct(Types $return, $parameters) {
+    $this->return= $return;
+    $this->parameters= $parameters;
+  }
+
+  /**
+   * Returns modifiers
+   *
+   * @return int
+   */
+  public function modifiers() {
+    return MODIFIER_PUBLIC;
+  }
 
   /**
    * Returns name
    *
    * @return  string
    */
-  public abstract function name();
+  public function name() {
+    return sprintf(
+      'function(%s): %s',
+      null === $this->parameters ? '?' : implode(', ', array_map(function($type) { return $type->name(); }, $this->parameters)),
+      $this->return->name()
+    );
+  }
 
   /**
    * Returns parent type
    *
    * @return  xp.compiler.types.Types
    */
-  public abstract function parent();
+  public function parent() {
+    return null;
+  }
 
   /**
    * Returns literal for use in code
    *
    * @return  string
    */
-  public abstract function literal();
+  public function literal() {
+    return 'callable';
+  }
 
   /**
    * Returns type kind (one of the *_KIND constants).
    *
    * @return  string
    */
-  public abstract function kind();
+  public function kind() {
+    return self::FUNCTION_KIND;
+  }
 
   /**
    * Checks whether a given type instance is a subclass of this class.
    *
-   * @param   self $t
+   * @param   xp.compiler.types.Types
    * @return  bool
    */
-  public abstract function isSubclassOf(Types $t);
+  public function isSubclassOf(Types $t) {
+    return false;
+  }
 
   /**
    * Returns whether this type is enumerable (that is: usable in foreach)
    *
    * @return  bool
    */
-  public abstract function isEnumerable();
+  public function isEnumerable() {
+    return false;
+  }
 
   /**
    * Returns the enumerator for this class or null if none exists.
@@ -64,21 +89,27 @@ abstract class Types extends \lang\Object {
    * @see     php://language.oop5.iterations
    * @return  xp.compiler.types.Enumerator
    */
-  public abstract function getEnumerator();
+  public function getEnumerator() {
+    return null;
+  }
 
   /**
    * Returns whether a constructor exists
    *
    * @return  bool
    */
-  public abstract function hasConstructor();
+  public function hasConstructor() {
+    return false;
+  }
 
   /**
    * Returns the constructor
    *
    * @return  xp.compiler.types.Constructor
    */
-  public abstract function getConstructor();
+  public function getConstructor() {
+    return null;
+  }
 
   /**
    * Returns whether a method with a given name exists
@@ -86,22 +117,28 @@ abstract class Types extends \lang\Object {
    * @param   string name
    * @return  bool
    */
-  public abstract function hasMethod($name);
-  
+  public function hasMethod($name) {
+    return false;
+  }
+
   /**
    * Returns a method by a given name
    *
    * @param   string name
    * @return  xp.compiler.types.Method
    */
-  public abstract function getMethod($name);
+  public function getMethod($name) {
+    return null;
+  }
 
   /**
    * Gets a list of extension methods
    *
    * @return  [:xp.compiler.types.Method[]]
    */
-  public abstract function getExtensions();
+  public function getExtensions() {
+    return array();
+  }
 
   /**
    * Returns whether an operator by a given symbol exists
@@ -109,7 +146,9 @@ abstract class Types extends \lang\Object {
    * @param   string symbol
    * @return  bool
    */
-  public abstract function hasOperator($symbol);
+  public function hasOperator($symbol) {
+    return false;
+  }
   
   /**
    * Returns an operator by a given name
@@ -117,7 +156,9 @@ abstract class Types extends \lang\Object {
    * @param   string symbol
    * @return  xp.compiler.types.Operator
    */
-  public abstract function getOperator($symbol);
+  public function getOperator($symbol) {
+    return null;
+  }
 
   /**
    * Returns a field by a given name
@@ -125,7 +166,9 @@ abstract class Types extends \lang\Object {
    * @param   string name
    * @return  bool
    */
-  public abstract function hasField($name);
+  public function hasField($name) {
+    return false;
+  }
   
   /**
    * Returns a field by a given name
@@ -133,7 +176,9 @@ abstract class Types extends \lang\Object {
    * @param   string name
    * @return  xp.compiler.types.Field
    */
-  public abstract function getField($name);
+  public function getField($name) {
+    return null;
+  }
 
   /**
    * Returns a property by a given name
@@ -141,7 +186,9 @@ abstract class Types extends \lang\Object {
    * @param   string name
    * @return  bool
    */
-  public abstract function hasProperty($name);
+  public function hasProperty($name) {
+    return false;
+  }
   
   /**
    * Returns a property by a given name
@@ -149,7 +196,9 @@ abstract class Types extends \lang\Object {
    * @param   string name
    * @return  xp.compiler.types.Property
    */
-  public abstract function getProperty($name);
+  public function getProperty($name) {
+    return null;
+  }
 
   /**
    * Returns a constant by a given name
@@ -157,7 +206,9 @@ abstract class Types extends \lang\Object {
    * @param   string name
    * @return  bool
    */
-  public abstract function hasConstant($name);
+  public function hasConstant($name) {
+    return false;
+  }
   
   /**
    * Returns a constant by a given name
@@ -165,53 +216,47 @@ abstract class Types extends \lang\Object {
    * @param   string name
    * @return  xp.compiler.types.Constant
    */
-  public abstract function getConstant($name);
+  public function getConstant($name) {
+    return null;
+  }
 
   /**
    * Returns whether this class has an indexer
    *
    * @return  bool
    */
-  public abstract function hasIndexer();
+  public function hasIndexer() {
+    return false;
+  }
 
   /**
    * Returns indexer
    *
    * @return  xp.compiler.types.Indexer
    */
-  public abstract function getIndexer();
-  
+  public function getIndexer() {
+    return null;
+  }
+
   /**
    * Returns a lookup map of generic placeholders
    *
    * @return  [:int]
    */
-  public abstract function genericPlaceholders();
-
+  public function genericPlaceholders() {
+    return array();
+  }
+  
   /**
-   * Returns modifiers
-   *
-   * @return int
-   */
-  public abstract function modifiers();
-
-  /**
-   * Returns package name
+   * Creates a string representation of this object
    *
    * @return  string
-   */
-  public function package() {
-    $name= $this->name();
-    return substr($name, 0, strrpos($name, '.'));
-  }
-
-  /**
-   * Test this type for equality with another object
-   *
-   * @param   lang.Generic cmp
-   * @return  bool
-   */
-  public function equals($cmp) {
-    return $cmp instanceof self && $this->name() === $cmp->name();
+   */    
+  public function toString() {
+    return sprintf(
+      '%s@(%s)',
+      $this->getClassName(),
+      $this->name()
+    );
   }
 }

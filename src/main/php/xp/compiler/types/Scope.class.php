@@ -206,6 +206,8 @@ abstract class Scope extends \lang\Object {
       return new PrimitiveTypeOf($name);
     } else if ($name->isGeneric()) {
       return new GenericType($this->resolveType(new TypeName($name->name), $register), $name->components);
+    } else if ($name->isFunction()) {
+      return new FunctionTypeOf($this->resolveType($name->functionReturnType(), $register), $name->components);
     }
 
     if ($this->declarations) {

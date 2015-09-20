@@ -40,7 +40,7 @@ use xp\compiler\ast\MemberAccessNode;
 use xp\compiler\ast\StaticMemberAccessNode;
 use xp\compiler\ast\ConstantNode;
 use xp\compiler\ast\ConstantAccessNode;
-use xp\compiler\ast\ClassAccessNode;
+use xp\compiler\ast\ClassNameAccessNode;
 use xp\compiler\ast\IntegerNode;
 use xp\compiler\ast\HexNode;
 use xp\compiler\ast\OctalNode;
@@ -381,6 +381,9 @@ annotationvalue:
   | qualifiedname T_DOUBLE_COLON T_VARIABLE {
       $$= $yyLex->create(new StaticMemberAccessNode(new TypeName($1), $3));
     }
+  | qualifiedname T_DOUBLE_COLON T_CLASS {
+      $$= $yyLex->create(new ClassNameAccessNode(new TypeName($1)));
+    }
 ;
 
 
@@ -561,10 +564,18 @@ staticmember:
   | T_WORD {
       $$= new ConstantAccessNode(NULL, $1);
     }
+  | T_CLASS {
+      $$= new ClassNameAccessNode(NULL);
+    }
 ;
 
 expression:
-    literal
+    literal chain_opt {
+      if ($2) {
+        $$= $2[0];
+        $2[1]->target= $1;
+      }
+    }
   | T_VARIABLE { $1= $yyLex->create(new VariableNode($1)); } chain_opt {
       if ($3) {
         $$= $3[0];
@@ -662,8 +673,8 @@ expression:
   | '@' expression {
       $$= $yyLex->create(new SilenceOperatorNode($2));
     }
-  | T_FUNCTION '(' lambda_input ')' '{' statements_opt '}' {
-      $$= $yyLex->create(new LambdaNode($3, (array)$6));
+  | T_FUNCTION '(' lambda_input ')' lambda_uses_opt '{' statements_opt '}' {
+      $$= $yyLex->create(new LambdaNode($3, (array)$7, $5));
     }
   | '(' expression ')' chain_opt { 
       if ($4) {
@@ -686,11 +697,17 @@ lambda_input_parameters:
 ;
 
 lambda_input_parameter:
-    T_VARIABLE { $$= new VariableNode($1); }
+    T_VARIABLE initialization_opt { $$= array('name' => $1); $2 && $$['default']= $2; }
+;
+
+lambda_uses_opt:
+    /* empty */ { $$= array(); }
+  | T_USE '(' lambda_input_parameters ')' { $$= $3; }
 ;
 
 literal:
     scalar
+  | '[' { $p= $yyLex->position; } map_or_list ']' { $3->position= $p; $3->type= NULL; $$= $3; }
   | T_ARRAY '(' { $p= $yyLex->position; } map_or_list ')' { $4->position= $p; $4->type= NULL; $$= $4; }
 ;
 
@@ -821,6 +838,9 @@ chain:
   | T_OBJECT_OPERATOR T_WORD '(' { $1= $yyLex->create(new MethodCallNode(NULL, $2)); } expressionlist_opt ')' { 
       $1->arguments= $5;
     }
+  | '(' { $1= $yyLex->create(new InstanceCallNode(NULL, NULL, FALSE)); } expressionlist_opt ')' { 
+      $1->arguments= $3;
+    }
 ;
 // }}}
 
@@ -831,7 +851,7 @@ typeref:
 ;
 
 typename:
-    qualifiedname { $$= new TypeName($1); }
+    qualifiedname { $$= 'callable' === $1 ? new TypeName('->var', null) : new TypeName($1); }
 ;
 
 arraytype:

@@ -14,6 +14,7 @@ use xp\compiler\ast\ArrayNode;
 use xp\compiler\ast\MapNode;
 use xp\compiler\ast\InstanceCreationNode;
 use xp\compiler\ast\ConstantAccessNode;
+use xp\compiler\ast\ClassNameAccessNode;
 use xp\compiler\ast\StaticMemberAccessNode;
 
 /**
@@ -69,6 +70,17 @@ class AnnotationTest extends ParserTestCase {
       'type'          => 'Expect',
       'parameters'    => array('default' => new StringNode('lang.IllegalArgumentException'))
     ))), $this->parseMethodWithAnnotations('#[@Expect("lang.IllegalArgumentException")]'));
+  }
+
+  /**
+   * Test annotation with default value (Expect(IllegalArgumentException::class))
+   */
+  #[@test]
+  public function annotationWithClasssName() {
+    $this->assertEquals(array(new AnnotationNode(array(
+      'type'          => 'Expect',
+      'parameters'    => array('default' => new ClassNameAccessNode(new TypeName('IllegalArgumentException')))
+    ))), $this->parseMethodWithAnnotations('#[@Expect(IllegalArgumentException::class)]'));
   }
 
   /**
@@ -155,6 +167,23 @@ class AnnotationTest extends ParserTestCase {
   }
 
   /**
+   * Test annotation with default value (Restrict(["Admin", "Root"]))
+   */
+  #[@test]
+  public function annotationWithShortArrayValue() {
+    $this->assertEquals(array(new AnnotationNode(array(
+      'type'          => 'Restrict',
+      'parameters'    => array('default' => new ArrayNode(array(
+        'values'        => array(
+          new StringNode('Admin'),
+          new StringNode('Root'),
+        ),
+        'type'          => null
+      )))
+    ))), $this->parseMethodWithAnnotations('#[@Restrict(["Admin", "Root"])]'));
+  }
+
+  /**
    * Test annotation with default value (Restrict(["Role" : "Root"]))
    */
   #[@test]
@@ -169,6 +198,23 @@ class AnnotationTest extends ParserTestCase {
         'type'          => null
       )))
     ))), $this->parseMethodWithAnnotations('#[@Restrict(array("Role" => "Root"))]'));
+  }
+
+  /**
+   * Test annotation with default value (Restrict(["Role" : "Root"]))
+   */
+  #[@test]
+  public function annotationWithShortMapValue() {
+    $this->assertEquals(array(new AnnotationNode(array(
+      'type'          => 'Restrict',
+      'parameters'    => array('default' => new MapNode(array(
+        'elements'      => array(array(
+          new StringNode('Role'),
+          new StringNode('Root'),
+        )),
+        'type'          => null
+      )))
+    ))), $this->parseMethodWithAnnotations('#[@Restrict(["Role" => "Root"])]'));
   }
 
   /**

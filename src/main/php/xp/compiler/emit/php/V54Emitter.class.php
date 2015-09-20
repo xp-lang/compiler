@@ -13,6 +13,8 @@ use xp\compiler\ast\StaticMethodCallNode;
 use xp\compiler\ast\ConstructorNode;
 use xp\compiler\ast\IndexerNode;
 use xp\compiler\ast\StaticInitializerNode;
+use xp\compiler\ast\CatchNode;
+use xp\compiler\ast\FinallyNode;
 use xp\compiler\emit\Buffer;
 use lang\reflect\Modifiers;
 
@@ -77,6 +79,131 @@ class V54Emitter extends Emitter {
   }
 
   /**
+   * Emit a try / catch block
+   * 
+   * Simple form:
+   * <code>
+   *   try {
+   *     // [...statements...]
+   *   } catch (lang.Throwable $e) {
+   *     // [...error handling...]
+   *   }
+   * </code>
+   *
+   * Multiple catches:
+   * <code>
+   *   try {
+   *     // [...statements...]
+   *   } catch (lang.IllegalArgumentException $e) {
+   *     // [...error handling for IAE...]
+   *   } catch (lang.FormatException $e) {
+   *     // [...error handling for FE...]
+   *   }
+   * </code>
+   *
+   * Try/finally without catch:
+   * <code>
+   *   try {
+   *     // [...statements...]
+   *   } finally {
+   *     // [...finalizations...]
+   *   }
+   * </code>
+   *
+   * Try/finally with catch:
+   * <code>
+   *   try {
+   *     // [...statements...]
+   *   } catch (lang.Throwable $e) {
+   *     // [...error handling...]
+   *   } finally {
+   *     // [...finalizations...]
+   *   }
+   * </code>
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.TryNode try
+   */
+  protected function emitTry($b, $try) {
+    static $mangled= '··e';
+
+    // Check whether a finalization handler is available. If so, because
+    // the underlying runtime does not support this, add statements after
+    // the try block and to all catch blocks
+    $numHandlers= sizeof($try->handling);
+    if ($try->handling[$numHandlers- 1] instanceof FinallyNode) {
+      array_unshift($this->finalizers, array_pop($try->handling));
+      $numHandlers--;
+    } else {
+      array_unshift($this->finalizers, null);
+    }
+
+    // If no handlers are left, create a simple catch-all-and-rethrow
+    // handler
+    if (0 == $numHandlers) {
+      $rethrow= new ThrowNode(array('expression' => new VariableNode($mangled)));
+      $first= new CatchNode(array(
+        'type'       => new TypeName('lang.Throwable'),
+        'variable'   => $mangled,
+        'statements' => $this->finalizers[0] ? array($this->finalizers[0], $rethrow) : array($rethrow)
+      ));
+    } else {
+      $first= $try->handling[0];
+      $this->scope[0]->setType(new VariableNode($first->variable), $first->type);
+    }
+
+    $b->append('try {'); {
+      $this->emitAll($b, (array)$try->statements);
+      $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
+    }
+
+    // First catch.
+    $b->append('} catch('.$this->literal($this->resolveType($first->type)).' $'.$first->variable.') {'); {
+      $this->scope[0]->setType(new VariableNode($first->variable), $first->type);
+      $this->emitAll($b, (array)$first->statements);
+      $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
+    }
+
+    // Additional catches
+    for ($i= 1; $i < $numHandlers; $i++) {
+      $b->append('} catch('.$this->literal($this->resolveType($try->handling[$i]->type)).' $'.$try->handling[$i]->variable.') {'); {
+        $this->scope[0]->setType(new VariableNode($try->handling[$i]->variable), $try->handling[$i]->type);
+        $this->emitAll($b, (array)$try->handling[$i]->statements);
+        $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
+      }
+    }
+
+    $b->append('}');
+    array_shift($this->finalizers);
+  }
+
+  /**
+   * Emit an automatic resource management (ARM) block
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.ArmNode arm
+   */
+  protected function emitArm($b, $arm) {
+    static $mangled= '··e';
+    static $ignored= '··i';
+
+    $this->emitAll($b, $arm->initializations);
+
+    // Manually verify as we can then rely on call target type being available
+    if (!$this->checks->verify($arm, $this->scope[0], $this, true)) return;
+
+    $exceptionType= $this->literal($this->resolveType(new TypeName('php.Exception')));
+    $b->append('$'.$mangled.'= NULL; try {');
+    $this->emitAll($b, (array)$arm->statements);
+    $b->append('} catch (')->append($exceptionType)->append('$'.$mangled.') {}');
+    foreach ($arm->variables as $v) {
+      $b->append('try { $')->append($v->name)->append('->close(); } ');
+      $b->append('catch (')->append($exceptionType)->append(' $'.$ignored.') {}');
+    }
+    $b->append('if ($'.$mangled.') throw $'.$mangled.';'); 
+  }
+
+  /**
    * Emit a lambda
    *
    * @param   xp.compiler.emit.Buffer b
@@ -84,17 +211,6 @@ class V54Emitter extends Emitter {
    * @see     http://de3.php.net/manual/de/functions.anonymous.php
    */
   protected function emitLambda($b, $lambda) {
-
-    // Capture all local variables and parameters of containing scope which
-    // are also used inside the lambda by value.
-    $finder= new \xp\compiler\ast\LocalVariableFinder();
-    foreach ($finder->variablesIn((array)$this->scope[0]->routine->body) as $variable) {
-      $finder->including($variable);
-    }
-    foreach ((array)$this->scope[0]->routine->parameters as $param) {
-      $finder->including($param['name']);
-    }
-    $finder->excluding('*');
 
     // Parameters
     $b->append('function(');
@@ -109,8 +225,24 @@ class V54Emitter extends Emitter {
     }
     $b->append(')');
 
-    // Use variables
-    if ($capture= $finder->variablesIn($lambda->statements)) {
+    // If not explicitely stated: Capture all local variables and parameters of
+    // containing scope which are also used inside the lambda by value.
+    if (null === $lambda->uses) {
+      $finder= new \xp\compiler\ast\LocalVariableFinder();
+      foreach ($finder->variablesIn((array)$this->scope[0]->routine->body) as $variable) {
+        $finder->including($variable);
+      }
+      foreach ($this->scope[0]->routine->parameters as $param) {
+        $finder->including($param['name']);
+      }
+      $finder->excluding('*');
+
+      // Use variables
+      if ($capture= $finder->variablesIn($lambda->statements)) {
+        $b->append(' use($')->append(implode(', $', $capture))->append(')');
+      }
+    } else if ($lambda->uses) {
+      $capture= array_map(function($var) { return $var['name']; }, $lambda->uses);
       $b->append(' use($')->append(implode(', $', $capture))->append(')');
     }
 

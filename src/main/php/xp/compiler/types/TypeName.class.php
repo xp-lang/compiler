@@ -6,13 +6,14 @@
  * Type literals and their representation
  * --------------------------------------
  * ```
- * int          : TypeName('int')
- * var          : TypeName('var')
- * string       : TypeName('string')
- * bool[]       : TypeName('bool[]')
- * [:var]       : TypeName('[:var]')
- * List<T>      : TypeName('List', [TypeName('T')])
- * Map<K, V>    : TypeName('Map', [TypeName('K'), TypeName('V')])
+ * int                   : TypeName('int')
+ * var                   : TypeName('var')
+ * string                : TypeName('string')
+ * bool[]                : TypeName('bool[]')
+ * [:var]                : TypeName('[:var]')
+ * List<T>               : TypeName('List', [TypeName('T')])
+ * Map<K, V>             : TypeName('Map', [TypeName('K'), TypeName('V')])
+ * function(int): string : TypeName('->string', [TypeName('int')])
  * ```
  *
  * @test     xp://net.xp_lang.tests.types.TypeNameTest
@@ -49,7 +50,7 @@ class TypeName extends \lang\Object {
    * @return  bool
    */
   public function isClass() {
-    return !$this->isArray() && !$this->isMap() && !$this->isVariable() && !$this->isVoid() && !$this->isPrimitive();
+    return !$this->isArray() && !$this->isMap() && !$this->isVariable() && !$this->isVoid() && !$this->isPrimitive() && !$this->isFunction();
   }
   
   /**
@@ -116,12 +117,30 @@ class TypeName extends \lang\Object {
   }
 
   /**
+   * Return whether this type is a function type
+   *
+   * @return  bool
+   */
+  public function isFunction() {
+    return 0 === strncmp($this->name, '->', 2);
+  }
+
+  /**
+   * Return function return type or null if this is not a function
+   *
+   * @return  xp.compiler.types.TypeName
+   */
+  public function functionReturnType() {
+    return $this->isFunction() ? new self(substr($this->name, 2)) : null;
+  }
+
+  /**
    * Return whether this type is a generic
    *
    * @return  bool
    */
   public function isGeneric() {
-    return !empty($this->components);
+    return 0 !== strncmp($this->name, '->', 2) && !empty($this->components);
   }
 
   /**
@@ -153,7 +172,7 @@ class TypeName extends \lang\Object {
   public function equals($cmp) {
     if (!$cmp instanceof self || $this->name !== $cmp->name) return false;
 
-    foreach ($this->components as $i => $c) {
+    foreach ((array)$this->components as $i => $c) {
       if (!$c->equals($cmp->components[$i])) return false;
     }
     return true;

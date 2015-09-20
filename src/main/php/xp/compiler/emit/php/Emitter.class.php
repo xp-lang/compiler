@@ -686,6 +686,17 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   }
 
   /**
+   * Emit class name access
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.ClassNameAccessNode access
+   */
+  public function emitClassNameAccess($b, $access) {
+    $b->append("'")->append(substr($this->literal($this->resolveType($access->type)), 1))->append("'");
+    $this->scope[0]->setType($access, new TypeName('string'));
+  }
+
+  /**
    * Emit a braced expression
    *
    * @param   xp.compiler.emit.Buffer b
@@ -1050,132 +1061,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     $this->emitAll($b, (array)$switch->cases);
     $b->append('}');
   }
-  
-  /**
-   * Emit a try / catch block
-   * 
-   * Simple form:
-   * <code>
-   *   try {
-   *     // [...statements...]
-   *   } catch (lang.Throwable $e) {
-   *     // [...error handling...]
-   *   }
-   * </code>
-   *
-   * Multiple catches:
-   * <code>
-   *   try {
-   *     // [...statements...]
-   *   } catch (lang.IllegalArgumentException $e) {
-   *     // [...error handling for IAE...]
-   *   } catch (lang.FormatException $e) {
-   *     // [...error handling for FE...]
-   *   }
-   * </code>
-   *
-   * Try/finally without catch:
-   * <code>
-   *   try {
-   *     // [...statements...]
-   *   } finally {
-   *     // [...finalizations...]
-   *   }
-   * </code>
-   *
-   * Try/finally with catch:
-   * <code>
-   *   try {
-   *     // [...statements...]
-   *   } catch (lang.Throwable $e) {
-   *     // [...error handling...]
-   *   } finally {
-   *     // [...finalizations...]
-   *   }
-   * </code>
-   *
-   * @param   xp.compiler.emit.Buffer b
-   * @param   xp.compiler.ast.TryNode try
-   */
-  protected function emitTry($b, $try) {
-    static $mangled= '··e';
 
-    // Check whether a finalization handler is available. If so, because
-    // the underlying runtime does not support this, add statements after
-    // the try block and to all catch blocks
-    $numHandlers= sizeof($try->handling);
-    if ($try->handling[$numHandlers- 1] instanceof FinallyNode) {
-      array_unshift($this->finalizers, array_pop($try->handling));
-      $numHandlers--;
-    } else {
-      array_unshift($this->finalizers, null);
-    }
-    
-    // If no handlers are left, create a simple catch-all-and-rethrow
-    // handler
-    if (0 == $numHandlers) {
-      $rethrow= new ThrowNode(array('expression' => new VariableNode($mangled)));
-      $first= new CatchNode(array(
-        'type'       => new TypeName('lang.Throwable'),
-        'variable'   => $mangled,
-        'statements' => $this->finalizers[0] ? array($this->finalizers[0], $rethrow) : array($rethrow)
-      ));
-    } else {
-      $first= $try->handling[0];
-      $this->scope[0]->setType(new VariableNode($first->variable), $first->type);
-    }
-
-    $b->append('try {'); {
-      $this->emitAll($b, (array)$try->statements);
-      $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
-    }
-    
-    // First catch.
-    $b->append('} catch('.$this->literal($this->resolveType($first->type)).' $'.$first->variable.') {'); {
-      $this->scope[0]->setType(new VariableNode($first->variable), $first->type);
-      $this->emitAll($b, (array)$first->statements);
-      $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
-    }
-    
-    // Additional catches
-    for ($i= 1; $i < $numHandlers; $i++) {
-      $b->append('} catch('.$this->literal($this->resolveType($try->handling[$i]->type)).' $'.$try->handling[$i]->variable.') {'); {
-        $this->scope[0]->setType(new VariableNode($try->handling[$i]->variable), $try->handling[$i]->type);
-        $this->emitAll($b, (array)$try->handling[$i]->statements);
-        $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
-      }
-    }
-    
-    $b->append('}');
-    array_shift($this->finalizers);
-  }
-
-  /**
-   * Emit an automatic resource management (ARM) block
-   *
-   * @param   xp.compiler.emit.Buffer b
-   * @param   xp.compiler.ast.ArmNode arm
-   */
-  protected function emitArm($b, $arm) {
-    static $mangled= '··e';
-    static $ignored= '··i';
-
-    $this->emitAll($b, $arm->initializations);
-
-    // Manually verify as we can then rely on call target type being available
-    if (!$this->checks->verify($arm, $this->scope[0], $this, true)) return;
-
-    $exceptionType= $this->literal($this->resolveType(new TypeName('php.Exception')));
-    $b->append('$'.$mangled.'= NULL; try {');
-    $this->emitAll($b, (array)$arm->statements);
-    $b->append('} catch (')->append($exceptionType)->append('$'.$mangled.') {}');
-    foreach ($arm->variables as $v) {
-      $b->append('try { $')->append($v->name)->append('->close(); } ');
-      $b->append('catch (')->append($exceptionType)->append(' $'.$ignored.') {}');
-    }
-    $b->append('if ($'.$mangled.') throw $'.$mangled.';'); 
-  }
-  
   /**
    * Emit a throw node
    *
@@ -1426,6 +1312,8 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
           // No runtime type checks
         } else if ($t->isArray() || $t->isMap()) {
           $b->append('array ');
+        } else if ($t->isFunction()) {
+          $b->append('callable ');
         } else if ($t->isClass() && !$this->scope[0]->declarations[0]->name->isPlaceHolder($t)) {
           $b->append($this->literal($ptr))->append(' ');
         } else if ('{' === $delim) {
