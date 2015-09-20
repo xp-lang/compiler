@@ -83,6 +83,7 @@ class Lexer extends \text\parser\generic\AbstractLexer {
       '&' => array('&&' => Parser::T_BOOLEAN_AND, '&=' => Parser::T_AND_EQUAL),
       '^' => array('^=' => Parser::T_XOR_EQUAL),
       '?' => array('?..' => 0, '?.' => Parser::T_NAV),    // "T?..." = non-checked vararg of T
+      'yield' => array('yield from' => Parser::T_YIELD_FROM, 'yield' => Parser::T_YIELD)
     );
 
   const DELIMITERS    = " ^|&?!.:;,@%~=<>(){}[]#+-*/\\\"'\r\n\t\$`";
@@ -213,6 +214,28 @@ class Lexer extends \text\parser\generic\AbstractLexer {
       } else if ('$' === $token{0}) {
         $this->token= Parser::T_VARIABLE;
         $this->value= $this->nextToken();
+      } else if (isset(self::$lookahead[$token])) {
+        $ahead= $token;
+        $p= true;
+        foreach (self::$lookahead[$token] as $candidate => $id) {
+          $l= strlen($candidate);
+          while (strlen($ahead) < $l && $this->tokenizer->hasMoreTokens()) {
+            $ahead.= $this->nextToken();
+          }
+          if (0 === strncmp($candidate, $ahead, $l)) {
+            if (0 === $id) break;
+            $this->token= $id;
+            $this->value= $candidate;
+            $this->pushBack(substr($ahead, $l));
+            $p= false;
+            break;
+          }
+        }
+        if ($p) {
+          $this->pushBack(substr($ahead, 1));
+          $this->token= ord($token);
+          $this->value= $token;
+        }
       } else if (isset(self::$keywords[$token])) {
         $this->token= self::$keywords[$token];
         $this->value= $token;
@@ -241,28 +264,6 @@ class Lexer extends \text\parser\generic\AbstractLexer {
           $this->token= ord($token);
           $this->value= $token;
           $this->pushBack($ahead);
-        }
-      } else if (isset(self::$lookahead[$token])) {
-        $ahead= $token;
-        $p= true;
-        foreach (self::$lookahead[$token] as $candidate => $id) {
-          $l= strlen($candidate);
-          while (strlen($ahead) < $l) {
-            $ahead.= $this->nextToken();
-          }
-          if (0 === strncmp($candidate, $ahead, $l)) {
-            if (0 === $id) break;
-            $this->token= $id;
-            $this->value= $candidate;
-            $this->pushBack(substr($ahead, $l));
-            $p= false;
-            break;
-          }
-        }
-        if ($p) {
-          $this->pushBack(substr($ahead, 1));
-          $this->token= ord($token);
-          $this->value= $token;
         }
       } else if (false !== strpos(self::DELIMITERS, $token) && 1 === $length) {
         $this->token= ord($token);

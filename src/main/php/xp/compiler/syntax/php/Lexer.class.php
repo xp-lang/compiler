@@ -49,7 +49,6 @@ class Lexer extends \text\parser\generic\AbstractLexer {
       'while'         => Parser::T_WHILE,
       'break'         => Parser::T_BREAK,
       'continue'      => Parser::T_CONTINUE,
-      'yield'         => Parser::T_YIELD,
 
       'if'            => Parser::T_IF,
       'else'          => Parser::T_ELSE,
@@ -66,7 +65,6 @@ class Lexer extends \text\parser\generic\AbstractLexer {
       '.' => array('.=' => Parser::T_CONCAT_EQUAL),
       '+' => array('+=' => Parser::T_ADD_EQUAL, '++' => Parser::T_INC),
       '*' => array('*=' => Parser::T_MUL_EQUAL),
-      '/' => array('/=' => Parser::T_DIV_EQUAL),
       '%' => array('%=' => Parser::T_MOD_EQUAL),
       '=' => array('==' => Parser::T_EQUALS, '=>' => Parser::T_DOUBLE_ARROW),
       '!' => array('!=' => Parser::T_NOT_EQUALS),
@@ -74,7 +72,8 @@ class Lexer extends \text\parser\generic\AbstractLexer {
       '|' => array('||' => Parser::T_BOOLEAN_OR, '|=' => Parser::T_OR_EQUAL),
       '&' => array('&&' => Parser::T_BOOLEAN_AND, '&=' => Parser::T_AND_EQUAL),
       '^' => array('^=' => Parser::T_XOR_EQUAL),
-      '?' => array('?>' => -1)
+      '?' => array('?>' => -1),
+      'yield' => array('yield from' => Parser::T_YIELD_FROM, 'yield' => Parser::T_YIELD)
     );
 
   const 
@@ -212,6 +211,28 @@ class Lexer extends \text\parser\generic\AbstractLexer {
       } else if ('$' === $token{0}) {
         $this->token= Parser::T_VARIABLE;
         $this->value= substr($token, 1);
+      } else if (isset(self::$lookahead[$token])) {
+        $ahead= $token;
+        $p= true;
+        foreach (self::$lookahead[$token] as $candidate => $id) {
+          $l= strlen($candidate);
+          while (strlen($ahead) < $l && $this->tokenizer->hasMoreTokens()) {
+            $ahead.= $this->nextToken();
+          }
+          if (0 === strncmp($candidate, $ahead, $l)) {
+            if (0 === $id) break;
+            $this->token= $id;
+            $this->value= $candidate;
+            $this->pushBack(substr($ahead, $l));
+            $p= false;
+            break;
+          }
+        }
+        if ($p) {
+          $this->pushBack(substr($ahead, 1));
+          $this->token= ord($token);
+          $this->value= $token;
+        }
       } else if (isset(self::$keywords[$token])) {
         $this->token= self::$keywords[$token];
         $this->value= $token;
@@ -236,17 +257,6 @@ class Lexer extends \text\parser\generic\AbstractLexer {
         } else if ('=' === $ahead) {
           $this->token= Parser::T_DIV_EQUAL;
           $this->value= '/=';
-        } else {
-          $this->token= ord($token);
-          $this->value= $token;
-          $this->pushBack($ahead);
-        }
-      } else if (isset(self::$lookahead[$token])) {
-        $ahead= $this->nextToken();
-        $combined= $token.$ahead;
-        if (isset(self::$lookahead[$token][$combined])) {
-          $this->token= self::$lookahead[$token][$combined];
-          $this->value= $combined;
         } else {
           $this->token= ord($token);
           $this->value= $token;
