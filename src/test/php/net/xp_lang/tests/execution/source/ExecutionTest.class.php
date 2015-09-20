@@ -1,7 +1,6 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
-use xp\compiler\emit\php\V54Emitter;
-use xp\compiler\emit\php\V55Emitter;
+use xp\compiler\emit\php\Emitter;
 use xp\compiler\task\CompilationTask;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\io\FileManager;
@@ -29,11 +28,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
    */
   protected static function emitter() {
     if (null === self::$emitter) {
-      if (version_compare(PHP_VERSION, '5.5.0', 'gt') && !defined('HHVM_VERSION')) {
-        self::$emitter= new V55Emitter();
-      } else {
-        self::$emitter= new V54Emitter();
-      }
+      self::$emitter= Emitter::newInstance();
     }
     return self::$emitter;
   }

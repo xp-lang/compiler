@@ -2436,5 +2436,24 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
 
     // Finalize
     return new Result($t, $bytes);
-  }    
+  }
+
+  /**
+   * Returns an emitter instance based on the current PHP runtime
+   *
+   * @return self
+   */
+  public static function newInstance() {
+    if (defined('HHVM_VERSION')) {
+      return newinstance('xp.compiler.emit.php.V55Emitter', [], '{
+        protected function emitTry($b, $try) {
+          V54Emitter::emitTry($b, $try);
+        }
+      }');
+    } else if (version_compare(PHP_VERSION, '5.5.0', 'gt')) {
+      return new V55Emitter();
+    } else {
+      return new V54Emitter();
+    }
+  }
 }

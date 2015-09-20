@@ -5,6 +5,7 @@ use xp\compiler\types\TaskScope;
 use xp\compiler\io\FileManager;
 use xp\compiler\io\ClassLoaderSource;
 use xp\compiler\task\CompilationTask;
+use xp\compiler\emit\php\Emitter;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\Syntax;
 use text\parser\generic\ParseException;
@@ -19,19 +20,10 @@ use lang\XPClass;
  * "edit / save / run" paradigm at development time.
  */
 class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
-  private static $emitterClass;
-  protected $source= array();
+  protected $source= [];
   protected $files= null;
   protected $emitter= null;
   protected $debug= false;
-
-  static function __static() {
-    if (version_compare(PHP_VERSION, '5.5.0', 'gt') && !defined('HHVM_VERSION')) {
-      self::$emitterClass= XPClass::forName('xp.compiler.emit.php.V55Emitter');
-    } else {
-      self::$emitterClass= XPClass::forName('xp.compiler.emit.php.V54Emitter');
-    }
-  }
 
   /**
    * Creates a JIT Class loader instances for a given path
@@ -41,12 +33,12 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    */
   public function __construct($path, $debug= false) {
     $this->files= new FileManager();
-    $this->emitter= self::$emitterClass->newInstance();
+    $this->emitter= Emitter::newInstance();
     $this->debug= $debug;
 
     // Maven conventions
     $path= rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-    foreach (array('src/main/xp', 'src/test/xp') as $dir) {
+    foreach (['src/main/xp', 'src/test/xp'] as $dir) {
       if (is_dir($d= realpath($path.$dir))) {
         $this->files->addSourcePath($d.DIRECTORY_SEPARATOR);
       }
