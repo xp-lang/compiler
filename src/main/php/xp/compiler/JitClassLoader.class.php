@@ -7,7 +7,6 @@ use xp\compiler\io\ClassLoaderSource;
 use xp\compiler\task\CompilationTask;
 use xp\compiler\diagnostic\NullDiagnosticListener;
 use xp\compiler\Syntax;
-use xp\compiler\emit\php\V55Emitter;
 use text\parser\generic\ParseException;
 use lang\ClassNotFoundException;
 use lang\ClassFormatException;
