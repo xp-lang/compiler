@@ -453,7 +453,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   public function emitStaticMethodCall($b, $call) {
     $ptr= $this->resolveType($call->type);
 
-    if (self::$UNPACK_REWRITE && $this->needsUnpacking((array)$call->arguments)) {
+    if (static::$UNPACK_REWRITE && $this->needsUnpacking((array)$call->arguments)) {
       $b->append('call_user_func_array([\''.$this->literal($ptr).'\', \''.$call->name.'\'], array_merge(');
       $s= sizeof($call->arguments) - 1;
       foreach ($call->arguments as $i => $argument) {
@@ -539,7 +539,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       $b->append($call->name);
       $this->emitInvocationArguments($b, (array)$call->arguments);
       $b->append(')');
-    } else if (self::$UNPACK_REWRITE && $this->needsUnpacking((array)$call->arguments)) {
+    } else if (static::$UNPACK_REWRITE && $this->needsUnpacking((array)$call->arguments)) {
       $b->insert('call_user_func_array([', $mark);
       $b->append(', \'')->append($call->name)->append("'], array_merge(");
       $s= sizeof($call->arguments) - 1;
@@ -1205,6 +1205,20 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $this->emitInvocationArguments($b, (array)$new->parameters, false);
       }
       $b->append(')');
+    } else if (static::$UNPACK_REWRITE && $this->needsUnpacking((array)$new->parameters)) {
+      $b->append('(new \ReflectionClass(\''.$this->literal($ptr).'\'))->newInstanceArgs(array_merge(');
+      $s= sizeof($new->parameters) - 1;
+      foreach ($new->parameters as $i => $argument) {
+        if ($argument instanceof UnpackNode) {
+          $this->emitOne($b, $argument->expression);
+        } else {
+          $b->append('[');
+          $this->emitOne($b, $argument);
+          $b->append(']');
+        }
+        $i < $s && $b->append(',');
+      }
+      $b->append('))');
     } else {
       $b->append('new '.$this->literal($ptr));
       $this->emitInvocationArguments($b, (array)$new->parameters);
