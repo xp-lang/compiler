@@ -1,18 +1,9 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
-/**
- * Tests varargs
- *
- * @see   http://java.sun.com/j2se/1.5.0/docs/guide/language/varargs.html
- */
 class VarArgsTest extends ExecutionTest {
 
-  /**
-   * Test 
-   *
-   */
   #[@test]
-  public function intArray() {
+  public function int_array() {
     $class= self::define('class', $this->name, null, '{
       public int[] $values;
       
@@ -23,12 +14,8 @@ class VarArgsTest extends ExecutionTest {
     $this->assertEquals(array(1, 2, 3), $class->newInstance(1, 2, 3)->values);
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
-  public function stringFormat() {
+  public function string_format() {
     $class= self::define('class', $this->name, null, '{
       public static string format(string $f, var... $args) {
         return vsprintf($f, $args);

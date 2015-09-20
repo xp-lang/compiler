@@ -63,7 +63,7 @@ class Lexer extends \text\parser\generic\AbstractLexer {
       '-' => array('-=' => Parser::T_SUB_EQUAL, '--' => Parser::T_DEC, '->' => Parser::T_OBJECT_OPERATOR),
       '>' => array('>=' => Parser::T_GE, '>>' => Parser::T_SHR),
       '<' => array('<=' => Parser::T_SE, '<<' => Parser::T_SHL),
-      '.' => array('.=' => Parser::T_CONCAT_EQUAL),
+      '.' => array('.=' => Parser::T_CONCAT_EQUAL, '...' => Parser::T_ELLIPSIS),
       '+' => array('+=' => Parser::T_ADD_EQUAL, '++' => Parser::T_INC),
       '*' => array('*=' => Parser::T_MUL_EQUAL, '**' => Parser::T_EXP),
       '/' => array('/=' => Parser::T_DIV_EQUAL),
@@ -242,15 +242,26 @@ class Lexer extends \text\parser\generic\AbstractLexer {
           $this->pushBack($ahead);
         }
       } else if (isset(self::$lookahead[$token])) {
-        $ahead= $this->nextToken();
-        $combined= $token.$ahead;
-        if (isset(self::$lookahead[$token][$combined])) {
-          $this->token= self::$lookahead[$token][$combined];
-          $this->value= $combined;
-        } else {
+        $ahead= $token;
+        $p= true;
+        foreach (self::$lookahead[$token] as $candidate => $id) {
+          $l= strlen($candidate);
+          while (strlen($ahead) < $l) {
+            $ahead.= $this->nextToken();
+          }
+          if (0 === strncmp($candidate, $ahead, $l)) {
+            if (0 === $id) break;
+            $this->token= $id;
+            $this->value= $candidate;
+            $this->pushBack(substr($ahead, $l));
+            $p= false;
+            break;
+          }
+        }
+        if ($p) {
+          $this->pushBack(substr($ahead, 1));
           $this->token= ord($token);
           $this->value= $token;
-          $this->pushBack($ahead);
         }
       } else if (false !== strpos(self::DELIMITERS, $token) && 1 == strlen($token)) {
         $this->token= ord($token);

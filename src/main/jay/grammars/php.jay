@@ -76,6 +76,7 @@ use xp\compiler\ast\DynamicInstanceOfNode;
 use xp\compiler\ast\DynamicVariableReferenceNode;
 use xp\compiler\ast\NoopNode;
 use xp\compiler\ast\YieldNode;
+use xp\compiler\ast\UnpackNode;
 %}
 
 %left ','
@@ -177,6 +178,7 @@ use xp\compiler\ast\YieldNode;
 %token T_SHR 420
 %token T_SHL 421
 %token T_EXP 422
+%token T_ELLIPSIS 423
 
 %%
 
@@ -369,7 +371,7 @@ annotationmember:
 
 annotationvalue:
     literal
-  | T_NEW typename '(' expressionlist_opt ')' {
+  | T_NEW typename '(' arguments ')' {
       $$= $yyLex->create(new InstanceCreationNode());
       $$->type= $2;
       $$->parameters= $4;
@@ -404,7 +406,9 @@ parameters:
 
 parameter:
 	typeref T_VARIABLE initialization_opt { $$= array('name' => $2, 'type' => $1, 'check' => TRUE); $3 && $$['default']= $3; }
+  | typeref T_ELLIPSIS T_VARIABLE initialization_opt { $$= array('name' => $3, 'type' => $1, 'vararg' => TRUE, 'check' => TRUE); $4 && $$['default']= $4; }
   | T_VARIABLE initialization_opt { $$= array('name' => $1, 'type' => new TypeName('var'), 'check' => FALSE); $2 && $$['default']= $2; }
+  | T_ELLIPSIS T_VARIABLE initialization_opt { $$= array('name' => $2, 'type' => new TypeName('var'), 'vararg' => TRUE, 'check' => FALSE); $3 && $$['default']= $3; }
 ;
 // }}}
 
@@ -525,6 +529,17 @@ catch:
 ;
 // }}}
 
+arguments:
+    /* empty */            { $$= NULL; }
+  | argument               { $$= [$1]; }
+  | argument ',' arguments { $$= $3 ? array_merge([$1], $3) : [$1]; }
+;
+
+argument:
+    T_ELLIPSIS expression  { $$= new UnpackNode($2); }
+  | expression             { $$= $1; }
+;
+
 // {{{ Expressions
 expressionlist_opt:
     /* empty */ { $$= NULL; }
@@ -542,12 +557,12 @@ expression_opt:
 ;
 
 instancecreation:
-    typeref '(' expressionlist_opt ')' {
+    typeref '(' arguments ')' {
       $$= new InstanceCreationNode();
       $$->type= $1;
       $$->parameters= $3;
     }
-  | T_VARIABLE '(' expressionlist_opt ')' {
+  | T_VARIABLE '(' arguments ')' {
       $$= new DynamicInstanceCreationNode();
       $$->variable= $1;
       $$->parameters= $3;
@@ -558,7 +573,7 @@ staticmember:
     T_VARIABLE { 
       $$= new StaticMemberAccessNode(NULL, $1); 
     }
-  | T_WORD '(' expressionlist_opt ')' { 
+  | T_WORD '(' arguments ')' { 
       $$= new StaticMethodCallNode(NULL, $1, $3); 
     }
   | T_WORD {
@@ -596,7 +611,7 @@ expression:
         $$= $4;
       }
     } 
-  | T_WORD '(' { $2= $yyLex->create(new InvocationNode($1)); } expressionlist_opt ')' chain_opt { 
+  | T_WORD '(' { $2= $yyLex->create(new InvocationNode($1)); } arguments ')' chain_opt { 
       $2->arguments= $4;
       if ($6) {
         $$= $6[0];
@@ -833,10 +848,10 @@ chain:
   | T_OBJECT_OPERATOR '{' expression '}' {
       $$= $yyLex->create(new DynamicVariableReferenceNode(NULL, $3)); 
     }
-  | T_OBJECT_OPERATOR T_WORD '(' { $1= $yyLex->create(new MethodCallNode(NULL, $2)); } expressionlist_opt ')' { 
+  | T_OBJECT_OPERATOR T_WORD '(' { $1= $yyLex->create(new MethodCallNode(NULL, $2)); } arguments ')' { 
       $1->arguments= $5;
     }
-  | '(' { $1= $yyLex->create(new InstanceCallNode(NULL, NULL, FALSE)); } expressionlist_opt ')' { 
+  | '(' { $1= $yyLex->create(new InstanceCallNode(NULL, NULL, FALSE)); } arguments ')' { 
       $1->arguments= $3;
     }
 ;
