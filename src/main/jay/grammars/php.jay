@@ -685,8 +685,8 @@ expression:
   | '@' expression {
       $$= $yyLex->create(new SilenceOperatorNode($2));
     }
-  | T_FUNCTION '(' lambda_input ')' lambda_uses_opt '{' statements_opt '}' {
-      $$= $yyLex->create(new LambdaNode($3, (array)$7, $5));
+  | T_FUNCTION '(' parameters_opt ')' lambda_uses_opt '{' statements_opt '}' {
+      $$= $yyLex->create(new LambdaNode((array)$3, (array)$7, $5));
     }
   | '(' expression ')' chain_opt { 
       if ($4) {
@@ -698,23 +698,18 @@ expression:
     }
 ;
 
-lambda_input:
-    /* empty */ { $$= array(); }
-  | lambda_input_parameters 
-;
-
-lambda_input_parameters:
-    lambda_input_parameter  { $$= array($1); }
-  | lambda_input_parameters ',' lambda_input_parameter { $$= array_merge($1, array($3)); }
-;
-
-lambda_input_parameter:
-    T_VARIABLE initialization_opt { $$= array('name' => $1); $2 && $$['default']= $2; }
-;
-
 lambda_uses_opt:
     /* empty */ { $$= array(); }
-  | T_USE '(' lambda_input_parameters ')' { $$= $3; }
+  | T_USE '(' lambda_uses ')' { $$= $3; }
+;
+
+lambda_uses:
+    lambda_use  { $$= array($1); }
+  | lambda_uses ',' lambda_use { $$= array_merge($1, array($3)); }
+;
+
+lambda_use:
+    T_VARIABLE initialization_opt { $$= array('name' => $1); $2 && $$['default']= $2; }
 ;
 
 literal:

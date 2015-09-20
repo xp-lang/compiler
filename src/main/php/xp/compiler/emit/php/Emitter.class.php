@@ -3,6 +3,7 @@
 use xp\compiler\types\CompiledType;
 use xp\compiler\types\TypeDeclaration;
 use xp\compiler\types\TypeInstance;
+use xp\compiler\types\TypeReference;
 use xp\compiler\types\TypeName;
 use xp\compiler\types\Types;
 use xp\compiler\types\Scope;
@@ -1373,7 +1374,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $ptr= $this->resolveType($t);
         $param['name']= $param['assign'];
         $defer[]= '$this->'.$param['assign'].'= $'.$param['assign'].';';
-      } else if (!$param['type']) {
+      } else if (!isset($param['type'])) {
         $t= TypeName::$VAR;
         $ptr= new TypeReference($t);
       } else {
