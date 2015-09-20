@@ -3,17 +3,25 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+### PHP 5.6
+
 * Implemented power operator `**` in PHP syntax - @thekid
-* Merged PR #46: Add function type syntax - @thekid
-* Merged PR #43: Add support for class Name Resolution As Scalar - @thekid
-* Merged PR #44: Implement short array and map syntax in PHP - @thekid
-* Merged PR #45: Make lambda capturing explicit when using PHP - @thekid
+
+### PHP 5.5
+
+* Merged PR #43: Add support for `::class` resolution - @thekid
 * Allowed dereferencing of constant arrays and strings - @thekid
 * Changed ARM blocks to use try / finally in PHP 5.5+ - @thekid
-* Changed code to emit native finally statement in PHP 5.5+ - @thekid
-* Merged PR #41: Fix capturing of local variables in lambdas - @thekid
+* Changed code to emit native `finally` statement in PHP 5.5+ - @thekid
 * Merged PR #40: support for generators / yield - @thekid
 * Changed default emitter to "php5.5" - @thekid
+
+### PHP 5.4
+
+* Merged PR #46: Add function type syntax - @thekid
+* Merged PR #45: Make lambda capturing explicit when using PHP - @thekid
+* Merged PR #44: Implement short array and map syntax in PHP - @thekid
+* Merged PR #41: Fix capturing of local variables in lambdas - @thekid
 
 ## 3.0.0 / 2015-08-16
 
