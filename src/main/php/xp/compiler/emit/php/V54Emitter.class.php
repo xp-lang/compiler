@@ -91,7 +91,7 @@ class V54Emitter extends Emitter {
     foreach ($finder->variablesIn((array)$this->scope[0]->routine->body) as $variable) {
       $finder->including($variable);
     }
-    foreach ($this->scope[0]->routine->parameters as $param) {
+    foreach ((array)$this->scope[0]->routine->parameters as $param) {
       $finder->including($param['name']);
     }
     $finder->excluding('*');

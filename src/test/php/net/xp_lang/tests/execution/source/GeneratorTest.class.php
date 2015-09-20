@@ -36,4 +36,28 @@ class GeneratorTest extends ExecutionTest {
       iterator_to_array($this->run('yield "number" : 1;'))
     );
   }
+
+  #[@test]
+  public function yield_from_generator() {
+    $this->assertEquals(
+      [0, 1, 2, 3],
+      iterator_to_array($this->run('yield 0; yield from (() -> { yield 1; yield 2; })(); yield 3;'))
+    );
+  }
+
+  #[@test]
+  public function yield_from_iterator() {
+    $this->assertEquals(
+      [0, 1, 2, 3],
+      iterator_to_array($this->run('yield 0; yield from new php.ArrayIterator([1, 2]); yield 3;'))
+    );
+  }
+
+  #[@test]
+  public function yield_from_an_array() {
+    $this->assertEquals(
+      [0, 1, 2, 3],
+      iterator_to_array($this->run('yield 0; yield from [1, 2]; yield 3;'))
+    );
+  }
 }
