@@ -264,7 +264,7 @@ class MethodDeclarationTest extends ParserTestCase {
       'body'       => array(),
       'extension'  => null
     )), $this->parse(
-      'public (? -> int) adding() { }'
+      'public {? -> int} adding() { }'
     ));
   }
 
@@ -280,7 +280,7 @@ class MethodDeclarationTest extends ParserTestCase {
       'body'       => array(),
       'extension'  => null
     )), $this->parse(
-      'public (Collection -> int) counting() { }'
+      'public {Collection -> int} counting() { }'
     ));
   }
 
@@ -296,7 +296,7 @@ class MethodDeclarationTest extends ParserTestCase {
       'body'       => array(),
       'extension'  => null
     )), $this->parse(
-      'public (Map, string -> int) grouping() { }'
+      'public {Map, string -> int} grouping() { }'
     ));
   }
 }

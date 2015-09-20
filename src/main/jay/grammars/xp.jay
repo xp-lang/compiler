@@ -1084,8 +1084,8 @@ signature:
 ;
 
 functiontype:
-    '(' '?' T_ARROW typeref ')' { $$= new TypeName('->'.$4->compoundName(), null); }
-  | '(' signature T_ARROW typeref ')' { $$= new TypeName('->'.$4->compoundName(), $2); }
+    '{' '?' T_ARROW typeref '}' { $$= new TypeName('->'.$4->compoundName(), null); }
+  | '{' signature T_ARROW typeref '}' { $$= new TypeName('->'.$4->compoundName(), $2); }
 ;
 
 name_list:
