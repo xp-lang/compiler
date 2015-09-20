@@ -251,4 +251,52 @@ class MethodDeclarationTest extends ParserTestCase {
     }
     $this->assertEquals($result, $cmp);
   }
+
+  #[@test]
+  public function addingMethod() {
+    $this->assertEquals(new MethodNode(array(
+      'modifiers'  => MODIFIER_PUBLIC,
+      'annotations'=> null,
+      'name'       => 'adding',
+      'returns'    => new TypeName('->int', null),
+      'parameters' => null,
+      'throws'     => null,
+      'body'       => array(),
+      'extension'  => null
+    )), $this->parse(
+      'public (? -> int) adding() { }'
+    ));
+  }
+
+  #[@test]
+  public function countingMethod() {
+    $this->assertEquals(new MethodNode(array(
+      'modifiers'  => MODIFIER_PUBLIC,
+      'annotations'=> null,
+      'name'       => 'counting',
+      'returns'    => new TypeName('->int', [new TypeName('Collection')]),
+      'parameters' => null,
+      'throws'     => null,
+      'body'       => array(),
+      'extension'  => null
+    )), $this->parse(
+      'public (Collection -> int) counting() { }'
+    ));
+  }
+
+  #[@test]
+  public function groupingMethod() {
+    $this->assertEquals(new MethodNode(array(
+      'modifiers'  => MODIFIER_PUBLIC,
+      'annotations'=> null,
+      'name'       => 'grouping',
+      'returns'    => new TypeName('->int', [new TypeName('Map'), new TypeName('string')]),
+      'parameters' => null,
+      'throws'     => null,
+      'body'       => array(),
+      'extension'  => null
+    )), $this->parse(
+      'public (Map, string -> int) grouping() { }'
+    ));
+  }
 }

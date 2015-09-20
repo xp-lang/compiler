@@ -1051,6 +1051,7 @@ typeref:
     typename
   | arraytype
   | maptype
+  | functiontype
 ;
 
 typename:
@@ -1074,6 +1075,17 @@ typeparameters:
 typeparameter:
     typeref
   | '?' T_EXTENDS qualifiedname { $$= new TypeName($3.'+'); }
+;
+
+signature:
+    /* empty */ { $$= array(); }
+  | typeref { $$= array($1); }
+  | signature ',' typeref { $$= array_merge($1, array($3)); }
+;
+
+functiontype:
+    '(' '?' T_ARROW typeref ')' { $$= new TypeName('->'.$4->compoundName(), null); }
+  | '(' signature T_ARROW typeref ')' { $$= new TypeName('->'.$4->compoundName(), $2); }
 ;
 
 name_list:

@@ -846,7 +846,7 @@ typeref:
 ;
 
 typename:
-    qualifiedname { $$= new TypeName($1); }
+    qualifiedname { $$= 'callable' === $1 ? new TypeName('->var', null) : new TypeName($1); }
 ;
 
 arraytype:
