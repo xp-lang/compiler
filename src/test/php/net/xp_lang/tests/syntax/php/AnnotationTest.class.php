@@ -14,6 +14,7 @@ use xp\compiler\ast\ArrayNode;
 use xp\compiler\ast\MapNode;
 use xp\compiler\ast\InstanceCreationNode;
 use xp\compiler\ast\ConstantAccessNode;
+use xp\compiler\ast\ClassNameAccessNode;
 use xp\compiler\ast\StaticMemberAccessNode;
 
 /**
@@ -69,6 +70,17 @@ class AnnotationTest extends ParserTestCase {
       'type'          => 'Expect',
       'parameters'    => array('default' => new StringNode('lang.IllegalArgumentException'))
     ))), $this->parseMethodWithAnnotations('#[@Expect("lang.IllegalArgumentException")]'));
+  }
+
+  /**
+   * Test annotation with default value (Expect(IllegalArgumentException::class))
+   */
+  #[@test]
+  public function annotationWithClasssName() {
+    $this->assertEquals(array(new AnnotationNode(array(
+      'type'          => 'Expect',
+      'parameters'    => array('default' => new ClassNameAccessNode(new TypeName('IllegalArgumentException')))
+    ))), $this->parseMethodWithAnnotations('#[@Expect(IllegalArgumentException::class)]'));
   }
 
   /**
