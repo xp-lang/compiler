@@ -13,6 +13,8 @@ use xp\compiler\ast\StaticMethodCallNode;
 use xp\compiler\ast\ConstructorNode;
 use xp\compiler\ast\IndexerNode;
 use xp\compiler\ast\StaticInitializerNode;
+use xp\compiler\ast\CatchNode;
+use xp\compiler\ast\FinallyNode;
 use xp\compiler\emit\Buffer;
 use lang\reflect\Modifiers;
 
@@ -74,6 +76,105 @@ class V54Emitter extends Emitter {
         $b->insert('new \\import(\''.$ptr->name().'\');', $import);
       }
     }
+  }
+
+  /**
+   * Emit a try / catch block
+   * 
+   * Simple form:
+   * <code>
+   *   try {
+   *     // [...statements...]
+   *   } catch (lang.Throwable $e) {
+   *     // [...error handling...]
+   *   }
+   * </code>
+   *
+   * Multiple catches:
+   * <code>
+   *   try {
+   *     // [...statements...]
+   *   } catch (lang.IllegalArgumentException $e) {
+   *     // [...error handling for IAE...]
+   *   } catch (lang.FormatException $e) {
+   *     // [...error handling for FE...]
+   *   }
+   * </code>
+   *
+   * Try/finally without catch:
+   * <code>
+   *   try {
+   *     // [...statements...]
+   *   } finally {
+   *     // [...finalizations...]
+   *   }
+   * </code>
+   *
+   * Try/finally with catch:
+   * <code>
+   *   try {
+   *     // [...statements...]
+   *   } catch (lang.Throwable $e) {
+   *     // [...error handling...]
+   *   } finally {
+   *     // [...finalizations...]
+   *   }
+   * </code>
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.TryNode try
+   */
+  protected function emitTry($b, $try) {
+    static $mangled= '··e';
+
+    // Check whether a finalization handler is available. If so, because
+    // the underlying runtime does not support this, add statements after
+    // the try block and to all catch blocks
+    $numHandlers= sizeof($try->handling);
+    if ($try->handling[$numHandlers- 1] instanceof FinallyNode) {
+      array_unshift($this->finalizers, array_pop($try->handling));
+      $numHandlers--;
+    } else {
+      array_unshift($this->finalizers, null);
+    }
+
+    // If no handlers are left, create a simple catch-all-and-rethrow
+    // handler
+    if (0 == $numHandlers) {
+      $rethrow= new ThrowNode(array('expression' => new VariableNode($mangled)));
+      $first= new CatchNode(array(
+        'type'       => new TypeName('lang.Throwable'),
+        'variable'   => $mangled,
+        'statements' => $this->finalizers[0] ? array($this->finalizers[0], $rethrow) : array($rethrow)
+      ));
+    } else {
+      $first= $try->handling[0];
+      $this->scope[0]->setType(new VariableNode($first->variable), $first->type);
+    }
+
+    $b->append('try {'); {
+      $this->emitAll($b, (array)$try->statements);
+      $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
+    }
+
+    // First catch.
+    $b->append('} catch('.$this->literal($this->resolveType($first->type)).' $'.$first->variable.') {'); {
+      $this->scope[0]->setType(new VariableNode($first->variable), $first->type);
+      $this->emitAll($b, (array)$first->statements);
+      $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
+    }
+
+    // Additional catches
+    for ($i= 1; $i < $numHandlers; $i++) {
+      $b->append('} catch('.$this->literal($this->resolveType($try->handling[$i]->type)).' $'.$try->handling[$i]->variable.') {'); {
+        $this->scope[0]->setType(new VariableNode($try->handling[$i]->variable), $try->handling[$i]->type);
+        $this->emitAll($b, (array)$try->handling[$i]->statements);
+        $this->finalizers[0] && $this->emitOne($b, $this->finalizers[0]);
+      }
+    }
+
+    $b->append('}');
+    array_shift($this->finalizers);
   }
 
   /**

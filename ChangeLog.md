@@ -3,6 +3,7 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Changed code to emit native finally statement in PHP 5.5+ - @thekid
 * Merged PR #41: Fix capturing of local variables in lambdas - @thekid
 * Merged PR #40: support for generators / yield - @thekid
 * Changed default emitter to "php5.5" - @thekid
