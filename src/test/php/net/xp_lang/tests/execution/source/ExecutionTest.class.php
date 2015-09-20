@@ -13,10 +13,6 @@ use lang\XPClass;
 use io\File;
 use io\streams\MemoryInputStream;
 
-/**
- * TestCase
- *
- */
 abstract class ExecutionTest extends \unittest\TestCase {
   protected static $emitter= null;
   protected $counter= 0;

@@ -1484,7 +1484,14 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
           $defer[]= $init;
         }
       }
-      $i < $s && !isset($parameters[$i+ 1]['vararg']) && $b->append(',');
+
+      if ($i < $s) {
+        if (static::$UNPACK_REWRITE && isset($parameters[$i + 1]['vararg'])) {
+          // Vararg is removed before PHP 5.6
+        } else {
+          $b->append(',');
+        }
+      }
       
       $this->scope[0]->setType(new VariableNode($param['name']), $t);
     }
