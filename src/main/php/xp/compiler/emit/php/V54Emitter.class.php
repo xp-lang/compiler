@@ -212,17 +212,6 @@ class V54Emitter extends Emitter {
    */
   protected function emitLambda($b, $lambda) {
 
-    // Capture all local variables and parameters of containing scope which
-    // are also used inside the lambda by value.
-    $finder= new \xp\compiler\ast\LocalVariableFinder();
-    foreach ($finder->variablesIn((array)$this->scope[0]->routine->body) as $variable) {
-      $finder->including($variable);
-    }
-    foreach ($this->scope[0]->routine->parameters as $param) {
-      $finder->including($param['name']);
-    }
-    $finder->excluding('*');
-
     // Parameters
     $b->append('function(');
     $s= sizeof($lambda->parameters)- 1;
@@ -236,8 +225,24 @@ class V54Emitter extends Emitter {
     }
     $b->append(')');
 
-    // Use variables
-    if ($capture= $finder->variablesIn($lambda->statements)) {
+    // If not explicitely stated: Capture all local variables and parameters of
+    // containing scope which are also used inside the lambda by value.
+    if (null === $lambda->uses) {
+      $finder= new \xp\compiler\ast\LocalVariableFinder();
+      foreach ($finder->variablesIn((array)$this->scope[0]->routine->body) as $variable) {
+        $finder->including($variable);
+      }
+      foreach ($this->scope[0]->routine->parameters as $param) {
+        $finder->including($param['name']);
+      }
+      $finder->excluding('*');
+
+      // Use variables
+      if ($capture= $finder->variablesIn($lambda->statements)) {
+        $b->append(' use($')->append(implode(', $', $capture))->append(')');
+      }
+    } else if ($lambda->uses) {
+      $capture= array_map(function($var) { return $var->name; }, $lambda->uses);
       $b->append(' use($')->append(implode(', $', $capture))->append(')');
     }
 
