@@ -562,7 +562,12 @@ staticmember:
 ;
 
 expression:
-    literal
+    literal chain_opt {
+      if ($2) {
+        $$= $2[0];
+        $2[1]->target= $1;
+      }
+    }
   | T_VARIABLE { $1= $yyLex->create(new VariableNode($1)); } chain_opt {
       if ($3) {
         $$= $3[0];
