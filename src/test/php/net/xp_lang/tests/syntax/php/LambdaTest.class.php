@@ -6,6 +6,8 @@ use xp\compiler\ast\BooleanNode;
 use xp\compiler\ast\VariableNode;
 use xp\compiler\ast\IntegerNode;
 use xp\compiler\ast\BinaryOpNode;
+use xp\compiler\ast\InstanceCallNode;
+use xp\compiler\ast\BracedExpressionNode;
 
 class LambdaTest extends ParserTestCase {
 
@@ -25,7 +27,7 @@ class LambdaTest extends ParserTestCase {
   public function oneParameter() {
     $this->assertEquals(
       array(new LambdaNode(
-        array(new VariableNode('a')),
+        array(['name' => 'a']),
         array(new ReturnNode(new BinaryOpNode(array(
           'lhs' => new VariableNode('a'),
           'rhs' => new IntegerNode('1'),
@@ -41,7 +43,7 @@ class LambdaTest extends ParserTestCase {
   public function twoParameters() {
     $this->assertEquals(
       array(new LambdaNode(
-        array(new VariableNode('a'), new VariableNode('b')),
+        array(['name' => 'a'], ['name' => 'b']),
         array(new ReturnNode(new BinaryOpNode(array(
           'lhs' => new VariableNode('a'),
           'rhs' => new VariableNode('b'),
@@ -57,11 +59,26 @@ class LambdaTest extends ParserTestCase {
   public function withUses() {
     $this->assertEquals(
       array(new LambdaNode(
-        array(new VariableNode('a')),
+        array(['name' => 'a']),
         array(/* TBI */),
-        array(new VariableNode('mul'), new VariableNode('neg'))
+        array(['name' => 'mul'], ['name' => 'neg'])
       )), 
       $this->parse('function($a) use($mul, $neg) { /* TBI */ };')
+    );
+  }
+
+  #[@test]
+  public function invocation() {
+    $this->assertEquals(
+      array(new InstanceCallNode(
+        new BracedExpressionNode(new LambdaNode(
+          array(['name' => 'a'], ['name' => 'b']),
+          array(/* TBI */),
+          array()
+        )),
+        array(new IntegerNode('1'), new IntegerNode('2'))
+      )),
+      $this->parse('(function($a, $b) { /* TBI */ })(1, 2);')
     );
   }
 }
