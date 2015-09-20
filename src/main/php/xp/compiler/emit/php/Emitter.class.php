@@ -686,6 +686,17 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   }
 
   /**
+   * Emit class name access
+   *
+   * @param   xp.compiler.emit.Buffer b
+   * @param   xp.compiler.ast.ClassNameAccessNode access
+   */
+  public function emitClassNameAccess($b, $access) {
+    $b->append("'")->append(substr($this->literal($this->resolveType($access->type)), 1))->append("'");
+    $this->scope[0]->setType($access, new TypeName('string'));
+  }
+
+  /**
    * Emit a braced expression
    *
    * @param   xp.compiler.emit.Buffer b
