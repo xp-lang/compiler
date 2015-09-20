@@ -2492,6 +2492,8 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
           V54Emitter::emitTry($b, $try);
         }
       }');
+    } else if (version_compare(PHP_VERSION, '5.6.0', 'gt')) {
+      return new V56Emitter();
     } else if (version_compare(PHP_VERSION, '5.5.0', 'gt')) {
       return new V55Emitter();
     } else {
