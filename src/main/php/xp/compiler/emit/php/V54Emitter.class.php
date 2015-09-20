@@ -242,7 +242,7 @@ class V54Emitter extends Emitter {
         $b->append(' use($')->append(implode(', $', $capture))->append(')');
       }
     } else if ($lambda->uses) {
-      $capture= array_map(function($var) { return $var->name; }, $lambda->uses);
+      $capture= array_map(function($var) { return $var['name']; }, $lambda->uses);
       $b->append(' use($')->append(implode(', $', $capture))->append(')');
     }
 
