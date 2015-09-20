@@ -1132,8 +1132,24 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    * @param   xp.compiler.ast.DynamicInstanceCreationNode new
    */
   protected function emitDynamicInstanceCreation($b, $new) {
-    $b->append('new ')->append('$')->append($new->variable);
-    $this->emitInvocationArguments($b, (array)$new->parameters);
+    if (static::$UNPACK_REWRITE && $this->needsUnpacking((array)$new->parameters)) {
+      $b->append('(new \ReflectionClass($'.$new->variable.'))->newInstanceArgs(array_merge(');
+      $s= sizeof($new->parameters) - 1;
+      foreach ($new->parameters as $i => $argument) {
+        if ($argument instanceof UnpackNode) {
+          $this->emitOne($b, $argument->expression);
+        } else {
+          $b->append('[');
+          $this->emitOne($b, $argument);
+          $b->append(']');
+        }
+        $i < $s && $b->append(',');
+      }
+      $b->append('))');
+    } else {
+      $b->append('new ')->append('$')->append($new->variable);
+      $this->emitInvocationArguments($b, (array)$new->parameters);
+    }
     
     $this->scope[0]->setType($new, new TypeName('lang.Object'));
   }
