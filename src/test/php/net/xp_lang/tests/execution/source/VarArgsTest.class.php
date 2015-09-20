@@ -27,4 +27,52 @@ class VarArgsTest extends ExecutionTest {
       $class->getMethod('format')->invoke(null, array('Hello %s #%d', 'World', 1))
     );
   }
+
+  #[@test]
+  public function argument_unpacking_instance() {
+    $class= self::define('class', $this->name, null, '{
+      public int[] $values;
+
+      private void unpack(int... $values) {
+        return $values;
+      }
+
+      public __construct(int[] $values) {
+        $this.values= $this.unpack(...$values);
+      }
+    }');
+    $this->assertEquals([1, 2], $class->newInstance([1, 2])->values);
+  }
+
+  #[@test]
+  public function argument_unpacking_static() {
+    $class= self::define('class', $this->name, null, '{
+      public int[] $values;
+
+      private static void unpack(int... $values) {
+        return $values;
+      }
+
+      public __construct(int[] $values) {
+        $this.values= self::unpack(...$values);
+      }
+    }');
+    $this->assertEquals([1, 2], $class->newInstance([1, 2])->values);
+  }
+
+  #[@test]
+  public function argument_unpacking_after_first() {
+    $class= self::define('class', $this->name, null, '{
+      public int[] $values;
+
+      private void unpack(int... $values) {
+        return $values;
+      }
+
+      public __construct(int[] $values) {
+        $this.values= $this.unpack(0, ...$values);
+      }
+    }');
+    $this->assertEquals([0, 1, 2], $class->newInstance([1, 2])->values);
+  }
 }
