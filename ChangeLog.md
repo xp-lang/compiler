@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 4.0.0 / 2015-11-08
+
 ### PHP 5.6
 
 * Implemented power operator `**` in PHP syntax - @thekid
