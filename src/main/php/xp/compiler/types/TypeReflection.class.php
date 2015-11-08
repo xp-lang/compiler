@@ -306,7 +306,7 @@ class TypeReflection extends Types {
     } else if ('»' === $literal[0]) {    // Maps
       return '[:'.$this->nameOf(substr($literal, 1)).']';
     } else {                             // Classes, enums, interfaces
-      return \xp::nameOf($literal);
+      return strtr($literal, '\\', '.');
     }
   }
 
