@@ -23,6 +23,10 @@ XP Compiler ChangeLog
 * Merged PR #44: Implement short array and map syntax in PHP - @thekid
 * Merged PR #41: Fix capturing of local variables in lambdas - @thekid
 
+### Other
+
+* Fixed forward compatibility with XP 6.6.0 - @thekid
+
 ## 3.0.0 / 2015-08-16
 
 ### Added support for PHP7
