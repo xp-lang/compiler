@@ -644,10 +644,12 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       !$access->target instanceof VariableNode &&
       !$access->target instanceof StaticMemberAccessNode
     ) {
-      $b->insert('this(', $mark);
-      $b->append(',');
+      $var= $this->tempVar();
+      $b->insert('(NULL === ('.$var.'=', $mark);
+      $b->append(')) ? NULL : '.$var);
+      $b->append('[');
       $this->emitOne($b, $access->offset);
-      $b->append(')');
+      $b->append(']');
     } else {
       $b->append('[');
       $access->offset && $this->emitOne($b, $access->offset);
