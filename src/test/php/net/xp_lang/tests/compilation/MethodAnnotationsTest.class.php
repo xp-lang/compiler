@@ -62,7 +62,7 @@ class MethodAnnotationsTest extends AnnotationsTest {
     $type= $this->compile('class %s { [@$conn: inject(name= "db")] void fixture(var $conn) { } }');
     $this->assertEquals(
       array('inject' => array('name' => 'db')), 
-      this($type->getMethod('fixture')->getParameters(), 0)->getAnnotations()
+      $type->getMethod('fixture')->getParameters()[0]->getAnnotations()
     );
   }
 }
