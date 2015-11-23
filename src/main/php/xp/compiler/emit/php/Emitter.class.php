@@ -3,6 +3,7 @@
 use xp\compiler\types\CompiledType;
 use xp\compiler\types\TypeDeclaration;
 use xp\compiler\types\TypeInstance;
+use xp\compiler\types\TypeReference;
 use xp\compiler\types\TypeName;
 use xp\compiler\types\Types;
 use xp\compiler\types\Scope;
@@ -44,6 +45,7 @@ use xp\compiler\ast\StaticInitializerNode;
 use xp\compiler\ast\LocalsToMemberPromoter;
 use xp\compiler\ast\InstanceCreationNode;
 use xp\compiler\ast\ConstantAccessNode;
+use xp\compiler\ast\UnpackNode;
 use xp\compiler\emit\Buffer;
 use lang\reflect\Modifiers;
 use lang\Throwable;
@@ -100,6 +102,8 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   protected $inits      = [null];
   protected $local      = [null];
   protected $types      = [null];
+
+  protected static $UNPACK_REWRITE = true;
 
   /**
    * Constructor.
@@ -201,7 +205,14 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
   protected function emitUses($b, array $types) {
     raise('lang.MethodNotImplementedException', 'Overwritten in subclasses', __METHOD__);
   }
-  
+
+  protected function needsUnpacking($arguments) {
+    foreach ($arguments as $argument) {
+      if ($argument instanceof UnpackNode) return true;
+    }
+    return false;
+  }
+
   /**
    * Emit parameters
    *
@@ -237,15 +248,37 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     }
     $ptr= $this->scope[0]->statics[$inv->name];
 
-    // Static method call vs. function call
-    if (true === $ptr) {
-      $b->append($inv->name);
-      $this->emitInvocationArguments($b, (array)$inv->arguments);
-      $this->scope[0]->setType($inv, TypeName::$VAR);
+    if (static::$UNPACK_REWRITE && $this->needsUnpacking((array)$inv->arguments)) {
+      if (true === $ptr) {
+        $b->append('call_user_func_array(\''.$inv->name.'\'');
+      } else {
+        $b->append('call_user_func_array([\''.$this->literal($ptr).'\', \''.$inv->name.'\']');
+      }
+      $b->append(', array_merge(');
+      $s= sizeof($inv->arguments) - 1;
+      foreach ($inv->arguments as $i => $argument) {
+        if ($argument instanceof UnpackNode) {
+          $this->emitOne($b, $argument->expression);
+        } else {
+          $b->append('[');
+          $this->emitOne($b, $argument);
+          $b->append(']');
+        }
+        $i < $s && $b->append(',');
+      }
+      $b->append('))');
     } else {
-      $b->append($this->literal($ptr->holder).'::'.$ptr->name());
-      $this->emitInvocationArguments($b, (array)$inv->arguments);
-      $this->scope[0]->setType($inv, $ptr->returns);
+
+      // Static method call vs. function call
+      if (true === $ptr) {
+        $b->append($inv->name);
+        $this->emitInvocationArguments($b, (array)$inv->arguments);
+        $this->scope[0]->setType($inv, TypeName::$VAR);
+      } else {
+        $b->append($this->literal($ptr->holder).'::'.$ptr->name());
+        $this->emitInvocationArguments($b, (array)$inv->arguments);
+        $this->scope[0]->setType($inv, $ptr->returns);
+      }
     }
   }
   
@@ -442,8 +475,25 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    */
   public function emitStaticMethodCall($b, $call) {
     $ptr= $this->resolveType($call->type);
-    $b->append($this->literal($ptr).'::'.$call->name);
-    $this->emitInvocationArguments($b, (array)$call->arguments);
+
+    if (static::$UNPACK_REWRITE && $this->needsUnpacking((array)$call->arguments)) {
+      $b->append('call_user_func_array([\''.$this->literal($ptr).'\', \''.$call->name.'\'], array_merge(');
+      $s= sizeof($call->arguments) - 1;
+      foreach ($call->arguments as $i => $argument) {
+        if ($argument instanceof UnpackNode) {
+          $this->emitOne($b, $argument->expression);
+        } else {
+          $b->append('[');
+          $this->emitOne($b, $argument);
+          $b->append(']');
+        }
+        $i < $s && $b->append(',');
+      }
+      $b->append('))');
+    } else {
+      $b->append($this->literal($ptr).'::'.$call->name);
+      $this->emitInvocationArguments($b, (array)$call->arguments);
+    }
 
     // Record type
     $this->scope[0]->setType($call, $ptr->hasMethod($call->name) ? $ptr->getMethod($call->name)->returns : TypeName::$VAR);
@@ -466,6 +516,21 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       if ($call->arguments) {
         $b->append(', ');
         $this->emitInvocationArguments($b, $call->arguments, false);
+      }
+    } else if (static::$UNPACK_REWRITE && $this->needsUnpacking((array)$call->arguments)) {
+      $b->append('call_user_func_array(');
+      $this->emitOne($b, $call->target);
+      $b->append(', array_merge(');
+      $s= sizeof($call->arguments) - 1;
+      foreach ($call->arguments as $i => $argument) {
+        if ($argument instanceof UnpackNode) {
+          $this->emitOne($b, $argument->expression);
+        } else {
+          $b->append('[');
+          $this->emitOne($b, $argument);
+          $b->append(']');
+        }
+        $i < $s && $b->append(',');
       }
       $b->append('))');
     } else {
@@ -512,6 +577,21 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       $b->append($call->name);
       $this->emitInvocationArguments($b, (array)$call->arguments);
       $b->append(')');
+    } else if (static::$UNPACK_REWRITE && $this->needsUnpacking((array)$call->arguments)) {
+      $b->insert('call_user_func_array([', $mark);
+      $b->append(', \'')->append($call->name)->append("'], array_merge(");
+      $s= sizeof($call->arguments) - 1;
+      foreach ($call->arguments as $i => $argument) {
+        if ($argument instanceof UnpackNode) {
+          $this->emitOne($b, $argument->expression);
+        } else {
+          $b->append('[');
+          $this->emitOne($b, $argument);
+          $b->append(']');
+        }
+        $i < $s && $b->append(',');
+      }
+      $b->append('))');
     } else {
 
       // Rewrite for unsupported syntax
@@ -1092,8 +1172,24 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    * @param   xp.compiler.ast.DynamicInstanceCreationNode new
    */
   protected function emitDynamicInstanceCreation($b, $new) {
-    $b->append('new ')->append('$')->append($new->variable);
-    $this->emitInvocationArguments($b, (array)$new->parameters);
+    if (static::$UNPACK_REWRITE && $this->needsUnpacking((array)$new->parameters)) {
+      $b->append('(new \ReflectionClass($'.$new->variable.'))->newInstanceArgs(array_merge(');
+      $s= sizeof($new->parameters) - 1;
+      foreach ($new->parameters as $i => $argument) {
+        if ($argument instanceof UnpackNode) {
+          $this->emitOne($b, $argument->expression);
+        } else {
+          $b->append('[');
+          $this->emitOne($b, $argument);
+          $b->append(']');
+        }
+        $i < $s && $b->append(',');
+      }
+      $b->append('))');
+    } else {
+      $b->append('new ')->append('$')->append($new->variable);
+      $this->emitInvocationArguments($b, (array)$new->parameters);
+    }
     
     $this->scope[0]->setType($new, new TypeName('lang.Object'));
   }
@@ -1165,6 +1261,20 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $this->emitInvocationArguments($b, (array)$new->parameters, false);
       }
       $b->append(')');
+    } else if (static::$UNPACK_REWRITE && $this->needsUnpacking((array)$new->parameters)) {
+      $b->append('(new \ReflectionClass(\''.$this->literal($ptr).'\'))->newInstanceArgs(array_merge(');
+      $s= sizeof($new->parameters) - 1;
+      foreach ($new->parameters as $i => $argument) {
+        if ($argument instanceof UnpackNode) {
+          $this->emitOne($b, $argument->expression);
+        } else {
+          $b->append('[');
+          $this->emitOne($b, $argument);
+          $b->append(']');
+        }
+        $i < $s && $b->append(',');
+      }
+      $b->append('))');
     } else {
       $b->append('new '.$this->literal($ptr));
       $this->emitInvocationArguments($b, (array)$new->parameters);
@@ -1303,7 +1413,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
         $ptr= $this->resolveType($t);
         $param['name']= $param['assign'];
         $defer[]= '$this->'.$param['assign'].'= $'.$param['assign'].';';
-      } else if (!$param['type']) {
+      } else if (!isset($param['type'])) {
         $t= TypeName::$VAR;
         $ptr= new TypeReference($t);
       } else {
@@ -1341,10 +1451,14 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       
       if (isset($param['vararg'])) {
         $genericParams.= '...';
-        if ($i > 0) {
-          $defer[]= '$'.$param['name'].'= array_slice(func_get_args(), '.$i.');';
+        if (static::$UNPACK_REWRITE) {
+          if ($i > 0) {
+            $defer[]= '$'.$param['name'].'= array_slice(func_get_args(), '.$i.');';
+          } else {
+            $defer[]= '$'.$param['name'].'= func_get_args();';
+          }
         } else {
-          $defer[]= '$'.$param['name'].'= func_get_args();';
+          $b->append('...$'.$param['name']);
         }
         $this->scope[0]->setType(new VariableNode($param['name']), new TypeName($t->name.'[]'));
         break;
@@ -1372,7 +1486,14 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
           $defer[]= $init;
         }
       }
-      $i < $s && !isset($parameters[$i+ 1]['vararg']) && $b->append(',');
+
+      if ($i < $s) {
+        if (static::$UNPACK_REWRITE && isset($parameters[$i + 1]['vararg'])) {
+          // Vararg is removed before PHP 5.6
+        } else {
+          $b->append(',');
+        }
+      }
       
       $this->scope[0]->setType(new VariableNode($param['name']), $t);
     }
@@ -2452,6 +2573,8 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
           V54Emitter::emitTry($b, $try);
         }
       }');
+    } else if (version_compare(PHP_VERSION, '5.6.0', 'gt')) {
+      return new V56Emitter();
     } else if (version_compare(PHP_VERSION, '5.5.0', 'gt')) {
       return new V55Emitter();
     } else {

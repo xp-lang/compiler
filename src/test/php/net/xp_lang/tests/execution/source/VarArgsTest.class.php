@@ -1,18 +1,9 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
-/**
- * Tests varargs
- *
- * @see   http://java.sun.com/j2se/1.5.0/docs/guide/language/varargs.html
- */
 class VarArgsTest extends ExecutionTest {
 
-  /**
-   * Test 
-   *
-   */
   #[@test]
-  public function intArray() {
+  public function int_array() {
     $class= self::define('class', $this->name, null, '{
       public int[] $values;
       
@@ -23,12 +14,8 @@ class VarArgsTest extends ExecutionTest {
     $this->assertEquals(array(1, 2, 3), $class->newInstance(1, 2, 3)->values);
   }
 
-  /**
-   * Test
-   *
-   */
   #[@test]
-  public function stringFormat() {
+  public function string_format() {
     $class= self::define('class', $this->name, null, '{
       public static string format(string $f, var... $args) {
         return vsprintf($f, $args);
@@ -39,5 +26,53 @@ class VarArgsTest extends ExecutionTest {
       'Hello World #1',
       $class->getMethod('format')->invoke(null, array('Hello %s #%d', 'World', 1))
     );
+  }
+
+  #[@test]
+  public function argument_unpacking_instance() {
+    $class= self::define('class', $this->name, null, '{
+      public int[] $values;
+
+      private void unpack(int... $values) {
+        return $values;
+      }
+
+      public __construct(int[] $values) {
+        $this.values= $this.unpack(...$values);
+      }
+    }');
+    $this->assertEquals([1, 2], $class->newInstance([1, 2])->values);
+  }
+
+  #[@test]
+  public function argument_unpacking_static() {
+    $class= self::define('class', $this->name, null, '{
+      public int[] $values;
+
+      private static void unpack(int... $values) {
+        return $values;
+      }
+
+      public __construct(int[] $values) {
+        $this.values= self::unpack(...$values);
+      }
+    }');
+    $this->assertEquals([1, 2], $class->newInstance([1, 2])->values);
+  }
+
+  #[@test]
+  public function argument_unpacking_after_first() {
+    $class= self::define('class', $this->name, null, '{
+      public int[] $values;
+
+      private void unpack(int... $values) {
+        return $values;
+      }
+
+      public __construct(int[] $values) {
+        $this.values= $this.unpack(0, ...$values);
+      }
+    }');
+    $this->assertEquals([0, 1, 2], $class->newInstance([1, 2])->values);
   }
 }

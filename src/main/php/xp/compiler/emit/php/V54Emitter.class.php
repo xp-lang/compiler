@@ -214,17 +214,9 @@ class V54Emitter extends Emitter {
   protected function emitLambda($b, $lambda) {
 
     // Parameters
-    $b->append('function(');
-    $s= sizeof($lambda->parameters)- 1;
-    foreach ($lambda->parameters as $i => $param) {
-      $b->append('$')->append($param['name']);
-      if (isset($param['default'])) {
-        $b->append('=');
-        $this->emitOne($b, $param['default']);
-      }
-      $i < $s && $b->append(',');
-    }
-    $b->append(')');
+    $b->append('function');
+    $this->emitParameters($b, (array)$lambda->parameters, '{');
+    $mark= $b->mark() - 1;
 
     // If not explicitely stated: Capture all local variables and parameters of
     // containing scope which are also used inside the lambda by value.
@@ -240,14 +232,13 @@ class V54Emitter extends Emitter {
 
       // Use variables
       if ($capture= $finder->variablesIn($lambda->statements)) {
-        $b->append(' use($')->append(implode(', $', $capture))->append(')');
+        $b->insert(' use($'.implode(', $', $capture).')', $mark);
       }
     } else if ($lambda->uses) {
       $capture= array_map(function($var) { return $var['name']; }, $lambda->uses);
-      $b->append(' use($')->append(implode(', $', $capture))->append(')');
+      $b->insert(' use($'.implode(', $', $capture).')', $mark);
     }
 
-    $b->append('{');
     $this->emitAll($b, $lambda->statements);
     $b->append('}');
   }

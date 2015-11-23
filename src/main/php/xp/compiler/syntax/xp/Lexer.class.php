@@ -68,7 +68,7 @@ class Lexer extends \text\parser\generic\AbstractLexer {
 
   protected static
     $lookahead= array(
-      '.' => array('...' => Parser::T_DOTS),
+      '.' => array('...' => Parser::T_ELLIPSIS),
       '-' => array('-=' => Parser::T_SUB_EQUAL, '--' => Parser::T_DEC, '->' => Parser::T_ARROW),
       '>' => array('>=' => Parser::T_GE),
       '<' => array('<=' => Parser::T_SE),
