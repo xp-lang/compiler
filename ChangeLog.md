@@ -3,7 +3,7 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
-## 4.1.0 / 2015-12-09
+## 4.0.1 / 2015-12-09
 
 * Rewrote code to ue `literal()` instead of `xp::reflect()`. See
   xp-framework/rfc#298
