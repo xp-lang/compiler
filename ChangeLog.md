@@ -5,7 +5,7 @@ XP Compiler ChangeLog
 
 ## 4.0.1 / 2015-12-09
 
-* Rewrote code to ue `literal()` instead of `xp::reflect()`. See
+* Rewrote code to use `literal()` instead of `xp::reflect()`. See
   xp-framework/rfc#298
   (@thekid)
 
