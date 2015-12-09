@@ -254,8 +254,8 @@ abstract class Scope extends \lang\Object {
     // JitClassLoader?
     if (!$this->resolved->containsKey($qualified)) {
       if (
-        class_exists(\xp::reflect($qualified), false) || 
-        interface_exists(\xp::reflect($qualified), false) || 
+        class_exists(literal($qualified), false) || 
+        interface_exists(literal($qualified), false) || 
         ClassLoader::getDefault()->providesClass($qualified)
       ) {
         try {

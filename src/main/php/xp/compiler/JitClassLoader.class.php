@@ -163,7 +163,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @throws lang.ClassLoadingException
    */
   public function loadClass0($class) {
-    if (isset(\xp::$cl[$class])) return \xp::reflect($class);
+    if (isset(\xp::$cl[$class])) return literal($class);
 
     // Locate sourcecode
     if (null === ($source= $this->locateSource($class))) {

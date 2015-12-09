@@ -132,7 +132,7 @@ class ClassDeclarationTest extends ExecutionTest {
   public function classInsidePackage() {
     $class= self::define('class', 'ClassInPackage', null, '{ }', array('package demo;'));
     $this->assertEquals('demo.SourceClassInPackage', $class->getName());
-    $this->assertEquals('demo\\SourceClassInPackage', \xp::reflect($class->getName()));
+    $this->assertEquals('demo\\SourceClassInPackage', literal($class->getName()));
   }
 
   /**
@@ -143,7 +143,7 @@ class ClassDeclarationTest extends ExecutionTest {
   public function packageClassInsidePackage() {
     $class= self::define('package class', 'PackageClassInPackage', null, '{ }', array('package demo;'));
     $this->assertEquals('demo.SourcePackageClassInPackage', $class->getName());
-    $this->assertEquals('demo\\SourcePackageClassInPackage', \xp::reflect($class->getName()));
+    $this->assertEquals('demo\\SourcePackageClassInPackage', literal($class->getName()));
   }
 
   /**
