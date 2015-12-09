@@ -24,7 +24,7 @@ class TypeInstanceTest extends \unittest\TestCase {
   public function runnable_interface_instance_equals_parameters() {
     $m= (new TypeInstance(new TypeReflection(XPClass::forName('lang.Runnable'))))->getMethod('equals');
     $this->assertEquals(
-      array(new Parameter('cmp', new TypeName('lang.Generic'))),
+      array(new Parameter('cmp', new TypeName('var'))),
       $m->parameters
     );
   }
