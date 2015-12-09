@@ -6,7 +6,7 @@
   "description" : "XP Compiler",
   "keywords": ["xp"],
   "require" : {
-    "xp-framework/core": "dev-master as 6.7.0-dev",
+    "xp-framework/core": "~6.4.0",
     "xp-framework/parser": "~6.0",
     "php" : ">=5.4.0"
   },
