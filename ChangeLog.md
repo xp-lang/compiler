@@ -3,6 +3,11 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+* Normalized types when checking for extension methods so all variants
+  of api doc `@param` tags, parameter type syntax and dotted as well as
+  PHP fully qualified and unqualified parameter names work.
+  (@thekid)
+
 ## 4.0.1 / 2015-12-09
 
 * Rewrote code to use `literal()` instead of `xp::reflect()`. See

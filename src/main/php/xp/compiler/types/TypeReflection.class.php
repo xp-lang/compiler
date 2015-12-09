@@ -333,7 +333,7 @@ class TypeReflection extends Types {
         if (
           ($method->getModifiers() & MODIFIER_STATIC) &&
           ($method->numParameters() > 0) &&
-          ($type === $method->getParameter(0)->getTypeName())
+          (strtr($type, '.', '\\') === strtr($method->getParameter(0)->getTypeName(), '.', '\\'))
         ) $r[$type][]= $this->getMethod($method->getName());
       }
     }
