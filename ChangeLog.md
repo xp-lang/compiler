@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 4.1.0 / 2015-12-09
+
 * Normalized types when checking for extension methods so all variants
   of api doc `@param` tags, parameter type syntax and dotted as well as
   PHP fully qualified and unqualified parameter names work.
