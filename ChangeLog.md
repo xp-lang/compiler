@@ -3,6 +3,12 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 4.1.0 / 2015-12-09
+
+* Rewrote code to ue `literal()` instead of `xp::reflect()`. See
+  xp-framework/rfc#298
+  (@thekid)
+
 ## 4.0.0 / 2015-11-08
 
 ### PHP 5.6
