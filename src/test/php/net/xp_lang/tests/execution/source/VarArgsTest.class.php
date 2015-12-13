@@ -20,7 +20,7 @@ class VarArgsTest extends ExecutionTest {
         $this.values= $values;
       }
     }');
-    $this->assertEquals(array(1, 2, 3), $class->newInstance(1, 2, 3)->values);
+    $this->assertEquals([1, 2, 3], $class->newInstance(1, 2, 3)->values);
   }
 
   /**
@@ -33,11 +33,11 @@ class VarArgsTest extends ExecutionTest {
       public static string format(string $f, var... $args) {
         return vsprintf($f, $args);
       }
-    }', array('import native standard.vsprintf;'));
+    }', ['import native standard.vsprintf;']);
 
     $this->assertEquals(
       'Hello World #1',
-      $class->getMethod('format')->invoke(null, array('Hello %s #%d', 'World', 1))
+      $class->getMethod('format')->invoke(null, ['Hello %s #%d', 'World', 1])
     );
   }
 }

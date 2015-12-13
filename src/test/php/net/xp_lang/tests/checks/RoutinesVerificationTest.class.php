@@ -36,157 +36,157 @@ class RoutinesVerificationTest extends \unittest\TestCase {
   
   #[@test]
   public function interfaceMethodsMayNotHaveBodies() {
-    $m= new MethodNode(array(
+    $m= new MethodNode([
       'name'        => 'run',
       'modifiers'   => MODIFIER_PUBLIC,
       'returns'     => TypeName::$VOID,
-      'parameters'  => array(),
-      'body'        => array()
-    ));
+      'parameters'  => [],
+      'body'        => []
+    ]);
     $this->assertEquals(
-      array('R403', 'Interface methods may not have a body Runnable::run'), 
-      $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Runnable')))
+      ['R403', 'Interface methods may not have a body Runnable::run'], 
+      $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, [], new TypeName('Runnable')))
     );
   }
 
   #[@test]
   public function interfaceMethodsMayNotBePrivate() {
-    $m= new MethodNode(array(
+    $m= new MethodNode([
       'name'        => 'run',
       'modifiers'   => MODIFIER_PRIVATE,
       'returns'     => TypeName::$VOID,
-      'parameters'  => array(),
+      'parameters'  => [],
       'body'        => null
-    ));
+    ]);
     $this->assertEquals(
-      array('R401', 'Interface methods may only be public Runnable::run'), 
-      $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Runnable')))
+      ['R401', 'Interface methods may only be public Runnable::run'], 
+      $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, [], new TypeName('Runnable')))
     );
   }
 
   #[@test]
   public function interfaceMethodsMayNotBeProtected() {
-    $m= new MethodNode(array(
+    $m= new MethodNode([
       'name'        => 'run',
       'modifiers'   => MODIFIER_PROTECTED,
       'returns'     => TypeName::$VOID,
-      'parameters'  => array(),
+      'parameters'  => [],
       'body'        => null
-    ));
+    ]);
     $this->assertEquals(
-      array('R401', 'Interface methods may only be public Runnable::run'), 
-      $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Runnable')))
+      ['R401', 'Interface methods may only be public Runnable::run'], 
+      $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, [], new TypeName('Runnable')))
     );
   }
 
   #[@test]
   public function interfaceMethodsMayNotBeAbstract() {
-    $m= new MethodNode(array(
+    $m= new MethodNode([
       'name'        => 'run',
       'modifiers'   => MODIFIER_ABSTRACT,
       'returns'     => TypeName::$VOID,
-      'parameters'  => array(),
+      'parameters'  => [],
       'body'        => null
-    ));
+    ]);
     $this->assertEquals(
-      array('R401', 'Interface methods may only be public Runnable::run'), 
-      $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Runnable')))
+      ['R401', 'Interface methods may only be public Runnable::run'], 
+      $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, [], new TypeName('Runnable')))
     );
   }
 
   #[@test]
   public function interfaceMethodsMayNotBeFinal() {
-    $m= new MethodNode(array(
+    $m= new MethodNode([
       'name'        => 'run',
       'modifiers'   => MODIFIER_FINAL,
       'returns'     => TypeName::$VOID,
-      'parameters'  => array(),
+      'parameters'  => [],
       'body'        => null
-    ));
+    ]);
     $this->assertEquals(
-      array('R401', 'Interface methods may only be public Runnable::run'), 
-      $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Runnable')))
+      ['R401', 'Interface methods may only be public Runnable::run'], 
+      $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, [], new TypeName('Runnable')))
     );
   }
 
   #[@test]
   public function interfaceMethodsMayOmitModifier() {
-    $m= new MethodNode(array(
+    $m= new MethodNode([
       'name'        => 'run',
       'modifiers'   => 0,
       'returns'     => TypeName::$VOID,
-      'parameters'  => array(),
+      'parameters'  => [],
       'body'        => null
-    ));
+    ]);
     $this->assertNull(
-      $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Runnable')))
+      $this->verify($m, new InterfaceNode(MODIFIER_PUBLIC, [], new TypeName('Runnable')))
     );
   }
 
   #[@test]
   public function abstractMethodsMayNotHaveBodies() {
-    $m= new MethodNode(array(
+    $m= new MethodNode([
       'name'        => 'run',
       'modifiers'   => MODIFIER_ABSTRACT,
       'returns'     => TypeName::$VOID,
-      'parameters'  => array(),
-      'body'        => array()
-    ));
+      'parameters'  => [],
+      'body'        => []
+    ]);
     $this->assertEquals(
-      array('R403', 'Abstract methods may not have a body Runner::run'), 
-      $this->verify($m, new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner')))
+      ['R403', 'Abstract methods may not have a body Runner::run'], 
+      $this->verify($m, new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Runner')))
     );
   }
 
   #[@test]
   public function nonAbstractMethodsMustHaveBodies() {
-    $m= new MethodNode(array(
+    $m= new MethodNode([
       'name'        => 'run',
       'modifiers'   => MODIFIER_PUBLIC,
       'returns'     => TypeName::$VOID,
-      'parameters'  => array(),
+      'parameters'  => [],
       'body'        => null
-    ));
+    ]);
     $this->assertEquals(
-      array('R401', 'Non-abstract methods must have a body Runner::run'), 
-      $this->verify($m, new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner')))
+      ['R401', 'Non-abstract methods must have a body Runner::run'], 
+      $this->verify($m, new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Runner')))
     );
   }
 
   #[@test]
   public function extensionMethodsMustBeStatic() {
-    $m= new MethodNode(array(
+    $m= new MethodNode([
       'name'        => 'equal',
       'modifiers'   => MODIFIER_PUBLIC,
       'returns'     => TypeName::$VOID,
-      'parameters'  => array(
-        array('name' => 'in', 'type' => new TypeName('string')),
-        array('name' => 'cmp', 'type' => new TypeName('string')),
-      ),
+      'parameters'  => [
+        ['name' => 'in', 'type' => new TypeName('string')],
+        ['name' => 'cmp', 'type' => new TypeName('string')],
+      ],
       'extension'   => true,
-      'body'        => array()
-    ));
+      'body'        => []
+    ]);
     $this->assertEquals(
-      array('E403', 'Extension methods must be static Runner::equal'), 
-      $this->verify($m, new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner')))
+      ['E403', 'Extension methods must be static Runner::equal'], 
+      $this->verify($m, new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Runner')))
     );
   }
 
   #[@test]
   public function extensionMethods() {
-    $m= new MethodNode(array(
+    $m= new MethodNode([
       'name'        => 'equal',
       'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'returns'     => TypeName::$VOID,
-      'parameters'  => array(
-        array('name' => 'in', 'type' => new TypeName('string')),
-        array('name' => 'cmp', 'type' => new TypeName('string')),
-      ),
+      'parameters'  => [
+        ['name' => 'in', 'type' => new TypeName('string')],
+        ['name' => 'cmp', 'type' => new TypeName('string')],
+      ],
       'extension'   => true,
-      'body'        => array()
-    ));
+      'body'        => []
+    ]);
     $this->assertNull(
-      $this->verify($m, new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner')))
+      $this->verify($m, new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Runner')))
     );
   }
 }

@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\syntax\xp;
 
+use text\parser\generic\ParseException;
 use xp\compiler\syntax\xp\Lexer;
 use xp\compiler\syntax\xp\Parser;
 use xp\compiler\ast\ClassConstantNode;
@@ -30,7 +31,7 @@ class ClassConstantsTest extends ParserTestCase {
   #[@test]
   public function stringConstant() {
     $this->assertEquals(
-      array(new ClassConstantNode('GET', new TypeName('string'), new StringNode('GET'))),
+      [new ClassConstantNode('GET', new TypeName('string'), new StringNode('GET'))],
       $this->parse('class HttpMethods { const string GET = "GET"; }')
     );
   }
@@ -42,7 +43,7 @@ class ClassConstantsTest extends ParserTestCase {
   #[@test]
   public function intConstant() {
     $this->assertEquals(
-      array(new ClassConstantNode('THRESHHOLD', new TypeName('int'), new IntegerNode('5'))),
+      [new ClassConstantNode('THRESHHOLD', new TypeName('int'), new IntegerNode('5'))],
       $this->parse('class Policy { const int THRESHHOLD = 5; }')
     );
   }
@@ -54,7 +55,7 @@ class ClassConstantsTest extends ParserTestCase {
   #[@test]
   public function varConstant() {
     $this->assertEquals(
-      array(new ClassConstantNode('EMPTYNESS', new TypeName('var'), new NullNode())),
+      [new ClassConstantNode('EMPTYNESS', new TypeName('var'), new NullNode())],
       $this->parse('class Example { const var EMPTYNESS = null; }')
     );
   }
@@ -63,7 +64,7 @@ class ClassConstantsTest extends ParserTestCase {
    * Test constant cannot be initialized to an object
    *
    */
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(ParseException::class)]
   public function constantsCanOnlyBePrimitives() {
     $this->parse('class Policy { const var THRESHHOLD = new Object(); }');
   }
@@ -72,7 +73,7 @@ class ClassConstantsTest extends ParserTestCase {
    * Test constant cannot be initialized to an object
    *
    */
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(ParseException::class)]
   public function noArraysAllowed() {
     $this->parse('class Numb3rs { const var[] FIRST_THREE = [1, 2, 3]; }');
   }
@@ -81,7 +82,7 @@ class ClassConstantsTest extends ParserTestCase {
    * Test constant cannot be initialized to an object
    *
    */
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(ParseException::class)]
   public function noMapsAllowed() {
     $this->parse('class Numb3rs { const [:var] FIRST_THREE = [1: "One", 2: "Two", 3: "Three"]; }');
   }

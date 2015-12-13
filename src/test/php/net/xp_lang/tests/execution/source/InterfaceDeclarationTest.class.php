@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
+use lang\FormatException;
 use lang\Primitive;
 use lang\XPClass;
 
@@ -48,7 +49,7 @@ class InterfaceDeclarationTest extends ExecutionTest {
    *
    * TODO: This should throw a CompilationException
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function interfacesMayNotHaveFields() {
     self::define('interface', 'WithField', null, '{
       public int $field = 0;
@@ -60,7 +61,7 @@ class InterfaceDeclarationTest extends ExecutionTest {
    *
    * TODO: This should throw a CompilationException
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function interfacesMayNotHaveProperties() {
     self::define('interface', 'WithProperty', null, '{
       public int property { get { return 0; } }
@@ -72,7 +73,7 @@ class InterfaceDeclarationTest extends ExecutionTest {
    *
    * TODO: This should throw a CompilationException
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function interfaceMethodsMayNotContainBody() {
     self::define('interface', 'WithMethod', null, '{
       public int method() {
@@ -91,8 +92,8 @@ class InterfaceDeclarationTest extends ExecutionTest {
       public bool accept(T $element);
     }');
     $this->assertTrue($class->isGenericDefinition());
-    $this->assertEquals(array('T'), $class->genericComponents());
+    $this->assertEquals(['T'], $class->genericComponents());
 
-    $this->assertEquals(array('params' => 'T'), $class->getMethod('accept')->getAnnotation('generic'));
+    $this->assertEquals(['params' => 'T'], $class->getMethod('accept')->getAnnotation('generic'));
   }
 }

@@ -181,7 +181,7 @@ class TypeTest extends \unittest\TestCase {
     $this->assertEquals(new TypeName('String'), $m->returns);
     $this->assertEquals(MODIFIER_PUBLIC, $m->modifiers);
     $this->assertEquals(
-      array(new Parameter('start', new TypeName('int')), new Parameter('len', new TypeName('int'))),
+      [new Parameter('start', new TypeName('int')), new Parameter('len', new TypeName('int'))],
       $m->parameters
     );
   }
@@ -199,7 +199,7 @@ class TypeTest extends \unittest\TestCase {
     $this->assertEquals(new TypeName('Complex'), $m->returns);
     $this->assertEquals(MODIFIER_PUBLIC | MODIFIER_STATIC, $m->modifiers);
     $this->assertEquals(
-      array(new Parameter('a', new TypeName('Complex')), new Parameter('b', new TypeName('Complex'))),
+      [new Parameter('a', new TypeName('Complex')), new Parameter('b', new TypeName('Complex'))],
       $m->parameters
     );
   }
@@ -216,7 +216,7 @@ class TypeTest extends \unittest\TestCase {
     $this->assertEquals('color', $m->name);
     $this->assertEquals(new TypeName('string'), $m->returns);
     $this->assertEquals(MODIFIER_PUBLIC, $m->modifiers);
-    $this->assertEquals(array(), $m->parameters);
+    $this->assertEquals([], $m->parameters);
   }
 
   #[@test]

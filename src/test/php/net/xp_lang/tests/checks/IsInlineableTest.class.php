@@ -33,47 +33,47 @@ class IsInlineableTest extends \unittest\TestCase {
   #[@test]
   public function oneLineMethodIsInlineable() {
     $this->assertNull(
-      $this->verify(new MethodNode(array(
+      $this->verify(new MethodNode([
         'modifiers'   => MODIFIER_INLINE,
         'name'        => 'inc',
-        'parameters'  => array(array('name' => 'in')),
-        'body'        => array(
+        'parameters'  => [['name' => 'in']],
+        'body'        => [
           new ReturnNode(
-            new UnaryOpNode(array('op' => '++', 'postfix' => false, 'expression' => new VariableNode('in')))
+            new UnaryOpNode(['op' => '++', 'postfix' => false, 'expression' => new VariableNode('in')])
           )
-        )
-      )))
+        ]
+      ]))
     );
   }
 
   #[@test]
   public function ifInsideMethodIsNotInlineable() {
     $this->assertEquals(
-      array('I403', 'Only one-line return statements can be inlined: inc()'),
-      $this->verify(new MethodNode(array(
+      ['I403', 'Only one-line return statements can be inlined: inc()'],
+      $this->verify(new MethodNode([
         'modifiers'   => MODIFIER_INLINE,
         'name'        => 'inc',
-        'parameters'  => array(array('name' => 'in')),
-        'body'        => array(
-          new IfNode(array('condition' => new VariableNode('in')))
-        )
-      )))
+        'parameters'  => [['name' => 'in']],
+        'body'        => [
+          new IfNode(['condition' => new VariableNode('in')])
+        ]
+      ]))
     );
   }
 
   #[@test]
   public function twoLineMethodIsNotInlineable() {
     $this->assertEquals(
-      array('I402', 'Only one-liners can be inlined: inc() has 2 statements'),
-      $this->verify(new MethodNode(array(
+      ['I402', 'Only one-liners can be inlined: inc() has 2 statements'],
+      $this->verify(new MethodNode([
         'modifiers'   => MODIFIER_INLINE,
         'name'        => 'inc',
-        'parameters'  => array(array('name' => 'in')),
-        'body'        => array(
-          new UnaryOpNode(array('op' => '++', 'postfix' => true, 'expression' => new VariableNode('in'))),
+        'parameters'  => [['name' => 'in']],
+        'body'        => [
+          new UnaryOpNode(['op' => '++', 'postfix' => true, 'expression' => new VariableNode('in')]),
           new ReturnNode(new VariableNode('in'))
-        )
-      )))
+        ]
+      ]))
     );
   }
 }

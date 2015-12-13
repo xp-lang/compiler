@@ -1,5 +1,7 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
+use lang\Object;
+use util\Date;
 use lang\XPClass;
 
 /**
@@ -28,7 +30,7 @@ class DefaultArgsTest extends ExecutionTest {
    */
   #[@test]
   public function omitted() {
-    $this->assertEquals(array(1, 2), $this->fixtureClass()->newInstance(1)->values);
+    $this->assertEquals([1, 2], $this->fixtureClass()->newInstance(1)->values);
   }
 
   /**
@@ -37,7 +39,7 @@ class DefaultArgsTest extends ExecutionTest {
    */
   #[@test]
   public function passed() {
-    $this->assertEquals(array(1, 2), $this->fixtureClass()->newInstance(1, 2)->values);
+    $this->assertEquals([1, 2], $this->fixtureClass()->newInstance(1, 2)->values);
   }
 
   /**
@@ -46,7 +48,7 @@ class DefaultArgsTest extends ExecutionTest {
    */
   #[@test]
   public function overridden() {
-    $this->assertEquals(array(2, 3), $this->fixtureClass()->newInstance(2, 3)->values);
+    $this->assertEquals([2, 3], $this->fixtureClass()->newInstance(2, 3)->values);
   }
 
   /**
@@ -61,8 +63,8 @@ class DefaultArgsTest extends ExecutionTest {
       }
     }');
     with ($i= $class->getMethod('newInstance')); {
-      $this->assertInstanceOf('lang.Object', $i->invoke(null, array()));
-      $this->assertInstanceOf('util.Date', $i->invoke(null, array(XPClass::forName('util.Date'))));
+      $this->assertInstanceOf(Object::class, $i->invoke(null, []));
+      $this->assertInstanceOf(Date::class, $i->invoke(null, [XPClass::forName('util.Date')]));
     }
   }
 }

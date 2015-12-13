@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\optimization;
 
+use xp\compiler\optimize\Optimization;
 use xp\compiler\optimize\Optimizations;
 use xp\compiler\types\MethodScope;
 use xp\compiler\ast\StringNode;
@@ -15,7 +16,7 @@ class OptimizationsTest extends \unittest\TestCase {
   protected $scope= null;
   
   static function __static() {
-    self::$optimization= newinstance('xp.compiler.optimize.Optimization', array(), '{
+    self::$optimization= newinstance(Optimization::class, [], '{
       public function node() { 
         return \lang\XPClass::forName("xp.compiler.ast.StringNode"); 
       }

@@ -59,10 +59,10 @@ class OperationEnumDeclarationTest extends ExecutionTest {
    * @return  var[]
    */
   public function members() {
-    return array(
-      array('plus', 0),
-      array('minus', 1)
-    );
+    return [
+      ['plus', 0],
+      ['minus', 1]
+    ];
   }
 
   #[@test, @values('members')]

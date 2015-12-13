@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
+use util\Date;
 use lang\XPClass;
 use net\xp_lang\tests\StringBuffer;
 
@@ -33,7 +34,7 @@ class MemberInitTest extends ExecutionTest {
    */
   #[@test]
   public function toEmptyArray() {
-    $this->assertEquals(array(), $this->newInstance('{ public Object[] $images= []; }')->images);
+    $this->assertEquals([], $this->newInstance('{ public Object[] $images= []; }')->images);
   }
 
   /**
@@ -42,7 +43,7 @@ class MemberInitTest extends ExecutionTest {
    */
   #[@test]
   public function toNonEmptyArray() {
-    $this->assertEquals(array(1, 2, 3), $this->newInstance('{ public int[] $list= [1, 2, 3]; }')->list);
+    $this->assertEquals([1, 2, 3], $this->newInstance('{ public int[] $list= [1, 2, 3]; }')->list);
   }
 
   /**
@@ -51,7 +52,7 @@ class MemberInitTest extends ExecutionTest {
    */
   #[@test]
   public function toNonEmptyMap() {
-    $this->assertEquals(array('one' => 'two'), $this->newInstance('{ public [:string] $map= [ one : "two"]; }')->map);
+    $this->assertEquals(['one' => 'two'], $this->newInstance('{ public [:string] $map= [ one : "two"]; }')->map);
   }
 
   /**
@@ -62,7 +63,7 @@ class MemberInitTest extends ExecutionTest {
   #[@test]
   public function toMapOfObjects() {
     $this->assertEquals(
-      array('one' => new StringBuffer('one')),
+      ['one' => new StringBuffer('one')],
       $this->newInstance('{ public [:net.xp_lang.tests.StringBuffer] $map= [ one : new net.xp_lang.tests.StringBuffer("one") ]; }')->map
     );
   }
@@ -75,7 +76,7 @@ class MemberInitTest extends ExecutionTest {
   #[@test]
   public function toArrayOfObjects() {
     $this->assertEquals(
-      array(new StringBuffer('one')),
+      [new StringBuffer('one')],
       $this->newInstance('{ public net.xp_lang.tests.StringBuffer[] $list= [new net.xp_lang.tests.StringBuffer("one")]; }')->list
     );
   }
@@ -158,7 +159,7 @@ class MemberInitTest extends ExecutionTest {
    */
   #[@test]
   public function toNewInstance() {
-    $this->assertInstanceOf('util.Date', $this->newInstance('{ public util.Date $now= new util.Date(); }')->now);
+    $this->assertInstanceOf(Date::class, $this->newInstance('{ public util.Date $now= new util.Date(); }')->now);
   }
 
   /**

@@ -37,7 +37,7 @@ class VariablesTest extends ExecutionTest {
    */
   #[@test]
   public function duplicate() {
-    $this->assertEquals(array(1, 1), $this->run('$a= $b= 1; return [$a, $b];'));
+    $this->assertEquals([1, 1], $this->run('$a= $b= 1; return [$a, $b];'));
   }
 
   /**
@@ -46,7 +46,7 @@ class VariablesTest extends ExecutionTest {
    */
   #[@test]
   public function triple() {
-    $this->assertEquals(array(1, 1, 1), $this->run('$a= $b= $c= 1; return [$a, $b, $c];'));
+    $this->assertEquals([1, 1, 1], $this->run('$a= $b= $c= 1; return [$a, $b, $c];'));
   }
 
   /**

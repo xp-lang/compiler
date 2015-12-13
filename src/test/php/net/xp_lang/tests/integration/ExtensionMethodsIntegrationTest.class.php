@@ -53,7 +53,7 @@ class ExtensionMethodsIntegrationTest extends \unittest\TestCase {
       Runtime::getInstance()->startupOptions()->withClassPath(self::$temp->getURI()),
       'class', 
       'net.xp_lang.tests.integration.ExtensionMethodsIntegrationTestFixture',
-      array()
+      []
     );
     $p->in->write($source."\n");
     $p->in->close();

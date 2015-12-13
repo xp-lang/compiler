@@ -36,58 +36,58 @@ class LocalsToMemberPromoterTest extends \unittest\TestCase {
 
   #[@test]
   public function basic() {
-    $assignment= new AssignmentNode(array(
+    $assignment= new AssignmentNode([
       'variable'      => new VariableNode('i'),
       'expression'    => new IntegerNode('0'),
       'op'            => '='
-    ));
+    ]);
     $promoted= $this->fixture->promote($assignment);
-    $this->assertEquals(array('$i' => $this->memberNode('i')), $promoted['replaced']);
+    $this->assertEquals(['$i' => $this->memberNode('i')], $promoted['replaced']);
     $this->assertEquals(
-      new AssignmentNode(array(
+      new AssignmentNode([
         'variable'      => $this->memberNode('i'),
         'expression'    => new IntegerNode('0'),
         'op'            => '='
-      )),
+      ]),
       $promoted['node']
     );
   }
 
   #[@test]
   public function withExclusion() {
-    $assignment= new AssignmentNode(array(
+    $assignment= new AssignmentNode([
       'variable'      => new VariableNode('i'),
       'expression'    => new VariableNode('a'),
       'op'            => '='
-    ));
+    ]);
     $this->fixture->exclude('a');
     $promoted= $this->fixture->promote($assignment);
-    $this->assertEquals(array('$i' => $this->memberNode('i')), $promoted['replaced']);
+    $this->assertEquals(['$i' => $this->memberNode('i')], $promoted['replaced']);
     $this->assertEquals(
-      new AssignmentNode(array(
+      new AssignmentNode([
         'variable'      => $this->memberNode('i'),
         'expression'    => new VariableNode('a'),
         'op'            => '='
-      )),
+      ]),
       $promoted['node']
     );
   }
 
   #[@test]
   public function memberNodesArentTouched() {
-    $assignment= new AssignmentNode(array(
+    $assignment= new AssignmentNode([
       'variable'      => new VariableNode('i'),
       'expression'    => $this->memberNode('i'),
       'op'            => '='
-    ));
+    ]);
     $promoted= $this->fixture->promote($assignment);
-    $this->assertEquals(array('$i' => $this->memberNode('i')), $promoted['replaced']);
+    $this->assertEquals(['$i' => $this->memberNode('i')], $promoted['replaced']);
     $this->assertEquals(
-      new AssignmentNode(array(
+      new AssignmentNode([
         'variable'      => $this->memberNode('i'),
         'expression'    => $this->memberNode('i'),
         'op'            => '='
-      )),
+      ]),
       $promoted['node']
     );
   }

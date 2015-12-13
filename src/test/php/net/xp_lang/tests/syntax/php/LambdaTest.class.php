@@ -14,11 +14,11 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function noParameters() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(),
-        array(new ReturnNode(new BooleanNode(true))),
-        array()
-      )), 
+      [new LambdaNode(
+        [],
+        [new ReturnNode(new BooleanNode(true))],
+        []
+      )], 
       $this->parse('function() { return true; };')
     );
   }
@@ -26,15 +26,15 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function oneParameter() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(['name' => 'a']),
-        array(new ReturnNode(new BinaryOpNode(array(
+      [new LambdaNode(
+        [['name' => 'a']],
+        [new ReturnNode(new BinaryOpNode([
           'lhs' => new VariableNode('a'),
           'rhs' => new IntegerNode('1'),
           'op'  => '+'
-        )))),
-        array()
-      )), 
+        ]))],
+        []
+      )], 
       $this->parse('function($a) { return $a + 1; };')
     );
   }
@@ -42,15 +42,15 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function twoParameters() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(['name' => 'a'], ['name' => 'b']),
-        array(new ReturnNode(new BinaryOpNode(array(
+      [new LambdaNode(
+        [['name' => 'a'], ['name' => 'b']],
+        [new ReturnNode(new BinaryOpNode([
           'lhs' => new VariableNode('a'),
           'rhs' => new VariableNode('b'),
           'op'  => '+'
-        )))),
-        array()
-      )), 
+        ]))],
+        []
+      )], 
       $this->parse('function($a, $b) { return $a + $b; };')
     );
   }
@@ -58,11 +58,11 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function withUses() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(['name' => 'a']),
-        array(/* TBI */),
-        array(['name' => 'mul'], ['name' => 'neg'])
-      )), 
+      [new LambdaNode(
+        [['name' => 'a']],
+        [/* TBI */],
+        [['name' => 'mul'], ['name' => 'neg']]
+      )], 
       $this->parse('function($a) use($mul, $neg) { /* TBI */ };')
     );
   }
@@ -70,14 +70,14 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function invocation() {
     $this->assertEquals(
-      array(new InstanceCallNode(
+      [new InstanceCallNode(
         new BracedExpressionNode(new LambdaNode(
-          array(['name' => 'a'], ['name' => 'b']),
-          array(/* TBI */),
-          array()
+          [['name' => 'a'], ['name' => 'b']],
+          [/* TBI */],
+          []
         )),
-        array(new IntegerNode('1'), new IntegerNode('2'))
-      )),
+        [new IntegerNode('1'), new IntegerNode('2')]
+      )],
       $this->parse('(function($a, $b) { /* TBI */ })(1, 2);')
     );
   }

@@ -17,7 +17,7 @@ class GenericTypeTest extends \unittest\TestCase {
   private function newGenericHashTableType() {
     return new GenericType(
       new TypeReflection(XPClass::forName('util.collections.HashTable')), 
-      array(new TypeName('string'), new TypeName('lang.Object'))
+      [new TypeName('string'), new TypeName('lang.Object')]
     );
   }    
 
@@ -29,7 +29,7 @@ class GenericTypeTest extends \unittest\TestCase {
   private function newGenericVectorType() {
     return new GenericType(
       new TypeReflection(XPClass::forName('util.collections.Vector')), 
-      array(new TypeName('string'))
+      [new TypeName('string')]
     );
   }    
 
@@ -60,32 +60,32 @@ class GenericTypeTest extends \unittest\TestCase {
   #[@test]
   public function rewriteGenericListTypeWithPlaceholder() {
     $this->assertEquals(
-      new TypeName('List', array(new TypeName('string'))),
-      $this->newGenericHashTableType()->rewrite(new TypeName('List', array(new TypeName('K'))))
+      new TypeName('List', [new TypeName('string')]),
+      $this->newGenericHashTableType()->rewrite(new TypeName('List', [new TypeName('K')]))
     );
   }
 
   #[@test]
   public function rewriteGenericListTypeWithoutPlaceholder() {
     $this->assertEquals(
-      new TypeName('List', array(new TypeName('int'))),
-      $this->newGenericHashTableType()->rewrite(new TypeName('List', array(new TypeName('int'))))
+      new TypeName('List', [new TypeName('int')]),
+      $this->newGenericHashTableType()->rewrite(new TypeName('List', [new TypeName('int')]))
     );
   }
 
   #[@test]
   public function rewriteGenericMapTypeBothPlaceholders() {
     $this->assertEquals(
-      new TypeName('Map', array(new TypeName('string'), new TypeName('lang.Object'))),
-      $this->newGenericHashTableType()->rewrite(new TypeName('Map', array(new TypeName('K'), new TypeName('V'))))
+      new TypeName('Map', [new TypeName('string'), new TypeName('lang.Object')]),
+      $this->newGenericHashTableType()->rewrite(new TypeName('Map', [new TypeName('K'), new TypeName('V')]))
     );
   }
 
   #[@test]
   public function rewriteGenericMapTypeOnePlaceholder() {
     $this->assertEquals(
-      new TypeName('Map', array(new TypeName('string'), new TypeName('int'))),
-      $this->newGenericHashTableType()->rewrite(new TypeName('Map', array(new TypeName('K'), new TypeName('int'))))
+      new TypeName('Map', [new TypeName('string'), new TypeName('int')]),
+      $this->newGenericHashTableType()->rewrite(new TypeName('Map', [new TypeName('K'), new TypeName('int')]))
     );
   }
 
@@ -123,7 +123,7 @@ class GenericTypeTest extends \unittest\TestCase {
   #[@test]
   public function hashTableGetMethodParameters() {
     $this->assertEquals(
-      array(new Parameter('key', new TypeName('string'))),
+      [new Parameter('key', new TypeName('string'))],
       $this->newGenericHashTableType()->getMethod('get')->parameters
     );
   }
@@ -151,7 +151,7 @@ class GenericTypeTest extends \unittest\TestCase {
   #[@test]
   public function vectorGetMethodParameters() {
     $this->assertEquals(
-      array(new Parameter('index', new TypeName('int'))),
+      [new Parameter('index', new TypeName('int'))],
       $this->newGenericVectorType()->getMethod('get')->parameters
     );
   }

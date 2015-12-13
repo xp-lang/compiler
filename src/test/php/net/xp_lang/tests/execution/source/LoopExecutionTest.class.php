@@ -12,7 +12,7 @@ class LoopExecutionTest extends ExecutionTest {
    */
   #[@test]
   public function foreachLoop() {
-    $this->assertEquals(array(1, 2, 3), $this->run('
+    $this->assertEquals([1, 2, 3], $this->run('
       $r= []; 
       foreach ($arg in [1, 2, 3]) { $r[]= $arg; } 
       return $r;
@@ -34,7 +34,7 @@ class LoopExecutionTest extends ExecutionTest {
    */
   #[@test]
   public function whileLoop() {
-    $this->assertEquals(array(1, 2, 3), $this->run('
+    $this->assertEquals([1, 2, 3], $this->run('
       $r= []; $s= 1;
       while ($s <= 3) { $r[]= $s++; } 
       return $r;
@@ -56,7 +56,7 @@ class LoopExecutionTest extends ExecutionTest {
    */
   #[@test]
   public function doLoop() {
-    $this->assertEquals(array(1, 2, 3), $this->run('
+    $this->assertEquals([1, 2, 3], $this->run('
       $r= []; $s= 1;
       do { $r[]= $s++; } while ($s < 4);
       return $r;
@@ -78,7 +78,7 @@ class LoopExecutionTest extends ExecutionTest {
    */
   #[@test]
   public function forLoop() {
-    $this->assertEquals(array(1, 2, 3), $this->run('
+    $this->assertEquals([1, 2, 3], $this->run('
       $r= [];
       for ($s= 1; $s <= 3; $s++) {
         $r[]= $s;

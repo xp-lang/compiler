@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\types;
 
+use xp\compiler\types\Constructor;
 use xp\compiler\types\TypeReflection;
 use xp\compiler\types\TypeName;
 use xp\compiler\types\Parameter;
@@ -56,7 +57,7 @@ class TypeReflectionTest extends \unittest\TestCase {
   #[@test]
   public function testCaseClassConstructor() {
     $decl= new TypeReflection(XPClass::forName('unittest.TestCase'));
-    $this->assertInstanceOf('xp.compiler.types.Constructor', $decl->getConstructor());
+    $this->assertInstanceOf(Constructor::class, $decl->getConstructor());
   }
 
   #[@test]
@@ -175,7 +176,7 @@ class TypeReflectionTest extends \unittest\TestCase {
   #[@test]
   public function objectClassHasNoExtensionMethods() {
     $this->assertEquals(
-      array(), 
+      [], 
       (new TypeReflection(XPClass::forName('lang.Object')))->getExtensions()
     );
   }
@@ -209,37 +210,37 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function parameter_with_array_default() {
-    $cl= ClassLoader::defineClass('TypeReflectionTest_'.$this->name, 'lang.Object', array(), '{
+    $cl= ClassLoader::defineClass('TypeReflectionTest_'.$this->name, 'lang.Object', [], '{
       /** @param string[] param */
       public function fixture($param= array()) { }
     }');
     $this->assertEquals(
-      new Parameter('param', new TypeName('string[]'), new \xp\compiler\ast\ArrayNode(array(
+      new Parameter('param', new TypeName('string[]'), new \xp\compiler\ast\ArrayNode([
         'type'   => new TypeName('string[]'),
-        'values' => array()
-      ))),
+        'values' => []
+      ])),
       (new TypeReflection($cl))->getMethod('fixture')->parameters[0]
     );
   }
 
   #[@test]
   public function parameter_with_map_default() {
-    $cl= ClassLoader::defineClass('TypeReflectionTest_'.$this->name, 'lang.Object', array(), '{
+    $cl= ClassLoader::defineClass('TypeReflectionTest_'.$this->name, 'lang.Object', [], '{
       /** @param [:string] param */
       public function fixture($param= array()) { }
     }');
     $this->assertEquals(
-      new Parameter('param', new TypeName('[:string]'), new \xp\compiler\ast\MapNode(array(
+      new Parameter('param', new TypeName('[:string]'), new \xp\compiler\ast\MapNode([
         'type'     => new TypeName('[:string]'),
-        'elements' => array()
-      ))),
+        'elements' => []
+      ])),
       (new TypeReflection($cl))->getMethod('fixture')->parameters[0]
     );
   }
 
   #[@test]
   public function enumMemberType() {
-    $cl= ClassLoader::defineClass('TypeReflectionTest_Enum', 'lang.Enum', array(), '{
+    $cl= ClassLoader::defineClass('TypeReflectionTest_Enum', 'lang.Enum', [], '{
       public static $a= 0, $b;
     }');
     $this->assertEquals(
@@ -250,7 +251,7 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function abstractEnumMemberType() {
-    $cl= ClassLoader::defineClass('TypeReflectionTest_AbstractEnum', 'lang.Enum', array(), '{
+    $cl= ClassLoader::defineClass('TypeReflectionTest_AbstractEnum', 'lang.Enum', [], '{
       public static $a, $b;
 
       static function __static() {
@@ -273,7 +274,7 @@ class TypeReflectionTest extends \unittest\TestCase {
   #[@test]
   public function generic_return_type() {
     $this->assertEquals(
-      new TypeName('self', array(new TypeName('R'))),
+      new TypeName('self', [new TypeName('R')]),
       (new TypeReflection(XPClass::forName('net.xp_lang.tests.integration.Sequence')))->getMethod('of')->returns
     );
   }

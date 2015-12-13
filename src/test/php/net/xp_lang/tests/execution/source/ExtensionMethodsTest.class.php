@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
+use lang\FormatException;
 use lang\XPClass;
 
 /**
@@ -82,7 +83,7 @@ class ExtensionMethodsTest extends ExecutionTest {
     }');
     $instance= $class->newInstance();
     $this->assertEquals(
-      array('hashCode', 'equals', 'getClassName', 'getClass', 'toString'),
+      ['hashCode', 'equals', 'getClassName', 'getClass', 'toString'],
       $instance->run(XPClass::forName('lang.Object'))
     );
   }
@@ -108,8 +109,8 @@ class ExtensionMethodsTest extends ExecutionTest {
     }');
     $instance= $class->newInstance();
     $this->assertEquals(
-      array(XPClass::forName('lang.Object')->hashCode(), XPClass::forName('lang.Generic')->hashCode()),
-      $instance->run(array(XPClass::forName('lang.Object'), XPClass::forName('lang.Generic')))
+      [XPClass::forName('lang.Object')->hashCode(), XPClass::forName('lang.Generic')->hashCode()],
+      $instance->run([XPClass::forName('lang.Object'), XPClass::forName('lang.Generic')])
     );
   }
 
@@ -134,8 +135,8 @@ class ExtensionMethodsTest extends ExecutionTest {
     }');
     $instance= $class->newInstance();
     $this->assertEquals(
-      array('color', 'name', 'model'),
-      $instance->run(array('color' => 'black', 'name' => 'Camera', 'model' => '500'))
+      ['color', 'name', 'model'],
+      $instance->run(['color' => 'black', 'name' => 'Camera', 'model' => '500'])
     );
   }
 
@@ -160,8 +161,8 @@ class ExtensionMethodsTest extends ExecutionTest {
     }');
     $instance= $class->newInstance();
     $this->assertEquals(
-      array(XPClass::forName('lang.Object'), $this->getClass()),
-      $instance->run(array('object' => XPClass::forName('lang.Object'), 'self' => $this->getClass()))
+      [XPClass::forName('lang.Object'), $this->getClass()],
+      $instance->run(['object' => XPClass::forName('lang.Object'), 'self' => $this->getClass()])
     );
   }
 
@@ -188,11 +189,11 @@ class ExtensionMethodsTest extends ExecutionTest {
         }
         return $r;
       }
-    }', array('package demo;'));
+    }', ['package demo;']);
 
     $r= $this->run(
       'return '.$class->getName().'::class.fieldsNamed(text.regex.Pattern::compile("_.*"));', 
-      array('import '.$class->getName().';')
+      ['import '.$class->getName().';']
     );
   }
 
@@ -200,7 +201,7 @@ class ExtensionMethodsTest extends ExecutionTest {
    * Test extension methods must be static
    *
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function nonStaticMethod() {
     self::define('class', 'StringIncorrectExtension', null, '{
       public bool equal(this string $in, string $cmp, bool $strict) {

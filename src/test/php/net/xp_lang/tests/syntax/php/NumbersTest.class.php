@@ -37,11 +37,11 @@ class NumbersTest extends ParserTestCase {
   #[@test]
   public function php_bug_61256_0x0_plus_1() {
     $this->assertEquals(
-      array(new BinaryOpNode(array(
+      [new BinaryOpNode([
         'lhs' => new HexNode('0x0'), 
         'rhs' => new IntegerNode('1'), 
         'op'  => '+'
-      ))),
+      ])],
       $this->parse('0x0+1;')
     );
   }
@@ -49,11 +49,11 @@ class NumbersTest extends ParserTestCase {
   #[@test]
   public function php_bug_61256_0x0_minus_1() {
     $this->assertEquals(
-      array(new BinaryOpNode(array(
+      [new BinaryOpNode([
         'lhs' => new HexNode('0x0'), 
         'rhs' => new IntegerNode('1'), 
         'op'  => '-'
-      ))),
+      ])],
       $this->parse('0x0-1;')
     );
   }
@@ -61,11 +61,11 @@ class NumbersTest extends ParserTestCase {
   #[@test]
   public function php_bug_61095_0x00_plus_2() {
     $this->assertEquals(
-      array(new BinaryOpNode(array(
+      [new BinaryOpNode([
         'lhs' => new HexNode('0x00'), 
         'rhs' => new IntegerNode('2'), 
         'op'  => '+'
-      ))),
+      ])],
       $this->parse('0x00+2;')
     );
   }
@@ -73,11 +73,11 @@ class NumbersTest extends ParserTestCase {
   #[@test]
   public function php_bug_61095_0x00_plus_0x02() {
     $this->assertEquals(
-      array(new BinaryOpNode(array(
+      [new BinaryOpNode([
         'lhs' => new HexNode('0x00'), 
         'rhs' => new HexNode('0x02'), 
         'op'  => '+'
-      ))),
+      ])],
       $this->parse('0x00+0x02;')
     );
   }
@@ -85,11 +85,11 @@ class NumbersTest extends ParserTestCase {
   #[@test]
   public function hex_add_0x0_plus_2_with_space() {
     $this->assertEquals(
-      array(new BinaryOpNode(array(
+      [new BinaryOpNode([
         'lhs' => new HexNode('0x0'), 
         'rhs' => new IntegerNode('2'), 
         'op'  => '+'
-      ))),
+      ])],
       $this->parse('0x0+ 2;')
     );
   }
@@ -97,28 +97,28 @@ class NumbersTest extends ParserTestCase {
   #[@test]
   public function hex_add_0x0_plus_2() {
     $this->assertEquals(
-      array(new BinaryOpNode(array(
+      [new BinaryOpNode([
         'lhs' => new HexNode('0x0'), 
         'rhs' => new IntegerNode('2'), 
         'op'  => '+'
-      ))),
+      ])],
       $this->parse('0x0+2;')
     );
   }
 
   #[@test]
   public function octal_zero() {
-    $this->assertEquals(array(new OctalNode('00')), $this->parse('00;'));
+    $this->assertEquals([new OctalNode('00')], $this->parse('00;'));
   }
 
   #[@test]
   public function octal_0000() {
-    $this->assertEquals(array(new OctalNode('0000')), $this->parse('0000;'));
+    $this->assertEquals([new OctalNode('0000')], $this->parse('0000;'));
   }
 
   #[@test]
   public function octal_0777() {
-    $this->assertEquals(array(new OctalNode('0777')), $this->parse('0777;'));
+    $this->assertEquals([new OctalNode('0777')], $this->parse('0777;'));
   }
 
   #[@test, @expect(class= FormatException::class, withMessage= '/Illegal octal/')]
@@ -138,78 +138,78 @@ class NumbersTest extends ParserTestCase {
 
   #[@test]
   public function integer_zero() {
-    $this->assertEquals(array(new IntegerNode('0')), $this->parse('0;'));
+    $this->assertEquals([new IntegerNode('0')], $this->parse('0;'));
   }
 
   #[@test]
   public function integer_huge() {
-    $this->assertEquals(array(new IntegerNode('58635272821786587286382824657568871098287278276543219876543')), $this->parse('58635272821786587286382824657568871098287278276543219876543;'));
+    $this->assertEquals([new IntegerNode('58635272821786587286382824657568871098287278276543219876543')], $this->parse('58635272821786587286382824657568871098287278276543219876543;'));
   }
 
   #[@test]
   public function hex_zero() {
-    $this->assertEquals(array(new HexNode('0x0')), $this->parse('0x0;'));
+    $this->assertEquals([new HexNode('0x0')], $this->parse('0x0;'));
   }
 
   #[@test]
   public function hex_lowercase() {
-    $this->assertEquals(array(new HexNode('0x61ae')), $this->parse('0x61ae;'));
+    $this->assertEquals([new HexNode('0x61ae')], $this->parse('0x61ae;'));
   }
 
   #[@test]
   public function hex_uppercase() {
-    $this->assertEquals(array(new HexNode('0X61AE')), $this->parse('0X61AE;'));
+    $this->assertEquals([new HexNode('0X61AE')], $this->parse('0X61AE;'));
   }
 
 
   #[@test]
   public function hex_mixedcase() {
-    $this->assertEquals(array(new HexNode('0xACe')), $this->parse('0xACe;'));
+    $this->assertEquals([new HexNode('0xACe')], $this->parse('0xACe;'));
   }
 
   #[@test]
   public function decimal_zero() {
-    $this->assertEquals(array(new DecimalNode('0.0')), $this->parse('0.0;'));
+    $this->assertEquals([new DecimalNode('0.0')], $this->parse('0.0;'));
   }
 
   #[@test]
   public function decimal() {
-    $this->assertEquals(array(new DecimalNode('6.100')), $this->parse('6.100;'));
+    $this->assertEquals([new DecimalNode('6.100')], $this->parse('6.100;'));
   }
 
   #[@test]
   public function decimal_exponent_lowercase() {
-    $this->assertEquals(array(new DecimalNode('1e4')), $this->parse('1e4;'));
+    $this->assertEquals([new DecimalNode('1e4')], $this->parse('1e4;'));
   }
 
   #[@test]
   public function decimal_exponent_uppercase() {
-    $this->assertEquals(array(new DecimalNode('1E4')), $this->parse('1E4;'));
+    $this->assertEquals([new DecimalNode('1E4')], $this->parse('1E4;'));
   }
 
   #[@test]
   public function decimal_fraction_exponent_uppercase() {
-    $this->assertEquals(array(new DecimalNode('1.5e4')), $this->parse('1.5e4;'));
+    $this->assertEquals([new DecimalNode('1.5e4')], $this->parse('1.5e4;'));
   }
 
   #[@test]
   public function decimal_exponent_plus() {
-    $this->assertEquals(array(new DecimalNode('1e+4')), $this->parse('1e+4;'));
+    $this->assertEquals([new DecimalNode('1e+4')], $this->parse('1e+4;'));
   }
 
   #[@test]
   public function decimal_exponent_minus() {
-    $this->assertEquals(array(new DecimalNode('1e-4')), $this->parse('1e-4;'));
+    $this->assertEquals([new DecimalNode('1e-4')], $this->parse('1e-4;'));
   }
 
   #[@test]
   public function decimal_fraction_exponent_plus() {
-    $this->assertEquals(array(new DecimalNode('1.5e+4')), $this->parse('1.5e+4;'));
+    $this->assertEquals([new DecimalNode('1.5e+4')], $this->parse('1.5e+4;'));
   }
 
   #[@test]
   public function decimal_fraction_exponent_minus() {
-    $this->assertEquals(array(new DecimalNode('1.5e-4')), $this->parse('1.5e-4;'));
+    $this->assertEquals([new DecimalNode('1.5e-4')], $this->parse('1.5e-4;'));
   }
 
   #[@test, @expect(class= FormatException::class, withMessage= '/Illegal decimal/')]

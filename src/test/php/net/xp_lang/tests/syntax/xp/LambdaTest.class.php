@@ -22,14 +22,14 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function binary_expression() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(array('name' => 'a')),
-        array(new ReturnNode(new BinaryOpNode(array(
+      [new LambdaNode(
+        [['name' => 'a']],
+        [new ReturnNode(new BinaryOpNode([
           'lhs' => new VariableNode('a'),
           'rhs' => new IntegerNode('1'),
           'op'  => '+'
-        ))))
-      )), 
+        ]))]
+      )], 
       $this->parse('$a -> $a + 1;')
     );
   }
@@ -37,14 +37,14 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function compare_expression() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(array('name' => 'a')),
-        array(new ReturnNode(new ComparisonNode(array(
+      [new LambdaNode(
+        [['name' => 'a']],
+        [new ReturnNode(new ComparisonNode([
           'lhs' => new VariableNode('a'),
           'rhs' => new IntegerNode('1'),
           'op'  => '>'
-        ))))
-      )), 
+        ]))]
+      )], 
       $this->parse('$a -> $a > 1;')
     );
   }
@@ -52,14 +52,14 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function statement_inside_block() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(array('name' => 'a')),
-        array(new ReturnNode(new BinaryOpNode(array(
+      [new LambdaNode(
+        [['name' => 'a']],
+        [new ReturnNode(new BinaryOpNode([
           'lhs' => new VariableNode('a'),
           'rhs' => new IntegerNode('1'),
           'op'  => '+'
-        ))))
-      )), 
+        ]))]
+      )], 
       $this->parse('$a -> { return $a + 1; };')
     );
   }
@@ -67,17 +67,17 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function multiple_statements_inside_block() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(array('name' => 'a')),
-        array(
-          new AssignmentNode(array(
+      [new LambdaNode(
+        [['name' => 'a']],
+        [
+          new AssignmentNode([
             'variable'    => new VariableNode('a'),
             'expression'  => new IntegerNode('1'),
             'op'          => '+='
-          )),
+          ]),
           new ReturnNode(new VariableNode('a'))
-        )
-      )), 
+        ]
+      )], 
       $this->parse('$a -> { $a+= 1; return $a; };')
     );
   }
@@ -85,10 +85,10 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function no_statements_inside_block() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(array('name' => 'a')),
-        array()
-      )), 
+      [new LambdaNode(
+        [['name' => 'a']],
+        []
+      )], 
       $this->parse('$a -> { };')
     );
   }
@@ -96,14 +96,14 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function typed_parameter_with_brackets() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(array('name' => 'a', 'type' => new TypeName('int'))),
-        array(new ReturnNode(new BinaryOpNode(array(
+      [new LambdaNode(
+        [['name' => 'a', 'type' => new TypeName('int')]],
+        [new ReturnNode(new BinaryOpNode([
           'lhs' => new VariableNode('a'),
           'rhs' => new IntegerNode('1'),
           'op'  => '+'
-        ))))
-      )), 
+        ]))]
+      )], 
       $this->parse('(int $a) -> { return $a + 1; };')
     );
   }
@@ -111,14 +111,14 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function untyped_parameters_with_brackets() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(array('name' => 'a'), array('name' => 'b')),
-        array(new ReturnNode(new BinaryOpNode(array(
+      [new LambdaNode(
+        [['name' => 'a'], ['name' => 'b']],
+        [new ReturnNode(new BinaryOpNode([
           'lhs' => new VariableNode('a'),
           'rhs' => new VariableNode('b'),
           'op'  => '+'
-        ))))
-      )), 
+        ]))]
+      )], 
       $this->parse('($a, $b) -> { return $a + $b; };')
     );
   }
@@ -126,14 +126,14 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function typed_parameters_with_brackets() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(array('name' => 'a', 'type' => new TypeName('int')), array('name' => 'b', 'type' => new TypeName('int'))),
-        array(new ReturnNode(new BinaryOpNode(array(
+      [new LambdaNode(
+        [['name' => 'a', 'type' => new TypeName('int')], ['name' => 'b', 'type' => new TypeName('int')]],
+        [new ReturnNode(new BinaryOpNode([
           'lhs' => new VariableNode('a'),
           'rhs' => new VariableNode('b'),
           'op'  => '+'
-        ))))
-      )), 
+        ]))]
+      )], 
       $this->parse('(int $a, int $b) -> { return $a + $b; };')
     );
   }
@@ -141,14 +141,14 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function empty_parameters() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(),
-        array(new ReturnNode(new StaticMethodCallNode(
+      [new LambdaNode(
+        [],
+        [new ReturnNode(new StaticMethodCallNode(
           new TypeName('Console'),
           'write', 
-          array(new StringNode('Hello'))
-        )))
-      )), 
+          [new StringNode('Hello')]
+        ))]
+      )], 
       $this->parse('() -> Console::write("Hello");')
     );
   }
@@ -156,14 +156,14 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function invocation() {
     $this->assertEquals(
-      array(new InstanceCallNode(new BracedExpressionNode(new LambdaNode(
-        array(),
-        array(new ReturnNode(new StaticMethodCallNode(
+      [new InstanceCallNode(new BracedExpressionNode(new LambdaNode(
+        [],
+        [new ReturnNode(new StaticMethodCallNode(
           new TypeName('Console'),
           'write', 
-          array(new StringNode('Hello'))
-        )))
-      )))), 
+          [new StringNode('Hello')]
+        ))]
+      )))], 
       $this->parse('(() -> Console::write("Hello"))();')
     );
   }
@@ -171,17 +171,17 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function expression_returning_expression_with_braces() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(array('name' => 'a')),
-        array(new ReturnNode(new BracedExpressionNode(new LambdaNode(
-          array(array('name' => 'a')),
-          array(new ReturnNode(new BinaryOpNode(array(
+      [new LambdaNode(
+        [['name' => 'a']],
+        [new ReturnNode(new BracedExpressionNode(new LambdaNode(
+          [['name' => 'a']],
+          [new ReturnNode(new BinaryOpNode([
             'lhs' => new VariableNode('a'),
             'rhs' => new IntegerNode('1'),
             'op'  => '+'
-          ))))
-        ))))
-      )), 
+          ]))]
+        )))]
+      )], 
       $this->parse('$a -> ($a -> $a + 1);')
     );
   }
@@ -189,17 +189,17 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function expression_returning_expression() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(array('name' => 'a')),
-        array(new ReturnNode(new LambdaNode(
-          array(array('name' => 'a')),
-          array(new ReturnNode(new BinaryOpNode(array(
+      [new LambdaNode(
+        [['name' => 'a']],
+        [new ReturnNode(new LambdaNode(
+          [['name' => 'a']],
+          [new ReturnNode(new BinaryOpNode([
             'lhs' => new VariableNode('a'),
             'rhs' => new IntegerNode('1'),
             'op'  => '+'
-          ))))
-        )))
-      )), 
+          ]))]
+        ))]
+      )], 
       $this->parse('$a -> $a -> $a + 1;')
     );
   }
@@ -207,10 +207,10 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function with_default_value() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(array('name' => 'a', 'type' => new TypeName('string'), 'default' => new NullNode())),
-        array()
-      )), 
+      [new LambdaNode(
+        [['name' => 'a', 'type' => new TypeName('string'), 'default' => new NullNode()]],
+        []
+      )], 
       $this->parse('(string $a= null) -> { };')
     );
   }
@@ -218,10 +218,10 @@ class LambdaTest extends ParserTestCase {
   #[@test]
   public function with_unchecked_default_value() {
     $this->assertEquals(
-      array(new LambdaNode(
-        array(array('name' => 'a', 'type' => new TypeName('string'), 'default' => new NullNode())),
-        array()
-      )), 
+      [new LambdaNode(
+        [['name' => 'a', 'type' => new TypeName('string'), 'default' => new NullNode()]],
+        []
+      )], 
       $this->parse('(string? $a= null) -> { };')
     );
   }

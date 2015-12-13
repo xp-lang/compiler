@@ -52,7 +52,7 @@ class PropertiesOverloadingTest extends ExecutionTest {
         get { return floor($this.seconds / 60) as int; }
         set { $this.seconds= $value * 60; }
       }
-    }', array('import native standard.floor;'));
+    }', ['import native standard.floor;']);
   }
   
   /**

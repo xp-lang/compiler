@@ -40,6 +40,6 @@ class MapTypeOfTest extends \unittest\TestCase {
 
   #[@test]
   public function mapTypeDoesNotHaveExtensions() {
-    $this->assertEquals(array(), $this->fixture->getExtensions());
+    $this->assertEquals([], $this->fixture->getExtensions());
   }
 }

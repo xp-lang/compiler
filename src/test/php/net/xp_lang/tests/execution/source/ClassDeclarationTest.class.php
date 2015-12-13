@@ -35,8 +35,8 @@ class ClassDeclarationTest extends ExecutionTest {
         $this->assertEquals(Type::forName('string[]'), $params[0]->getType());
       }
       
-      $in= array('Hello', 'World');
-      $this->assertEquals($in, $method->invoke(null, array($in)));
+      $in= ['Hello', 'World'];
+      $this->assertEquals($in, $method->invoke(null, [$in]));
     }
   }
 
@@ -72,12 +72,12 @@ class ClassDeclarationTest extends ExecutionTest {
     }');
     
     $this->assertTrue($class->isGenericDefinition());
-    $this->assertEquals(array('T'), $class->genericComponents('generic'));
-    $this->assertEquals(array('params' => 'T', 'return' => 'T'), $class->getMethod('add')->getAnnotation('generic'));
-    $this->assertEquals(array('return' => 'T[]'), $class->getMethod('elements')->getAnnotation('generic'));
+    $this->assertEquals(['T'], $class->genericComponents('generic'));
+    $this->assertEquals(['params' => 'T', 'return' => 'T'], $class->getMethod('add')->getAnnotation('generic'));
+    $this->assertEquals(['return' => 'T[]'], $class->getMethod('elements')->getAnnotation('generic'));
     $this->assertEquals(
-      array('Ciao', 'Salut', 'Hello', 'Hallo', 'Hola'),
-      $class->getMethod('test')->invoke(null, array(array('Hello', 'Hallo', 'Hola')))->elements()
+      ['Ciao', 'Salut', 'Hello', 'Hallo', 'Hola'],
+      $class->getMethod('test')->invoke(null, [['Hello', 'Hallo', 'Hola']])->elements()
     );
   }
 
@@ -88,7 +88,7 @@ class ClassDeclarationTest extends ExecutionTest {
   #[@test]
   public function genericClassExtendingHashTable() {
     $class= self::define('class', 'MapOf<K, V>', 'util.collections.HashTable<K, V>', '{ }');
-    $this->assertEquals(array('self' => 'K, V', 'parent' => 'K, V'), $class->getAnnotation('generic'));
+    $this->assertEquals(['self' => 'K, V', 'parent' => 'K, V'], $class->getAnnotation('generic'));
   }
 
   /**
@@ -101,7 +101,7 @@ class ClassDeclarationTest extends ExecutionTest {
       public string hashCode() { }
       public bool equals(Generic? $cmp) { }
     }');
-    $this->assertEquals(array('self' => 'K, V', 'implements' => array('K, V')), $class->getAnnotation('generic'));
+    $this->assertEquals(['self' => 'K, V', 'implements' => ['K, V']], $class->getAnnotation('generic'));
   }
 
   /**
@@ -111,7 +111,7 @@ class ClassDeclarationTest extends ExecutionTest {
   #[@test]
   public function genericInterfaceExtendingMap() {
     $class= self::define('interface', 'IMapOf<K, V>', 'util.collections.Map<K, V>', '{ }');
-    $this->assertEquals(array('self' => 'K, V', 'extends' => array('K, V')), $class->getAnnotation('generic'));
+    $this->assertEquals(['self' => 'K, V', 'extends' => ['K, V']], $class->getAnnotation('generic'));
   }
 
   /**
@@ -121,7 +121,7 @@ class ClassDeclarationTest extends ExecutionTest {
   #[@test]
   public function genericInterfaceExtendingMapPartially() {
     $class= self::define('interface', 'ITypeMapOf<V>', 'util.collections.Map<lang.Type, V>', '{ }');
-    $this->assertEquals(array('self' => 'V', 'extends' => array('lang.Type, V')), $class->getAnnotation('generic'));
+    $this->assertEquals(['self' => 'V', 'extends' => ['lang.Type, V']], $class->getAnnotation('generic'));
   }
 
   /**
@@ -130,7 +130,7 @@ class ClassDeclarationTest extends ExecutionTest {
    */
   #[@testm]
   public function classInsidePackage() {
-    $class= self::define('class', 'ClassInPackage', null, '{ }', array('package demo;'));
+    $class= self::define('class', 'ClassInPackage', null, '{ }', ['package demo;']);
     $this->assertEquals('demo.SourceClassInPackage', $class->getName());
     $this->assertEquals('demo\\SourceClassInPackage', literal($class->getName()));
   }
@@ -141,7 +141,7 @@ class ClassDeclarationTest extends ExecutionTest {
    */
   #[@test]
   public function packageClassInsidePackage() {
-    $class= self::define('package class', 'PackageClassInPackage', null, '{ }', array('package demo;'));
+    $class= self::define('package class', 'PackageClassInPackage', null, '{ }', ['package demo;']);
     $this->assertEquals('demo.SourcePackageClassInPackage', $class->getName());
     $this->assertEquals('demo\\SourcePackageClassInPackage', literal($class->getName()));
   }
@@ -217,7 +217,7 @@ class ClassDeclarationTest extends ExecutionTest {
     $class= self::define('class', $this->name, null, '{
       public static XPClass $arrayClass = lang.types.ArrayList::class;
     }');
-    $this->assertInstanceOf('lang.XPClass', $class->getField('arrayClass')->get(null));
+    $this->assertInstanceOf(XPClass::class, $class->getField('arrayClass')->get(null));
   }
 
   /**
@@ -231,7 +231,7 @@ class ClassDeclarationTest extends ExecutionTest {
     }');
     
     with ($instance= $class->newInstance(), $elements= $class->getField('elements')->get($instance)); {
-      $this->assertInstanceOf('lang.types.ArrayList', $elements);
+      $this->assertInstanceOf(ArrayList::class, $elements);
       $this->assertEquals(new ArrayList(1, 2, 3), $elements);
     }
   }
@@ -249,7 +249,7 @@ class ClassDeclarationTest extends ExecutionTest {
     with ($instance= $class->newInstance($this->name)); {
       $this->assertEquals($this->name, $instance->getName());
       $elements= $class->getField('elements')->get($instance);
-      $this->assertInstanceOf('lang.types.ArrayList', $elements);
+      $this->assertInstanceOf(ArrayList::class, $elements);
       $this->assertEquals(new ArrayList(1, 2, 3), $elements);
     }
   }
@@ -260,7 +260,7 @@ class ClassDeclarationTest extends ExecutionTest {
    */
   #[@test]
   public function classAnnotation() {
-    $fixture= self::define('class', 'AnnotationsFor'.$this->name, null, '{ }', array('[@fixture]'));
+    $fixture= self::define('class', 'AnnotationsFor'.$this->name, null, '{ }', ['[@fixture]']);
     $this->assertTrue($fixture->hasAnnotation('fixture'));
     $this->assertEquals(null, $fixture->getAnnotation('fixture'));
   }
@@ -271,7 +271,7 @@ class ClassDeclarationTest extends ExecutionTest {
    */
   #[@test]
   public function interfaceAnnotation() {
-    $fixture= self::define('interface', 'AnnotationsFor'.$this->name, null, '{ }', array('[@fixture]'));
+    $fixture= self::define('interface', 'AnnotationsFor'.$this->name, null, '{ }', ['[@fixture]']);
     $this->assertTrue($fixture->hasAnnotation('fixture'));
     $this->assertEquals(null, $fixture->getAnnotation('fixture'));
   }
@@ -282,7 +282,7 @@ class ClassDeclarationTest extends ExecutionTest {
    */
   #[@test]
   public function enumAnnotation() {
-    $fixture= self::define('enum', 'AnnotationsFor'.$this->name, null, '{ }', array('[@fixture]'));
+    $fixture= self::define('enum', 'AnnotationsFor'.$this->name, null, '{ }', ['[@fixture]']);
     $this->assertTrue($fixture->hasAnnotation('fixture'));
     $this->assertEquals(null, $fixture->getAnnotation('fixture'));
   }

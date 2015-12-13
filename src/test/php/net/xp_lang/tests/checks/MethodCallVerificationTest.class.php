@@ -40,23 +40,23 @@ class MethodCallVerificationTest extends \unittest\TestCase {
       new TypeName('Fixture'),
       $parent ?: new TypeName('lang.Object'),
       null,
-      array(
-        new MethodNode(array(
+      [
+        new MethodNode([
           'name'      => 'hashCode',
           'modifiers' => MODIFIER_PUBLIC
-        )),
-        new MethodNode(array(
+        ]),
+        new MethodNode([
           'name'      => 'asIntern',
           'modifiers' => MODIFIER_PROTECTED
-        )),
-        new MethodNode(array(
+        ]),
+        new MethodNode([
           'name'      => 'delegate',
           'modifiers' => MODIFIER_PRIVATE
-        )),
-      )
+        ]),
+      ]
     );
     $scope->addResolved('parent', $ptr= $scope->resolveType($scope->declarations[0]->parent));
-    $scope->addResolved('self', new TypeDeclaration(new ParseTree(null, array(), $scope->declarations[0]), $ptr));
+    $scope->addResolved('self', new TypeDeclaration(new ParseTree(null, [], $scope->declarations[0]), $ptr));
     $scope->setType(new VariableNode('this'), new TypeName('Fixture'));
     return $this->fixture->verify($call, $scope);
   }
@@ -68,13 +68,13 @@ class MethodCallVerificationTest extends \unittest\TestCase {
    * @return  xp.compiler.ast.InstanceCreationNode
    */
   private function newInstance($type) {
-    return new InstanceCreationNode(array('type' => new TypeName($type)));
+    return new InstanceCreationNode(['type' => new TypeName($type)]);
   }
 
   #[@test]
   public function nonExistantMethodCall() {
     $this->assertEquals(
-      array('T404', 'No such method nonExistant() in Fixture'),
+      ['T404', 'No such method nonExistant() in Fixture'],
       $this->verify(new MethodCallNode(new VariableNode('this'), 'nonExistant'))
     );
   }
@@ -110,7 +110,7 @@ class MethodCallVerificationTest extends \unittest\TestCase {
   #[@test]
   public function stringProtectedMethodCall() {
     $this->assertEquals(
-      array('T403', 'Invoking protected net.xp_lang.tests.StringBuffer::set() from Fixture'),
+      ['T403', 'Invoking protected net.xp_lang.tests.StringBuffer::set() from Fixture'],
       $this->verify(new MethodCallNode($this->newInstance('net.xp_lang.tests.StringBuffer'), 'set'))
     );
   }
@@ -125,7 +125,7 @@ class MethodCallVerificationTest extends \unittest\TestCase {
   #[@test]
   public function unsupportedType() {
     $this->assertEquals(
-      array('T305', 'Using member calls on unsupported type string'),
+      ['T305', 'Using member calls on unsupported type string'],
       $this->verify(new MethodCallNode(new StringNode('hello'), 'length'))
     );
   }
@@ -133,7 +133,7 @@ class MethodCallVerificationTest extends \unittest\TestCase {
   #[@test]
   public function varType() {
     $this->assertEquals(
-      array('T203', 'Member call (var).length() verification deferred until runtime'),
+      ['T203', 'Member call (var).length() verification deferred until runtime'],
       $this->verify(new MethodCallNode(new CastNode(new VariableNode('this'), new TypeName('var')), 'length'))
     );
   }

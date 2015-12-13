@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\types;
 
+use xp\compiler\types\ResolveException;
 use xp\compiler\emit\php\V54Emitter;
 use xp\compiler\types\TypeReflection;
 use xp\compiler\types\TypeReference;
@@ -54,10 +55,10 @@ class ScopeTest extends \unittest\TestCase {
 
   #[@test]
   public function typedArrayType() {
-    $this->assertEquals(new TypeName('string[]'), $this->fixture->typeOf(new ArrayNode(array(
+    $this->assertEquals(new TypeName('string[]'), $this->fixture->typeOf(new ArrayNode([
       'values'        => null,
       'type'          => new TypeName('string[]'),
-    ))));
+    ])));
   }
   
   #[@test]
@@ -67,10 +68,10 @@ class ScopeTest extends \unittest\TestCase {
 
   #[@test]
   public function typedMapType() {
-    $this->assertEquals(new TypeName('[:string]'), $this->fixture->typeOf(new MapNode(array(
+    $this->assertEquals(new TypeName('[:string]'), $this->fixture->typeOf(new MapNode([
       'elements'      => null,
       'type'          => new TypeName('[:string]'),
-    ))));
+    ])));
   }
   
   #[@test]
@@ -189,12 +190,12 @@ class ScopeTest extends \unittest\TestCase {
     }
   }
 
-  #[@test, @expect('xp.compiler.types.ResolveException')]
+  #[@test, @expect(ResolveException::class)]
   public function importNonExistantType() {
     $this->fixture->addTypeImport('util.cmd.@@NON_EXISTANT@@');
   }
 
-  #[@test, @expect('xp.compiler.types.ResolveException')]
+  #[@test, @expect(ResolveException::class)]
   public function importNonExistantPackage() {
     $this->fixture->addPackageImport('util.cmd.@@NON_EXISTANT@@');
   }
@@ -260,7 +261,7 @@ class ScopeTest extends \unittest\TestCase {
 
   #[@test]
   public function resolveGenericType() {
-    $components= array(new TypeName('string'), new TypeName('lang.Object'));
+    $components= [new TypeName('string'), new TypeName('lang.Object')];
     $this->assertEquals(
       new GenericType(new TypeReflection(XPClass::forName('util.collections.HashTable')), $components),
       $this->fixture->resolveType(new TypeName('util.collections.HashTable', $components))
@@ -271,7 +272,7 @@ class ScopeTest extends \unittest\TestCase {
   public function usedAfterPackageImport() {
     $this->fixture->addPackageImport('util.cmd');
     
-    $this->assertEquals(array(), $this->fixture->used);
+    $this->assertEquals([], $this->fixture->used);
   }
 
   #[@test]
@@ -279,7 +280,7 @@ class ScopeTest extends \unittest\TestCase {
     $this->fixture->addPackageImport('util.cmd');
     $this->fixture->resolveType(new TypeName('Command'));
     
-    $this->assertEquals(array('util.cmd.Command' => true), $this->fixture->used);
+    $this->assertEquals(['util.cmd.Command' => true], $this->fixture->used);
   }
 
   #[@test]
@@ -288,14 +289,14 @@ class ScopeTest extends \unittest\TestCase {
     $this->fixture->resolveType(new TypeName('Command'));
     $this->fixture->resolveType(new TypeName('Command'));
     
-    $this->assertEquals(array('util.cmd.Command' => true), $this->fixture->used);
+    $this->assertEquals(['util.cmd.Command' => true], $this->fixture->used);
   }
 
   #[@test]
   public function usedAfterTypeImport() {
     $this->fixture->addTypeImport('util.cmd.Command');
     
-    $this->assertEquals(array('util.cmd.Command' => true), $this->fixture->used);
+    $this->assertEquals(['util.cmd.Command' => true], $this->fixture->used);
   }
 
   #[@test]
@@ -303,6 +304,6 @@ class ScopeTest extends \unittest\TestCase {
     $this->fixture->addTypeImport('util.cmd.Command');
     $this->fixture->addTypeImport('util.cmd.Command');
     
-    $this->assertEquals(array('util.cmd.Command' => true), $this->fixture->used);
+    $this->assertEquals(['util.cmd.Command' => true], $this->fixture->used);
   }
 }

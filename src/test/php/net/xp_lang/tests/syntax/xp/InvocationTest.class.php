@@ -16,7 +16,7 @@ class InvocationTest extends ParserTestCase {
   #[@test]
   public function writeLine() {
     $this->assertEquals(
-      array(new InvocationNode('writeLine', array(new VariableNode('m')))),
+      [new InvocationNode('writeLine', [new VariableNode('m')])],
       $this->parse('writeLine($m);')
     );
   }

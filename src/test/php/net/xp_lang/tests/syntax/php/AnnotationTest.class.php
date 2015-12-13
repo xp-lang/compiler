@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\syntax\php;
 
+use text\parser\generic\ParseException;
 use xp\compiler\syntax\php\Parser;
 use xp\compiler\syntax\php\Lexer;
 use xp\compiler\types\TypeName;
@@ -39,151 +40,151 @@ class AnnotationTest extends ParserTestCase {
 
   #[@test]
   public function simpleAnnotation() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Test'
-    ))), $this->parseMethodWithAnnotations('#[@Test]'));
+    ])], $this->parseMethodWithAnnotations('#[@Test]'));
   }
 
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(ParseException::class)]
   public function simpleAnnotationWithBrackets() {
     $this->parseMethodWithAnnotations('#[@Test()]');
   }
 
   #[@test]
   public function annotationWithStringValue() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Expect',
-      'parameters'    => array('default' => new StringNode('lang.IllegalArgumentException'))
-    ))), $this->parseMethodWithAnnotations('#[@Expect("lang.IllegalArgumentException")]'));
+      'parameters'    => ['default' => new StringNode('lang.IllegalArgumentException')]
+    ])], $this->parseMethodWithAnnotations('#[@Expect("lang.IllegalArgumentException")]'));
   }
 
   #[@test]
   public function annotationWithClasssName() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Expect',
-      'parameters'    => array('default' => new ClassNameAccessNode(new TypeName('IllegalArgumentException')))
-    ))), $this->parseMethodWithAnnotations('#[@Expect(IllegalArgumentException::class)]'));
+      'parameters'    => ['default' => new ClassNameAccessNode(new TypeName('IllegalArgumentException'))]
+    ])], $this->parseMethodWithAnnotations('#[@Expect(IllegalArgumentException::class)]'));
   }
 
   #[@test]
   public function annotationWithIntegerValue() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Limit',
-      'parameters'    => array('default' => new IntegerNode('5'))
-    ))), $this->parseMethodWithAnnotations('#[@Limit(5)]'));
+      'parameters'    => ['default' => new IntegerNode('5')]
+    ])], $this->parseMethodWithAnnotations('#[@Limit(5)]'));
   }
 
   #[@test]
   public function annotationWithHexValue() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Limit',
-      'parameters'    => array('default' => new HexNode('0x5'))
-    ))), $this->parseMethodWithAnnotations('#[@Limit(0x5)]'));
+      'parameters'    => ['default' => new HexNode('0x5')]
+    ])], $this->parseMethodWithAnnotations('#[@Limit(0x5)]'));
   }
 
   #[@test]
   public function annotationWithDecimalValue() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Limit',
-      'parameters'    => array('default' => new DecimalNode('5.0'))
-    ))), $this->parseMethodWithAnnotations('#[@Limit(5.0)]'));
+      'parameters'    => ['default' => new DecimalNode('5.0')]
+    ])], $this->parseMethodWithAnnotations('#[@Limit(5.0)]'));
   }
 
   #[@test]
   public function annotationWithnullValue() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Limit',
-      'parameters'    => array('default' => new NullNode())
-    ))), $this->parseMethodWithAnnotations('#[@Limit(null)]'));
+      'parameters'    => ['default' => new NullNode()]
+    ])], $this->parseMethodWithAnnotations('#[@Limit(null)]'));
   }
 
   #[@test]
   public function annotationWithtrueValue() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Limit',
-      'parameters'    => array('default' => new BooleanNode(true))
-    ))), $this->parseMethodWithAnnotations('#[@Limit(true)]'));
+      'parameters'    => ['default' => new BooleanNode(true)]
+    ])], $this->parseMethodWithAnnotations('#[@Limit(true)]'));
   }
 
   #[@test]
   public function annotationWithfalseValue() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Limit',
-      'parameters'    => array('default' => new BooleanNode(false))
-    ))), $this->parseMethodWithAnnotations('#[@Limit(false)]'));
+      'parameters'    => ['default' => new BooleanNode(false)]
+    ])], $this->parseMethodWithAnnotations('#[@Limit(false)]'));
   }
 
   #[@test]
   public function annotationWithArrayValue() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Restrict',
-      'parameters'    => array('default' => new ArrayNode(array(
-        'values'        => array(
+      'parameters'    => ['default' => new ArrayNode([
+        'values'        => [
           new StringNode('Admin'),
           new StringNode('Root'),
-        ),
+        ],
         'type'          => null
-      )))
-    ))), $this->parseMethodWithAnnotations('#[@Restrict(array("Admin", "Root"))]'));
+      ])]
+    ])], $this->parseMethodWithAnnotations('#[@Restrict(array("Admin", "Root"))]'));
   }
 
   #[@test]
   public function annotationWithShortArrayValue() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Restrict',
-      'parameters'    => array('default' => new ArrayNode(array(
-        'values'        => array(
+      'parameters'    => ['default' => new ArrayNode([
+        'values'        => [
           new StringNode('Admin'),
           new StringNode('Root'),
-        ),
+        ],
         'type'          => null
-      )))
-    ))), $this->parseMethodWithAnnotations('#[@Restrict(["Admin", "Root"])]'));
+      ])]
+    ])], $this->parseMethodWithAnnotations('#[@Restrict(["Admin", "Root"])]'));
   }
 
   #[@test]
   public function annotationWithMapValue() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Restrict',
-      'parameters'    => array('default' => new MapNode(array(
-        'elements'      => array(array(
+      'parameters'    => ['default' => new MapNode([
+        'elements'      => [[
           new StringNode('Role'),
           new StringNode('Root'),
-        )),
+        ]],
         'type'          => null
-      )))
-    ))), $this->parseMethodWithAnnotations('#[@Restrict(array("Role" => "Root"))]'));
+      ])]
+    ])], $this->parseMethodWithAnnotations('#[@Restrict(array("Role" => "Root"))]'));
   }
 
   #[@test]
   public function annotationWithShortMapValue() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Restrict',
-      'parameters'    => array('default' => new MapNode(array(
-        'elements'      => array(array(
+      'parameters'    => ['default' => new MapNode([
+        'elements'      => [[
           new StringNode('Role'),
           new StringNode('Root'),
-        )),
+        ]],
         'type'          => null
-      )))
-    ))), $this->parseMethodWithAnnotations('#[@Restrict(["Role" => "Root"])]'));
+      ])]
+    ])], $this->parseMethodWithAnnotations('#[@Restrict(["Role" => "Root"])]'));
   }
 
   #[@test]
   public function annotationWithValues() {
-    $this->assertEquals(array(new AnnotationNode(array(
+    $this->assertEquals([new AnnotationNode([
       'type'          => 'Expect',
-      'parameters'    => array(
-        'classes' => new ArrayNode(array(
-          'values'        => array(
+      'parameters'    => [
+        'classes' => new ArrayNode([
+          'values'        => [
             new StringNode('lang.IllegalArgumentException'),
             new StringNode('lang.IllegalAccessException'),
-          ),
+          ],
           'type'          => null
-        )),
+        ]),
         'code'    => new IntegerNode('503'),
-      )))
-    ), $this->parseMethodWithAnnotations('#[@Expect(
+      ]])
+    ], $this->parseMethodWithAnnotations('#[@Expect(
       classes = array("lang.IllegalArgumentException", "lang.IllegalAccessException"),
       code    = 503
     )]'));
@@ -191,22 +192,22 @@ class AnnotationTest extends ParserTestCase {
 
   #[@test]
   public function multipleAnnotations() {
-    $this->assertEquals(array(
-      new AnnotationNode(array('type' => 'WebMethod')),
-      new AnnotationNode(array('type' => 'Deprecated')),
-    ), $this->parseMethodWithAnnotations('#[@WebMethod, @Deprecated]'));
+    $this->assertEquals([
+      new AnnotationNode(['type' => 'WebMethod']),
+      new AnnotationNode(['type' => 'Deprecated']),
+    ], $this->parseMethodWithAnnotations('#[@WebMethod, @Deprecated]'));
   }
 
   #[@test]
   public function newinstance() {
     $this->assertEquals(
-      array(new AnnotationNode(array(
+      [new AnnotationNode([
         'type'       => 'action',
-        'parameters' => array('default' => new InstanceCreationNode(array(
+        'parameters' => ['default' => new InstanceCreationNode([
           'type'       => new TypeName('IsPlatform'),
-          'parameters' => array(new StringNode('WIN'))
-        )))
-      ))),
+          'parameters' => [new StringNode('WIN')]
+        ])]
+      ])],
       $this->parseMethodWithAnnotations('#[@action(new IsPlatform("WIN"))]')
     );
   }
@@ -214,13 +215,13 @@ class AnnotationTest extends ParserTestCase {
   #[@test]
   public function newinstance_fully_qualified() {
     $this->assertEquals(
-      array(new AnnotationNode(array(
+      [new AnnotationNode([
         'type'       => 'action',
-        'parameters' => array('default' => new InstanceCreationNode(array(
+        'parameters' => ['default' => new InstanceCreationNode([
           'type'       => new TypeName('unittest.actions.IsPlatform'),
-          'parameters' => array(new StringNode('WIN'))
-        )))
-      ))),
+          'parameters' => [new StringNode('WIN')]
+        ])]
+      ])],
       $this->parseMethodWithAnnotations('#[@action(new \unittest\actions\IsPlatform("WIN"))]')
     );
   }
@@ -228,10 +229,10 @@ class AnnotationTest extends ParserTestCase {
   #[@test]
   public function constant_reference() {
     $this->assertEquals(
-      array(new AnnotationNode(array(
+      [new AnnotationNode([
         'type'       => 'inject',
-        'parameters' => array('name' => new ConstantAccessNode(new TypeName('self'), 'CONNECTION_DSN'))
-      ))),
+        'parameters' => ['name' => new ConstantAccessNode(new TypeName('self'), 'CONNECTION_DSN')]
+      ])],
       $this->parseMethodWithAnnotations('#[@inject(name = self::CONNECTION_DSN)]')
     );
   }
@@ -239,10 +240,10 @@ class AnnotationTest extends ParserTestCase {
   #[@test]
   public function static_member() {
     $this->assertEquals(
-      array(new AnnotationNode(array(
+      [new AnnotationNode([
         'type'       => 'value',
-        'parameters' => array('default' => new StaticMemberAccessNode(new TypeName('CommandLine'), 'UNIX'))
-      ))),
+        'parameters' => ['default' => new StaticMemberAccessNode(new TypeName('CommandLine'), 'UNIX')]
+      ])],
       $this->parseMethodWithAnnotations('#[@value(CommandLine::$UNIX)]')
     );
   }

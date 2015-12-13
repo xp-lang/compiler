@@ -21,7 +21,7 @@ class TypeRestrictionTest extends ExecutionTest {
       ucfirst($this->name).'·'.($this->counter++), 
       null,
       '{ public bool accept('.$signature.') { return true; }}',
-      array('import util.collections.*;')
+      ['import util.collections.*;']
     );
     return $type->newInstance();
   }
@@ -87,7 +87,7 @@ class TypeRestrictionTest extends ExecutionTest {
    * Test passing an object to a primitive type hint
    *
    */
-  #[@test, @expect('lang.IllegalArgumentException')]
+  #[@test, @expect(IllegalArgumentException::class)]
   public function objectVsPrimitive() {
     $this->signature('string $arg')->accept($this);
   }
@@ -194,6 +194,6 @@ class TypeRestrictionTest extends ExecutionTest {
    */
   #[@test]
   public function arrayVsVar() {
-    $this->assertTrue($this->signature('var $arg')->accept(array(1, 2, 3)));
+    $this->assertTrue($this->signature('var $arg')->accept([1, 2, 3]));
   }
 }

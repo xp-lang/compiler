@@ -35,26 +35,26 @@ class FieldsVerificationTest extends \unittest\TestCase {
   
   #[@test]
   public function classesMayHaveFieldDeclarations() {
-    $f= new FieldNode(array(
+    $f= new FieldNode([
       'name'        => 'color',
       'modifiers'   => MODIFIER_PUBLIC,
       'type'        => new TypeName('string'),
-    ));
+    ]);
     $this->assertEquals(
-      array('I403', 'Interfaces may not have field declarations'), 
-      $this->verify($f, new InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Item')))
+      ['I403', 'Interfaces may not have field declarations'], 
+      $this->verify($f, new InterfaceNode(MODIFIER_PUBLIC, [], new TypeName('Item')))
     );
   }
 
   #[@test]
   public function interfacesMayNotHaveFieldDeclarations() {
-    $f= new FieldNode(array(
+    $f= new FieldNode([
       'name'        => 'color',
       'modifiers'   => MODIFIER_PUBLIC,
       'type'        => new TypeName('string'),
-    ));
+    ]);
     $this->assertNull(
-      $this->verify($f, new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Item')))
+      $this->verify($f, new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Item')))
     );
   }
 }

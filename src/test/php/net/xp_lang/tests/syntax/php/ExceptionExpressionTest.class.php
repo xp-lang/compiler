@@ -13,16 +13,16 @@ class ExceptionExpressionTest extends ParserTestCase {
 
   #[@test]
   public function singleCatch() {
-    $this->assertEquals(array(new TryNode(array(
-      'statements' => array(new MethodCallNode(new VariableNode('method'), 'call')),
-      'handling'   => array(
-        new CatchNode(array(
+    $this->assertEquals([new TryNode([
+      'statements' => [new MethodCallNode(new VariableNode('method'), 'call')],
+      'handling'   => [
+        new CatchNode([
           'type'       => new TypeName('IllegalArgumentException'),
           'variable'   => 'e',
-          'statements' => array(new MethodCallNode(new VariableNode('this'), 'finalize'))
-        ))
-      )
-    ))), $this->parse('
+          'statements' => [new MethodCallNode(new VariableNode('this'), 'finalize')]
+        ])
+      ]
+    ])], $this->parse('
       try {
         $method->call();
       } catch (IllegalArgumentException $e) {
@@ -33,45 +33,45 @@ class ExceptionExpressionTest extends ParserTestCase {
 
   #[@test]
   public function singleThrow() {
-    $this->assertEquals(array(new ThrowNode(array(
-      'expression' => new InstanceCreationNode(array(
+    $this->assertEquals([new ThrowNode([
+      'expression' => new InstanceCreationNode([
         'type'       => new TypeName('IllegalStateException'),
         'parameters' => null
-      ))
-    ))), $this->parse('
+      ])
+    ])], $this->parse('
       throw new IllegalStateException();
     '));
   }
 
   #[@test]
   public function multipleCatches() {
-    $this->assertEquals(array(new TryNode(array(
-      'statements' => array(
-        new ReturnNode(new InstanceCreationNode(array(
+    $this->assertEquals([new TryNode([
+      'statements' => [
+        new ReturnNode(new InstanceCreationNode([
           'type'       => new TypeName('HashTable'),
           'parameters' => null
-        )))
-      ), 
-      'handling'   => array(
-        new CatchNode(array(
+        ]))
+      ], 
+      'handling'   => [
+        new CatchNode([
           'type'       => new TypeName('IllegalArgumentException'),
           'variable'   => 'e',
           'statements' => null, 
-        )),
-        new CatchNode(array(
+        ]),
+        new CatchNode([
           'type'       => new TypeName('SecurityException'),
           'variable'   => 'e',
-          'statements' => array(new ThrowNode(array(
+          'statements' => [new ThrowNode([
             'expression' => new VariableNode('e')
-          ))), 
-        )),
-        new CatchNode(array(
+          ])], 
+        ]),
+        new CatchNode([
           'type'       => new TypeName('Exception'),
           'variable'   => 'e',
           'statements' => null, 
-        ))
-      )
-    ))), $this->parse('
+        ])
+      ]
+    ])], $this->parse('
       try {
         return new HashTable();
       } catch (IllegalArgumentException $e) {

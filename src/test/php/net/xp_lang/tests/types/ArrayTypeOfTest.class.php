@@ -48,6 +48,6 @@ class ArrayTypeOfTest extends \unittest\TestCase {
 
   #[@test]
   public function arrayTypeDoesNotHaveExtensions() {
-    $this->assertEquals(array(), $this->fixture->getExtensions());
+    $this->assertEquals([], $this->fixture->getExtensions());
   }
 }

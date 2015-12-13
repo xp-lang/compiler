@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
+use lang\FormatException;
 use lang\Primitive;
 use lang\Enum;
 
@@ -28,7 +29,7 @@ class EnumDeclarationTest extends ExecutionTest {
     $this->assertEquals(2, $plus->evaluate(1, 1));
   }
 
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function only_abstract_enums_can_contain_members_with_bodies() {
     self::define('enum', 'BrokenOperation', null, '{
       plus {

@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\syntax\xp;
 
+use lang\FormatException;
 use xp\compiler\ast\InstanceCreationNode;
 use xp\compiler\ast\InstanceOfNode;
 use xp\compiler\ast\MethodNode;
@@ -20,10 +21,10 @@ class ObjectOperationTest extends ParserTestCase {
   #[@test]
   public function instanceCreation() {
     $this->assertEquals(
-      array(new InstanceCreationNode(array(
+      [new InstanceCreationNode([
         'type'       => new TypeName('XPClass'),
         'parameters' => null
-      ))),
+      ])],
       $this->parse('new XPClass();')
     );
   }
@@ -35,10 +36,10 @@ class ObjectOperationTest extends ParserTestCase {
   #[@test]
   public function genericInstanceCreation() {
     $this->assertEquals(
-      array(new InstanceCreationNode(array(
-        'type'       => new TypeName('Filter', array(new TypeName('String'))),
+      [new InstanceCreationNode([
+        'type'       => new TypeName('Filter', [new TypeName('String')]),
         'parameters' => null
-      ))),
+      ])],
       $this->parse('new Filter<String>();')
     );
   }
@@ -50,10 +51,10 @@ class ObjectOperationTest extends ParserTestCase {
   #[@test]
   public function genericOfGenericInstanceCreation() {
     $this->assertEquals(
-      array(new InstanceCreationNode(array(
-        'type'       => new TypeName('Filter', array(new TypeName('Vector', array(new TypeName('string'))))),
+      [new InstanceCreationNode([
+        'type'       => new TypeName('Filter', [new TypeName('Vector', [new TypeName('string')])]),
         'parameters' => null
-      ))),
+      ])],
       $this->parse('new Filter<Vector<string>>();')
     );
   }
@@ -65,23 +66,23 @@ class ObjectOperationTest extends ParserTestCase {
   #[@test]
   public function anonymousInstanceCreation() {
     $this->assertEquals(
-      array(new InstanceCreationNode(array(
+      [new InstanceCreationNode([
         'type'       => new TypeName('Runnable'),
         'parameters' => null,
-        'body'       => array(
-          new MethodNode(array(
+        'body'       => [
+          new MethodNode([
             'modifiers'   => MODIFIER_PUBLIC,
             'annotations' => null,
             'name'        => 'run',
             'returns'     => TypeName::$VOID,
             'parameters'  => null,
             'throws'      => null,
-            'body'        => array(),
+            'body'        => [],
             'comment'     => null,
             'extension'   => null,
-          ))
-        )
-      ))),
+          ])
+        ]
+      ])],
       $this->parse('new Runnable() {
         public void run() {
           // TBI
@@ -97,7 +98,7 @@ class ObjectOperationTest extends ParserTestCase {
   #[@test]
   public function cloningOperation() {
     $this->assertEquals(
-      array(new CloneNode(new VariableNode('b'))),
+      [new CloneNode(new VariableNode('b'))],
       $this->parse('clone $b;')
     );
   }
@@ -109,10 +110,10 @@ class ObjectOperationTest extends ParserTestCase {
   #[@test]
   public function instanceOfTest() {
     $this->assertEquals(
-      array(new InstanceOfNode(array(
+      [new InstanceOfNode([
         'expression' => new VariableNode('b'), 
         'type'       => new TypeName('XPClass')
-      ))),
+      ])],
       $this->parse('$b instanceof XPClass;')
     );
   }
@@ -122,7 +123,7 @@ class ObjectOperationTest extends ParserTestCase {
    * but is bascially the same as "new Object();"
    *
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function newWithoutBraces() {
     $this->parse('new Object;');
   }

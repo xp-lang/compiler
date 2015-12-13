@@ -44,7 +44,7 @@ class PrimitiveExtensionMethodsIntegrationTest extends \unittest\TestCase {
     $task= new CompilationTask(
       new StringSource(sprintf($decl, $this->counter++, $source), self::$syntax, $this->name),
       new NullDiagnosticListener(),
-      newinstance('xp.compiler.io.FileManager', array($this->getClass()->getClassLoader()), '{
+      newinstance(FileManager::class, [$this->getClass()->getClassLoader()], '{
         protected $cl;
         
         public function __construct($cl) {

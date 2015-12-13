@@ -1,5 +1,7 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
+use lang\ClassCastException;
+
 /**
  * Tests casting
  *
@@ -63,17 +65,17 @@ class CastingTest extends ExecutionTest {
 
   #[@test]
   public function zeroAsIntArray() {
-    $this->assertEquals(array(0), $this->run('return 0 as int[];'));
+    $this->assertEquals([0], $this->run('return 0 as int[];'));
   }
 
   #[@test]
   public function stringAsStringArray() {
-    $this->assertEquals(array('Hello'), $this->run('return "Hello" as string[];'));
+    $this->assertEquals(['Hello'], $this->run('return "Hello" as string[];'));
   }
 
   #[@test]
   public function nullAsVarArray() {
-    $this->assertEquals(array(), $this->run('return null as var[];'));
+    $this->assertEquals([], $this->run('return null as var[];'));
   }
 
   #[@test]
@@ -81,7 +83,7 @@ class CastingTest extends ExecutionTest {
     $this->run('return new util.Date() as lang.Object;');
   }
 
-  #[@test, @expect('lang.ClassCastException')]
+  #[@test, @expect(ClassCastException::class)]
   public function objectAsDate() {
     $this->run('return new lang.Object() as util.Date;');
   }
@@ -91,7 +93,7 @@ class CastingTest extends ExecutionTest {
     $this->run('return $this as util.Date?;');
   }
 
-  #[@test, @expect('lang.ClassCastException')]
+  #[@test, @expect(ClassCastException::class)]
   public function objectAsString() {
     $this->run('return new lang.Object() as string;');
   }

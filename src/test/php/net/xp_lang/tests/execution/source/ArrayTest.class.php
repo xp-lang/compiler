@@ -12,7 +12,7 @@ class ArrayTest extends ExecutionTest {
    */
   #[@test]
   public function untypedArray() {
-    $this->assertEquals(array(1, 2), $this->run('return [1, 2];'));
+    $this->assertEquals([1, 2], $this->run('return [1, 2];'));
   }
 
   /**
@@ -21,7 +21,7 @@ class ArrayTest extends ExecutionTest {
    */
   #[@test]
   public function typedArray() {
-    $this->assertEquals(array('Hello', 'World'), $this->run('return new string[] { "Hello", "World" };'));
+    $this->assertEquals(['Hello', 'World'], $this->run('return new string[] { "Hello", "World" };'));
   }
 
   /**

@@ -45,7 +45,7 @@ abstract class AnnotationsTest extends \unittest\TestCase {
       Syntax::forName('xp')->parse(new MemoryInputStream(sprintf($src, $unique))),
       $this->scope
     );
-    $r->executeWith(array());
+    $r->executeWith([]);
     return \lang\XPClass::forName($r->type()->name());
   }
 }

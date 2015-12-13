@@ -17,11 +17,11 @@ class BitOperatorsTest extends ParserTestCase {
    */
   #[@test]
   public function bitwiseOr() {
-    $this->assertEquals(array(new BinaryOpNode(array(
+    $this->assertEquals([new BinaryOpNode([
       'lhs'           => new IntegerNode('1'),
       'rhs'           => new IntegerNode('2'),
       'op'            => '|'
-    ))), $this->parse('
+    ])], $this->parse('
       1 | 2;
     '));
   }
@@ -32,11 +32,11 @@ class BitOperatorsTest extends ParserTestCase {
    */
   #[@test]
   public function bitwiseAnd() {
-    $this->assertEquals(array(new BinaryOpNode(array(
+    $this->assertEquals([new BinaryOpNode([
       'lhs'           => new IntegerNode('1'),
       'rhs'           => new IntegerNode('2'),
       'op'            => '&'
-    ))), $this->parse('
+    ])], $this->parse('
       1 & 2;
     '));
   }
@@ -47,11 +47,11 @@ class BitOperatorsTest extends ParserTestCase {
    */
   #[@test]
   public function bitwiseXOr() {
-    $this->assertEquals(array(new BinaryOpNode(array(
+    $this->assertEquals([new BinaryOpNode([
       'lhs'           => new IntegerNode('1'),
       'rhs'           => new IntegerNode('2'),
       'op'            => '^'
-    ))), $this->parse('
+    ])], $this->parse('
       1 ^ 2;
     '));
   }
@@ -62,11 +62,11 @@ class BitOperatorsTest extends ParserTestCase {
    */
   #[@test]
   public function bitwiseNot() {
-    $this->assertEquals(array(new UnaryOpNode(array(
+    $this->assertEquals([new UnaryOpNode([
       'expression'    => new IntegerNode('1'),
       'postfix'       => false,
       'op'            => '~'
-    ))), $this->parse('
+    ])], $this->parse('
       ~1;
     '));
   }
@@ -77,11 +77,11 @@ class BitOperatorsTest extends ParserTestCase {
    */
   #[@test]
   public function shiftLeft() {
-    $this->assertEquals(array(new BinaryOpNode(array(
+    $this->assertEquals([new BinaryOpNode([
       'lhs'           => new IntegerNode('1'),
       'rhs'           => new IntegerNode('2'),
       'op'            => '<<'
-    ))), $this->parse('
+    ])], $this->parse('
       1 << 2;
     '));
   }
@@ -92,11 +92,11 @@ class BitOperatorsTest extends ParserTestCase {
    */
   #[@test]
   public function shiftRight() {
-    $this->assertEquals(array(new BinaryOpNode(array(
+    $this->assertEquals([new BinaryOpNode([
       'lhs'           => new IntegerNode('1'),
       'rhs'           => new IntegerNode('2'),
       'op'            => '>>'
-    ))), $this->parse('
+    ])], $this->parse('
       1 >> 2;
     '));
   }

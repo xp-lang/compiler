@@ -37,16 +37,16 @@ class TryOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function removeUselessTryCatch() {
-    $try= new TryNode(array(
-      'statements' => array(new ReturnNode(new NullNode())),
-      'handling'   => array(
-        new CatchNode(array(
+    $try= new TryNode([
+      'statements' => [new ReturnNode(new NullNode())],
+      'handling'   => [
+        new CatchNode([
           'type'       => new TypeName('lang.Throwable'),
           'variable'   => 'e',
-          'statements' => array(new ThrowNode(array('expression' => new VariableNode('e'))))
-        ))
-      )
-    ));
+          'statements' => [new ThrowNode(['expression' => new VariableNode('e')])]
+        ])
+      ]
+    ]);
 
     $this->assertEquals(
       new StatementsNode($try->statements), 
@@ -59,16 +59,16 @@ class TryOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function emptyTryBecomesNoop() {
-    $try= new TryNode(array(
-      'statements' => array(),
-      'handling'   => array(
-        new CatchNode(array(
+    $try= new TryNode([
+      'statements' => [],
+      'handling'   => [
+        new CatchNode([
           'type'       => new TypeName('lang.Throwable'),
           'variable'   => 'e',
-          'statements' => array(new ReturnNode( new NullNode()))
-        ))
-      )
-    ));
+          'statements' => [new ReturnNode( new NullNode())]
+        ])
+      ]
+    ]);
 
     $this->assertEquals(
       new NoopNode(), 
@@ -82,14 +82,14 @@ class TryOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function emptyTryWithFinally() {
-    $try= new TryNode(array(
-      'statements' => array(),
-      'handling'   => array(
-        new FinallyNode(array(
-          'statements' => array(new ReturnNode(new NullNode()))
-        ))
-      )
-    ));
+    $try= new TryNode([
+      'statements' => [],
+      'handling'   => [
+        new FinallyNode([
+          'statements' => [new ReturnNode(new NullNode())]
+        ])
+      ]
+    ]);
 
     $this->assertEquals(
       new StatementsNode($try->handling[0]->statements), 

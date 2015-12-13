@@ -30,7 +30,7 @@ class ClassDeclarationTest extends ParserTestCase {
         null,                       // Annotations
         new TypeName('Empty'),      // Name
         null,                       // Parent
-        array(),                    // Implements
+        [],                    // Implements
         null                        // Body
       ), 
       $this->parse('<?php namespace net\xp_lang\tests\syntax\php; class Empty { } ?>')
@@ -39,18 +39,18 @@ class ClassDeclarationTest extends ParserTestCase {
 
   #[@test]
   public function classConstant() {
-    $this->assertEquals(array(new ClassConstantNode(
+    $this->assertEquals([new ClassConstantNode(
       'DEBUG',
       TypeName::$VAR,
       new IntegerNode('1')
-    )), $this->parse('<?php namespace net\xp_lang\tests\syntax\php; class Logger { 
+    )], $this->parse('<?php namespace net\xp_lang\tests\syntax\php; class Logger { 
       const DEBUG = 1;
     } ?>')->body);
   }
 
   #[@test]
   public function classConstants() {
-    $this->assertEquals(array(
+    $this->assertEquals([
       new ClassConstantNode(
         'DEBUG',
         TypeName::$VAR,
@@ -60,29 +60,29 @@ class ClassDeclarationTest extends ParserTestCase {
         TypeName::$VAR,
         new IntegerNode('2')
       )
-    ), $this->parse('<?php namespace net\xp_lang\tests\syntax\php; class Logger { 
+    ], $this->parse('<?php namespace net\xp_lang\tests\syntax\php; class Logger { 
       const DEBUG = 1, WARN  = 2;
     } ?>')->body);
   }
 
   #[@test]
   public function methodAndField() {
-    $this->assertEquals(array(new FieldNode(array(
+    $this->assertEquals([new FieldNode([
       'modifiers'       => MODIFIER_PRIVATE | MODIFIER_STATIC,
       'annotations'     => null,
       'name'            => 'instance',
       'type'            => new TypeName('var'),
       'initialization'  => new NullNode()
-    )), new MethodNode(array(
+    ]), new MethodNode([
       'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'annotations' => null,
       'name'        => 'getInstance',
       'returns'     => new TypeName('var'),
       'parameters'  => null, 
       'throws'      => null,
-      'body'        => array(),
+      'body'        => [],
       'extension'   => null
-    ))), $this->parse('<?php namespace net\xp_lang\tests\syntax\php; class Logger { 
+    ])], $this->parse('<?php namespace net\xp_lang\tests\syntax\php; class Logger { 
       private static $instance= null;
       public static function getInstance() { /* ... */ }
     } ?>')->body);

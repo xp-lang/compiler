@@ -39,7 +39,7 @@ class NamespaceTest extends ParserTestCase {
   #[@test]
   public function simple_namespace_declaration() {
     $this->assertEquals(
-      new PackageNode(array('name' => 'demo')),
+      new PackageNode(['name' => 'demo']),
       $this->parse('<?php namespace demo; class A { }')->package
     );
   }
@@ -47,7 +47,7 @@ class NamespaceTest extends ParserTestCase {
   #[@test]
   public function sub_namespace_declaration() {
     $this->assertEquals(
-      new PackageNode(array('name' => 'demo.sub')),
+      new PackageNode(['name' => 'demo.sub']),
       $this->parse('<?php namespace demo\\sub; class A { }')->package
     );
   }
@@ -55,7 +55,7 @@ class NamespaceTest extends ParserTestCase {
   #[@test]
   public function sub_sub_namespace_declaration() {
     $this->assertEquals(
-      new PackageNode(array('name' => 'demo.sub.child')),
+      new PackageNode(['name' => 'demo.sub.child']),
       $this->parse('<?php namespace demo\\sub\\child; class A { }')->package
     );
   }
@@ -73,7 +73,7 @@ class NamespaceTest extends ParserTestCase {
   #[@test]
   public function no_use_statements() {
     $this->assertEquals(
-      array(),
+      [],
       $this->importsIn($this->parse('<?php namespace demo;
         class A { }
       '))
@@ -83,7 +83,7 @@ class NamespaceTest extends ParserTestCase {
   #[@test]
   public function single_use_statement() {
     $this->assertEquals(
-      array(new ImportNode(array('name' => 'lang.Object'))),
+      [new ImportNode(['name' => 'lang.Object'])],
       $this->importsIn($this->parse('<?php namespace demo;
         use lang\\Object;
         class A { }
@@ -94,10 +94,10 @@ class NamespaceTest extends ParserTestCase {
   #[@test]
   public function two_use_statements() {
     $this->assertEquals(
-      array(
-        new ImportNode(array('name' => 'lang.Object')),
-        new ImportNode(array('name' => 'util.Date'))
-      ),
+      [
+        new ImportNode(['name' => 'lang.Object']),
+        new ImportNode(['name' => 'util.Date'])
+      ],
       $this->importsIn($this->parse('<?php namespace demo;
         use lang\\Object;
         use util\\Date;

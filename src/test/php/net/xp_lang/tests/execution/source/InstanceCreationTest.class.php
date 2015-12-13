@@ -1,5 +1,7 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
+use lang\Object;
+use xp\compiler\Syntax;
 use lang\XPClass;
 use lang\Primitive;
 
@@ -23,24 +25,24 @@ class InstanceCreationTest extends ExecutionTest {
   
   #[@test]
   public function new_instance_from_object_class() {
-    $this->assertInstanceOf('lang.Object', $this->run('return new Object();'));
+    $this->assertInstanceOf(Object::class, $this->run('return new Object();'));
   }
 
   #[@test]
   public function new_instance_from_fully_qualified_object_class() {
-    $this->assertInstanceOf('lang.Object', $this->run('return new lang.Object();'));
+    $this->assertInstanceOf(Object::class, $this->run('return new lang.Object();'));
   }
 
   #[@test]
   public function new_instance_from_namespaced_class() {
-    $this->assertInstanceOf('xp.compiler.Syntax', $this->run('return xp.compiler.Syntax::forName("xp");'));
+    $this->assertInstanceOf(Syntax::class, $this->run('return xp.compiler.Syntax::forName("xp");'));
   }
 
   #[@test]
   public function new_generic_hashtable() {
     $hash= $this->run('return new util.collections.HashTable<string, lang.Generic>();');
     $this->assertEquals(
-      array(Primitive::$STRING, XPClass::forName('lang.Generic')), 
+      [Primitive::$STRING, XPClass::forName('lang.Generic')], 
       $hash->getClass()->genericArguments()
     );
   }
@@ -49,7 +51,7 @@ class InstanceCreationTest extends ExecutionTest {
   public function new_generic_vector() {
     $hash= $this->run('return new util.collections.Vector<int>();');
     $this->assertEquals(
-      array(Primitive::$INT), 
+      [Primitive::$INT], 
       $hash->getClass()->genericArguments()
     );
   }
@@ -86,7 +88,7 @@ class InstanceCreationTest extends ExecutionTest {
       public void run() {
         throw new lang.MethodNotImplementedException("run");
       }
-    };', array('package test;'));
+    };', ['package test;']);
     $this->assertAnonymousInstanceOf('lang.Runnable', $runnable);
   }
 
@@ -98,7 +100,7 @@ class InstanceCreationTest extends ExecutionTest {
     ];');
 
     $this->assertEquals(
-      array('a', 'b'),
+      ['a', 'b'],
       array_map(function($e) { return $e->id(); }, $instances)
     );
   }
@@ -130,7 +132,7 @@ class InstanceCreationTest extends ExecutionTest {
       $f->getClass()->genericDefinition()
     );
     $this->assertEquals(
-      array(Primitive::$STRING), 
+      [Primitive::$STRING], 
       $f->getClass()->genericArguments()
     );
   }

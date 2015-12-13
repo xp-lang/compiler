@@ -1,5 +1,8 @@
 <?php namespace net\xp_lang\tests\types;
 
+use xp\compiler\types\Constructor;
+use xp\compiler\types\Operator;
+use xp\compiler\types\Property;
 use xp\compiler\types\TypeDeclaration;
 use xp\compiler\types\TypeName;
 use xp\compiler\types\Types;
@@ -23,7 +26,7 @@ class TypeDeclarationTest extends \unittest\TestCase {
 
   #[@test]
   public function nameWithoutPackage() {
-    $decl= new TypeDeclaration(new ParseTree(null, array(), new ClassNode(
+    $decl= new TypeDeclaration(new ParseTree(null, [], new ClassNode(
       MODIFIER_PUBLIC, 
       null,
       new TypeName('TestCase')
@@ -33,7 +36,7 @@ class TypeDeclarationTest extends \unittest\TestCase {
 
   #[@test]
   public function nameWithPackage() {
-    $decl= new TypeDeclaration(new ParseTree(new TypeName('unittest.web'), array(), new ClassNode(
+    $decl= new TypeDeclaration(new ParseTree(new TypeName('unittest.web'), [], new ClassNode(
       MODIFIER_PUBLIC, 
       null,
       new TypeName('WebTestCase')
@@ -43,7 +46,7 @@ class TypeDeclarationTest extends \unittest\TestCase {
 
   #[@test]
   public function literalWithoutPackage() {
-    $decl= new TypeDeclaration(new ParseTree(null, array(), new ClassNode(
+    $decl= new TypeDeclaration(new ParseTree(null, [], new ClassNode(
       MODIFIER_PUBLIC, 
       null,
       new TypeName('TestCase')
@@ -53,7 +56,7 @@ class TypeDeclarationTest extends \unittest\TestCase {
 
   #[@test]
   public function literalWithPackage() {
-    $decl= new TypeDeclaration(new ParseTree(new TypeName('unittest.web'), array(), new ClassNode(
+    $decl= new TypeDeclaration(new ParseTree(new TypeName('unittest.web'), [], new ClassNode(
       MODIFIER_PUBLIC, 
       null,
       new TypeName('WebTestCase')
@@ -63,7 +66,7 @@ class TypeDeclarationTest extends \unittest\TestCase {
 
   #[@test]
   public function classKind() {
-    $decl= new TypeDeclaration(new ParseTree(null, array(), new ClassNode(
+    $decl= new TypeDeclaration(new ParseTree(null, [], new ClassNode(
       MODIFIER_PUBLIC, 
       null,
       new TypeName('TestCase')
@@ -73,17 +76,17 @@ class TypeDeclarationTest extends \unittest\TestCase {
 
   #[@test]
   public function interfaceKind() {
-    $decl= new TypeDeclaration(new ParseTree(null, array(), new InterfaceNode(array(
+    $decl= new TypeDeclaration(new ParseTree(null, [], new InterfaceNode([
       'name' => new TypeName('Resolveable')
-    ))));
+    ])));
     $this->assertEquals(Types::INTERFACE_KIND, $decl->kind());
   }
 
   #[@test]
   public function enumKind() {
-    $decl= new TypeDeclaration(new ParseTree(null, array(), new EnumNode(array(
+    $decl= new TypeDeclaration(new ParseTree(null, [], new EnumNode([
       'name' => new TypeName('Operation')
-    ))));
+    ])));
     $this->assertEquals(Types::ENUM_KIND, $decl->kind());
   }
   
@@ -94,52 +97,52 @@ class TypeDeclarationTest extends \unittest\TestCase {
    */
   protected function stringClass() {
     return new TypeDeclaration(
-      new ParseTree(new TypeName('lang.types'), array(), new ClassNode(
+      new ParseTree(new TypeName('lang.types'), [], new ClassNode(
         MODIFIER_PUBLIC, 
         null,
         new TypeName('String'),
         new TypeName('lang.Object'),
         null,
-        array(
+        [
           new ClassConstantNode('ENCODING', new TypeName('string'), new StringNode('utf-8')),
-          new ConstructorNode(array(
-          )),
-          new MethodNode(array(
+          new ConstructorNode([
+          ]),
+          new MethodNode([
             'name'        => 'substring',
             'returns'     => new TypeName('lang.types.String'),
             'modifiers'   => MODIFIER_PUBLIC,
-            'parameters'  => array(
-              array(
+            'parameters'  => [
+              [
                 'name'    => 'start',
                 'type'    => new TypeName('int'),
                 'check'   => true
-              ), 
-              array(
+              ], 
+              [
                 'name'    => 'end',
                 'type'    => new TypeName('int'),
                 'check'   => true,
                 'default' => new IntegerNode(-1)
-              )
-            )
-          )),
-          new FieldNode(array(
+              ]
+            ]
+          ]),
+          new FieldNode([
             'name' => 'length'
-          )),
-          new PropertyNode(array(
+          ]),
+          new PropertyNode([
             'name' => 'chars'
-          )),
-          new OperatorNode(array(
+          ]),
+          new OperatorNode([
             'symbol' => '~'
-          )),
-          new IndexerNode(array(
+          ]),
+          new IndexerNode([
             'type'       => new TypeName('string'),
-            'parameter'  => array(
+            'parameter'  => [
               'name'  => 'offset',
               'type'  => new TypeName('int'),
               'check' => true
-            )
-          ))
-        )
+            ]
+          ])
+        ]
       )),
       $this->objectClass()
     );
@@ -152,18 +155,18 @@ class TypeDeclarationTest extends \unittest\TestCase {
    */
   protected function coinEnum() {
     return new TypeDeclaration(
-      new ParseTree(new TypeName('util.money'), array(), new ClassNode(
+      new ParseTree(new TypeName('util.money'), [], new ClassNode(
         MODIFIER_PUBLIC, 
         null,
         new TypeName('Coin'),
         new TypeName('lang.Enum'),
         null,
-        array(
-          new EnumMemberNode(array('name' => 'penny', 'value' => new IntegerNode('1'), 'body' => null)),
-          new EnumMemberNode(array('name' => 'nickel', 'value' => new IntegerNode('2'), 'body' => null)),
-          new EnumMemberNode(array('name' => 'dime', 'value' => new IntegerNode('10'), 'body' => null)),
-          new EnumMemberNode(array('name' => 'quarter', 'value' => new IntegerNode('25'), 'body' => null)),
-        )
+        [
+          new EnumMemberNode(['name' => 'penny', 'value' => new IntegerNode('1'), 'body' => null]),
+          new EnumMemberNode(['name' => 'nickel', 'value' => new IntegerNode('2'), 'body' => null]),
+          new EnumMemberNode(['name' => 'dime', 'value' => new IntegerNode('10'), 'body' => null]),
+          new EnumMemberNode(['name' => 'quarter', 'value' => new IntegerNode('25'), 'body' => null]),
+        ]
       )),
       $this->objectClass()
     );
@@ -176,17 +179,17 @@ class TypeDeclarationTest extends \unittest\TestCase {
    */
   protected function objectClass() {
     return new TypeDeclaration(
-      new ParseTree(new TypeName('lang'), array(), new ClassNode(
+      new ParseTree(new TypeName('lang'), [], new ClassNode(
         MODIFIER_PUBLIC, 
         null,
         new TypeName('Object'),
         null,
         null,
-        array(
-          new MethodNode(array(
+        [
+          new MethodNode([
             'name' => 'equals'
-          ))
-        )
+          ])
+        ]
       ))
     );
   }
@@ -198,14 +201,14 @@ class TypeDeclarationTest extends \unittest\TestCase {
    */
   protected function secureStringClass() {
     return new TypeDeclaration(
-      new ParseTree(new TypeName('security'), array(), new ClassNode(
+      new ParseTree(new TypeName('security'), [], new ClassNode(
         MODIFIER_PUBLIC, 
         null,
         new TypeName('SecureString'),
         new TypeName('lang.types.String'),
         null,
-        array(
-        )
+        [
+        ]
       )),
       $this->stringClass()
     );
@@ -238,7 +241,7 @@ class TypeDeclarationTest extends \unittest\TestCase {
   #[@test]
   public function stringClassConstructor() {
     $decl= $this->stringClass();
-    $this->assertInstanceOf('xp.compiler.types.Constructor', $decl->getConstructor());
+    $this->assertInstanceOf(Constructor::class, $decl->getConstructor());
   }
 
   #[@test]
@@ -284,10 +287,10 @@ class TypeDeclarationTest extends \unittest\TestCase {
     $this->assertEquals(new TypeName('lang.types.String'), $method->returns);
     $this->assertEquals('substring', $method->name);
     $this->assertEquals(
-      array(
+      [
         new Parameter('start', new TypeName('int')),
         new Parameter('end', new TypeName('int'), new IntegerNode(-1))
-      ),
+      ],
       $method->parameters
     );
     $this->assertEquals(MODIFIER_PUBLIC, $method->modifiers);
@@ -314,7 +317,7 @@ class TypeDeclarationTest extends \unittest\TestCase {
   #[@test]
   public function stringClassConcatOperator() {
     $decl= $this->stringClass();
-    $this->assertInstanceOf('xp.compiler.types.Operator', $decl->getOperator('~'));
+    $this->assertInstanceOf(Operator::class, $decl->getOperator('~'));
   }
 
   #[@test]
@@ -326,7 +329,7 @@ class TypeDeclarationTest extends \unittest\TestCase {
   #[@test]
   public function secureStringClassConcatOperator() {
     $decl= $this->secureStringClass();
-    $this->assertInstanceOf('xp.compiler.types.Operator', $decl->getOperator('~'));
+    $this->assertInstanceOf(Operator::class, $decl->getOperator('~'));
   }
 
   #[@test]
@@ -356,7 +359,7 @@ class TypeDeclarationTest extends \unittest\TestCase {
   #[@test]
   public function stringClassConcatProperty() {
     $decl= $this->stringClass();
-    $this->assertInstanceOf('xp.compiler.types.Property', $decl->getProperty('chars'));
+    $this->assertInstanceOf(Property::class, $decl->getProperty('chars'));
   }
 
   #[@test]
@@ -368,7 +371,7 @@ class TypeDeclarationTest extends \unittest\TestCase {
   #[@test]
   public function secureStringClassConcatProperty() {
     $decl= $this->secureStringClass();
-    $this->assertInstanceOf('xp.compiler.types.Property', $decl->getProperty('chars'));
+    $this->assertInstanceOf(Property::class, $decl->getProperty('chars'));
   }
 
   #[@test]
@@ -459,13 +462,13 @@ class TypeDeclarationTest extends \unittest\TestCase {
   #[@test]
   public function extendedStringClassSubclassOfObject() {
     $decl= new TypeDeclaration(
-      new ParseTree(new TypeName('lang.types'), array(), new ClassNode(
+      new ParseTree(new TypeName('lang.types'), [], new ClassNode(
         MODIFIER_PUBLIC, 
         null,
         new TypeName('ExtendedString'),
         new TypeName('lang.types.String'),
         null,
-        array()
+        []
       )),
       $this->stringClass()
     );
@@ -479,33 +482,33 @@ class TypeDeclarationTest extends \unittest\TestCase {
 
   #[@test]
   public function getExtensionsFromStringClass() {
-    $this->assertEquals(array(), $this->stringClass()->getExtensions());
+    $this->assertEquals([], $this->stringClass()->getExtensions());
   }
 
   #[@test]
   public function getExtensionsFromArrayListExtensionsClass() {
     $decl= new TypeDeclaration(
-      new ParseTree(new TypeName('lang.types'), array(), new ClassNode(
+      new ParseTree(new TypeName('lang.types'), [], new ClassNode(
         MODIFIER_PUBLIC, 
         null,
         new TypeName('ArraySortingExtensions'),
         new TypeName('lang.Object'),
         null,
-        array(
-          new MethodNode(array(
+        [
+          new MethodNode([
             'name'        => 'sorted',
             'returns'     => new TypeName('lang.types.ArrayList'),
             'extension'   => new TypeName('lang.types.ArrayList'),
             'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
-            'parameters'  => array(
-              array(
+            'parameters'  => [
+              [
                 'name'  => 'self',
                 'type'  => new TypeName('lang.types.ArrayList'),
                 'check' => true
-              ), 
-            )
-          )),
-        )
+              ], 
+            ]
+          ]),
+        ]
       )),
       $this->objectClass()
     );

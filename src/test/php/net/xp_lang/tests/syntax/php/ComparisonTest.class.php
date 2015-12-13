@@ -9,102 +9,102 @@ class ComparisonTest extends ParserTestCase {
 
   #[@test]
   public function equality() {
-    $this->assertEquals(array(new ComparisonNode(array(
+    $this->assertEquals([new ComparisonNode([
       'lhs'           => new VariableNode('i'),
       'rhs'           => new IntegerNode('10'),
       'op'            => '=='
-    ))), $this->parse('
+    ])], $this->parse('
       $i == 10;
     '));
   }
 
   #[@test]
   public function identity() {
-    $this->assertEquals(array(new ComparisonNode(array(
+    $this->assertEquals([new ComparisonNode([
       'lhs'           => new VariableNode('i'),
       'rhs'           => new IntegerNode('10'),
       'op'            => '==='
-    ))), $this->parse('
+    ])], $this->parse('
       $i === 10;
     '));
   }
 
   #[@test]
   public function notIdentity() {
-    $this->assertEquals(array(new ComparisonNode(array(
+    $this->assertEquals([new ComparisonNode([
       'lhs'           => new VariableNode('i'),
       'rhs'           => new IntegerNode('10'),
       'op'            => '!=='
-    ))), $this->parse('
+    ])], $this->parse('
       $i !== 10;
     '));
   }
 
   #[@test]
   public function equalityToNegativeLhs() {
-    $this->assertEquals(array(new ComparisonNode(array(
-      'lhs'           => new UnaryOpNode(array(
+    $this->assertEquals([new ComparisonNode([
+      'lhs'           => new UnaryOpNode([
         'expression'    => new IntegerNode('10'),
         'op'            => '-'
-      )),
+      ]),
       'rhs'           => new VariableNode('i'),
       'op'            => '=='
-    ))), $this->parse('
+    ])], $this->parse('
       -10 == $i;
     '));
   }
 
   #[@test]
   public function unEquality() {
-    $this->assertEquals(array(new ComparisonNode(array(
+    $this->assertEquals([new ComparisonNode([
       'lhs'           => new VariableNode('i'),
       'rhs'           => new IntegerNode('10'),
       'op'            => '!='
-    ))), $this->parse('
+    ])], $this->parse('
       $i != 10;
     '));
   }
 
   #[@test]
   public function smallerThan() {
-    $this->assertEquals(array(new ComparisonNode(array(
+    $this->assertEquals([new ComparisonNode([
       'lhs'           => new VariableNode('i'),
       'rhs'           => new IntegerNode('10'),
       'op'            => '<'
-    ))), $this->parse('
+    ])], $this->parse('
       $i < 10;
     '));
   }
 
   #[@test]
   public function smallerThanOrEqualTo() {
-    $this->assertEquals(array(new ComparisonNode(array(
+    $this->assertEquals([new ComparisonNode([
       'lhs'           => new VariableNode('i'),
       'rhs'           => new IntegerNode('10'),
       'op'            => '<='
-    ))), $this->parse('
+    ])], $this->parse('
       $i <= 10;
     '));
   }
 
   #[@test]
   public function greaterThan() {
-    $this->assertEquals(array(new ComparisonNode(array(
+    $this->assertEquals([new ComparisonNode([
       'lhs'           => new VariableNode('i'),
       'rhs'           => new IntegerNode('10'),
       'op'            => '>'
-    ))), $this->parse('
+    ])], $this->parse('
       $i > 10;
     '));
   }
 
   #[@test]
   public function greaterThanOrEqualTo() {
-    $this->assertEquals(array(new ComparisonNode(array(
+    $this->assertEquals([new ComparisonNode([
       'lhs'           => new VariableNode('i'),
       'rhs'           => new IntegerNode('10'),
       'op'            => '>='
-    ))), $this->parse('
+    ])], $this->parse('
       $i >= 10;
     '));
   }

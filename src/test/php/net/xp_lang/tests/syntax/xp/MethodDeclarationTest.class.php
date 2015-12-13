@@ -22,164 +22,164 @@ class MethodDeclarationTest extends ParserTestCase {
 
   #[@test]
   public function toStringMethod() {
-    $this->assertEquals(new MethodNode(array(
+    $this->assertEquals(new MethodNode([
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'toString',
       'returns'    => new TypeName('string'),
       'parameters' => null,
       'throws'     => null,
-      'body'       => array(),
+      'body'       => [],
       'extension'  => null
-    )), $this->parse(
+    ]), $this->parse(
       'public string toString() { }'
     ));
   }
 
   #[@test]
   public function equalsMethod() {
-    $this->assertEquals(new MethodNode(array(
+    $this->assertEquals(new MethodNode([
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'equals',
       'returns'    => new TypeName('bool'),
-      'parameters' => array(array(
+      'parameters' => [[
         'name'  => 'cmp',
         'type'  => new TypeName('Object'),
         'check' => true
-      )),
+      ]],
       'throws'     => null,
-      'body'       => array(),
+      'body'       => [],
       'extension'  => null
-    )), $this->parse(
+    ]), $this->parse(
       'public bool equals(Object $cmp) { }'
     ));
   }
 
   #[@test]
   public function abstractMethod() {
-    $this->assertEquals(new MethodNode(array(
+    $this->assertEquals(new MethodNode([
       'modifiers'  => MODIFIER_PUBLIC | MODIFIER_ABSTRACT,
       'annotations'=> null,
       'name'       => 'setTrace',
       'returns'    => TypeName::$VOID,
-      'parameters' => array(array(
+      'parameters' => [[
         'name'  => 'cat',
         'type'  => new TypeName('util.log.LogCategory'),
         'check' => true
-      )),
+      ]],
       'throws'     => null,
       'body'       => null,
       'extension'  => null
-    )), $this->parse(
+    ]), $this->parse(
       'public abstract void setTrace(util.log.LogCategory $cat);'
     ));
   }
 
   #[@test]
   public function interfaceMethod() {
-    $this->assertEquals(new MethodNode(array(
+    $this->assertEquals(new MethodNode([
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'compareTo',
       'returns'    => new TypeName('int'),
-      'parameters' => array(array(
+      'parameters' => [[
         'name'  => 'other',
         'type'  => new TypeName('Object'),
         'check' => true
-      )),
+      ]],
       'throws'     => null,
       'body'       => null,
       'extension'  => null
-    )), $this->parse( 
+    ]), $this->parse( 
       'public int compareTo(Object $other);'
     ));
   }
 
   #[@test]
   public function staticMethod() {
-    $this->assertEquals(new MethodNode(array(
+    $this->assertEquals(new MethodNode([
       'modifiers'  => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'annotations'=> null,
       'name'       => 'loadClass',
-      'returns'    => new TypeName('Class', array(new TypeName('T'))),
-      'parameters' => array(array(
+      'returns'    => new TypeName('Class', [new TypeName('T')]),
+      'parameters' => [[
         'name'  => 'name',
         'type'  => new TypeName('string'),
         'check' => true
-      )),
-      'throws'     => array(new TypeName('ClassNotFoundException'), new TypeName('SecurityException')),
-      'body'       => array(),
+      ]],
+      'throws'     => [new TypeName('ClassNotFoundException'), new TypeName('SecurityException')],
+      'body'       => [],
       'extension'  => null
-    )), $this->parse(
+    ]), $this->parse(
       'public static Class<T> loadClass(string $name) throws ClassNotFoundException, SecurityException { }'
     ));
   }
 
   #[@test]
   public function printfMethod() {
-    $this->assertEquals(new MethodNode(array(
+    $this->assertEquals(new MethodNode([
       'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'annotations' => null,
       'name'        => 'printf',
       'returns'     => new TypeName('string'),
-      'parameters'  => array(array(
+      'parameters'  => [[
         'name'      => 'format',
         'type'      => new TypeName('string'),
         'check'     => true
-      ), array(
+      ], [
         'name'      => 'args',
         'type'      => new TypeName('string'),
         'vararg'    => true,
         'check'     => true
-      )), 
+      ]], 
       'throws'      => null,
-      'body'        => array(),
+      'body'        => [],
       'extension'   => null
-    )), $this->parse(
+    ]), $this->parse(
       'public static string printf(string $format, string... $args) { }'
     ));
   }
 
   #[@test]
   public function addAllMethod() {
-    $this->assertEquals(new MethodNode(array(
+    $this->assertEquals(new MethodNode([
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'addAll',
       'returns'    => TypeName::$VOID,
-      'parameters' => array(array(
+      'parameters' => [[
         'name'   => 'elements',
         'type'   => new TypeName('T[]'),  // XXX FIXME this is probably not a good representation
         'check'  => true      
-      )), 
+      ]], 
       'throws'     => null,
-      'body'       => array(),
+      'body'       => [],
       'extension'  => null
-    )), $this->parse(
+    ]), $this->parse(
       'public void addAll(T[] $elements) { }'
     ));
   }
 
   #[@test]
   public function plusOperator() {
-    $this->assertEquals(new OperatorNode(array(
+    $this->assertEquals(new OperatorNode([
       'modifiers'  => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'annotations'=> null,
       'symbol'     => '+',
       'returns'    => new TypeName('self'),
-      'parameters' => array(array(
+      'parameters' => [[
         'name'  => 'a',
         'type'  => new TypeName('self'),
         'check' => true
-      ), array(
+      ], [
         'name'  => 'b',
         'type'  => new TypeName('self'),
         'check' => true
-      )),
+      ]],
       'throws'     => null,
-      'body'       => array()
-    )), $this->parse(
+      'body'       => []
+    ]), $this->parse(
       'public static self operator + (self $a, self $b) { }'
     ));
   }
@@ -191,48 +191,48 @@ class MethodDeclarationTest extends ParserTestCase {
 
   #[@test]
   public function mapMethodWithAnnotations() {
-    $this->assertEquals(new MethodNode(array(
+    $this->assertEquals(new MethodNode([
       'modifiers'  => 0,
-      'annotations'=> array(
-        new AnnotationNode(array(
+      'annotations'=> [
+        new AnnotationNode([
           'type'        => 'test',
-          'parameters'  => array()
-        ))
-      ),
+          'parameters'  => []
+        ])
+      ],
       'name'       => 'map',
       'returns'    => new TypeName('[:string]'),
-      'parameters' => array(), 
+      'parameters' => [], 
       'throws'     => null,
-      'body'       => array(),
+      'body'       => [],
       'extension'  => null
-    )), $this->parse(
+    ]), $this->parse(
       '[@test] [:string] map() { }'
     ));
   }
 
   #[@test]
   public function extensionMethod() {
-    $this->assertEquals(new MethodNode(array(
+    $this->assertEquals(new MethodNode([
       'modifiers'  => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'annotations'=> null,
       'name'       => 'endsWith',
       'returns'    => new TypeName('bool'),
-      'parameters' => array(
-        array(
+      'parameters' => [
+        [
           'name'   => 'self',
           'type'   => new TypeName('string'),
           'check'  => true
-        ),
-        array(
+        ],
+        [
           'name'   => 'end',
           'type'   => new TypeName('string'),
           'check'  => true
-        )
-      ),
+        ]
+      ],
       'throws'     => null,
-      'body'       => array(),
+      'body'       => [],
       'extension'  => new TypeName('string')
-    )), $this->parse(
+    ]), $this->parse(
       'public static bool endsWith(this string $self, string $end) { }'
     ));
   }
@@ -245,57 +245,57 @@ class MethodDeclarationTest extends ParserTestCase {
   #  ['int compare($a, $b) { }', [['var', false], ['var', false]]]
   #])]
   public function parameters($src, $result) {
-    $cmp= array();
+    $cmp= [];
     foreach ($this->parse($src)->parameters as $param) {
-      $cmp[]= array($param['type']->compoundName(), $param['check']);
+      $cmp[]= [$param['type']->compoundName(), $param['check']];
     }
     $this->assertEquals($result, $cmp);
   }
 
   #[@test]
   public function addingMethod() {
-    $this->assertEquals(new MethodNode(array(
+    $this->assertEquals(new MethodNode([
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'adding',
       'returns'    => new TypeName('->int', null),
       'parameters' => null,
       'throws'     => null,
-      'body'       => array(),
+      'body'       => [],
       'extension'  => null
-    )), $this->parse(
+    ]), $this->parse(
       'public {? -> int} adding() { }'
     ));
   }
 
   #[@test]
   public function countingMethod() {
-    $this->assertEquals(new MethodNode(array(
+    $this->assertEquals(new MethodNode([
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'counting',
       'returns'    => new TypeName('->int', [new TypeName('Collection')]),
       'parameters' => null,
       'throws'     => null,
-      'body'       => array(),
+      'body'       => [],
       'extension'  => null
-    )), $this->parse(
+    ]), $this->parse(
       'public {Collection -> int} counting() { }'
     ));
   }
 
   #[@test]
   public function groupingMethod() {
-    $this->assertEquals(new MethodNode(array(
+    $this->assertEquals(new MethodNode([
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'grouping',
       'returns'    => new TypeName('->int', [new TypeName('Map'), new TypeName('string')]),
       'parameters' => null,
       'throws'     => null,
-      'body'       => array(),
+      'body'       => [],
       'extension'  => null
-    )), $this->parse(
+    ]), $this->parse(
       'public {(Map, string) -> int} grouping() { }'
     ));
   }

@@ -25,16 +25,16 @@ class ExceptionExpressionTest extends ParserTestCase {
    */
   #[@test]
   public function singleCatch() {
-    $this->assertEquals(array(new TryNode(array(
-      'statements' => array(new MethodCallNode(new VariableNode('method'), 'call')), 
-      'handling'   => array(
-        new CatchNode(array(
+    $this->assertEquals([new TryNode([
+      'statements' => [new MethodCallNode(new VariableNode('method'), 'call')], 
+      'handling'   => [
+        new CatchNode([
           'type'       => new TypeName('IllegalArgumentException'),
           'variable'   => 'e',
-          'statements' => array(new MethodCallNode(new VariableNode('this'), 'finalize')), 
-        ))
-      )
-    ))), $this->parse('
+          'statements' => [new MethodCallNode(new VariableNode('this'), 'finalize')], 
+        ])
+      ]
+    ])], $this->parse('
       try {
         $method.call();
       } catch (IllegalArgumentException $e) {
@@ -49,12 +49,12 @@ class ExceptionExpressionTest extends ParserTestCase {
    */
   #[@test]
   public function singleThrow() {
-    $this->assertEquals(array(new ThrowNode(array(
-      'expression' => new InstanceCreationNode(array(
+    $this->assertEquals([new ThrowNode([
+      'expression' => new InstanceCreationNode([
         'type'       => new TypeName('IllegalStateException'),
         'parameters' => null
-      ))
-    ))), $this->parse('
+      ])
+    ])], $this->parse('
       throw new IllegalStateException();
     '));
   }
@@ -65,24 +65,24 @@ class ExceptionExpressionTest extends ParserTestCase {
    */
   #[@test]
   public function singleFinally() {
-    $this->assertEquals(array(new TryNode(array(
-      'statements' => array(
-        new ThrowNode(array(
-          'expression' => new InstanceCreationNode(array(
+    $this->assertEquals([new TryNode([
+      'statements' => [
+        new ThrowNode([
+          'expression' => new InstanceCreationNode([
             'type'       => new TypeName('ChainedException'),
-            'parameters' => array(
+            'parameters' => [
               new StringNode('Hello'),
               new VariableNode('e'),
-            )
-          ))
-        ))
-      ), 
-      'handling'   => array(
-        new FinallyNode(array(
-          'statements' => array(new MethodCallNode(new VariableNode('this'), 'finalize')), 
-        ))
-      )
-    ))), $this->parse('
+            ]
+          ])
+        ])
+      ], 
+      'handling'   => [
+        new FinallyNode([
+          'statements' => [new MethodCallNode(new VariableNode('this'), 'finalize')], 
+        ])
+      ]
+    ])], $this->parse('
       try {
         throw new ChainedException("Hello", $e);
       } finally {
@@ -97,36 +97,36 @@ class ExceptionExpressionTest extends ParserTestCase {
    */
   #[@test]
   public function multipleCatches() {
-    $this->assertEquals(array(new TryNode(array(
-      'statements' => array(
-        new ReturnNode(new InstanceCreationNode(array(
-          'type'       => new TypeName('util.collections.HashTable', array(
+    $this->assertEquals([new TryNode([
+      'statements' => [
+        new ReturnNode(new InstanceCreationNode([
+          'type'       => new TypeName('util.collections.HashTable', [
             new TypeName('string'), 
             new TypeName('lang.Object')
-          )),
+          ]),
           'parameters' => null
-        )))
-      ), 
-      'handling'   => array(
-        new CatchNode(array(
+        ]))
+      ], 
+      'handling'   => [
+        new CatchNode([
           'type'       => new TypeName('IllegalArgumentException'),
           'variable'   => 'e',
           'statements' => null, 
-        )),
-        new CatchNode(array(
+        ]),
+        new CatchNode([
           'type'       => new TypeName('SecurityException'),
           'variable'   => 'e',
-          'statements' => array(new ThrowNode(array(
+          'statements' => [new ThrowNode([
             'expression' => new VariableNode('e')
-          ))), 
-        )),
-        new CatchNode(array(
+          ])], 
+        ]),
+        new CatchNode([
           'type'       => new TypeName('Exception'),
           'variable'   => 'e',
           'statements' => null, 
-        ))
-      )
-    ))), $this->parse('
+        ])
+      ]
+    ])], $this->parse('
       try {
         return new util.collections.HashTable<string, lang.Object>();
       } catch (IllegalArgumentException $e) {
@@ -143,33 +143,33 @@ class ExceptionExpressionTest extends ParserTestCase {
    */
   #[@test]
   public function multiCatch() {
-    $this->assertEquals(array(new TryNode(array(
-      'statements' => array(
-        new ReturnNode(new InstanceCreationNode(array(
-          'type'       => new TypeName('util.collections.HashTable', array(
+    $this->assertEquals([new TryNode([
+      'statements' => [
+        new ReturnNode(new InstanceCreationNode([
+          'type'       => new TypeName('util.collections.HashTable', [
             new TypeName('string'), 
             new TypeName('lang.Object')
-          )),
+          ]),
           'parameters' => null
-        )))
-      ), 
-      'handling'   => array(
-        new CatchNode(array(
+        ]))
+      ], 
+      'handling'   => [
+        new CatchNode([
           'type'       => new TypeName('IllegalArgumentException'),
           'variable'   => 'e',
-          'statements' => array(new ThrowNode(array(
+          'statements' => [new ThrowNode([
             'expression' => new VariableNode('e')
-          ))), 
-        )),
-        new CatchNode(array(
+          ])], 
+        ]),
+        new CatchNode([
           'type'       => new TypeName('SecurityException'),
           'variable'   => 'e',
-          'statements' => array(new ThrowNode(array(
+          'statements' => [new ThrowNode([
             'expression' => new VariableNode('e')
-          ))), 
-        ))
-      )
-    ))), $this->parse('
+          ])], 
+        ])
+      ]
+    ])], $this->parse('
       try {
         return new util.collections.HashTable<string, lang.Object>();
       } catch (IllegalArgumentException | SecurityException $e) {
@@ -184,19 +184,19 @@ class ExceptionExpressionTest extends ParserTestCase {
    */
   #[@test]
   public function resourceManagementWithAssignment() {
-    $this->assertEquals(array(new ArmNode(
-      array(new AssignmentNode(array(
+    $this->assertEquals([new ArmNode(
+      [new AssignmentNode([
         'variable'   => new VariableNode('r'),
-        'expression' => new InstanceCreationNode(array(
+        'expression' => new InstanceCreationNode([
           'type'       => new TypeName('TextReader'),
-          'parameters' => array(new VariableNode('stream')),
+          'parameters' => [new VariableNode('stream')],
           'body'       => null
-        )),
+        ]),
         'op'         => '='
-      ))),
-      array(new VariableNode('r')),
-      array(new ReturnNode(new MethodCallNode(new VariableNode('r'), 'readLine')))
-    )), $this->parse('
+      ])],
+      [new VariableNode('r')],
+      [new ReturnNode(new MethodCallNode(new VariableNode('r'), 'readLine'))]
+    )], $this->parse('
       try ($r= new TextReader($stream)) {
         return $r.readLine();
       }
@@ -209,13 +209,13 @@ class ExceptionExpressionTest extends ParserTestCase {
    */
   #[@test]
   public function resourceManagement() {
-    $this->assertEquals(array(
+    $this->assertEquals([
       new ArmNode(
-        array(),
-        array(new VariableNode('r')),
-        array(new ReturnNode(new MethodCallNode(new VariableNode('r'), 'readLine')))       
+        [],
+        [new VariableNode('r')],
+        [new ReturnNode(new MethodCallNode(new VariableNode('r'), 'readLine'))]       
       )
-    ), $this->parse('
+    ], $this->parse('
       try ($r) {
         return $r.readLine();
       }
@@ -228,15 +228,15 @@ class ExceptionExpressionTest extends ParserTestCase {
    */
   #[@test]
   public function resourceManagementWithTwoVariables() {
-    $this->assertEquals(array(
+    $this->assertEquals([
       new ArmNode(
-        array(),
-        array(new VariableNode('in'), new VariableNode('out')),
-        array(new ReturnNode(new MethodCallNode(new VariableNode('out'), 'write', array(
+        [],
+        [new VariableNode('in'), new VariableNode('out')],
+        [new ReturnNode(new MethodCallNode(new VariableNode('out'), 'write', [
           new MethodCallNode(new VariableNode('in'), 'read')
-        ))))       
+        ]))]       
       )
-    ), $this->parse('
+    ], $this->parse('
       try ($in, $out) {
         return $out.write($in.read());
       }

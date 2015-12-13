@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\syntax\xp;
 
+use text\parser\generic\ParseException;
 use xp\compiler\syntax\xp\Lexer;
 use xp\compiler\syntax\xp\Parser;
 use xp\compiler\ast\ImportNode;
@@ -27,9 +28,9 @@ class ImportTest extends ParserTestCase {
    */
   #[@test]
   public function singleTypeImport() {
-    $this->assertEquals(array(new ImportNode(array(
+    $this->assertEquals([new ImportNode([
         'name'     => 'util.collections.HashTable'
-      ))), 
+      ])], 
       $this->parse('import util.collections.HashTable; public class Test { }')
     );
   }
@@ -40,9 +41,9 @@ class ImportTest extends ParserTestCase {
    */
   #[@test]
   public function typeImportOnDemand() {
-    $this->assertEquals(array(new ImportNode(array(
+    $this->assertEquals([new ImportNode([
         'name'     => 'util.collections.*'
-      ))), 
+      ])], 
       $this->parse('import util.collections.*; public class Test { }')
     );
   }
@@ -53,9 +54,9 @@ class ImportTest extends ParserTestCase {
    */
   #[@test]
   public function staticImport() {
-    $this->assertEquals(array(new StaticImportNode(array(
+    $this->assertEquals([new StaticImportNode([
         'name'     => 'rdbms.criterion.Restrictions.in'
-      ))), 
+      ])], 
       $this->parse('import static rdbms.criterion.Restrictions::in; public class Test { }')
     );
   }
@@ -66,9 +67,9 @@ class ImportTest extends ParserTestCase {
    */
   #[@test]
   public function staticImportOnDemand() {
-    $this->assertEquals(array(new StaticImportNode(array(
+    $this->assertEquals([new StaticImportNode([
         'name'     => 'rdbms.criterion.Restrictions.*'
-      ))), 
+      ])], 
       $this->parse('import static rdbms.criterion.Restrictions::*; public class Test { }')
     );
   }
@@ -79,9 +80,9 @@ class ImportTest extends ParserTestCase {
    */
   #[@test]
   public function staticImportDeprecatedForm() {
-    $this->assertEquals(array(new StaticImportNode(array(
+    $this->assertEquals([new StaticImportNode([
         'name'     => 'rdbms.criterion.Restrictions.in'
-      ))), 
+      ])], 
       $this->parse('import static rdbms.criterion.Restrictions.in; public class Test { }')
     );
   }
@@ -92,9 +93,9 @@ class ImportTest extends ParserTestCase {
    */
   #[@test]
   public function nativeImport() {
-    $this->assertEquals(array(new NativeImportNode(array(
+    $this->assertEquals([new NativeImportNode([
         'name'     => 'standard.*'
-      ))), 
+      ])], 
       $this->parse('import native standard.*; public class Test { }')
     );
   }
@@ -105,13 +106,13 @@ class ImportTest extends ParserTestCase {
    */
   #[@test]
   public function multipleImports() {
-    $this->assertEquals(array(new ImportNode(array(
+    $this->assertEquals([new ImportNode([
         'name'     => 'util.collections.*'
-      )), new ImportNode(array(
+      ]), new ImportNode([
         'name'     => 'util.Date'
-      )), new ImportNode(array(
+      ]), new ImportNode([
         'name'     => 'unittest.*'
-      ))), 
+      ])], 
       $this->parse('
         import util.collections.*; 
         import util.Date; 
@@ -126,7 +127,7 @@ class ImportTest extends ParserTestCase {
    * Test "import *" is not valid
    *
    */
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(ParseException::class)]
   public function noImportAll() {
     $this->parse('import *; public class Test { }');
   }
@@ -135,7 +136,7 @@ class ImportTest extends ParserTestCase {
    * Test "import test" is not valid
    *
    */
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(ParseException::class)]
   public function noImportNothing() {
     $this->parse('import test; public class Test { }');
   }

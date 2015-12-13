@@ -10,10 +10,10 @@ class ArrayTest extends ParserTestCase {
   #  '[];'
   #])]
   public function emptyUntypedArray($syntax) {
-    $this->assertEquals(array(new ArrayNode(array(
+    $this->assertEquals([new ArrayNode([
       'values'        => null,
       'type'          => null,
-    ))), $this->parse($syntax));
+    ])], $this->parse($syntax));
   }
 
   #[@test, @values([
@@ -21,14 +21,14 @@ class ArrayTest extends ParserTestCase {
   #  '[1, 2, 3];'
   #])]
   public function untypedArray($syntax) {
-    $this->assertEquals(array(new ArrayNode(array(
-      'values'        => array(
+    $this->assertEquals([new ArrayNode([
+      'values'        => [
         new IntegerNode('1'),
         new IntegerNode('2'),
         new IntegerNode('3'),
-      ),
+      ],
       'type'          => null,
-    ))), $this->parse($syntax));
+    ])], $this->parse($syntax));
   }
 
   #[@test, @values([
@@ -36,13 +36,13 @@ class ArrayTest extends ParserTestCase {
   #  '[1, 2, 3, ];'
   #])]
   public function untypedArrayWithDanglingComma($syntax) {
-    $this->assertEquals(array(new ArrayNode(array(
-      'values'        => array(
+    $this->assertEquals([new ArrayNode([
+      'values'        => [
         new IntegerNode('1'),
         new IntegerNode('2'),
         new IntegerNode('3'),
-      ),
+      ],
       'type'          => null,
-    ))), $this->parse($syntax));
+    ])], $this->parse($syntax));
   }
 }

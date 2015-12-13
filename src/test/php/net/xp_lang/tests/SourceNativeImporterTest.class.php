@@ -24,7 +24,7 @@ class SourceNativeImporterTest extends \unittest\TestCase {
   #[@test]
   public function importArray_keys() {
     $this->assertEquals(
-      array('array_keys' => true), 
+      ['array_keys' => true], 
       $this->fixture->import('standard.array_keys')
     );
   }
@@ -32,7 +32,7 @@ class SourceNativeImporterTest extends \unittest\TestCase {
   #[@test]
   public function importPreg_match() {
     $this->assertEquals(
-      array('preg_match' => true), 
+      ['preg_match' => true], 
       $this->fixture->import('pcre.preg_match')
     );
   }
@@ -40,7 +40,7 @@ class SourceNativeImporterTest extends \unittest\TestCase {
   #[@test]
   public function importStrlen() {
     $this->assertEquals(
-      array('strlen' => true), 
+      ['strlen' => true], 
       $this->fixture->import('core.strlen')
     );
   }
@@ -48,7 +48,7 @@ class SourceNativeImporterTest extends \unittest\TestCase {
   #[@test]
   public function importAllFromStandard() {
     $this->assertEquals(
-      array(0 => array('standard' => true)), 
+      [0 => ['standard' => true]], 
       $this->fixture->import('standard.*')
     );
   }

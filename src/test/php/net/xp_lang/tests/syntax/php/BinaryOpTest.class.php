@@ -84,15 +84,15 @@ class BinaryOpTest extends ParserTestCase {
   #[@test]
   public function bracketsUsedForPrecedence() {
     $this->assertEquals(
-      array(new BinaryOpNode(array(
-        'lhs' => new BracedExpressionNode(new BinaryOpNode(array(
+      [new BinaryOpNode([
+        'lhs' => new BracedExpressionNode(new BinaryOpNode([
           'lhs'    => new IntegerNode('5'),
           'rhs'    => new IntegerNode('6'),
           'op'     => '+'
-        ))),
+        ])),
         'rhs' => new IntegerNode('3'),
         'op'  => '*'
-      ))), 
+      ])], 
       $this->parse('(5 + 6) * 3;')
     );
   }
@@ -100,15 +100,15 @@ class BinaryOpTest extends ParserTestCase {
   #[@test]
   public function bracketsUsedForPrecedenceWithVariable() {
     $this->assertEquals(
-      array(new BinaryOpNode(array(
-        'lhs' => new BracedExpressionNode(new BinaryOpNode(array(
+      [new BinaryOpNode([
+        'lhs' => new BracedExpressionNode(new BinaryOpNode([
           'lhs'    => new VariableNode('i'),
           'rhs'    => new IntegerNode('6'),
           'op'     => '+'
-        ))),
+        ])),
         'rhs' => new IntegerNode('3'),
         'op'  => '*'
-      ))), 
+      ])], 
       $this->parse('($i + 6) * 3;')
     );
   }
@@ -116,11 +116,11 @@ class BinaryOpTest extends ParserTestCase {
   #[@test]
   public function concatenation() {
     $this->assertEquals(
-      array(new BinaryOpNode(array(
+      [new BinaryOpNode([
         'lhs' => new StringNode('Hello'),
         'rhs' => new StringNode('World'),
         'op'  => '~'
-      ))), 
+      ])], 
       $this->parse('"Hello"."World";')
     );
   }
@@ -128,15 +128,15 @@ class BinaryOpTest extends ParserTestCase {
   #[@test]
   public function bracketsInConcatenation() {
     $this->assertEquals(
-      array(new BinaryOpNode(array(
+      [new BinaryOpNode([
         'lhs' => new StringNode('Hello #'),
-        'rhs' => new BracedExpressionNode(new BinaryOpNode(array(
+        'rhs' => new BracedExpressionNode(new BinaryOpNode([
           'lhs' => new VariableNode('i'),
           'rhs' => new IntegerNode('1'),
           'op'  => '+'
-        ))),
+        ])),
         'op'  => '~'
-      ))), 
+      ])], 
       $this->parse('"Hello #".($i + 1);')
     );
   }
@@ -144,15 +144,15 @@ class BinaryOpTest extends ParserTestCase {
   #[@test]
   public function concatenation_string_variable_and_string() {
     $this->assertEquals(
-      array(new BinaryOpNode(array(
+      [new BinaryOpNode([
         'lhs' => new StringNode('/^'),
-        'rhs' => new BinaryOpNode(array(
+        'rhs' => new BinaryOpNode([
           'lhs' => new VariableNode('module'),
           'rhs' => new StringNode('@.+/'),
           'op'  => '~'
-        )),
+        ]),
         'op'  => '~'
-      ))),
+      ])],
       $this->parse("'/^'.\$module.'@.+/';")
     );
   }

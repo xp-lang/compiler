@@ -18,10 +18,10 @@ class MapTest extends ParserTestCase {
   #[@test]
   public function emptyUntypedMap() {
     $this->assertEquals(
-      array(new MapNode(array(
-        'elements'      => array(),
+      [new MapNode([
+        'elements'      => [],
         'type'          => null,
-      ))), 
+      ])], 
       $this->parse('[:];')
     );
   }
@@ -32,10 +32,10 @@ class MapTest extends ParserTestCase {
    */
   #[@test]
   public function emptyTypedMap() {
-    $this->assertEquals(array(new MapNode(array(
-      'elements'      => array(),
+    $this->assertEquals([new MapNode([
+      'elements'      => [],
       'type'          => new TypeName('[:string]'),
-    ))), $this->parse('
+    ])], $this->parse('
       new [:string] {:};
     '));
   }
@@ -46,10 +46,10 @@ class MapTest extends ParserTestCase {
    */
   #[@test]
   public function intArrayMap() {
-    $this->assertEquals(array(new MapNode(array(
-      'elements'      => array(),
+    $this->assertEquals([new MapNode([
+      'elements'      => [],
       'type'          => new TypeName('[:int[]]'),
-    ))), $this->parse('
+    ])], $this->parse('
       new [:int[]] {:};
     '));
   }
@@ -60,10 +60,10 @@ class MapTest extends ParserTestCase {
    */
   #[@test]
   public function varArrayMap() {
-    $this->assertEquals(array(new MapNode(array(
-      'elements'      => array(),
+    $this->assertEquals([new MapNode([
+      'elements'      => [],
       'type'          => new TypeName('[:var[]]'),
-    ))), $this->parse('
+    ])], $this->parse('
       new [:var[]] {:};
     '));
   }
@@ -74,10 +74,10 @@ class MapTest extends ParserTestCase {
    */
   #[@test]
   public function intMapMap() {
-    $this->assertEquals(array(new MapNode(array(
-      'elements'      => array(),
+    $this->assertEquals([new MapNode([
+      'elements'      => [],
       'type'          => new TypeName('[:[:int]]'),
-    ))), $this->parse('
+    ])], $this->parse('
       new [:[:int]] {:};
     '));
   }
@@ -88,10 +88,10 @@ class MapTest extends ParserTestCase {
    */
   #[@test]
   public function stringToGeneric() {
-    $this->assertEquals(array(new MapNode(array(
-      'elements'      => array(),
+    $this->assertEquals([new MapNode([
+      'elements'      => [],
       'type'          => new TypeName('[:util.Vector<net.xp_lang.tests.StringBuffer>]'),
-    ))), $this->parse('
+    ])], $this->parse('
       new [:util.Vector<net.xp_lang.tests.StringBuffer>] {:};
     '));
   }
@@ -103,23 +103,23 @@ class MapTest extends ParserTestCase {
   #[@test]
   public function untypedMap() {
     $this->assertEquals(
-      array(new MapNode(array(
-        'elements'      => array(
-          array(
+      [new MapNode([
+        'elements'      => [
+          [
             new StringNode('one'),
             new IntegerNode('1'),
-          ),
-          array(
+          ],
+          [
             new StringNode('two'),
             new IntegerNode('2'),
-          ),
-          array(
+          ],
+          [
             new StringNode('three'),
             new IntegerNode('3'),
-          ),
-        ),
+          ],
+        ],
         'type'          => null,
-      ))), 
+      ])], 
       $this->parse('[ one : 1, two : 2,  three : 3 ];')
     );
   }
@@ -131,23 +131,23 @@ class MapTest extends ParserTestCase {
   #[@test]
   public function typedMap() {
     $this->assertEquals(
-      array(new MapNode(array(
-        'elements'      => array(
-          array(
+      [new MapNode([
+        'elements'      => [
+          [
             new StringNode('one'),
             new IntegerNode('1'),
-          ),
-          array(
+          ],
+          [
             new StringNode('two'),
             new IntegerNode('2'),
-          ),
-          array(
+          ],
+          [
             new StringNode('three'),
             new IntegerNode('3'),
-          ),
-        ),
+          ],
+        ],
       'type'          => new TypeName('[:int]'),
-      ))), 
+      ])], 
       $this->parse('new [:int] { one : 1, two : 2,  three : 3 };')
     );
   }
@@ -159,23 +159,23 @@ class MapTest extends ParserTestCase {
   #[@test]
   public function untypedMapWithDanglingComma() {
     $this->assertEquals(
-      array(new MapNode(array(
-        'elements'      => array(
-          array(
+      [new MapNode([
+        'elements'      => [
+          [
             new StringNode('one'),
             new IntegerNode('1'),
-          ),
-          array(
+          ],
+          [
             new StringNode('two'),
             new IntegerNode('2'),
-          ),
-          array(
+          ],
+          [
             new StringNode('three'),
             new IntegerNode('3'),
-          ),
-        ),
+          ],
+        ],
         'type'          => null,
-      ))), 
+      ])], 
       $this->parse('[ one : 1, two : 2,  three : 3, ];')
     );
   }
@@ -187,19 +187,19 @@ class MapTest extends ParserTestCase {
   #[@test]
   public function optionalQuoting() {
     $this->assertEquals(
-      array(new MapNode(array(
-        'elements'      => array(
-          array(
+      [new MapNode([
+        'elements'      => [
+          [
             new StringNode('content-type'),
             new IntegerNode('text/html'),
-          ),
-          array(
+          ],
+          [
             new StringNode('server'),
             new IntegerNode('Apache'),
-          ),
-        ),
+          ],
+        ],
         'type'          => null,
-      ))), 
+      ])], 
       $this->parse("[ 'content-type' : 'text/html', server : 'Apache' ];")
     );
   }

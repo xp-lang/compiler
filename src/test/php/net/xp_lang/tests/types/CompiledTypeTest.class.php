@@ -107,7 +107,7 @@ class CompiledTypeTest extends \unittest\TestCase {
   #[@test]
   public function getParentMethod() {
     $m= $this->fixtureWithParent(self::$objectType)->getMethod('getClassName');
-    $this->assertInstanceOf('xp.compiler.types.Method', $m);
+    $this->assertInstanceOf(Method::class, $m);
     $this->assertEquals($this->fixture->parent(), $m->holder);
   }
 
@@ -125,7 +125,7 @@ class CompiledTypeTest extends \unittest\TestCase {
     $m->returns= new TypeName('string');
     $this->fixtureWithParent(self::$objectType)->addMethod($m);
     $m= $this->fixture->getMethod('getClassName');
-    $this->assertInstanceOf('xp.compiler.types.Method', $m);
+    $this->assertInstanceOf(Method::class, $m);
     $this->assertEquals($this->fixture, $m->holder);
   }
 
@@ -141,7 +141,7 @@ class CompiledTypeTest extends \unittest\TestCase {
 
   #[@test]
   public function emptyTypeHasNoExtensions() {
-    $this->assertEquals(array(), $this->fixture->getExtensions());
+    $this->assertEquals([], $this->fixture->getExtensions());
   }
 
   #[@test]
@@ -149,7 +149,7 @@ class CompiledTypeTest extends \unittest\TestCase {
     $m= new Method('sorted');
     $m->modifiers= MODIFIER_PUBLIC | MODIFIER_STATIC;
     $m->returns= new TypeName('lang.types.ArrayList');
-    $m->parameters= array(new Parameter('self', new TypeName('lang.types.ArrayList')));
+    $m->parameters= [new Parameter('self', new TypeName('lang.types.ArrayList'))];
     $this->fixture->addMethod($m, new TypeName('lang.types.ArrayList'));
     $extensions= $this->fixture->getExtensions();
 

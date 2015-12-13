@@ -17,107 +17,107 @@ class ControlStructuresTest extends ParserTestCase {
 
   #[@test]
   public function ifStatement() {
-    $this->assertEquals(array(new IfNode(array(
+    $this->assertEquals([new IfNode([
       'condition'      => new VariableNode('i'),
       'statements'     => null,
       'otherwise'      => null, 
-    ))), $this->parse('
+    ])], $this->parse('
       if ($i) { }
     '));
   }
 
   #[@test]
   public function ifStatementWithOutCurlies() {
-    $this->assertEquals(array(new IfNode(array(
+    $this->assertEquals([new IfNode([
       'condition'      => new VariableNode('i'),
-      'statements'     => array(new ReturnNode(new BooleanNode(true))),
+      'statements'     => [new ReturnNode(new BooleanNode(true))],
       'otherwise'      => null, 
-    ))), $this->parse('
+    ])], $this->parse('
       if ($i) return true;
     '));
   }
 
   #[@test]
   public function ifElseStatement() {
-    $this->assertEquals(array(new IfNode(array(
+    $this->assertEquals([new IfNode([
       'condition'      => new VariableNode('i'),
       'statements'     => null, 
-      'otherwise'      => new ElseNode(array(
+      'otherwise'      => new ElseNode([
         'statements'     => null,
-      )), 
-    ))), $this->parse('
+      ]), 
+    ])], $this->parse('
       if ($i) { } else { }
     '));
   }
 
   #[@test]
   public function ifElseCascades() {
-    $this->assertEquals(array(new IfNode(array(
-      'condition'      => new BinaryOpNode(array(
+    $this->assertEquals([new IfNode([
+      'condition'      => new BinaryOpNode([
         'lhs'            => new VariableNode('i'),
         'rhs'            => new IntegerNode('3'),
         'op'             => '%'
-      )),
+      ]),
       'statements'     => null, 
-      'otherwise'      => new ElseNode(array(
-        'statements'     => array(new IfNode(array(
-          'condition'      => new BinaryOpNode(array(
+      'otherwise'      => new ElseNode([
+        'statements'     => [new IfNode([
+          'condition'      => new BinaryOpNode([
             'lhs'            => new VariableNode('i'),
             'rhs'            => new IntegerNode('2'),
             'op'             => '%'
-          )),
+          ]),
           'statements'     => null, 
-          'otherwise'      => new ElseNode(array(
+          'otherwise'      => new ElseNode([
             'statements'     => null,
-          )), 
-        ))),
-      )), 
-    ))), $this->parse('
+          ]), 
+        ])],
+      ]), 
+    ])], $this->parse('
       if ($i % 3) { } else if ($i % 2) { } else { }
     '));
   }
 
   #[@test]
   public function emptySwitchStatement() {
-    $this->assertEquals(array(new SwitchNode(array(
+    $this->assertEquals([new SwitchNode([
       'expression'     => new VariableNode('i'),
       'cases'          => null,
-    ))), $this->parse('
+    ])], $this->parse('
       switch ($i) { }
     '));
   }
 
   #[@test]
   public function switchStatement() {
-    $this->assertEquals(array(new SwitchNode(array(
+    $this->assertEquals([new SwitchNode([
       'expression'     => new VariableNode('i'),
-      'cases'          => array(
-        new CaseNode(array(
+      'cases'          => [
+        new CaseNode([
           'expression'     => new IntegerNode('0'),
-          'statements'     => array(
+          'statements'     => [
             new StringNode('no entries'),
             new BreakNode()
-          )
-        )),
-        new CaseNode(array(
+          ]
+        ]),
+        new CaseNode([
           'expression'     => new IntegerNode('1'),
-          'statements'     => array(
+          'statements'     => [
             new StringNode('one entry'),
             new BreakNode()
-          )
-       )),
-        new DefaultNode(array(
-          'statements'     => array(
-            new BinaryOpNode(array(
+          ]
+       ]),
+        new DefaultNode([
+          'statements'     => [
+            new BinaryOpNode([
               'lhs'        => new VariableNode('i'),
               'rhs'        => new StringNode(' entries'),
               'op'         => '~'
-            )),
+            ]),
             new BreakNode()
-          )
-        ))
-      ),
-    ))), $this->parse('
+          ]
+        ])
+      ],
+    ])], $this->parse('
       switch ($i) { 
         case 0: "no entries"; break;
         case 1: "one entry"; break;

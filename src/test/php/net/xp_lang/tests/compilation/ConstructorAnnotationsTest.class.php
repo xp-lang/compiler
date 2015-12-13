@@ -13,7 +13,7 @@ class ConstructorAnnotationsTest extends AnnotationsTest {
    */
   #[@test]
   public function noAnnotations() {
-    $this->assertEquals(array(), $this->compile('class %s { __construct() { } }')->getConstructor()->getAnnotations());
+    $this->assertEquals([], $this->compile('class %s { __construct() { } }')->getConstructor()->getAnnotations());
   }
 
   /**
@@ -23,7 +23,7 @@ class ConstructorAnnotationsTest extends AnnotationsTest {
   #[@test]
   public function simpleAnnotation() {
     $this->assertEquals(
-      array('experimental' => null), 
+      ['experimental' => null], 
       $this->compile('class %s { [@experimental] __construct() { } }')->getConstructor()->getAnnotations()
     );
   }
@@ -35,7 +35,7 @@ class ConstructorAnnotationsTest extends AnnotationsTest {
   #[@test]
   public function annotationWithDefault() {
     $this->assertEquals(
-      array('experimental' => 'beta'), 
+      ['experimental' => 'beta'], 
       $this->compile('class %s { [@experimental("beta")] __construct() { } }')->getConstructor()->getAnnotations()
     );
   }
@@ -47,7 +47,7 @@ class ConstructorAnnotationsTest extends AnnotationsTest {
   #[@test]
   public function annotationWithParams() {
     $this->assertEquals(
-      array('experimental' => array('stages' => array('beta', 'RC'))), 
+      ['experimental' => ['stages' => ['beta', 'RC']]], 
       $this->compile('class %s { [@experimental(stages= ["beta", "RC"])] __construct() { } }')->getConstructor()->getAnnotations()
     );
   }

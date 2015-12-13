@@ -19,17 +19,17 @@ class WithTest extends ParserTestCase {
   #[@test]
   public function oneAssignment() {
     $this->assertEquals(
-      array(new WithNode(
-        array(new AssignmentNode(array(
+      [new WithNode(
+        [new AssignmentNode([
           'variable'   => new VariableNode('o'),
           'op'         => '=',
-          'expression' => new InstanceCreationNode(array(
+          'expression' => new InstanceCreationNode([
             'type'       => new TypeName('Object'),
-            'parameters' => array(),
-          ))
-        ))),
-        array()
-      )), 
+            'parameters' => [],
+          ])
+        ])],
+        []
+      )], 
       $this->parse('with ($o= new Object()) { }')
     );
   }
@@ -41,24 +41,24 @@ class WithTest extends ParserTestCase {
   #[@test]
   public function twoAssignments() {
     $this->assertEquals(
-      array(new WithNode(
-        array(new AssignmentNode(array(
+      [new WithNode(
+        [new AssignmentNode([
           'variable'   => new VariableNode('o1'),
           'op'         => '=',
-          'expression' => new InstanceCreationNode(array(
+          'expression' => new InstanceCreationNode([
             'type'       => new TypeName('Object'),
-            'parameters' => array(),
-          ))
-        )), new AssignmentNode(array(
+            'parameters' => [],
+          ])
+        ]), new AssignmentNode([
           'variable'   => new VariableNode('o2'),
           'op'         => '=',
-          'expression' => new InstanceCreationNode(array(
+          'expression' => new InstanceCreationNode([
             'type'       => new TypeName('Object'),
-            'parameters' => array(),
-          ))
-        ))),
-        array()
-      )), 
+            'parameters' => [],
+          ])
+        ])],
+        []
+      )], 
       $this->parse('with ($o1= new Object(), $o2= new Object()) { }')
     );
   }
@@ -70,21 +70,21 @@ class WithTest extends ParserTestCase {
   #[@test]
   public function statements() {
     $this->assertEquals(
-      array(new WithNode(
-        array(new AssignmentNode(array(
+      [new WithNode(
+        [new AssignmentNode([
           'variable'   => new VariableNode('o'),
           'op'         => '=',
-          'expression' => new InstanceCreationNode(array(
+          'expression' => new InstanceCreationNode([
             'type'       => new TypeName('Object'),
-            'parameters' => array(),
-          ))
-        ))),
-        array(new AssignmentNode(array(
+            'parameters' => [],
+          ])
+        ])],
+        [new AssignmentNode([
           'variable'   => new VariableNode('s'),
           'op'         => '=',
           'expression' => new MethodCallNode(new VariableNode('o'), 'toString', null)
-        )))
-      )), 
+        ])]
+      )], 
       $this->parse('with ($o= new Object()) { $s= $o.toString(); }')
     );
   }

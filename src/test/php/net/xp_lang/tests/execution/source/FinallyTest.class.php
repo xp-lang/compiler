@@ -12,7 +12,7 @@ class FinallyTest extends ExecutionTest {
    */
   #[@test]
   public function tryFinallyNoException() {
-    $this->assertEquals(array('Try', 'Finally'), $this->run('
+    $this->assertEquals(['Try', 'Finally'], $this->run('
       $r= [];
       try {
         $r[]= "Try";
@@ -29,7 +29,7 @@ class FinallyTest extends ExecutionTest {
    */
   #[@test]
   public function tryFinallyWithException() {
-    $this->assertEquals(array('Try', 'Finally', 'Catch'), $this->run('
+    $this->assertEquals(['Try', 'Finally', 'Catch'], $this->run('
       try {
         $r= [];
         try {
@@ -51,7 +51,7 @@ class FinallyTest extends ExecutionTest {
    */
   #[@test]
   public function tryFinallyWithReturn() {
-    $this->assertEquals(array('Try', 'Finally'), $this->run('
+    $this->assertEquals(['Try', 'Finally'], $this->run('
       $r= [];
       try {
         $r[]= "Try";
@@ -68,7 +68,7 @@ class FinallyTest extends ExecutionTest {
    */
   #[@test]
   public function tryCatchFinallyWithException() {
-    $this->assertEquals(array('Try', 'Catch', 'Finally'), $this->run('
+    $this->assertEquals(['Try', 'Catch', 'Finally'], $this->run('
       $r= [];
       try {
         $r[]= "Try";
@@ -88,7 +88,7 @@ class FinallyTest extends ExecutionTest {
    */
   #[@test]
   public function tryCatchFinallyWithReturnInsideCatch() {
-    $this->assertEquals(array('Try', 'Catch', 'Finally'), $this->run('
+    $this->assertEquals(['Try', 'Catch', 'Finally'], $this->run('
       $r= [];
       try {
         $r[]= "Try";
@@ -108,7 +108,7 @@ class FinallyTest extends ExecutionTest {
    */
   #[@test]
   public function tryCatchFinallyNoException() {
-    $this->assertEquals(array('Try', 'Finally'), $this->run('
+    $this->assertEquals(['Try', 'Finally'], $this->run('
       $r= [];
       try {
         $r[]= "Try";

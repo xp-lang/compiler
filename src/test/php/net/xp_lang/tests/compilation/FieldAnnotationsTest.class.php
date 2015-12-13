@@ -13,7 +13,7 @@ class FieldAnnotationsTest extends AnnotationsTest {
    */
   #[@test]
   public function noAnnotations() {
-    $this->assertEquals(array('type' => 'var'), $this->compile('class %s { var $fixture; }')->getField('fixture')->getAnnotations());
+    $this->assertEquals(['type' => 'var'], $this->compile('class %s { var $fixture; }')->getField('fixture')->getAnnotations());
   }
 
   /**
@@ -23,7 +23,7 @@ class FieldAnnotationsTest extends AnnotationsTest {
   #[@test]
   public function simpleAnnotation() {
     $this->assertEquals(
-      array('type' => 'var', 'experimental' => null), 
+      ['type' => 'var', 'experimental' => null], 
       $this->compile('class %s { [@experimental] var $fixture; }')->getField('fixture')->getAnnotations()
     );
   }
@@ -35,7 +35,7 @@ class FieldAnnotationsTest extends AnnotationsTest {
   #[@test]
   public function annotationWithDefault() {
     $this->assertEquals(
-      array('type' => 'var', 'experimental' => 'beta'), 
+      ['type' => 'var', 'experimental' => 'beta'], 
       $this->compile('class %s { [@experimental("beta")] var $fixture; }')->getField('fixture')->getAnnotations()
     );
   }
@@ -47,7 +47,7 @@ class FieldAnnotationsTest extends AnnotationsTest {
   #[@test]
   public function annotationWithParams() {
     $this->assertEquals(
-      array('type' => 'var', 'experimental' => array('stages' => array('beta', 'RC'))), 
+      ['type' => 'var', 'experimental' => ['stages' => ['beta', 'RC']]], 
       $this->compile('class %s { [@experimental(stages= ["beta", "RC"])] var $fixture; }')->getField('fixture')->getAnnotations()
     );
   }

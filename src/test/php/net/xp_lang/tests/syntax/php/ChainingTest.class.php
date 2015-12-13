@@ -39,10 +39,10 @@ class ChainingTest extends ParserTestCase {
   public function chainedAfterNew() {
     $this->assertEquals(
       [new MethodCallNode(
-        new BracedExpressionNode(new InstanceCreationNode(array(
+        new BracedExpressionNode(new InstanceCreationNode([
           'type'           => new TypeName('Date'),
           'parameters'     => null,
-        ))),
+        ])),
         'toString',
         null
       )], 

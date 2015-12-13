@@ -1,5 +1,7 @@
 <?php namespace net\xp_lang\tests\syntax\xp;
 
+use lang\FormatException;
+
 /**
  * TestCase showing what is not supported in XP language in comparison
  * to PHP.
@@ -12,7 +14,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://language.variables.variable
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function variableVariables() {
     $this->parse('$$i= 0;');
   }
@@ -22,7 +24,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://language.variables.variable
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function dynamicVariables() {
     $this->parse('${$i}= 0;');
   }
@@ -32,7 +34,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://goto
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function gotoStatement() {
     $this->parse('goto error;');
   }
@@ -42,7 +44,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://declare
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function declareStatement() {
     $this->parse('declare(ticks=1) { }');
   }
@@ -52,7 +54,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://language.functions
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function functions() {
     $this->parse('function a() { }');
   }
@@ -62,7 +64,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://new
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function newWithoutBraces() {
     $this->parse('new A;');
   }
@@ -72,7 +74,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://language.references
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function references() {
     $this->parse('$a= &$b;');
   }
@@ -82,7 +84,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://elseif
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function elseifKeyword() {
     $this->parse('if ($a) { $b++; } elseif ($c) { $d++; }');
   }
@@ -92,7 +94,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://include
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function includeKeywordWithoutBraces() {
     $this->parse('include "functions.inc";');
   }
@@ -102,7 +104,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://require
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function requireKeywordWithoutBraces() {
     $this->parse('require "functions.inc";');
   }
@@ -112,7 +114,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://echo
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function echoKeywordWithoutBraces() {
     $this->parse('echo "Hello";');
   }
@@ -122,7 +124,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://control-structures.alternative-syntax
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function alternativeIf() {
     $this->parse('if ($a): $b++; endif;');
   }
@@ -132,7 +134,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://control-structures.alternative-syntax
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function alternativeWhile() {
     $this->parse('while ($a > 0): $a--; endwhile;');
   }
@@ -142,7 +144,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://control-structures.alternative-syntax
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function alternativeFor() {
     $this->parse('for ($i= 0; $i < 4; $i++): $b--; endfor;');
   }
@@ -152,7 +154,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://control-structures.alternative-syntax
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function alternativeForeach() {
     $this->parse('foreach ($a in $list): $b--; endforeach;');
   }
@@ -162,7 +164,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://language.operators.errorcontrol
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function silenceOperator() {
     $this->parse('$a= @$b;');
   }
@@ -172,7 +174,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://language.operators.execution
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function executionOperator() {
     $this->parse('$a= `ls -al`;');
   }
@@ -182,7 +184,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://language.basic-syntax.phpmode
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function inlineHTML() {
     $this->parse('?>HTML<?php namespace net\xp_lang\tests\syntax\xp;');
   }
@@ -192,7 +194,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://language.basic-syntax.comments
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function hashComment() {
     $this->parse('# $a= 1;');
   }
@@ -202,7 +204,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://heredoc
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function hereDoc() {
     $this->parse("\$s= <<<EOS\nHello\nEOS;");
   }
@@ -212,7 +214,7 @@ class UnsupportedFeaturesTest extends ParserTestCase {
    *
    * @see   php://nowdoc
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function nowDoc() {
     $this->parse("\$s= <<<'EOS'\nHello\nEOS;");
   }

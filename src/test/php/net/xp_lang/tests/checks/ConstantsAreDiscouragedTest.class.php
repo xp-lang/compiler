@@ -20,7 +20,7 @@ class ConstantsAreDiscouragedTest extends \unittest\TestCase {
   #[@test]
   public function constantsAreDiscouraged() {
     $this->assertEquals(
-      array('T203', 'Global constants (DIRECTORY_SEPARATOR) are discouraged'), 
+      ['T203', 'Global constants (DIRECTORY_SEPARATOR) are discouraged'], 
       $this->fixture->verify(new ConstantNode('DIRECTORY_SEPARATOR'), $this->scope)
     );
   }

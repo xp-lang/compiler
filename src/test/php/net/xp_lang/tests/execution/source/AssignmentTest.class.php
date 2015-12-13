@@ -1,5 +1,8 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
+use lang\FormatException;
+use xp\compiler\checks\IsAssignable;
+
 /**
  * Tests assigments
  */
@@ -10,7 +13,7 @@ class AssignmentTest extends ExecutionTest {
    */
   #[@beforeClass]
   public static function useIsAssignableCheck() {
-    self::check(new \xp\compiler\checks\IsAssignable(), true);
+    self::check(new IsAssignable(), true);
   }
   
   /**
@@ -89,7 +92,7 @@ class AssignmentTest extends ExecutionTest {
    * Test assigning to a function call is not allowed
    *
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function assignToFunction() {
     $this->compile('is()= 1;');
   }
@@ -98,7 +101,7 @@ class AssignmentTest extends ExecutionTest {
    * Test assigning to a method call is not allowed
    *
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function assignToMethod() {
     $this->compile('$this.equals()= 1;');
   }
@@ -107,7 +110,7 @@ class AssignmentTest extends ExecutionTest {
    * Test assigning to class member call is not allowed
    *
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function assignToClassMember() {
     $this->compile('self::class= true;');
   }
@@ -116,7 +119,7 @@ class AssignmentTest extends ExecutionTest {
    * Test assigning to a method call is not allowed
    *
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function assignToStaticMethod() {
     $this->compile('self::getInstance()= 1;');
   }

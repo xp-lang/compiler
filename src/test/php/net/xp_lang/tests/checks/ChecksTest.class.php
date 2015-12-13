@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\checks;
 
+use xp\compiler\checks\Check;
 use xp\compiler\checks\Checks;
 use xp\compiler\types\MethodScope;
 use xp\compiler\ast\StringNode;
@@ -12,7 +13,7 @@ class ChecksTest extends \unittest\TestCase {
 
   #[@beforeClass]
   public static function defineChecks() {
-    self::$check= newinstance('xp.compiler.checks.Check', [], '{
+    self::$check= newinstance(Check::class, [], '{
       public function node() { 
         return \lang\XPClass::forName("xp.compiler.ast.StringNode"); 
       }
@@ -44,7 +45,7 @@ class ChecksTest extends \unittest\TestCase {
    * @param   string message
    */
   public function warn($code, $message) {
-    $this->messages[]= array('warning', $code, $message);
+    $this->messages[]= ['warning', $code, $message];
   }
 
   /**
@@ -54,27 +55,27 @@ class ChecksTest extends \unittest\TestCase {
    * @param   string message
    */
   public function error($code, $message) {
-    $this->messages[]= array('error', $code, $message);
+    $this->messages[]= ['error', $code, $message];
   }
 
   #[@test]
   public function withoutCheck() {
     $this->assertTrue($this->fixture->verify(new StringNode('Test'), $this->scope, $this));
-    $this->assertEquals(array(), $this->messages);
+    $this->assertEquals([], $this->messages);
   }
 
   #[@test]
   public function withErrorCheck() {
     $this->fixture->add(self::$check, true);
     $this->assertFalse($this->fixture->verify(new StringNode('Test'), $this->scope, $this));
-    $this->assertEquals(array(array('error', 'C100', 'Test')), $this->messages);
+    $this->assertEquals([['error', 'C100', 'Test']], $this->messages);
   }
 
   #[@test]
   public function withWarningCheck() {
     $this->fixture->add(self::$check, false);
     $this->assertTrue($this->fixture->verify(new StringNode('Test'), $this->scope, $this));
-    $this->assertEquals(array(array('warning', 'C100', 'Test')), $this->messages);
+    $this->assertEquals([['warning', 'C100', 'Test']], $this->messages);
   }
 
   #[@test]
@@ -83,7 +84,7 @@ class ChecksTest extends \unittest\TestCase {
     $this->fixture->add(self::$check, true);
     $this->assertFalse($this->fixture->verify(new StringNode('Test'), $this->scope, $this));
     $this->assertEquals(
-      array(array('warning', 'C100', 'Test'), array('error', 'C100', 'Test')), 
+      [['warning', 'C100', 'Test'], ['error', 'C100', 'Test']], 
       $this->messages
     );
   }
@@ -94,7 +95,7 @@ class ChecksTest extends \unittest\TestCase {
     $this->fixture->add(self::$check, false);
     $this->assertTrue($this->fixture->verify(new StringNode('Test'), $this->scope, $this));
     $this->assertEquals(
-      array(array('warning', 'C100', 'Test'), array('warning', 'C100', 'Test')), 
+      [['warning', 'C100', 'Test'], ['warning', 'C100', 'Test']], 
       $this->messages
     );
   }
@@ -105,7 +106,7 @@ class ChecksTest extends \unittest\TestCase {
     $this->fixture->add(self::$check, true);
     $this->assertFalse($this->fixture->verify(new StringNode('Test'), $this->scope, $this));
     $this->assertEquals(
-      array(array('error', 'C100', 'Test'), array('error', 'C100', 'Test')), 
+      [['error', 'C100', 'Test'], ['error', 'C100', 'Test']], 
       $this->messages
     );
   }
@@ -115,6 +116,6 @@ class ChecksTest extends \unittest\TestCase {
     $this->fixture->add(self::$check, true);
     $this->fixture->clear();
     $this->assertTrue($this->fixture->verify(new StringNode('Test'), $this->scope, $this));
-    $this->assertEquals(array(), $this->messages);
+    $this->assertEquals([], $this->messages);
   }
 }

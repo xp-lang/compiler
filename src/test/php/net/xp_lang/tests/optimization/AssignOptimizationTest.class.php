@@ -43,12 +43,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function addition() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new VariableNode('a'), 'op' => '+=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new VariableNode('a'), 'op' => '+=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '+', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '+', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -58,12 +58,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function subtraction() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new VariableNode('a'), 'op' => '-=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new VariableNode('a'), 'op' => '-=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '-', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '-', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -73,12 +73,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function multiplication() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new VariableNode('a'), 'op' => '*=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new VariableNode('a'), 'op' => '*=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '*', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '*', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -88,12 +88,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function division() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new VariableNode('a'), 'op' => '/=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new VariableNode('a'), 'op' => '/=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '/', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '/', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -103,12 +103,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function modulo() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new VariableNode('a'), 'op' => '%=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new VariableNode('a'), 'op' => '%=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '%', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '%', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -118,12 +118,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function concat() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new VariableNode('a'), 'op' => '~=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new VariableNode('a'), 'op' => '~=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '~', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '~', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -133,12 +133,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function shiftRight() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new VariableNode('a'), 'op' => '>>=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new VariableNode('a'), 'op' => '>>=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '>>', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '>>', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -148,12 +148,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function shiftLeft() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new VariableNode('a'), 'op' => '<<=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new VariableNode('a'), 'op' => '<<=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '<<', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '<<', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -163,12 +163,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function logicalAnd() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new VariableNode('a'), 'op' => '&=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new VariableNode('a'), 'op' => '&=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '&', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '&', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -178,12 +178,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function logicalOr() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new VariableNode('a'), 'op' => '|=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new VariableNode('a'), 'op' => '|=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '|', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '|', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -193,12 +193,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function logicalXor() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new VariableNode('a'), 'op' => '^=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new VariableNode('a'), 'op' => '^=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '^', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '^', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -208,12 +208,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function instanceMemberVariables() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new MemberAccessNode(new VariableNode('this'), 'a'), 'op' => '+=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new MemberAccessNode(new VariableNode('this'), 'a'), 'op' => '+=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new MemberAccessNode(new VariableNode('this'), 'a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new MemberAccessNode(new VariableNode('this'), 'a'), 'op' => '+', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new MemberAccessNode(new VariableNode('this'), 'a'), 'op' => '+', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -223,12 +223,12 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function staticMemberVariables() {
     $this->assertEquals(
-      new AssignmentNode(array('variable' => new StaticMemberAccessNode(new TypeName('self'), 'a'), 'op' => '+=', 'expression' => new VariableNode('b'))),
-      $this->optimize(new AssignmentNode(array(
+      new AssignmentNode(['variable' => new StaticMemberAccessNode(new TypeName('self'), 'a'), 'op' => '+=', 'expression' => new VariableNode('b')]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new StaticMemberAccessNode(new TypeName('self'), 'a'), 
         'op'         => '=', 
-        'expression' => new BinaryOpNode(array('lhs' => new StaticMemberAccessNode(new TypeName('self'), 'a'), 'op' => '+', 'rhs' => new VariableNode('b')))
-      )))
+        'expression' => new BinaryOpNode(['lhs' => new StaticMemberAccessNode(new TypeName('self'), 'a'), 'op' => '+', 'rhs' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -237,11 +237,11 @@ class AssignOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function notOptimizedIfInstanceMemberAssignToLocal() {
-    $assignment= new AssignmentNode(array(
+    $assignment= new AssignmentNode([
       'variable'   => new MemberAccessNode(new VariableNode('this'), 'a'), 
       'op'         => '=', 
-      'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '+', 'rhs' => new VariableNode('b')))
-    ));
+      'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '+', 'rhs' => new VariableNode('b')])
+    ]);
     $this->assertEquals($assignment, $this->optimize($assignment));
   }
 
@@ -250,11 +250,11 @@ class AssignOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function notOptimizedIfLocalAssignToInstanceMember() {
-    $assignment= new AssignmentNode(array(
+    $assignment= new AssignmentNode([
       'variable'   => new VariableNode('a'), 
       'op'         => '=', 
-      'expression' => new BinaryOpNode(array('lhs' => new MemberAccessNode(new VariableNode('this'), 'a'), 'op' => '+', 'rhs' => new VariableNode('b')))
-    ));
+      'expression' => new BinaryOpNode(['lhs' => new MemberAccessNode(new VariableNode('this'), 'a'), 'op' => '+', 'rhs' => new VariableNode('b')])
+    ]);
     $this->assertEquals($assignment, $this->optimize($assignment));
   }
 
@@ -263,11 +263,11 @@ class AssignOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function notOptimizedIfStaticMemberAssignToLocal() {
-    $assignment= new AssignmentNode(array(
+    $assignment= new AssignmentNode([
       'variable'   => new StaticMemberAccessNode(new TypeName('self'), 'a'), 
       'op'         => '=', 
-      'expression' => new BinaryOpNode(array('lhs' => new VariableNode('a'), 'op' => '+', 'rhs' => new VariableNode('b')))
-    ));
+      'expression' => new BinaryOpNode(['lhs' => new VariableNode('a'), 'op' => '+', 'rhs' => new VariableNode('b')])
+    ]);
     $this->assertEquals($assignment, $this->optimize($assignment));
   }
 
@@ -276,11 +276,11 @@ class AssignOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function notOptimizedIfLocalAssignToStaticMember() {
-    $assignment= new AssignmentNode(array(
+    $assignment= new AssignmentNode([
       'variable'   => new VariableNode('a'), 
       'op'         => '=', 
-      'expression' => new BinaryOpNode(array('lhs' => new StaticMemberAccessNode(new TypeName('self'), 'a'), 'op' => '+', 'rhs' => new VariableNode('b')))
-    ));
+      'expression' => new BinaryOpNode(['lhs' => new StaticMemberAccessNode(new TypeName('self'), 'a'), 'op' => '+', 'rhs' => new VariableNode('b')])
+    ]);
     $this->assertEquals($assignment, $this->optimize($assignment));
   }
 
@@ -289,11 +289,11 @@ class AssignOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function notOptimizedIfNotLHS() {
-    $assignment= new AssignmentNode(array(
+    $assignment= new AssignmentNode([
       'variable'   => new VariableNode('a'), 
       'op'         => '=', 
-      'expression' => new BinaryOpNode(array('lhs' => new VariableNode('b'), 'op' => '+', 'rhs' => new VariableNode('c')))
-    ));
+      'expression' => new BinaryOpNode(['lhs' => new VariableNode('b'), 'op' => '+', 'rhs' => new VariableNode('c')])
+    ]);
     $this->assertEquals($assignment, $this->optimize($assignment));
   }
 
@@ -302,11 +302,11 @@ class AssignOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function notOptimizedIfRHS() {
-    $assignment= new AssignmentNode(array(
+    $assignment= new AssignmentNode([
       'variable'   => new VariableNode('a'), 
       'op'         => '=', 
-      'expression' => new BinaryOpNode(array('lhs' => new VariableNode('b'), 'op' => '+', 'rhs' => new VariableNode('a')))
-    ));
+      'expression' => new BinaryOpNode(['lhs' => new VariableNode('b'), 'op' => '+', 'rhs' => new VariableNode('a')])
+    ]);
     $this->assertEquals($assignment, $this->optimize($assignment));
   }
 
@@ -316,16 +316,16 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function minusAssignAndUnaryMinus() {
     $this->assertEquals(
-      new AssignmentNode(array(
+      new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '+=', 
         'expression' => new VariableNode('b')
-      )),
-      $this->optimize(new AssignmentNode(array(
+      ]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '-=', 
-        'expression' => new UnaryOpNode(array('op' => '-', 'postfix' => false, 'expression' => new VariableNode('b')))
-      )))
+        'expression' => new UnaryOpNode(['op' => '-', 'postfix' => false, 'expression' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -335,16 +335,16 @@ class AssignOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function plusAssignAndUnaryMinus() {
     $this->assertEquals(
-      new AssignmentNode(array(
+      new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '-=', 
         'expression' => new VariableNode('b')
-      )),
-      $this->optimize(new AssignmentNode(array(
+      ]),
+      $this->optimize(new AssignmentNode([
         'variable'   => new VariableNode('a'), 
         'op'         => '+=', 
-        'expression' => new UnaryOpNode(array('op' => '-', 'postfix' => false, 'expression' => new VariableNode('b')))
-      )))
+        'expression' => new UnaryOpNode(['op' => '-', 'postfix' => false, 'expression' => new VariableNode('b')])
+      ]))
     );
   }
 
@@ -353,11 +353,11 @@ class AssignOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function timesAssignAndUnaryMinusNotOptimized() {
-    $assignment= new AssignmentNode(array(
+    $assignment= new AssignmentNode([
       'variable'   => new VariableNode('a'), 
       'op'         => '*=', 
-      'expression' => new UnaryOpNode(array('op' => '-', 'postfix' => false, 'expression' => new VariableNode('b')))
-    ));
+      'expression' => new UnaryOpNode(['op' => '-', 'postfix' => false, 'expression' => new VariableNode('b')])
+    ]);
     $this->assertEquals($assignment, $this->optimize($assignment));
   }
 }

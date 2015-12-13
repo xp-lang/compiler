@@ -37,30 +37,30 @@ class TypeMemberHasDocumentationTest extends \unittest\TestCase {
   
   #[@test]
   public function methodWithoutApidoc() {
-    $m= new MethodNode(array(
+    $m= new MethodNode([
       'name'        => 'run',
       'modifiers'   => MODIFIER_ABSTRACT,
       'returns'     => TypeName::$VOID,
-      'parameters'  => array(),
-      'body'        => array()
-    ));
+      'parameters'  => [],
+      'body'        => []
+    ]);
     $this->assertEquals(
-      array('D201', 'No api doc for member Runner::run'), 
-      $this->verify($m, new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner')))
+      ['D201', 'No api doc for member Runner::run'], 
+      $this->verify($m, new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Runner')))
     );
   }
 
   #[@test]
   public function methodsInSyntheticClassesNotChecked() {
-    $c= new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Lambda··4b70075bd9164'));
+    $c= new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Lambda··4b70075bd9164'));
     $c->synthetic= true;
-    $m= new MethodNode(array(
+    $m= new MethodNode([
       'name'        => 'run',
       'modifiers'   => MODIFIER_ABSTRACT,
       'returns'     => TypeName::$VOID,
-      'parameters'  => array(),
-      'body'        => array()
-    ));
+      'parameters'  => [],
+      'body'        => []
+    ]);
     $this->assertNull($this->verify($m, $c));
   }
 }

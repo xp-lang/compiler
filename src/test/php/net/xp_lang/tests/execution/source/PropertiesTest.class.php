@@ -1,5 +1,7 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
+use lang\IllegalAccessException;
+
 /**
  * Tests properties
  */
@@ -58,12 +60,12 @@ class PropertiesTest extends ExecutionTest {
       public string toString() {
         return $this.buffer;
       }
-    }', array(
+    }', [
       'import native core.strlen;', 
       'import native standard.str_split;',
       'import native standard.substr;',
       'import native standard.implode;',
-    ));
+    ]);
   }
   
   /**
@@ -83,14 +85,14 @@ class PropertiesTest extends ExecutionTest {
   #[@test]
   public function readChars() {
     $str= self::$fixture->newInstance('Hello');
-    $this->assertEquals(array('H', 'e', 'l', 'l', 'o'), $str->chars);
+    $this->assertEquals(['H', 'e', 'l', 'l', 'o'], $str->chars);
   }
 
   /**
    * Test writing the length property
    *
    */
-  #[@test, @expect('lang.IllegalAccessException')]
+  #[@test, @expect(IllegalAccessException::class)]
   public function writeLength() {
     $str= self::$fixture->newInstance('Hello');
     $str->length= 5;
@@ -100,7 +102,7 @@ class PropertiesTest extends ExecutionTest {
    * Test writing the length property
    *
    */
-  #[@test, @expect('lang.IllegalAccessException')]
+  #[@test, @expect(IllegalAccessException::class)]
   public function addLength() {
     $str= self::$fixture->newInstance('Hello');
     $str->length++;
@@ -113,7 +115,7 @@ class PropertiesTest extends ExecutionTest {
   #[@test]
   public function writeChars() {
     $str= self::$fixture->newInstance('Hello');
-    $str->chars= array('A', 'B', 'C');
+    $str->chars= ['A', 'B', 'C'];
     $this->assertEquals('ABC', $str->toString());
   }
 
@@ -167,7 +169,7 @@ class PropertiesTest extends ExecutionTest {
    * Test removing offsets
    *
    */
-  #[@test, @expect('lang.IllegalAccessException')]
+  #[@test, @expect(IllegalAccessException::class)]
   public function offsetUnset() {
     $str= self::$fixture->newInstance('Hello');
     unset($str[0]);

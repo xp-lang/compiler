@@ -9,17 +9,17 @@ class InstanceOfTest extends ParserTestCase {
 
   #[@test]
   public function instanceOfObject() {
-    $this->assertEquals(array(new InstanceOfNode(array(
+    $this->assertEquals([new InstanceOfNode([
       'expression'    => new VariableNode('a'),
       'type'          => new TypeName('Object'),
-    ))), $this->parse('$a instanceof Object;'));
+    ])], $this->parse('$a instanceof Object;'));
   }
 
   #[@test]
   public function memberInstanceOfObject() {
-    $this->assertEquals(array(new InstanceOfNode(array(
+    $this->assertEquals([new InstanceOfNode([
       'expression'    => new MemberAccessNode(new VariableNode('this'), 'a'),
       'type'          => new TypeName('Object'),
-    ))), $this->parse('$this->a instanceof Object;'));
+    ])], $this->parse('$this->a instanceof Object;'));
   }
 }

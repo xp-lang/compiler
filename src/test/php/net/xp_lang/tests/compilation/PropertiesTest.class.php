@@ -48,14 +48,14 @@ use lang\reflect\Modifiers;
       Syntax::forName('xp')->parse(new MemoryInputStream(sprintf($src, $unique))),
       $this->scope
     );
-    $r->executeWith(array());
+    $r->executeWith([]);
     return new TypeReflection(\lang\XPClass::forName($r->type()->name()));
   }
 
   protected function assertProperty($modifiers, $name, $type, $actual) {
     $this->assertEquals(
-      array('modifiers' => Modifiers::namesOf($modifiers), 'name' => $name, 'type' => $type),
-      array('modifiers' => Modifiers::namesOf($actual->modifiers), 'name' => $actual->name, 'type' => $actual->type)
+      ['modifiers' => Modifiers::namesOf($modifiers), 'name' => $name, 'type' => $type],
+      ['modifiers' => Modifiers::namesOf($actual->modifiers), 'name' => $actual->name, 'type' => $actual->type]
     );
   }
 

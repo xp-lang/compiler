@@ -15,10 +15,10 @@ class UnaryOpTest extends ParserTestCase {
    */
   #[@test]
   public function negation() {
-    $this->assertEquals(array(new UnaryOpNode(array(
+    $this->assertEquals([new UnaryOpNode([
       'expression'    => new VariableNode('i'),
       'op'            => '!'
-    ))), $this->parse('
+    ])], $this->parse('
       !$i;
     '));
   }
@@ -29,10 +29,10 @@ class UnaryOpTest extends ParserTestCase {
    */
   #[@test]
   public function complement() {
-    $this->assertEquals(array(new UnaryOpNode(array(
+    $this->assertEquals([new UnaryOpNode([
       'expression'    => new VariableNode('i'),
       'op'            => '~'
-    ))), $this->parse('
+    ])], $this->parse('
       ~$i;
     '));
   }
@@ -43,10 +43,10 @@ class UnaryOpTest extends ParserTestCase {
    */
   #[@test]
   public function increment() {
-    $this->assertEquals(array(new UnaryOpNode(array(
+    $this->assertEquals([new UnaryOpNode([
       'expression'    => new VariableNode('i'),
       'op'            => '++'
-    ))), $this->parse('
+    ])], $this->parse('
       ++$i;
     '));
   }
@@ -57,10 +57,10 @@ class UnaryOpTest extends ParserTestCase {
    */
   #[@test]
   public function decrement() {
-    $this->assertEquals(array(new UnaryOpNode(array(
+    $this->assertEquals([new UnaryOpNode([
       'expression'    => new VariableNode('i'),
       'op'            => '--'
-    ))), $this->parse('
+    ])], $this->parse('
       --$i;
     '));
   }

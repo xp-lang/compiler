@@ -16,7 +16,7 @@ class CoreFunctionalityTest extends \unittest\TestCase {
    * @return var[]
    */
   public function functions() {
-    return array(
+    return [
       'newinstance',
       'with',
       'create',
@@ -25,7 +25,7 @@ class CoreFunctionalityTest extends \unittest\TestCase {
       'cast',
       'is',
       'this'
-    );
+    ];
   }
 
   /**

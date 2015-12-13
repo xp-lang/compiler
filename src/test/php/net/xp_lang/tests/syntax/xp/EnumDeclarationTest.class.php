@@ -35,7 +35,7 @@ class EnumDeclarationTest extends ParserTestCase {
       null,
       new TypeName('Days'),
       null,
-      array(),
+      [],
       null
     ), $this->parse('enum Days { }'));
   }
@@ -51,7 +51,7 @@ class EnumDeclarationTest extends ParserTestCase {
       null,
       new TypeName('Days'),
       null,
-      array(),
+      [],
       null
     ), $this->parse('abstract enum Days { }'));
   }
@@ -62,15 +62,15 @@ class EnumDeclarationTest extends ParserTestCase {
    */
   #[@test]
   public function daysEnum() {
-    $this->assertEquals(array(
-      new EnumMemberNode(array('name' => 'monday', 'body' => null)),
-      new EnumMemberNode(array('name' => 'tuesday', 'body' => null)),
-      new EnumMemberNode(array('name' => 'wednedsday', 'body' => null)),
-      new EnumMemberNode(array('name' => 'thursday', 'body' => null)),
-      new EnumMemberNode(array('name' => 'friday', 'body' => null)),
-      new EnumMemberNode(array('name' => 'saturday', 'body' => null)),
-      new EnumMemberNode(array('name' => 'sunday', 'body' => null)),
-    ), $this->parse('enum Days { monday, tuesday, wednedsday, thursday, friday, saturday, sunday }')->body);
+    $this->assertEquals([
+      new EnumMemberNode(['name' => 'monday', 'body' => null]),
+      new EnumMemberNode(['name' => 'tuesday', 'body' => null]),
+      new EnumMemberNode(['name' => 'wednedsday', 'body' => null]),
+      new EnumMemberNode(['name' => 'thursday', 'body' => null]),
+      new EnumMemberNode(['name' => 'friday', 'body' => null]),
+      new EnumMemberNode(['name' => 'saturday', 'body' => null]),
+      new EnumMemberNode(['name' => 'sunday', 'body' => null]),
+    ], $this->parse('enum Days { monday, tuesday, wednedsday, thursday, friday, saturday, sunday }')->body);
   }
 
   /**
@@ -79,38 +79,38 @@ class EnumDeclarationTest extends ParserTestCase {
    */
   #[@test]
   public function coinEnum() {
-    $this->assertEquals(new EnumNode(0, null, new TypeName('Coin'), null, array(), array(
-      new EnumMemberNode(array(
+    $this->assertEquals(new EnumNode(0, null, new TypeName('Coin'), null, [], [
+      new EnumMemberNode([
         'name'      => 'penny', 
         'value'     => new IntegerNode('1'),
         'body'      => null
-      )),
-      new EnumMemberNode(array(
+      ]),
+      new EnumMemberNode([
         'name'      => 'nickel', 
         'value'     => new IntegerNode('2'),
         'body'      => null
-      )),
-      new EnumMemberNode(array(
+      ]),
+      new EnumMemberNode([
         'name'      => 'dime', 
         'value'     => new IntegerNode('10'),
         'body'      => null
-      )),
-      new EnumMemberNode(array(
+      ]),
+      new EnumMemberNode([
         'name'      => 'quarter', 
         'value'     => new IntegerNode('25'),
         'body'      => null
-      )),
-      new MethodNode(array(
+      ]),
+      new MethodNode([
         'modifiers'    => MODIFIER_PUBLIC,
         'annotations'  => null,
         'returns'      => new TypeName('string'),
         'name'         => 'color',
         'parameters'   => null,
         'throws'       => null,
-        'body'         => array(),
+        'body'         => [],
         'extension'    => null
-      ))
-    )), $this->parse('enum Coin { 
+      ])
+    ]), $this->parse('enum Coin { 
       penny(1), nickel(2), dime(10), quarter(25);
       
       public string color() {

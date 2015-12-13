@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\syntax\xp;
 
+use text\parser\generic\ParseException;
 use xp\compiler\syntax\xp\Lexer;
 use xp\compiler\syntax\xp\Parser;
 use xp\compiler\ast\ClassNode;
@@ -39,8 +40,8 @@ class ClassDeclarationTest extends ParserTestCase {
         null,                       // Annotations
         new TypeName('Empty'),      // Name
         null,                       // Parent
-        array(),                    // Implements
-        array()                     // Body
+        [],                    // Implements
+        []                     // Body
       ), 
       $this->parse('class Empty { }')
     );
@@ -58,11 +59,11 @@ class ClassDeclarationTest extends ParserTestCase {
         null,                       // Annotations
         new TypeName('Driver'),     // Name
         null,                       // Parent
-        array(),                    // Implements
-        array(
-          new StaticInitializerNode(array(
-          ))
-        )
+        [],                    // Implements
+        [
+          new StaticInitializerNode([
+          ])
+        ]
       ), 
       $this->parse('class Driver { static { } }')
     );
@@ -77,13 +78,13 @@ class ClassDeclarationTest extends ParserTestCase {
     $this->assertEquals(
       new ClassNode(
         0,
-        array(new AnnotationNode(array(
+        [new AnnotationNode([
           'type'       => 'Deprecated'
-        ))),
+        ])],
         new TypeName('Empty'),
         null,
-        array(),
-        array()
+        [],
+        []
       ), 
       $this->parse('[@Deprecated] class Empty { }')
     );
@@ -101,8 +102,8 @@ class ClassDeclarationTest extends ParserTestCase {
         null,
         new TypeName('Class'),
         new TypeName('lang.Object'),
-        array(),
-        array()
+        [],
+        []
       ), 
       $this->parse('class Class extends lang.Object { }')
     );
@@ -120,8 +121,8 @@ class ClassDeclarationTest extends ParserTestCase {
         null,
         new TypeName('HttpConnection'),
         null,
-        array(new TypeName('Traceable')),
-        array()
+        [new TypeName('Traceable')],
+        []
       ), 
       $this->parse('class HttpConnection implements Traceable { }')
     );
@@ -139,8 +140,8 @@ class ClassDeclarationTest extends ParserTestCase {
         null,
         new TypeName('Math'),
         null,
-        array(new TypeName('util.Observer'), new TypeName('Traceable')),
-        array()
+        [new TypeName('util.Observer'), new TypeName('Traceable')],
+        []
       ), 
       $this->parse('class Math implements util.Observer, Traceable { }')
     );
@@ -158,8 +159,8 @@ class ClassDeclarationTest extends ParserTestCase {
         null,
         new TypeName('Integer'),
         new TypeName('Number'),
-        array(new TypeName('Observer')),
-        array()
+        [new TypeName('Observer')],
+        []
       ), 
       $this->parse('class Integer extends Number implements Observer { }')
     );
@@ -177,8 +178,8 @@ class ClassDeclarationTest extends ParserTestCase {
         null,
         new TypeName('Class'),
         null,
-        array(),
-        array()
+        [],
+        []
       ), 
       $this->parse('public class Class { }')
     );
@@ -196,8 +197,8 @@ class ClassDeclarationTest extends ParserTestCase {
         null,
         new TypeName('Base'),
         null,
-        array(),
-        array()
+        [],
+        []
       ), 
       $this->parse('public abstract class Base { }')
     );
@@ -213,10 +214,10 @@ class ClassDeclarationTest extends ParserTestCase {
       new ClassNode(
         0,
         null,
-        new TypeName('Class', array(new TypeName('T'))),
+        new TypeName('Class', [new TypeName('T')]),
         null,
-        array(),
-        array()
+        [],
+        []
       ), 
       $this->parse('class Class<T> { }')
     );
@@ -232,10 +233,10 @@ class ClassDeclarationTest extends ParserTestCase {
       new ClassNode(
         0,
         null,
-        new TypeName('HashTable', array(new TypeName('K'), new TypeName('V'))),
+        new TypeName('HashTable', [new TypeName('K'), new TypeName('V')]),
         null,
-        array(new TypeName('Map', array(new TypeName('K'), new TypeName('V')))),
-        array()
+        [new TypeName('Map', [new TypeName('K'), new TypeName('V')])],
+        []
       ), 
       $this->parse('class HashTable<K, V> implements Map<K, V> { }')
     );
@@ -253,7 +254,7 @@ class ClassDeclarationTest extends ParserTestCase {
         null,
         new TypeName('Empty'),
         null,
-        array()
+        []
       ), 
       $this->parse('interface Empty { }')
     );
@@ -269,9 +270,9 @@ class ClassDeclarationTest extends ParserTestCase {
       new InterfaceNode(
         0,
         null,
-        new TypeName('Filter', array(new TypeName('T'))),
+        new TypeName('Filter', [new TypeName('T')]),
         null,
-        array()
+        []
       ), 
       $this->parse('interface Filter<T> { }')
     );
@@ -287,9 +288,9 @@ class ClassDeclarationTest extends ParserTestCase {
       new InterfaceNode(
         0,
         null,
-        new TypeName('Map', array(new TypeName('K'), new TypeName('V'))),
+        new TypeName('Map', [new TypeName('K'), new TypeName('V')]),
         null,
-        array()
+        []
       ), 
       $this->parse('interface Map<K, V> { }')
     );
@@ -306,8 +307,8 @@ class ClassDeclarationTest extends ParserTestCase {
         0,
         null,
         new TypeName('Debuggable'),
-        array(new TypeName('util.log.Traceable')),
-        array()
+        [new TypeName('util.log.Traceable')],
+        []
       ), 
       $this->parse('interface Debuggable extends util.log.Traceable { }')
     );
@@ -324,8 +325,8 @@ class ClassDeclarationTest extends ParserTestCase {
         0,
         null,
         new TypeName('Debuggable'),
-        array(new TypeName('Traceable'), new TypeName('Observer', array(new TypeName('T')))),
-        array()
+        [new TypeName('Traceable'), new TypeName('Observer', [new TypeName('T')])],
+        []
       ), 
       $this->parse('interface Debuggable extends Traceable, Observer<T> { }')
     );
@@ -335,7 +336,7 @@ class ClassDeclarationTest extends ParserTestCase {
    * Test array type cannot be used as class name
    *
    */
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(ParseException::class)]
   public function noArrayTypeAsClassName() {
     $this->parse('class int[] { }');
   }
@@ -344,7 +345,7 @@ class ClassDeclarationTest extends ParserTestCase {
    * Test array type cannot be used as enum name
    *
    */
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(ParseException::class)]
   public function noArrayTypeAsEnumName() {
     $this->parse('enum int[] { }');
   }
@@ -353,7 +354,7 @@ class ClassDeclarationTest extends ParserTestCase {
    * Test array type cannot be used as interface name
    *
    */
-  #[@test, @expect('text.parser.generic.ParseException')]
+  #[@test, @expect(ParseException::class)]
   public function noArrayTypeAsInterfaceName() {
     $this->parse('interface int[] { }');
   }
@@ -364,22 +365,22 @@ class ClassDeclarationTest extends ParserTestCase {
    */
   #[@test]
   public function methodAndField() {
-    $this->assertEquals(array(new FieldNode(array(
+    $this->assertEquals([new FieldNode([
       'modifiers'       => MODIFIER_PRIVATE | MODIFIER_STATIC,
       'annotations'     => null,
       'name'            => 'instance',
       'type'            => new TypeName('self'),
       'initialization'  => new NullNode()
-    )), new MethodNode(array(
+    ]), new MethodNode([
       'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'annotations' => null,
       'name'        => 'getInstance',
       'returns'     => new TypeName('self'),
       'parameters'  => null, 
       'throws'      => null,
-      'body'        => array(),
+      'body'        => [],
       'extension'   => null
-    ))), $this->parse('class Logger { 
+    ])], $this->parse('class Logger { 
       private static self $instance= null;
       public static self getInstance() { /* ... */ }
     }')->body);
@@ -391,22 +392,22 @@ class ClassDeclarationTest extends ParserTestCase {
    */
   #[@test]
   public function fieldAndMethod() {
-    $this->assertEquals(array(new MethodNode(array(
+    $this->assertEquals([new MethodNode([
       'modifiers'   => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'annotations' => null,
       'name'        => 'getInstance',
       'returns'     => new TypeName('self'),
       'parameters'  => null, 
       'throws'      => null,
-      'body'        => array(),
+      'body'        => [],
       'extension'   => null
-    )), new FieldNode(array(
+    ]), new FieldNode([
       'modifiers'       => MODIFIER_PRIVATE | MODIFIER_STATIC,
       'annotations'     => null,
       'name'            => 'instance',
       'type'            => new TypeName('self'),
       'initialization'  => new NullNode()
-    ))), $this->parse('class Logger { 
+    ])], $this->parse('class Logger { 
       public static self getInstance() { /* ... */ }
       private static self $instance= null;
     }')->body);

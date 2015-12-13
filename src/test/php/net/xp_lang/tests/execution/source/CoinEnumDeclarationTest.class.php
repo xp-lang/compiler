@@ -64,12 +64,12 @@ class CoinEnumDeclarationTest extends ExecutionTest {
    * @return  var[]
    */
   public function members() {
-    return array(
-      array('penny', 1, 'copper'),
-      array('nickel', 2, 'nickel'),
-      array('dime', 10, 'silver'),
-      array('quarter', 25, 'silver')
-    );
+    return [
+      ['penny', 1, 'copper'],
+      ['nickel', 2, 'nickel'],
+      ['dime', 10, 'silver'],
+      ['quarter', 25, 'silver']
+    ];
   }
 
   #[@test, @values('members')]

@@ -37,21 +37,21 @@ class ArrayAccessVerificationTest extends \unittest\TestCase {
   #[@test]
   public function stringArray() {
     $this->assertNull(
-      $this->verify(new ArrayNode(array('type' => new TypeName('string[]'), 'values' => array())))
+      $this->verify(new ArrayNode(['type' => new TypeName('string[]'), 'values' => []]))
     );
   }
 
   #[@test]
   public function stringMap() {
     $this->assertNull(
-      $this->verify(new MapNode(array('type' => new TypeName('[:string]'), 'elements' => array())))
+      $this->verify(new MapNode(['type' => new TypeName('[:string]'), 'elements' => []]))
     );
   }
 
   #[@test]
   public function int() {
     $this->assertEquals(
-      array('T305', 'Using array-access on unsupported type xp.compiler.types.TypeName(int)'),
+      ['T305', 'Using array-access on unsupported type xp.compiler.types.TypeName(int)'],
       $this->verify(new IntegerNode())
     );
   }
@@ -59,7 +59,7 @@ class ArrayAccessVerificationTest extends \unittest\TestCase {
   #[@test]
   public function undeclared() {
     $this->assertEquals(
-      array('T203', 'Array access (var)[0] verification deferred until runtime'),
+      ['T203', 'Array access (var)[0] verification deferred until runtime'],
       $this->verify(new VariableNode('undeclared'))
     );
   }
@@ -74,24 +74,24 @@ class ArrayAccessVerificationTest extends \unittest\TestCase {
   #[@test]
   public function arrayList() {
     $this->assertNull(
-      $this->verify(new InstanceCreationNode(array('type' => new TypeName('lang.types.ArrayList'))))
+      $this->verify(new InstanceCreationNode(['type' => new TypeName('lang.types.ArrayList')]))
     );
   }
 
   #[@test]
   public function anonymousIListInstance() {
     $this->assertNull(
-      $this->verify(new InstanceCreationNode(array('type' => new TypeName('util.collections.IList'), 'body' => array(
+      $this->verify(new InstanceCreationNode(['type' => new TypeName('util.collections.IList'), 'body' => [
         // Implementation missing, irrelevant to this test
-      ))))
+      ]]))
     );
   }
 
   #[@test]
   public function object() {
     $this->assertEquals(
-      array('T305', 'Type lang.Object does not support offset access'),
-      $this->verify(new InstanceCreationNode(array('type' => new TypeName('lang.Object'))))
+      ['T305', 'Type lang.Object does not support offset access'],
+      $this->verify(new InstanceCreationNode(['type' => new TypeName('lang.Object')]))
     );
   }
 }

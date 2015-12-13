@@ -34,23 +34,23 @@ class StaticMethodCallVerificationTest extends \unittest\TestCase {
       new TypeName('Fixture'),
       $parent ?: new TypeName('lang.Object'),
       null,
-      array(
-        new MethodNode(array(
+      [
+        new MethodNode([
           'name'      => 'forName',
           'modifiers' => MODIFIER_STATIC | MODIFIER_PUBLIC
-        )),
-        new MethodNode(array(
+        ]),
+        new MethodNode([
           'name'      => 'getInstance',
           'modifiers' => MODIFIER_STATIC | MODIFIER_PROTECTED
-        )),
-        new MethodNode(array(
+        ]),
+        new MethodNode([
           'name'      => 'asIntern',
           'modifiers' => MODIFIER_STATIC | MODIFIER_PRIVATE
-        )),
-      )
+        ]),
+      ]
     );
     $scope->addResolved('parent', $ptr= $scope->resolveType($scope->declarations[0]->parent));
-    $scope->addResolved('self', new TypeDeclaration(new ParseTree(null, array(), $scope->declarations[0]), $ptr));
+    $scope->addResolved('self', new TypeDeclaration(new ParseTree(null, [], $scope->declarations[0]), $ptr));
     return $this->fixture->verify($call, $scope);
   }
   
@@ -61,13 +61,13 @@ class StaticMethodCallVerificationTest extends \unittest\TestCase {
    * @return  xp.compiler.ast.InstanceCreationNode
    */
   protected function newInstance($type) {
-    return new InstanceCreationNode(array('type' => new TypeName($type)));
+    return new InstanceCreationNode(['type' => new TypeName($type)]);
   }
 
   #[@test]
   public function nonExistantMethodCall() {
     $this->assertEquals(
-      array('T404', 'No such method nonExistant() in Fixture'),
+      ['T404', 'No such method nonExistant() in Fixture'],
       $this->verify(new StaticMethodCallNode(new TypeName('self'), 'nonExistant'))
     );
   }
@@ -103,7 +103,7 @@ class StaticMethodCallVerificationTest extends \unittest\TestCase {
   #[@test]
   public function enumProtectedMethodCall() {
     $this->assertEquals(
-      array('T403', 'Invoking protected static lang.Enum::membersOf() from Fixture'),
+      ['T403', 'Invoking protected static lang.Enum::membersOf() from Fixture'],
       $this->verify(new StaticMethodCallNode(new TypeName('lang.Enum'), 'membersOf'))
     );
   }

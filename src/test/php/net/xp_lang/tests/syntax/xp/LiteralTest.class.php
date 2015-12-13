@@ -27,7 +27,7 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function doubleQuotedStringLiteral() {
-    $this->assertEquals(array(new StringNode('Hello World')), $this->parse('"Hello World";'));
+    $this->assertEquals([new StringNode('Hello World')], $this->parse('"Hello World";'));
   }
 
   /**
@@ -36,7 +36,7 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function singleQuotedStringLiteral() {
-    $this->assertEquals(array(new StringNode('Hello World')), $this->parse("'Hello World';"));
+    $this->assertEquals([new StringNode('Hello World')], $this->parse("'Hello World';"));
   }
 
   /**
@@ -45,10 +45,10 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function emptyStrings() {
-    $this->assertEquals(array(
+    $this->assertEquals([
       new StringNode(''),
       new StringNode(''),
-    ), $this->parse('""; \'\';'));
+    ], $this->parse('""; \'\';'));
   }
 
   /**
@@ -58,7 +58,7 @@ class LiteralTest extends ParserTestCase {
   #[@test]
   public function doubleQuotedStringWithEscapes() {
     $this->assertEquals(
-      array(new StringNode('"Hello", he said')),
+      [new StringNode('"Hello", he said')],
       $this->parse('"\"Hello\", he said";')
     );
   }
@@ -69,7 +69,7 @@ class LiteralTest extends ParserTestCase {
   #[@test]
   public function singleQuotedStringWithEscapes() {
     $this->assertEquals(
-      array(new StringNode("Timm's e-mail address")),
+      [new StringNode("Timm's e-mail address")],
       $this->parse("'Timm\'s e-mail address';")
     );
   }
@@ -80,12 +80,12 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function multiLineString() {
-    $this->assertEquals(array(new StringNode('This
+    $this->assertEquals([new StringNode('This
        is 
        a
        multiline
        string'
-    )), $this->parse("
+    )], $this->parse("
       'This
        is 
        a
@@ -100,7 +100,7 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function numberLiteral() {
-    $this->assertEquals(array(new IntegerNode('1')), $this->parse('1;'));
+    $this->assertEquals([new IntegerNode('1')], $this->parse('1;'));
   }
 
   /**
@@ -109,10 +109,10 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function negativeInt() {
-    $this->assertEquals(array(new UnaryOpNode(array(
+    $this->assertEquals([new UnaryOpNode([
       'expression'    => new IntegerNode('1'),
       'op'            => '-'
-    ))), $this->parse("
+    ])], $this->parse("
       -1;
     "));
   }
@@ -123,10 +123,10 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function negativeDecimal() {
-    $this->assertEquals(array(new UnaryOpNode(array(
+    $this->assertEquals([new UnaryOpNode([
       'expression'    => new DecimalNode('1.0'),
       'op'            => '-'
-    ))), $this->parse("
+    ])], $this->parse("
       -1.0;
     "));
   }
@@ -137,7 +137,7 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function hexLiteral() {
-    $this->assertEquals(array(new HexNode('0x0')), $this->parse('0x0;'));
+    $this->assertEquals([new HexNode('0x0')], $this->parse('0x0;'));
   }
 
   /**
@@ -146,7 +146,7 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function octalLiteral() {
-    $this->assertEquals(array(new OctalNode('00')), $this->parse('00;'));
+    $this->assertEquals([new OctalNode('00')], $this->parse('00;'));
   }
 
   /**
@@ -155,7 +155,7 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function decimalLiteral() {
-    $this->assertEquals(array(new DecimalNode('1.0')), $this->parse('1.0;'));
+    $this->assertEquals([new DecimalNode('1.0')], $this->parse('1.0;'));
   }
 
   /**
@@ -165,7 +165,7 @@ class LiteralTest extends ParserTestCase {
   #[@test]
   public function booleanTrueLiteral() {
     $this->assertEquals(
-      array(new BooleanNode(true)),
+      [new BooleanNode(true)],
       $this->parse('true;')
     );
   }
@@ -177,7 +177,7 @@ class LiteralTest extends ParserTestCase {
   #[@test]
   public function booleanTrueLiteralInBraces() {
     $this->assertEquals(
-      array(new BracedExpressionNode(new BooleanNode(true))),
+      [new BracedExpressionNode(new BooleanNode(true))],
       $this->parse('(true);')
     );
   }
@@ -189,7 +189,7 @@ class LiteralTest extends ParserTestCase {
   #[@test]
   public function booleanFalseLiteral() {
     $this->assertEquals(
-      array(new BooleanNode(false)),
+      [new BooleanNode(false)],
       $this->parse('false;')
     );
   }
@@ -201,7 +201,7 @@ class LiteralTest extends ParserTestCase {
   #[@test]
   public function nullLiteral() {
     $this->assertEquals(
-      array(new NullNode()),
+      [new NullNode()],
       $this->parse('null;')
     );
   }
@@ -212,13 +212,13 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function arrayLiteral() {
-    $this->assertEquals(array(new ArrayNode(array(
-      'values'        => array(
+    $this->assertEquals([new ArrayNode([
+      'values'        => [
         new IntegerNode('1'),
         new IntegerNode('2'),
-      ),
+      ],
       'type'          => null
-    ))), $this->parse("
+    ])], $this->parse("
       [1, 2];
     "));
   }
@@ -229,13 +229,13 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function mapLiteral() {
-    $this->assertEquals(array(new MapNode(array(
-      'elements'      => array(array(
+    $this->assertEquals([new MapNode([
+      'elements'      => [[
         new StringNode('one'),
         new IntegerNode('1')
-      )),
+      ]],
       'type'          => null
-    ))), $this->parse("
+    ])], $this->parse("
       [ one : 1 ];
     "));
   }
@@ -247,7 +247,7 @@ class LiteralTest extends ParserTestCase {
   #[@test]
   public function classLiteral() {
     $this->assertEquals(
-      array(new ClassAccessNode(new TypeName('net.xp_lang.tests.StringBuffer'))),
+      [new ClassAccessNode(new TypeName('net.xp_lang.tests.StringBuffer'))],
       $this->parse('net.xp_lang.tests.StringBuffer::class;')
     );
   }
@@ -258,16 +258,16 @@ class LiteralTest extends ParserTestCase {
    */
   #[@test]
   public function chainingAfterArrayLiteral() {
-    $this->assertEquals(array(new MemberAccessNode(
-      new ArrayNode(array(
-        'values'        => array(
+    $this->assertEquals([new MemberAccessNode(
+      new ArrayNode([
+        'values'        => [
           new IntegerNode('1'),
           new IntegerNode('2'),
-        ),
+        ],
         'type'          => null
-      )),
+      ]),
       'array'
-    )), $this->parse("
+    )], $this->parse("
       [1, 2].array;
     "));
   }

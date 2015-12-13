@@ -12,7 +12,7 @@ class SilenceOperatorTest extends ParserTestCase {
   #[@test]
   public function arrayGet() {
     $this->assertEquals(
-      array(new SilenceOperatorNode(new ArrayAccessNode(new VariableNode('a'), new IntegerNode('0')))),
+      [new SilenceOperatorNode(new ArrayAccessNode(new VariableNode('a'), new IntegerNode('0')))],
       $this->parse('@$a[0];')
     );
   }
@@ -20,10 +20,10 @@ class SilenceOperatorTest extends ParserTestCase {
   #[@test]
   public function stringCast() {
     $this->assertEquals(
-      array(new SilenceOperatorNode(new CastNode(array(
+      [new SilenceOperatorNode(new CastNode([
         'type'        => new TypeName('string'),
         'expression'  => new VariableNode('a')
-      )))),
+      ]))],
       $this->parse('@(string)$a;')
     );
   }

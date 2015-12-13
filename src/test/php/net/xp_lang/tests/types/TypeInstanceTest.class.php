@@ -32,7 +32,7 @@ class TypeInstanceTest extends \unittest\TestCase {
   #[@test]
   public function object_class_has_no_extension_methods() {
     $this->assertEquals(
-      array(), 
+      [], 
       (new TypeInstance(new TypeReflection(XPClass::forName('lang.Object'))))->getExtensions()
     );
   }

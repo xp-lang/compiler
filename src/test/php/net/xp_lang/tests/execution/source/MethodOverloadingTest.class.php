@@ -29,9 +29,9 @@ class MethodOverloadingTest extends ExecutionTest {
           case "ints": return $this.compare(1, 2);
         }
       }
-    }', array(
+    }', [
       'import native core.strcmp;',
-    ));
+    ]);
   }
   
   /**

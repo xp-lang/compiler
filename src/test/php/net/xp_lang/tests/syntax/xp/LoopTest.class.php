@@ -1,5 +1,6 @@
 <?php namespace net\xp_lang\tests\syntax\xp;
 
+use lang\FormatException;
 use xp\compiler\ast\ForNode;
 use xp\compiler\ast\AssignmentNode;
 use xp\compiler\ast\VariableNode;
@@ -22,24 +23,24 @@ class LoopTest extends ParserTestCase {
    */
   #[@test]
   public function forLoop() {
-    $this->assertEquals(array(new ForNode(array(
-      'initialization' => array(new AssignmentNode(array(
+    $this->assertEquals([new ForNode([
+      'initialization' => [new AssignmentNode([
         'variable'       => new VariableNode('i'),
         'expression'     => new IntegerNode('0'),
         'op'             => '='
-      ))),
-      'condition'      => array(new ComparisonNode(array(
+      ])],
+      'condition'      => [new ComparisonNode([
         'lhs'           => new VariableNode('i'),
         'rhs'           => new IntegerNode('1000'),
         'op'            => '<'
-      ))),
-      'loop'           => array(new UnaryOpNode(array(
+      ])],
+      'loop'           => [new UnaryOpNode([
         'expression'    => new VariableNode('i'),
         'op'            => '++',
         'postfix'       => true
-      ))),
+      ])],
       'statements'     => null, 
-    ))), $this->parse('
+    ])], $this->parse('
       for ($i= 0; $i < 1000; $i++) { }
     '));
   }
@@ -50,11 +51,11 @@ class LoopTest extends ParserTestCase {
    */
   #[@test]
   public function foreachLoop() {
-    $this->assertEquals(array(new ForeachNode(array(
+    $this->assertEquals([new ForeachNode([
       'expression'    => new VariableNode('list'),
-      'assignment'    => array('value' => 'value'),
+      'assignment'    => ['value' => 'value'],
       'statements'    => null, 
-    ))), $this->parse('
+    ])], $this->parse('
       foreach ($value in $list) { }
     '));
   }
@@ -65,11 +66,11 @@ class LoopTest extends ParserTestCase {
    */
   #[@test]
   public function foreachLoopWithKey() {
-    $this->assertEquals(array(new ForeachNode(array(
+    $this->assertEquals([new ForeachNode([
       'expression'    => new VariableNode('list'),
-      'assignment'    => array('key' => 'key', 'value' => 'value'),
+      'assignment'    => ['key' => 'key', 'value' => 'value'],
       'statements'    => null, 
-    ))), $this->parse('
+    ])], $this->parse('
       foreach ($key, $value in $list) { }
     '));
   }
@@ -80,22 +81,22 @@ class LoopTest extends ParserTestCase {
    */
   #[@test]
   public function whileLoop() {
-    $this->assertEquals(array(new WhileNode(
-      new ComparisonNode(array(
-        'lhs'           => new UnaryOpNode(array(
+    $this->assertEquals([new WhileNode(
+      new ComparisonNode([
+        'lhs'           => new UnaryOpNode([
           'expression'    => new VariableNode('i'),
           'op'            => '++',
           'postfix'       => true
-        )),
+        ]),
         'rhs'           => new IntegerNode('10000'),
         'op'            => '<'
-      )),
-      array(new UnaryOpNode(array(
+      ]),
+      [new UnaryOpNode([
         'expression'    => new VariableNode('i'),
         'op'            => '++',
         'postfix'       => true
-      )))
-    )), $this->parse('
+      ])]
+    )], $this->parse('
       while ($i++ < 10000) { $i++; }
     '));
   }
@@ -106,22 +107,22 @@ class LoopTest extends ParserTestCase {
    */
   #[@test]
   public function doLoop() {
-    $this->assertEquals(array(new DoNode(
-      new ComparisonNode(array(
-        'lhs'           => new UnaryOpNode(array(
+    $this->assertEquals([new DoNode(
+      new ComparisonNode([
+        'lhs'           => new UnaryOpNode([
           'expression'    => new VariableNode('i'),
           'op'            => '++',
           'postfix'       => true
-        )),
+        ]),
         'rhs'           => new IntegerNode('10000'),
         'op'            => '<'
-      )),
-      array(new UnaryOpNode(array(
+      ]),
+      [new UnaryOpNode([
         'expression'    => new VariableNode('i'),
         'op'            => '++',
         'postfix'       => true
-      )))
-    )), $this->parse('
+      ])]
+    )], $this->parse('
       do { $i++; } while ($i++ < 10000);
     '));
   }
@@ -131,7 +132,7 @@ class LoopTest extends ParserTestCase {
    * Test while
    *
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function whileLoopWithoutBody() {
     $this->parse('$a= 0; while ($a--);');
   }
@@ -140,7 +141,7 @@ class LoopTest extends ParserTestCase {
    * Test foreach
    *
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function foreachLoopWithoutBody() {
     $this->parse('foreach ($a in [1]);');
   }
@@ -149,7 +150,7 @@ class LoopTest extends ParserTestCase {
    * Test while
    *
    */
-  #[@test, @expect('lang.FormatException')]
+  #[@test, @expect(FormatException::class)]
   public function forLoopWithoutBody() {
     $this->parse('for ($i= 0; $i < 1; $i++);');
   }

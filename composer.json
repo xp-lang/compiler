@@ -12,6 +12,7 @@
     "xp-framework/patterns": "^6.6",
     "xp-framework/logging": "^6.5",
     "xp-framework/collections": "^6.5",
+    "xp-framework/io-collections": "^6.5",
     "php" : ">=5.5.0"
   },
   "require-dev" : {

@@ -58,7 +58,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
    * @param   string[] imports
    * @return  var
    */
-  protected function run($src, array $imports= array()) {
+  protected function run($src, array $imports= []) {
     return self::define(
       'class', 
       ucfirst($this->name).'·'.($this->counter++), 
@@ -75,7 +75,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
    * @param   string[] imports
    * @return  lang.XPClass
    */
-  protected function compile($src, array $imports= array()) {
+  protected function compile($src, array $imports= []) {
     return self::define(
       'class', 
       ucfirst($this->name).'·'.($this->counter++), 
@@ -95,7 +95,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
    * @param   string[] imports
    * @return  lang.XPClass
    */
-  protected static function define($type, $class, $parent, $src, array $imports= array()) {
+  protected static function define($type, $class, $parent, $src, array $imports= []) {
     $emitter= self::emitter();
     $emitter->clearMessages();
     $syntax= Syntax::forName('xp');
@@ -109,7 +109,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
     
     // Parent class
     if ($parent instanceof XPClass) {
-      $extends= (new XPClass(__CLASS__))->getPackage()->getName().'.'.$parent->getName();
+      $extends= (new XPClass(self::class))->getPackage()->getName().'.'.$parent->getName();
       $scope->addResolved($extends, new TypeReflection($parent));
       $scope->addTypeImport($extends);
     } else {
@@ -127,7 +127,7 @@ abstract class ExecutionTest extends \unittest\TestCase {
     \xp::gc();
 
     // DEBUG $r->writeTo(\util\cmd\Console::$out->getStream());
-    $r->executeWith(array());
+    $r->executeWith([]);
     return XPClass::forName($r->type()->name());
   }
 }

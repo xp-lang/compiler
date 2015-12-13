@@ -58,7 +58,7 @@ class BufferTest extends \unittest\TestCase {
   #[@test]
   public function position_plus_one_line_adds_space() {
     $b= new Buffer('One', 1);
-    $b->position(array(2, 1));
+    $b->position([2, 1]);
     $b->append('Two');
     $this->assertSource("One\nTwo", $b);
   }
@@ -66,7 +66,7 @@ class BufferTest extends \unittest\TestCase {
   #[@test]
   public function position_plus_one_line_increases_line() {
     $b= new Buffer('One', 1);
-    $b->position(array(2, 1));
+    $b->position([2, 1]);
     $this->assertEquals(2, $b->line);
   }
 
@@ -74,7 +74,7 @@ class BufferTest extends \unittest\TestCase {
   #[@test]
   public function position_plus_three_lines_adds_space() {
     $b= new Buffer('One', 1);
-    $b->position(array(5, 1));
+    $b->position([5, 1]);
     $b->append('Five');
     $this->assertSource("One\n\n\n\nFive", $b);
   }
@@ -82,7 +82,7 @@ class BufferTest extends \unittest\TestCase {
   #[@test]
   public function position_plus_three_lines_increases_line() {
     $b= new Buffer('One', 1);
-    $b->position(array(5, 1));
+    $b->position([5, 1]);
     $this->assertEquals(5, $b->line);
   }
 

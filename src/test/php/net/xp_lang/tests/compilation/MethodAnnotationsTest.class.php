@@ -13,7 +13,7 @@ class MethodAnnotationsTest extends AnnotationsTest {
    */
   #[@test]
   public function noAnnotations() {
-    $this->assertEquals(array(), $this->compile('class %s { void fixture() { } }')->getMethod('fixture')->getAnnotations());
+    $this->assertEquals([], $this->compile('class %s { void fixture() { } }')->getMethod('fixture')->getAnnotations());
   }
 
   /**
@@ -23,7 +23,7 @@ class MethodAnnotationsTest extends AnnotationsTest {
   #[@test]
   public function simpleAnnotation() {
     $this->assertEquals(
-      array('experimental' => null), 
+      ['experimental' => null], 
       $this->compile('class %s { [@experimental] void fixture() { } }')->getMethod('fixture')->getAnnotations()
     );
   }
@@ -35,7 +35,7 @@ class MethodAnnotationsTest extends AnnotationsTest {
   #[@test]
   public function annotationWithDefault() {
     $this->assertEquals(
-      array('experimental' => 'beta'), 
+      ['experimental' => 'beta'], 
       $this->compile('class %s { [@experimental("beta")] void fixture() { } }')->getMethod('fixture')->getAnnotations()
     );
   }
@@ -47,7 +47,7 @@ class MethodAnnotationsTest extends AnnotationsTest {
   #[@test]
   public function annotationWithParams() {
     $this->assertEquals(
-      array('experimental' => array('stages' => array('beta', 'RC'))), 
+      ['experimental' => ['stages' => ['beta', 'RC']]], 
       $this->compile('class %s { [@experimental(stages= ["beta", "RC"])] void fixture() { } }')->getMethod('fixture')->getAnnotations()
     );
   }
@@ -61,7 +61,7 @@ class MethodAnnotationsTest extends AnnotationsTest {
   public function parameterAnnotation() {
     $type= $this->compile('class %s { [@$conn: inject(name= "db")] void fixture(var $conn) { } }');
     $this->assertEquals(
-      array('inject' => array('name' => 'db')), 
+      ['inject' => ['name' => 'db']], 
       $type->getMethod('fixture')->getParameters()[0]->getAnnotations()
     );
   }

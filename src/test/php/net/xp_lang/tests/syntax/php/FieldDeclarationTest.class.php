@@ -20,26 +20,26 @@ class FieldDeclarationTest extends ParserTestCase {
 
   #[@test]
   public function publicField() {
-    $this->assertEquals(array(new FieldNode(array(
+    $this->assertEquals([new FieldNode([
       'modifiers'  => MODIFIER_PUBLIC,
       'annotations'=> null,
       'name'       => 'name',
       'type'       => TypeName::$VAR,
       'initialization' => null,
-    ))), $this->parse('class Person { 
+    ])], $this->parse('class Person { 
       public $name;
     }'));
   }
 
   #[@test]
   public function privateStaticField() {
-    $this->assertEquals(array(new FieldNode(array(
+    $this->assertEquals([new FieldNode([
       'modifiers'       => MODIFIER_PRIVATE | MODIFIER_STATIC,
       'annotations'     => null,
       'name'            => 'instance',
       'type'            => TypeName::$VAR,
       'initialization'  => new NullNode()
-    ))), $this->parse('class Logger { 
+    ])], $this->parse('class Logger { 
       private static $instance= null;
     }'));
   }

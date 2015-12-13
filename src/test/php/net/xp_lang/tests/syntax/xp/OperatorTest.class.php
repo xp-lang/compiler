@@ -23,19 +23,19 @@ class OperatorTest extends ParserTestCase {
 
   #[@test]
   public function concat_operator() {
-    $this->assertEquals(array(new OperatorNode(array(
+    $this->assertEquals([new OperatorNode([
       'modifiers'  => MODIFIER_PUBLIC | MODIFIER_STATIC,
       'annotations'=> null,
       'name'       => '',
       'symbol'     => '~',
       'returns'    => new TypeName('self'),
-      'parameters' => array(
-        array('name' => 'self', 'type' => new TypeName('self'), 'check' => true),
-        array('name' => 'arg', 'type' => TypeName::$VAR, 'check' => true),
-      ),
+      'parameters' => [
+        ['name' => 'self', 'type' => new TypeName('self'), 'check' => true],
+        ['name' => 'arg', 'type' => TypeName::$VAR, 'check' => true],
+      ],
       'throws'     => null,
-      'body'       => array()
-    ))), $this->parse('class String { 
+      'body'       => []
+    ])], $this->parse('class String { 
       public static self operator ~(self $self, var $arg) { }
     }'));
   }

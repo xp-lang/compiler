@@ -37,7 +37,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     $this->fixture->addSource($this->newProperties('
     '));
 
-    $this->assertEquals(array(), array_keys($this->fixture->getProfile()->warnings));
+    $this->assertEquals([], array_keys($this->fixture->getProfile()->warnings));
   }
 
   #[@test]
@@ -46,7 +46,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
       [warnings]
     '));
 
-    $this->assertEquals(array(), array_keys($this->fixture->getProfile()->warnings));
+    $this->assertEquals([], array_keys($this->fixture->getProfile()->warnings));
   }
   
   #[@test]
@@ -57,7 +57,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     '));
 
     $this->assertEquals(
-      array('xp.compiler.checks.TypeHasDocumentation'),
+      ['xp.compiler.checks.TypeHasDocumentation'],
       array_keys($this->fixture->getProfile()->warnings)
     );
   }
@@ -71,7 +71,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     '));
 
     $this->assertEquals(
-      array('xp.compiler.checks.TypeHasDocumentation', 'xp.compiler.checks.TypeMemberHasDocumentation'),
+      ['xp.compiler.checks.TypeHasDocumentation', 'xp.compiler.checks.TypeMemberHasDocumentation'],
       array_keys($this->fixture->getProfile()->warnings)
     );
   }
@@ -88,7 +88,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     '));
 
     $this->assertEquals(
-      array('xp.compiler.checks.TypeHasDocumentation', 'xp.compiler.checks.TypeMemberHasDocumentation'),
+      ['xp.compiler.checks.TypeHasDocumentation', 'xp.compiler.checks.TypeMemberHasDocumentation'],
       array_keys($this->fixture->getProfile()->warnings)
     );
   }
@@ -105,7 +105,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     '));
 
     $this->assertEquals(
-      array('xp.compiler.checks.TypeHasDocumentation'),
+      ['xp.compiler.checks.TypeHasDocumentation'],
       array_keys($this->fixture->getProfile()->warnings)
     );
   }
@@ -115,7 +115,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     $this->fixture->addSource($this->newProperties('
     '));
 
-    $this->assertEquals(array(), array_keys($this->fixture->getProfile()->errors));
+    $this->assertEquals([], array_keys($this->fixture->getProfile()->errors));
   }
 
   #[@test]
@@ -124,7 +124,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
       [errors]
     '));
 
-    $this->assertEquals(array(), array_keys($this->fixture->getProfile()->errors));
+    $this->assertEquals([], array_keys($this->fixture->getProfile()->errors));
   }
 
   #[@test]
@@ -135,7 +135,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     '));
 
     $this->assertEquals(
-      array('xp.compiler.checks.TypeHasDocumentation'),
+      ['xp.compiler.checks.TypeHasDocumentation'],
       array_keys($this->fixture->getProfile()->errors)
     );
   }
@@ -149,7 +149,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     '));
 
     $this->assertEquals(
-      array('xp.compiler.checks.TypeHasDocumentation', 'xp.compiler.checks.TypeMemberHasDocumentation'),
+      ['xp.compiler.checks.TypeHasDocumentation', 'xp.compiler.checks.TypeMemberHasDocumentation'],
       array_keys($this->fixture->getProfile()->errors)
     );
   }
@@ -166,7 +166,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     '));
 
     $this->assertEquals(
-      array('xp.compiler.checks.TypeHasDocumentation', 'xp.compiler.checks.TypeMemberHasDocumentation'),
+      ['xp.compiler.checks.TypeHasDocumentation', 'xp.compiler.checks.TypeMemberHasDocumentation'],
       array_keys($this->fixture->getProfile()->errors)
     );
   }
@@ -183,7 +183,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     '));
 
     $this->assertEquals(
-      array('xp.compiler.checks.TypeHasDocumentation'),
+      ['xp.compiler.checks.TypeHasDocumentation'],
       array_keys($this->fixture->getProfile()->errors)
     );
   }
@@ -193,7 +193,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     $this->fixture->addSource($this->newProperties('
     '));
 
-    $this->assertEquals(array(), array_keys($this->fixture->getProfile()->optimizations));
+    $this->assertEquals([], array_keys($this->fixture->getProfile()->optimizations));
   }
 
   #[@test]
@@ -202,7 +202,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
       [optimizations]
     '));
 
-    $this->assertEquals(array(), array_keys($this->fixture->getProfile()->optimizations));
+    $this->assertEquals([], array_keys($this->fixture->getProfile()->optimizations));
   }
 
   #[@test]
@@ -213,7 +213,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     '));
 
     $this->assertEquals(
-      array('xp.compiler.optimize.BinaryOptimization'),
+      ['xp.compiler.optimize.BinaryOptimization'],
       array_keys($this->fixture->getProfile()->optimizations)
     );
   }
@@ -227,7 +227,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     '));
 
     $this->assertEquals(
-      array('xp.compiler.optimize.BinaryOptimization', 'xp.compiler.optimize.DeadCodeElimination'),
+      ['xp.compiler.optimize.BinaryOptimization', 'xp.compiler.optimize.DeadCodeElimination'],
       array_keys($this->fixture->getProfile()->optimizations)
     );
   }
@@ -244,7 +244,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     '));
 
     $this->assertEquals(
-      array('xp.compiler.optimize.BinaryOptimization', 'xp.compiler.optimize.DeadCodeElimination'),
+      ['xp.compiler.optimize.BinaryOptimization', 'xp.compiler.optimize.DeadCodeElimination'],
       array_keys($this->fixture->getProfile()->optimizations)
     );
   }
@@ -261,7 +261,7 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
     '));
 
     $this->assertEquals(
-      array('xp.compiler.optimize.BinaryOptimization'),
+      ['xp.compiler.optimize.BinaryOptimization'],
       array_keys($this->fixture->getProfile()->optimizations)
     );
   }

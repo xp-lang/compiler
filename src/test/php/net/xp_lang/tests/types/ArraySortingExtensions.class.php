@@ -9,7 +9,7 @@
 class ArraySortingExtensions extends \lang\Object {
   
   static function __import($scope) {
-    \xp::extensions(__CLASS__, $scope);
+    \xp::extensions(self::class, $scope);
   }
 
   /**

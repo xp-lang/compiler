@@ -16,7 +16,7 @@ class NumberResolveTest extends \unittest\TestCase {
   /**
    * Test [N]e[N]
    */
-  #[@test, @values(array('1e4', '1E4', '1.0e4', '1.0E4'))]
+  #[@test, @values(['1e4', '1E4', '1.0e4', '1.0E4'])]
   public function exponents($value) {
     $this->assertEquals(10000.0, (new DecimalNode($value))->resolve(), $value);
   }
@@ -24,7 +24,7 @@ class NumberResolveTest extends \unittest\TestCase {
   /**
    * Test [N]e+[N]
    */
-  #[@test, @values(array('1e+4', '1E+4', '1.0e+4', '1.0E+4'))]
+  #[@test, @values(['1e+4', '1E+4', '1.0e+4', '1.0E+4'])]
   public function exponents_with_plus($value) {
     $this->assertEquals(10000.0, (new DecimalNode($value))->resolve(), $value);
   }
@@ -32,7 +32,7 @@ class NumberResolveTest extends \unittest\TestCase {
   /**
    * Test [N]e-[N]
    */
-  #[@test, @values(array('1e-4', '1E-4', '1.0e-4', '1.0E-4'))]
+  #[@test, @values(['1e-4', '1E-4', '1.0e-4', '1.0E-4'])]
   public function exponents_with_minus($value) {
     $this->assertEquals(0.0001, (new DecimalNode($value))->resolve(), $value);
   }

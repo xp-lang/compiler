@@ -9,19 +9,19 @@ class DynamicTest extends ParserTestCase {
 
   #[@test]
   public function instanceOfVariable() {
-    $this->assertEquals(array(new DynamicInstanceOfNode(array(
+    $this->assertEquals([new DynamicInstanceOfNode([
       'expression'    => new VariableNode('a'),
       'variable'      => 'type'
-    ))), $this->parse('$a instanceof $type;'));
+    ])], $this->parse('$a instanceof $type;'));
   }
 
   #[@test]
   public function instanceCreation() {
     $this->assertEquals(
-      array(new DynamicInstanceCreationNode(array(
+      [new DynamicInstanceCreationNode([
         'variable'    => 'type',
-        'parameters'  => array()
-      ))),
+        'parameters'  => []
+      ])],
       $this->parse('new $type();')
     );
   }
@@ -29,7 +29,7 @@ class DynamicTest extends ParserTestCase {
   #[@test]
   public function variableMemberAccess() {
     $this->assertEquals(
-      array(new DynamicVariableReferenceNode(new VariableNode('this'), new VariableNode('name'))),
+      [new DynamicVariableReferenceNode(new VariableNode('this'), new VariableNode('name'))],
       $this->parse('$this->$name;')
     );
   }
@@ -37,7 +37,7 @@ class DynamicTest extends ParserTestCase {
   #[@test]
   public function expressionMemberAccess() {
     $this->assertEquals(
-      array(new DynamicVariableReferenceNode(new VariableNode('this'), new VariableNode('name'))),
+      [new DynamicVariableReferenceNode(new VariableNode('this'), new VariableNode('name'))],
       $this->parse('$this->{$name};')
     );
   }

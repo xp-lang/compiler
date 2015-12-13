@@ -20,14 +20,14 @@ class CastingTest extends ParserTestCase {
   #[@test, @ignore('Prefix casting unsupported')]
   public function prefixIntCast() {
     $this->assertEquals(
-      array(new AssignmentNode(array(
+      [new AssignmentNode([
         'variable'    => new VariableNode('a'),
-        'expression'  => new CastNode(array(
+        'expression'  => new CastNode([
           'type'        => new TypeName('int'),
           'expression'  => new VariableNode('b')
-        )),
+        ]),
         'op'          => '='
-      ))),
+      ])],
       $this->parse('$a= (int)$b;')
     );
   }
@@ -39,14 +39,14 @@ class CastingTest extends ParserTestCase {
   #[@test, @ignore('Prefix casting unsupported')]
   public function prefixIntCastBracketedLiteral() {
     $this->assertEquals(
-      array(new AssignmentNode(array(
+      [new AssignmentNode([
         'variable'    => new VariableNode('a'),
-        'expression'  => new CastNode(array(
+        'expression'  => new CastNode([
           'type'        => new TypeName('int'),
           'expression'  => new BooleanNode(true)
-        )),
+        ]),
         'op'          => '='
-      ))),
+      ])],
       $this->parse('$a= (int)(true);')
     );
   }
@@ -58,14 +58,14 @@ class CastingTest extends ParserTestCase {
   #[@test, @ignore('Prefix casting unsupported')]
   public function prefixIntArrayCast() {
     $this->assertEquals(
-      array(new AssignmentNode(array(
+      [new AssignmentNode([
         'variable'    => new VariableNode('a'),
-        'expression'  => new CastNode(array(
+        'expression'  => new CastNode([
           'type'        => new TypeName('int[]'),
           'expression'  => new VariableNode('b')
-        )),
+        ]),
         'op'          => '='
-      ))),
+      ])],
       $this->parse('$a= (int[])$b;')
     );
   }
@@ -77,14 +77,14 @@ class CastingTest extends ParserTestCase {
   #[@test, @ignore('Prefix casting unsupported')]
   public function prefixGenericCast() {
     $this->assertEquals(
-      array(new AssignmentNode(array(
+      [new AssignmentNode([
         'variable'    => new VariableNode('a'),
-        'expression'  => new CastNode(array(
-          'type'        => new TypeName('List', array(new TypeName('String'))),
+        'expression'  => new CastNode([
+          'type'        => new TypeName('List', [new TypeName('String')]),
           'expression'  => new VariableNode('b')
-        )),
+        ]),
         'op'          => '='
-      ))),
+      ])],
       $this->parse('$a= (List<String>)$b;')
     );
   }
@@ -96,14 +96,14 @@ class CastingTest extends ParserTestCase {
   #[@test, @ignore('Prefix casting unsupported')]
   public function prefixQualifiedCast() {
     $this->assertEquals(
-      array(new AssignmentNode(array(
+      [new AssignmentNode([
         'variable'    => new VariableNode('a'),
-        'expression'  => new CastNode(array(
+        'expression'  => new CastNode([
           'type'        => new TypeName('com.example.bank.Account'),
           'expression'  => new VariableNode('b')
-        )),
+        ]),
         'op'          => '='
-      ))),
+      ])],
       $this->parse('$a= (com.example.bank.Account)$b;')
     );
   }
@@ -115,15 +115,15 @@ class CastingTest extends ParserTestCase {
   #[@test]
   public function postfixQualifiedCast() {
     $this->assertEquals(
-      array(new AssignmentNode(array(
+      [new AssignmentNode([
         'variable'    => new VariableNode('a'),
-        'expression'  => new CastNode(array(
+        'expression'  => new CastNode([
           'type'        => new TypeName('com.example.bank.Account'),
           'check'       => true,
           'expression'  => new VariableNode('b')
-        )),
+        ]),
         'op'          => '='
-      ))),
+      ])],
       $this->parse('$a= $b as com.example.bank.Account;')
     );
   }
@@ -135,15 +135,15 @@ class CastingTest extends ParserTestCase {
   #[@test]
   public function postfixQualifiedNonEnforcedCast() {
     $this->assertEquals(
-      array(new AssignmentNode(array(
+      [new AssignmentNode([
         'variable'    => new VariableNode('a'),
-        'expression'  => new CastNode(array(
+        'expression'  => new CastNode([
           'type'        => new TypeName('com.example.bank.Account'),
           'check'       => false,
           'expression'  => new VariableNode('b')
-        )),
+        ]),
         'op'          => '='
-      ))),
+      ])],
       $this->parse('$a= $b as com.example.bank.Account?;')
     );
   }

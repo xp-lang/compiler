@@ -64,7 +64,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function emptyParentClassUsesObject() {
     $this->assertUses(
-      array('lang.Object'),
+      ['lang.Object'],
       'public class %s { }'
     );
   }
@@ -75,7 +75,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function throwableSubclass() {
     $this->assertUses(
-      array('lang.Throwable'),
+      ['lang.Throwable'],
       'public class %s extends Throwable { }'
     );
   }
@@ -86,7 +86,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function stringListExtension() {
     $this->assertUses(
-      array('util.collections.IList'),
+      ['util.collections.IList'],
       'public interface %s<T> extends util.collections.IList<T> { }'
     );
   }
@@ -97,7 +97,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function runnableImplementation() {
     $this->assertUses(
-      array('lang.Object', 'lang.Runnable'),
+      ['lang.Object', 'lang.Runnable'],
       'public class %s implements Runnable { }'
     );
   }
@@ -108,7 +108,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function stringListImplementation() {
     $this->assertUses(
-      array('lang.Object', 'util.collections.IList'),
+      ['lang.Object', 'util.collections.IList'],
       'public class %s<T> implements util.collections.IList<T> { }'
     );
   }
@@ -119,7 +119,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function memberTypeDeclarationGetsUsed() {
     $this->assertUses(
-      array('lang.Object', 'lang.Throwable'),
+      ['lang.Object', 'lang.Throwable'],
       'public class %s { 
         Throwable $member= null;
       }'
@@ -132,7 +132,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function genericMemberTypeDeclarationGetsUsed() {
     $this->assertUses(
-      array('lang.Object', 'util.collections.IList'),// TBD: 'net.xp_lang.tests.StringBuffer',
+      ['lang.Object', 'util.collections.IList'],// TBD: 'net.xp_lang.tests.StringBuffer',
       'public class %s { 
         util.collections.IList<net.xp_lang.tests.StringBuffer> $list;
       }'
@@ -145,7 +145,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function indexerTypeDeclarationGetsUsed() {
     $this->assertUses(
-      array('lang.Object', 'net.xp_lang.tests.StringBuffer'),
+      ['lang.Object', 'net.xp_lang.tests.StringBuffer'],
       'public class %s { 
         net.xp_lang.tests.StringBuffer this[int $index] {
           get { return $this.strings[$index]; }
@@ -162,7 +162,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function propertyTypeDeclarationGetsUsed() {
     $this->assertUses(
-      array('lang.Object', 'net.xp_lang.tests.StringBuffer'),
+      ['lang.Object', 'net.xp_lang.tests.StringBuffer'],
       'public class %s { 
         net.xp_lang.tests.StringBuffer current {
           get { return $this.strings[$this.offset]; }
@@ -178,7 +178,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function memberInitializationToThrowableInstanceUsesThrowable() {
     $this->assertUses(
-      array('lang.Object', 'lang.Throwable'),
+      ['lang.Object', 'lang.Throwable'],
       'public class %s { 
         var $member= new Throwable();
       }'
@@ -191,7 +191,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function memberInitializationToThrowableArrayUsesThrowable() {
     $this->assertUses(
-      array('lang.Object', 'lang.Throwable'),
+      ['lang.Object', 'lang.Throwable'],
       'public class %s { 
         var $member= new Throwable[] { } ;
       }'
@@ -204,7 +204,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function memberInitializationToThrowableMapUsesThrowable() {
     $this->assertUses(
-      array('lang.Object', 'lang.Throwable'),
+      ['lang.Object', 'lang.Throwable'],
       'public class %s { 
         var $member= new [:Throwable] {:} ;
       }'
@@ -217,7 +217,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function memberInitializationToThrowableClassUsesThrowable() {
     $this->assertUses(
-      array('lang.Object', 'lang.Throwable', 'lang.XPClass'),
+      ['lang.Object', 'lang.Throwable', 'lang.XPClass'],
       'public class %s { 
         var $member= Throwable::class;
       }'
@@ -231,7 +231,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function memberInitializationToAnonymousInstanceUsesRunnable() {
     $this->assertUses(
-      array('lang.Object', 'lang.Runnable'),
+      ['lang.Object', 'lang.Runnable'],
       'public class %s { 
         var $member= new Runnable() {
           public void run() {
@@ -248,7 +248,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function localVariableAssginmentToThrowableInstanceUsesThrowable() {
     $this->assertUses(
-      array('lang.Object', 'lang.Throwable'),
+      ['lang.Object', 'lang.Throwable'],
       'public class %s { 
         public static void main(string[] $args) {
           $instance= new Throwable();
@@ -263,7 +263,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function localVariableAssginmentToAnonymousInstanceUsesRunnable() {
     $this->assertUses(
-      array('lang.Object', 'lang.Runnable'),
+      ['lang.Object', 'lang.Runnable'],
       'public class %s { 
         public static void main(string[] $args) {
           $instance= new Runnable() {
@@ -282,7 +282,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function localVariableAssginmentToThrowableClassUsesThrowable() {
     $this->assertUses(
-      array('lang.Object', 'lang.Throwable'),
+      ['lang.Object', 'lang.Throwable'],
       'public class %s { 
         public static void main(string[] $args) {
           $class= lang.Throwable::class;
@@ -297,7 +297,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function staticCallToXpClassForNameUsesXpClass() {
     $this->assertUses(
-      array('lang.Object', 'lang.XPClass'),
+      ['lang.Object', 'lang.XPClass'],
       'public class %s { 
         public static void main(string[] $args) {
           XPClass::forName($args[0]);
@@ -312,7 +312,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function methodCallsReturnValueDoesNotGetUsed() {
     $this->assertUses(
-      array('lang.Object'),
+      ['lang.Object'],
       'public class %s { 
         public static void main(string[] $args) {
           self::class.getClassLoader();
@@ -327,7 +327,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function methodDeclarationsInterfaceReturnValueDoesNotGetUsed() {
     $this->assertUses(
-      array('lang.Object', 'lang.XPClass'),
+      ['lang.Object', 'lang.XPClass'],
       'public class %s { 
         static IClassLoader loaderOf(string $name) {
           return XPClass::forName($name).getClassLoader();
@@ -346,7 +346,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function methodDeclarationsClassReturnValueDoesNotGetUsed() {
     $this->assertUses(
-      array('lang.Object', 'lang.XPClass'),
+      ['lang.Object', 'lang.XPClass'],
       'public class %s { 
         static AbstractClassLoader loaderOf(string $name) {
           return XPClass::forName($name).getClassLoader();
@@ -365,7 +365,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function methodDeclarationsArrayReturnValueDoesNotGetUsed() {
     $this->assertUses(
-      array('lang.Object'),
+      ['lang.Object'],
       'public class %s { 
         static AbstractClassLoader[] loadersOf(string $name) {
           // TBI
@@ -384,7 +384,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function methodDeclarationsMapReturnValueDoesNotGetUsed() {
     $this->assertUses(
-      array('lang.Object'),
+      ['lang.Object'],
       'public class %s { 
         static [:AbstractClassLoader] loadersOf(string $name) {
           // TBI
@@ -403,7 +403,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function methodDeclarationsArgumentTypesGetUsed() {
     $this->assertUses(
-      array('lang.Object', 'net.xp_lang.tests.StringBuffer'),
+      ['lang.Object', 'net.xp_lang.tests.StringBuffer'],
       'public class %s { 
         static void deleteFrom(net.xp_lang.tests.StringBuffer $string, int? $pos, int? $length) {
           // TBI
@@ -418,7 +418,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function constructorDeclarationsArgumentTypesGetUsed() {
     $this->assertUses(
-      array('lang.Object', 'net.xp_lang.tests.StringBuffer'),
+      ['lang.Object', 'net.xp_lang.tests.StringBuffer'],
       'public class %s { 
         public __construct(net.xp_lang.tests.StringBuffer $string) {
           // TBI
@@ -433,7 +433,7 @@ class UsesDeclarationsTest extends \unittest\TestCase {
   #[@test]
   public function extensionMethodDeclarationsExtensionGetUsed() {
     $this->assertUses(
-      array('lang.Object', 'net.xp_lang.tests.StringBuffer'),
+      ['lang.Object', 'net.xp_lang.tests.StringBuffer'],
       'public class %s { 
         static void delete(this net.xp_lang.tests.StringBuffer $self, int? $pos, int? $length) {
           // TBI

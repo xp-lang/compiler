@@ -77,7 +77,7 @@ class TypeNameTest extends \unittest\TestCase {
 
   #[@test]
   public function genericListIsGeneric() {
-    $this->assertTrue((new TypeName('List', array(new TypeName('T'))))->isGeneric());
+    $this->assertTrue((new TypeName('List', [new TypeName('T')]))->isGeneric());
   }
 
   #[@test]
@@ -102,7 +102,7 @@ class TypeNameTest extends \unittest\TestCase {
 
   #[@test]
   public function genericListCompoundName() {
-    $this->assertEquals('List<T>', (new TypeName('List', array(new TypeName('T'))))->compoundName());
+    $this->assertEquals('List<T>', (new TypeName('List', [new TypeName('T')]))->compoundName());
   }
 
   #[@test]
@@ -130,19 +130,19 @@ class TypeNameTest extends \unittest\TestCase {
 
   #[@test]
   public function tIsPlaceHolderInListOfT() {
-    $decl= new TypeName('List', array(new TypeName('T')));
+    $decl= new TypeName('List', [new TypeName('T')]);
     $this->assertTrue($decl->isPlaceholder(new TypeName('T')));
   }
 
   #[@test]
   public function kIsNotPlaceHolderInListOfT() {
-    $decl= new TypeName('List', array(new TypeName('T')));
+    $decl= new TypeName('List', [new TypeName('T')]);
     $this->assertFalse($decl->isPlaceholder(new TypeName('K')));
   }
 
   #[@test]
   public function kAndVArePlaceHoldersInMapOfKV() {
-    $decl= new TypeName('Map', array(new TypeName('K'), new TypeName('V')));
+    $decl= new TypeName('Map', [new TypeName('K'), new TypeName('V')]);
     $this->assertTrue($decl->isPlaceholder(new TypeName('K')), 'K');
     $this->assertTrue($decl->isPlaceholder(new TypeName('V')), 'V');
   }
@@ -154,11 +154,11 @@ class TypeNameTest extends \unittest\TestCase {
 
   #[@test]
   public function isFunction() {
-    $this->assertTrue((new TypeName('->string', array(new TypeName('int'))))->isFunction());
+    $this->assertTrue((new TypeName('->string', [new TypeName('int')]))->isFunction());
   }
 
   #[@test]
   public function functionReturnType() {
-    $this->assertEquals(new TypeName('string'), (new TypeName('->string', array()))->functionReturnType());
+    $this->assertEquals(new TypeName('string'), (new TypeName('->string', []))->functionReturnType());
   }
 }

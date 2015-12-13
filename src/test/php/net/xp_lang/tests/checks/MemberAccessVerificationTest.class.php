@@ -40,23 +40,23 @@ class MemberAccessVerificationTest extends \unittest\TestCase {
       new TypeName('Fixture'),
       $parent ?: new TypeName('lang.Object'),
       null,
-      array(
-        new FieldNode(array(
+      [
+        new FieldNode([
           'name'      => 'name',
           'modifiers' => MODIFIER_PUBLIC
-        )),
-        new FieldNode(array(
+        ]),
+        new FieldNode([
           'name'      => 'id',
           'modifiers' => MODIFIER_PROTECTED
-        )),
-        new FieldNode(array(
+        ]),
+        new FieldNode([
           'name'      => 'delegate',
           'modifiers' => MODIFIER_PRIVATE
-        )),
-      )
+        ]),
+      ]
     );
     $scope->addResolved('parent', $ptr= $scope->resolveType($scope->declarations[0]->parent));
-    $scope->addResolved('self', new TypeDeclaration(new ParseTree(null, array(), $scope->declarations[0]), $ptr));
+    $scope->addResolved('self', new TypeDeclaration(new ParseTree(null, [], $scope->declarations[0]), $ptr));
     $scope->setType(new VariableNode('this'), new TypeName('Fixture'));
     return $this->fixture->verify($call, $scope);
   }
@@ -68,13 +68,13 @@ class MemberAccessVerificationTest extends \unittest\TestCase {
    * @return  xp.compiler.ast.InstanceCreationNode
    */
   private function newInstance($type) {
-    return new InstanceCreationNode(array('type' => new TypeName($type)));
+    return new InstanceCreationNode(['type' => new TypeName($type)]);
   }
 
   #[@test]
   public function nonExistantMemberAccess() {
     $this->assertEquals(
-      array('T404', 'No such field $nonExistant in Fixture'),
+      ['T404', 'No such field $nonExistant in Fixture'],
       $this->verify(new MemberAccessNode(new VariableNode('this'), 'nonExistant'))
     );
   }
@@ -110,7 +110,7 @@ class MemberAccessVerificationTest extends \unittest\TestCase {
   #[@test]
   public function stringProtectedMemberAccess() {
     $this->assertEquals(
-      array('T403', 'Accessing protected net.xp_lang.tests.StringBuffer::$buffer from Fixture'),
+      ['T403', 'Accessing protected net.xp_lang.tests.StringBuffer::$buffer from Fixture'],
       $this->verify(new MemberAccessNode($this->newInstance('net.xp_lang.tests.StringBuffer'), 'buffer'))
     );
   }
@@ -125,7 +125,7 @@ class MemberAccessVerificationTest extends \unittest\TestCase {
   #[@test]
   public function unsupportedType() {
     $this->assertEquals(
-      array('T305', 'Using member access on unsupported type string'),
+      ['T305', 'Using member access on unsupported type string'],
       $this->verify(new MemberAccessNode(new StringNode('hello'), 'length'))
     );
   }
@@ -133,7 +133,7 @@ class MemberAccessVerificationTest extends \unittest\TestCase {
   #[@test]
   public function varType() {
     $this->assertEquals(
-      array('T203', 'Member access (var).length() verification deferred until runtime'),
+      ['T203', 'Member access (var).length() verification deferred until runtime'],
       $this->verify(new MemberAccessNode(new CastNode(new VariableNode('this'), new TypeName('var')), 'length'))
     );
   }

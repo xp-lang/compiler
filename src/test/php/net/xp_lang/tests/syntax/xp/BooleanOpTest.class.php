@@ -12,20 +12,20 @@ class BooleanOpTest extends ParserTestCase {
 
   #[@test]
   public function boolean_or() {
-    $this->assertEquals(array(new BooleanOpNode(array(
+    $this->assertEquals([new BooleanOpNode([
       'lhs'           => new VariableNode('a'),
       'rhs'           => new VariableNode('b'),
       'op'            => '||'
-    ))), $this->parse('$a || $b;'));
+    ])], $this->parse('$a || $b;'));
   }
 
   #[@test]
   public function boolean_and() {
-    $this->assertEquals(array(new BooleanOpNode(array(
+    $this->assertEquals([new BooleanOpNode([
       'lhs'           => new VariableNode('a'),
       'rhs'           => new VariableNode('b'),
       'op'            => '&&'
-    ))), $this->parse('$a && $b;'));
+    ])], $this->parse('$a && $b;'));
   }
 
   /**
@@ -37,14 +37,14 @@ class BooleanOpTest extends ParserTestCase {
    */
   #[@test]
   public function conditional_assignment() {
-    $this->assertEquals(array(new BooleanOpNode(array(
+    $this->assertEquals([new BooleanOpNode([
       'lhs'           => new VariableNode('a'),
-      'rhs'           => new AssignmentNode(array(
+      'rhs'           => new AssignmentNode([
         'variable'      => new VariableNode('b'),
         'expression'    => new IntegerNode('1'),
         'op'            => '+='
-      )),
+      ]),
       'op'            => '&&'
-    ))), $this->parse('$a && $b+= 1;'));
+    ])], $this->parse('$a && $b+= 1;'));
   }
 }

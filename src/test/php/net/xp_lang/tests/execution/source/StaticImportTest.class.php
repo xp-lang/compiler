@@ -35,7 +35,7 @@ class StaticImportTest extends ExecutionTest {
   public function importAll() {
     $this->run(
       'writeLine("Hello");', 
-      array('import static util.cmd.Console::*;')
+      ['import static util.cmd.Console::*;']
     );
     $this->assertEquals("Hello\n", $this->stream->getBytes());
   }
@@ -48,7 +48,7 @@ class StaticImportTest extends ExecutionTest {
   public function importSpecific() {
     $this->run(
       'writeLine("Hello");', 
-      array('import static util.cmd.Console::writeLine;')
+      ['import static util.cmd.Console::writeLine;']
     );
     $this->assertEquals("Hello\n", $this->stream->getBytes());
   }
@@ -61,7 +61,7 @@ class StaticImportTest extends ExecutionTest {
   public function importConst() {
     $this->run(
       'util.cmd.Console::writeLine(STATUS_OK);', 
-      array('import static peer.http.HttpConstants::*;')
+      ['import static peer.http.HttpConstants::*;']
     );
     $this->assertEquals("200\n", $this->stream->getBytes());
   }
@@ -80,7 +80,7 @@ class StaticImportTest extends ExecutionTest {
       public string run() {
         return join("Hello", "World");
       }
-    }', array('import static self::*;'));
+    }', ['import static self::*;']);
     $this->assertEquals('Hello World', $class->newInstance()->run());
   }
 }

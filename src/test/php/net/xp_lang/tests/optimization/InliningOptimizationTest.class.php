@@ -35,13 +35,13 @@ class InliningOptimizationTest extends \unittest\TestCase {
     $this->fixture->add(new InlineStaticMethodCalls());
     
     // Declare class
-    $class= new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Test'), null, array(), array());
+    $class= new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Test'), null, [], []);
     
     // Declare scope and inject resolved types
     $this->scope= new MethodScope();
     $this->scope->declarations[0]= $class;
     $this->scope->setType(new VariableNode('this'), $class->name);
-    $this->scope->addResolved('self', new TypeDeclaration(new ParseTree('', array(), $class)));
+    $this->scope->addResolved('self', new TypeDeclaration(new ParseTree('', [], $class)));
   }
   
   /**
@@ -61,19 +61,19 @@ class InliningOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function oneLineInstanceMethod() {
-    $call= new MethodCallNode(new VariableNode('this'), 'inc', array(new VariableNode('a')));
+    $call= new MethodCallNode(new VariableNode('this'), 'inc', [new VariableNode('a')]);
     $this->assertEquals(
-      new UnaryOpNode(array('op' => '++', 'postfix' => false, 'expression' => new VariableNode('a'))), 
-      $this->optimize($call, array(new MethodNode(array(
+      new UnaryOpNode(['op' => '++', 'postfix' => false, 'expression' => new VariableNode('a')]), 
+      $this->optimize($call, [new MethodNode([
         'modifiers'   => MODIFIER_INLINE,
         'name'        => 'inc',
-        'parameters'  => array(array('name' => 'in')),
-        'body'        => array(
+        'parameters'  => [['name' => 'in']],
+        'body'        => [
           new ReturnNode(
-            new UnaryOpNode(array('op' => '++', 'postfix' => false, 'expression' => new VariableNode('in')))
+            new UnaryOpNode(['op' => '++', 'postfix' => false, 'expression' => new VariableNode('in')])
           )
-        )
-      ))))
+        ]
+      ])])
     );
   }
 
@@ -82,19 +82,19 @@ class InliningOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function noInstanceMethodOptimizationWithoutInlineFlag() {
-    $call= new MethodCallNode(new VariableNode('this'), 'inc', array(new VariableNode('a')));
+    $call= new MethodCallNode(new VariableNode('this'), 'inc', [new VariableNode('a')]);
     $this->assertEquals(
       $call, 
-      $this->optimize($call, array(new MethodNode(array(
+      $this->optimize($call, [new MethodNode([
         'modifiers'   => 0,
         'name'        => 'inc',
-        'parameters'  => array(array('name' => 'in')),
-        'body'        => array(
+        'parameters'  => [['name' => 'in']],
+        'body'        => [
           new ReturnNode(
-            new UnaryOpNode(array('op' => '++', 'postfix' => false, 'expression' => new VariableNode('in')))
+            new UnaryOpNode(['op' => '++', 'postfix' => false, 'expression' => new VariableNode('in')])
           )
-        )
-      ))))
+        ]
+      ])])
     );
   }
 
@@ -103,19 +103,19 @@ class InliningOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function oneLineStaticMethod() {
-    $call= new StaticMethodCallNode(new TypeName('self'), 'inc', array(new VariableNode('a')));
+    $call= new StaticMethodCallNode(new TypeName('self'), 'inc', [new VariableNode('a')]);
     $this->assertEquals(
-      new UnaryOpNode(array('op' => '++', 'postfix' => false, 'expression' => new VariableNode('a'))), 
-      $this->optimize($call, array(new MethodNode(array(
+      new UnaryOpNode(['op' => '++', 'postfix' => false, 'expression' => new VariableNode('a')]), 
+      $this->optimize($call, [new MethodNode([
         'modifiers'   => MODIFIER_INLINE | MODIFIER_STATIC,
         'name'        => 'inc',
-        'parameters'  => array(array('name' => 'in')),
-        'body'        => array(
+        'parameters'  => [['name' => 'in']],
+        'body'        => [
           new ReturnNode(
-            new UnaryOpNode(array('op' => '++', 'postfix' => false, 'expression' => new VariableNode('in')))
+            new UnaryOpNode(['op' => '++', 'postfix' => false, 'expression' => new VariableNode('in')])
           )
-        )
-      ))))
+        ]
+      ])])
     );
   }
 
@@ -124,19 +124,19 @@ class InliningOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function noStaticMethodOptimizationWithoutInlineFlag() {
-    $call= new StaticMethodCallNode(new TypeName('self'), 'inc', array(new VariableNode('a')));
+    $call= new StaticMethodCallNode(new TypeName('self'), 'inc', [new VariableNode('a')]);
     $this->assertEquals(
       $call, 
-      $this->optimize($call, array(new MethodNode(array(
+      $this->optimize($call, [new MethodNode([
         'modifiers'   => MODIFIER_STATIC,
         'name'        => 'inc',
-        'parameters'  => array(array('name' => 'in')),
-        'body'        => array(
+        'parameters'  => [['name' => 'in']],
+        'body'        => [
           new ReturnNode(
-            new UnaryOpNode(array('op' => '++', 'postfix' => false, 'expression' => new VariableNode('in')))
+            new UnaryOpNode(['op' => '++', 'postfix' => false, 'expression' => new VariableNode('in')])
           )
-        )
-      ))))
+        ]
+      ])])
     );
   }
 
@@ -148,19 +148,19 @@ class InliningOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function parameterRewritingWithTwoParameters() {
-    $call= new MethodCallNode(new VariableNode('this'), 'add', array(new VariableNode('a'), new VariableNode('b')));
+    $call= new MethodCallNode(new VariableNode('this'), 'add', [new VariableNode('a'), new VariableNode('b')]);
     $this->assertEquals(
-      new BinaryOpNode(array('lhs' => new VariableNode('a'), 'rhs' => new VariableNode('b'), 'op' => '+')), 
-      $this->optimize($call, array(new MethodNode(array(
+      new BinaryOpNode(['lhs' => new VariableNode('a'), 'rhs' => new VariableNode('b'), 'op' => '+']), 
+      $this->optimize($call, [new MethodNode([
         'modifiers'   => MODIFIER_INLINE,
         'name'        => 'add',
-        'parameters'  => array(array('name' => 'x'), array('name' => 'y')),
-        'body'        => array(
+        'parameters'  => [['name' => 'x'], ['name' => 'y']],
+        'body'        => [
           new ReturnNode(
-            new BinaryOpNode(array('lhs' => new VariableNode('x'), 'rhs' => new VariableNode('y'), 'op' => '+'))
+            new BinaryOpNode(['lhs' => new VariableNode('x'), 'rhs' => new VariableNode('y'), 'op' => '+'])
           )
-        )
-      ))))
+        ]
+      ])])
     );
   }
 
@@ -172,19 +172,19 @@ class InliningOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function parameterRewritingWithOneParameterAndOneMember() {
-    $call= new MethodCallNode(new VariableNode('this'), 'inc', array(new VariableNode('a')));
+    $call= new MethodCallNode(new VariableNode('this'), 'inc', [new VariableNode('a')]);
     $this->assertEquals(
-      new BinaryOpNode(array('lhs' => new VariableNode('a'), 'rhs' => new MemberAccessNode(new VariableNode('this'), 'step'), 'op' => '+')), 
-      $this->optimize($call, array(new MethodNode(array(
+      new BinaryOpNode(['lhs' => new VariableNode('a'), 'rhs' => new MemberAccessNode(new VariableNode('this'), 'step'), 'op' => '+']), 
+      $this->optimize($call, [new MethodNode([
         'modifiers'   => MODIFIER_INLINE,
         'name'        => 'inc',
-        'parameters'  => array(array('name' => 'x')),
-        'body'        => array(
+        'parameters'  => [['name' => 'x']],
+        'body'        => [
           new ReturnNode(
-            new BinaryOpNode(array('lhs' => new VariableNode('x'), 'rhs' => new MemberAccessNode(new VariableNode('this'), 'step'), 'op' => '+'))
+            new BinaryOpNode(['lhs' => new VariableNode('x'), 'rhs' => new MemberAccessNode(new VariableNode('this'), 'step'), 'op' => '+'])
           )
-        )
-      ))))
+        ]
+      ])])
     );
   }
 
@@ -196,19 +196,19 @@ class InliningOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function recursionsNotOptimized() {
-    $call= new MethodCallNode(new VariableNode('this'), 'inc', array(new VariableNode('a')));
+    $call= new MethodCallNode(new VariableNode('this'), 'inc', [new VariableNode('a')]);
     $this->assertEquals(
       $call,
-      $this->optimize($call, array(new MethodNode(array(
+      $this->optimize($call, [new MethodNode([
         'modifiers'   => MODIFIER_INLINE,
         'name'        => 'inc',
-        'parameters'  => array(array('name' => 'x')),
-        'body'        => array(
+        'parameters'  => [['name' => 'x']],
+        'body'        => [
           new ReturnNode(
-            new MethodCallNode(new VariableNode('this'), 'inc', array(new VariableNode('x')))
+            new MethodCallNode(new VariableNode('this'), 'inc', [new VariableNode('x')])
           )
-        )
-      ))))
+        ]
+      ])])
     );
   }
 
@@ -222,19 +222,19 @@ class InliningOptimizationTest extends \unittest\TestCase {
    */
   #[@test]
   public function recursionsNotOptimizedRecursively() {
-    $call= new MethodCallNode(new VariableNode('this'), 'inc', array(new VariableNode('a')));
+    $call= new MethodCallNode(new VariableNode('this'), 'inc', [new VariableNode('a')]);
     $this->assertEquals(
-      new BinaryOpNode(array('lhs' => new VariableNode('a'), 'rhs' => $call, 'op' => '+')),
-      $this->optimize($call, array(new MethodNode(array(
+      new BinaryOpNode(['lhs' => new VariableNode('a'), 'rhs' => $call, 'op' => '+']),
+      $this->optimize($call, [new MethodNode([
         'modifiers'   => MODIFIER_INLINE,
         'name'        => 'inc',
-        'parameters'  => array(array('name' => 'x')),
-        'body'        => array(
+        'parameters'  => [['name' => 'x']],
+        'body'        => [
           new ReturnNode(
-            new BinaryOpNode(array('lhs' => new VariableNode('x'), 'rhs' => new MethodCallNode(new VariableNode('this'), 'inc', array(new VariableNode('x'))), 'op' => '+'))
+            new BinaryOpNode(['lhs' => new VariableNode('x'), 'rhs' => new MethodCallNode(new VariableNode('this'), 'inc', [new VariableNode('x')]), 'op' => '+'])
           )
-        )
-      ))))
+        ]
+      ])])
     );
   }
 
@@ -251,50 +251,50 @@ class InliningOptimizationTest extends \unittest\TestCase {
   #[@test]
   public function cascadedInlining() {
     $member= new MemberAccessNode(new VariableNode('this'), 'step');
-    $unary= new UnaryOpNode(array('op' => '-', 'postfix' => false, 'expression' => $member));
-    $decl= array(
-      new MethodNode(array(
+    $unary= new UnaryOpNode(['op' => '-', 'postfix' => false, 'expression' => $member]);
+    $decl= [
+      new MethodNode([
         'modifiers'   => MODIFIER_INLINE,
         'name'        => 'add',
-        'parameters'  => array(array('name' => 'x'), array('name' => 'y')),
-        'body'        => array(
+        'parameters'  => [['name' => 'x'], ['name' => 'y']],
+        'body'        => [
           new ReturnNode(
-            new BinaryOpNode(array('lhs' => new VariableNode('x'), 'rhs' => new VariableNode('y'), 'op' => '+'))
+            new BinaryOpNode(['lhs' => new VariableNode('x'), 'rhs' => new VariableNode('y'), 'op' => '+'])
           )
-        )
-      )),   
-      new MethodNode(array(
+        ]
+      ]),   
+      new MethodNode([
         'modifiers'   => MODIFIER_INLINE,
         'name'        => 'inc',
-        'parameters'  => array(array('name' => 'm')),
-        'body'        => array(
-          new ReturnNode(new MethodCallNode(new VariableNode('this'), 'add', array(
+        'parameters'  => [['name' => 'm']],
+        'body'        => [
+          new ReturnNode(new MethodCallNode(new VariableNode('this'), 'add', [
             new VariableNode('m'), 
             $member
-          )))
-        )
-      )),   
-      new MethodNode(array(
+          ]))
+        ]
+      ]),   
+      new MethodNode([
         'modifiers'   => MODIFIER_INLINE,
         'name'        => 'dec',
-        'parameters'  => array(array('name' => 'm')),
-        'body'        => array(
-          new ReturnNode(new MethodCallNode(new VariableNode('this'), 'add', array(
+        'parameters'  => [['name' => 'm']],
+        'body'        => [
+          new ReturnNode(new MethodCallNode(new VariableNode('this'), 'add', [
             new VariableNode('m'), 
             $unary
-          )))
-        )
-      )),   
-    );
+          ]))
+        ]
+      ]),   
+    ];
 
     $this->assertEquals(
-      new BinaryOpNode(array('lhs' => new VariableNode('a'), 'rhs' => $member, 'op' => '+')),
-      $this->optimize(new MethodCallNode(new VariableNode('this'), 'inc', array(new VariableNode('a'))), $decl),
+      new BinaryOpNode(['lhs' => new VariableNode('a'), 'rhs' => $member, 'op' => '+']),
+      $this->optimize(new MethodCallNode(new VariableNode('this'), 'inc', [new VariableNode('a')]), $decl),
       'inc'
     );
     $this->assertEquals(
-      new BinaryOpNode(array('lhs' => new VariableNode('a'), 'rhs' => $unary, 'op' => '+')),
-      $this->optimize(new MethodCallNode(new VariableNode('this'), 'dec', array(new VariableNode('a'))), $decl),
+      new BinaryOpNode(['lhs' => new VariableNode('a'), 'rhs' => $unary, 'op' => '+']),
+      $this->optimize(new MethodCallNode(new VariableNode('this'), 'dec', [new VariableNode('a')]), $decl),
       'dec'
     );
   }

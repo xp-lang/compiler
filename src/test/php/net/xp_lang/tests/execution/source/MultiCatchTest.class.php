@@ -1,5 +1,7 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
+use lang\IllegalArgumentException;
+
 /**
  * Tests MultiCatchs
  *
@@ -42,7 +44,7 @@ class MultiCatchTest extends ExecutionTest {
    * Test catch
    *
    */
-  #[@test, @expect('lang.IllegalArgumentException')]
+  #[@test, @expect(IllegalArgumentException::class)]
   public function iaException() {
     $this->run('
       try {

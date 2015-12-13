@@ -16,10 +16,10 @@ class ArrayTest extends ParserTestCase {
    */
   #[@test]
   public function emptyUntypedArray() {
-    $this->assertEquals(array(new ArrayNode(array(
-      'values'        => array(),
+    $this->assertEquals([new ArrayNode([
+      'values'        => [],
       'type'          => null,
-    ))), $this->parse('
+    ])], $this->parse('
       [];
     '));
   }
@@ -30,10 +30,10 @@ class ArrayTest extends ParserTestCase {
    */
   #[@test]
   public function emptyTypedArray() {
-    $this->assertEquals(array(new ArrayNode(array(
-      'values'        => array(),
+    $this->assertEquals([new ArrayNode([
+      'values'        => [],
       'type'          => new TypeName('int[]'),
-    ))), $this->parse('
+    ])], $this->parse('
       new int[] {};
     '));
   }
@@ -44,14 +44,14 @@ class ArrayTest extends ParserTestCase {
    */
   #[@test]
   public function untypedArray() {
-    $this->assertEquals(array(new ArrayNode(array(
-      'values'        => array(
+    $this->assertEquals([new ArrayNode([
+      'values'        => [
         new IntegerNode('1'),
         new IntegerNode('2'),
         new IntegerNode('3'),
-      ),
+      ],
       'type'          => null,
-    ))), $this->parse('
+    ])], $this->parse('
       [1, 2, 3];
     '));
   }
@@ -62,14 +62,14 @@ class ArrayTest extends ParserTestCase {
    */
   #[@test]
   public function untypedArrayWithDanglingComma() {
-    $this->assertEquals(array(new ArrayNode(array(
-      'values'        => array(
+    $this->assertEquals([new ArrayNode([
+      'values'        => [
         new IntegerNode('1'),
         new IntegerNode('2'),
         new IntegerNode('3'),
-      ),
+      ],
       'type'          => null,
-    ))), $this->parse('
+    ])], $this->parse('
       [1, 2, 3, ];
     '));
   }
@@ -80,14 +80,14 @@ class ArrayTest extends ParserTestCase {
    */
   #[@test]
   public function typedArray() {
-    $this->assertEquals(array(new ArrayNode(array(
-      'values'        => array(
+    $this->assertEquals([new ArrayNode([
+      'values'        => [
         new IntegerNode('1'),
         new IntegerNode('2'),
         new IntegerNode('3'),
-      ),
+      ],
       'type'          => new TypeName('int[]'),
-    ))), $this->parse('
+    ])], $this->parse('
       new int[] {1, 2, 3};
     '));
   }
@@ -99,10 +99,10 @@ class ArrayTest extends ParserTestCase {
   #[@test]
   public function arrayTypeArray() {
     $this->assertEquals(
-      array(new ArrayNode(array(
-        'values'        => array(),
+      [new ArrayNode([
+        'values'        => [],
         'type'          => new TypeName('string[][]'),
-      ))),
+      ])],
       $this->parse('new string[][] {};')
     );
   }
@@ -114,10 +114,10 @@ class ArrayTest extends ParserTestCase {
   #[@test]
   public function mapTypeArray() {
     $this->assertEquals(
-      array(new ArrayNode(array(
-        'values'        => array(),
+      [new ArrayNode([
+        'values'        => [],
         'type'          => new TypeName('[:var][]'),
-      ))),
+      ])],
       $this->parse('new [:var][] {};')
     );
   }
@@ -129,10 +129,10 @@ class ArrayTest extends ParserTestCase {
   #[@test]
   public function genericTypeArray() {
     $this->assertEquals(
-      array(new ArrayNode(array(
-        'values'        => array(),
+      [new ArrayNode([
+        'values'        => [],
         'type'          => new TypeName('List<string>[]'),
-      ))),
+      ])],
       $this->parse('new List<string>[] {};')
     );
   }

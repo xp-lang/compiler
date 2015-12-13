@@ -42,7 +42,7 @@ class AnnotationTest extends ExecutionTest {
   #[@test]
   public function newinstance_annotation_with_array() {
     $this->assertEquals(
-      array(new StringBuffer('Hello')),
+      [new StringBuffer('Hello')],
       $this->methodAnnotatedWith('[@value([new net.xp_lang.tests.StringBuffer("Hello")])]')->getAnnotation('value')
     );
   }
@@ -50,7 +50,7 @@ class AnnotationTest extends ExecutionTest {
   #[@test]
   public function newinstance_annotation_with_map() {
     $this->assertEquals(
-      array('hello' => new StringBuffer('Hello')),
+      ['hello' => new StringBuffer('Hello')],
       $this->methodAnnotatedWith('[@value([hello : new net.xp_lang.tests.StringBuffer("Hello")])]')->getAnnotation('value')
     );
   }
@@ -96,7 +96,7 @@ class AnnotationTest extends ExecutionTest {
   #[@test]
   public function limit_annotation() {
     $this->assertEquals(
-      array('time' => 0.1),
+      ['time' => 0.1],
       $this->methodAnnotatedWith('[@test, @limit(time = 0.1)]')->getAnnotation('limit')
     );
   }
@@ -111,7 +111,7 @@ class AnnotationTest extends ExecutionTest {
   #[@test]
   public function restricted_annotation() {
     $this->assertEquals(
-      array('roles' => array('admin', 'root')),
+      ['roles' => ['admin', 'root']],
       $this->methodAnnotatedWith('[@restricted(roles = ["admin", "root"])]')->getAnnotation('restricted')
     );
   }

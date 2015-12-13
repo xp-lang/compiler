@@ -12,7 +12,7 @@ class CatchTest extends ExecutionTest {
    */
   #[@test]
   public function catchNoException() {
-    $this->assertEquals(array('Try'), $this->run('
+    $this->assertEquals(['Try'], $this->run('
       $r= [];
       try {
         $r[]= "Try";
@@ -29,7 +29,7 @@ class CatchTest extends ExecutionTest {
    */
   #[@test]
   public function catchWithException() {
-    $this->assertEquals(array('Try', 'Catch'), $this->run('
+    $this->assertEquals(['Try', 'Catch'], $this->run('
       $r= [];
       try {
         $r[]= "Try";
@@ -47,7 +47,7 @@ class CatchTest extends ExecutionTest {
    */
   #[@test]
   public function catchSubclass() {
-    $this->assertEquals(array('Try', 'Catch'), $this->run('
+    $this->assertEquals(['Try', 'Catch'], $this->run('
       $r= [];
       try {
         $r[]= "Try";
@@ -65,7 +65,7 @@ class CatchTest extends ExecutionTest {
    */
   #[@test]
   public function catchIAE() {
-    $this->assertEquals(array('Try', 'Catch.IAE'), $this->run('
+    $this->assertEquals(['Try', 'Catch.IAE'], $this->run('
       $r= [];
       try {
         $r[]= "Try";
@@ -85,7 +85,7 @@ class CatchTest extends ExecutionTest {
    */
   #[@test]
   public function catchFE() {
-    $this->assertEquals(array('Try', 'Catch.FE'), $this->run('
+    $this->assertEquals(['Try', 'Catch.FE'], $this->run('
       $r= [];
       try {
         $r[]= "Try";
@@ -105,7 +105,7 @@ class CatchTest extends ExecutionTest {
    */
   #[@test]
   public function catchMultipleFE() {
-    $this->assertEquals(array('Try', 'Catch'), $this->run('
+    $this->assertEquals(['Try', 'Catch'], $this->run('
       $r= [];
       try {
         $r[]= "Try";
@@ -123,7 +123,7 @@ class CatchTest extends ExecutionTest {
    */
   #[@test]
   public function catchMultipleIAE() {
-    $this->assertEquals(array('Try', 'Catch'), $this->run('
+    $this->assertEquals(['Try', 'Catch'], $this->run('
       $r= [];
       try {
         $r[]= "Try";
@@ -141,7 +141,7 @@ class CatchTest extends ExecutionTest {
    */
   #[@test]
   public function catchMultipleISE() {
-    $this->assertEquals(array('Try', 'Catch.ISE'), $this->run('
+    $this->assertEquals(['Try', 'Catch.ISE'], $this->run('
       $r= [];
       try {
         $r[]= "Try";

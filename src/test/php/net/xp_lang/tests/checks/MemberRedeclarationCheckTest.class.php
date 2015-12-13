@@ -31,12 +31,12 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   #[@test]
   public function interfaceWithDuplicateMethod() {
     $this->assertEquals(
-      array('C409', 'Cannot redeclare Runnable::run()'), 
+      ['C409', 'Cannot redeclare Runnable::run()'], 
       $this->fixture->verify(
-        new InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Runnable'), array(), array(
-          new MethodNode(array('name' => 'run')),
-          new MethodNode(array('name' => 'run')),
-        )), 
+        new InterfaceNode(MODIFIER_PUBLIC, [], new TypeName('Runnable'), [], [
+          new MethodNode(['name' => 'run']),
+          new MethodNode(['name' => 'run']),
+        ]), 
         $this->scope
       )
     );
@@ -46,10 +46,10 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   public function interfaceWithTwoMethods() {
     $this->assertNull(
       $this->fixture->verify(
-        new InterfaceNode(MODIFIER_PUBLIC, array(), new TypeName('Runnable'), array(), array(
-          new MethodNode(array('name' => 'run')),
-          new MethodNode(array('name' => 'runnable')),
-        )), 
+        new InterfaceNode(MODIFIER_PUBLIC, [], new TypeName('Runnable'), [], [
+          new MethodNode(['name' => 'run']),
+          new MethodNode(['name' => 'runnable']),
+        ]), 
         $this->scope
       )
     );
@@ -58,12 +58,12 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   #[@test]
   public function classWithDuplicateMethod() {
     $this->assertEquals(
-      array('C409', 'Cannot redeclare Runner::run()'), 
+      ['C409', 'Cannot redeclare Runner::run()'], 
       $this->fixture->verify(
-        new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner'), null, array(), array(
-          new MethodNode(array('name' => 'run')),
-          new MethodNode(array('name' => 'run')),
-        )), 
+        new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Runner'), null, [], [
+          new MethodNode(['name' => 'run']),
+          new MethodNode(['name' => 'run']),
+        ]), 
         $this->scope
       )
     );
@@ -73,10 +73,10 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   public function classWithTwoMethods() {
     $this->assertNull(
       $this->fixture->verify(
-        new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner'), null, array(), array(
-          new MethodNode(array('name' => 'run')),
-          new MethodNode(array('name' => 'runnable')),
-        )), 
+        new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Runner'), null, [], [
+          new MethodNode(['name' => 'run']),
+          new MethodNode(['name' => 'runnable']),
+        ]), 
         $this->scope
       )
     );
@@ -85,12 +85,12 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   #[@test]
   public function classWithDuplicateField() {
     $this->assertEquals(
-      array('C409', 'Cannot redeclare Runner::$in'), 
+      ['C409', 'Cannot redeclare Runner::$in'], 
       $this->fixture->verify(
-        new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner'), null, array(), array(
-          new FieldNode(array('name' => 'in')),
-          new FieldNode(array('name' => 'in')),
-        )), 
+        new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Runner'), null, [], [
+          new FieldNode(['name' => 'in']),
+          new FieldNode(['name' => 'in']),
+        ]), 
         $this->scope
       )
     );
@@ -99,12 +99,12 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   #[@test]
   public function classWithFieldAndPropertyWithSameName() {
     $this->assertEquals(
-      array('C409', 'Cannot redeclare Runner::$in'), 
+      ['C409', 'Cannot redeclare Runner::$in'], 
       $this->fixture->verify(
-        new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner'), null, array(), array(
-          new FieldNode(array('name' => 'in')),
-          new PropertyNode(array('name' => 'in')),
-        )), 
+        new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Runner'), null, [], [
+          new FieldNode(['name' => 'in']),
+          new PropertyNode(['name' => 'in']),
+        ]), 
         $this->scope
       )
     );
@@ -114,10 +114,10 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   public function classWithTwoFields() {
     $this->assertNull(
       $this->fixture->verify(
-        new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner'), null, array(), array(
-          new FieldNode(array('name' => 'in')),
-          new FieldNode(array('name' => 'out')),
-        )), 
+        new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Runner'), null, [], [
+          new FieldNode(['name' => 'in']),
+          new FieldNode(['name' => 'out']),
+        ]), 
         $this->scope
       )
     );
@@ -127,10 +127,10 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   public function classWithFieldAndMethodWithSameName() {
     $this->assertNull(
       $this->fixture->verify(
-        new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Runner'), null, array(), array(
-          new FieldNode(array('name' => 'run')),
-          new MethodNode(array('name' => 'run')),
-        )), 
+        new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Runner'), null, [], [
+          new FieldNode(['name' => 'run']),
+          new MethodNode(['name' => 'run']),
+        ]), 
         $this->scope
       )
     );
@@ -139,12 +139,12 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   #[@test]
   public function classWithDuplicateConstant() {
     $this->assertEquals(
-      array('C409', 'Cannot redeclare Std::IN'), 
+      ['C409', 'Cannot redeclare Std::IN'], 
       $this->fixture->verify(
-        new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Std'), null, array(), array(
+        new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Std'), null, [], [
           new ClassConstantNode('IN', new TypeName('string'), new StringNode('php://stdin')),
           new ClassConstantNode('IN', new TypeName('string'), new StringNode('php://stdout')),
-        )), 
+        ]), 
         $this->scope
       )
     );
@@ -153,12 +153,12 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   #[@test]
   public function enumWithDuplicateMember() {
     $this->assertEquals(
-      array('C409', 'Cannot redeclare Coin::$penny'), 
+      ['C409', 'Cannot redeclare Coin::$penny'], 
       $this->fixture->verify(
-        new EnumNode(MODIFIER_PUBLIC, array(), new TypeName('Coin'), null, array(), array(
-          new EnumMemberNode(array('name' => 'penny')),
-          new EnumMemberNode(array('name' => 'penny')),
-        )), 
+        new EnumNode(MODIFIER_PUBLIC, [], new TypeName('Coin'), null, [], [
+          new EnumMemberNode(['name' => 'penny']),
+          new EnumMemberNode(['name' => 'penny']),
+        ]), 
         $this->scope
       )
     );
@@ -168,10 +168,10 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   public function enumWithTwoMembers() {
     $this->assertNull(
       $this->fixture->verify(
-        new EnumNode(MODIFIER_PUBLIC, array(), new TypeName('Coin'), null, array(), array(
-          new EnumMemberNode(array('name' => 'penny')),
-          new EnumMemberNode(array('name' => 'dime')),
-        )), 
+        new EnumNode(MODIFIER_PUBLIC, [], new TypeName('Coin'), null, [], [
+          new EnumMemberNode(['name' => 'penny']),
+          new EnumMemberNode(['name' => 'dime']),
+        ]), 
         $this->scope
       )
     );
@@ -180,12 +180,12 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   #[@test]
   public function enumWithConflictingFieldAndMember() {
     $this->assertEquals(
-      array('C409', 'Cannot redeclare Coin::$penny'), 
+      ['C409', 'Cannot redeclare Coin::$penny'], 
       $this->fixture->verify(
-        new EnumNode(MODIFIER_PUBLIC, array(), new TypeName('Coin'), null, array(), array(
-          new EnumMemberNode(array('name' => 'penny')),
-          new FieldNode(array('name' => 'penny')),
-        )), 
+        new EnumNode(MODIFIER_PUBLIC, [], new TypeName('Coin'), null, [], [
+          new EnumMemberNode(['name' => 'penny']),
+          new FieldNode(['name' => 'penny']),
+        ]), 
         $this->scope
       )
     );
@@ -195,10 +195,10 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   public function classWithStaticInitializer() {
     $this->assertNull(
       $this->fixture->verify(
-        new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Init'), null, array(), array(
-          new MethodNode(array('name' => 'run')),
-          new StaticInitializerNode(array()),
-        )), 
+        new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Init'), null, [], [
+          new MethodNode(['name' => 'run']),
+          new StaticInitializerNode([]),
+        ]), 
         $this->scope
       )
     );
@@ -207,12 +207,12 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   #[@test]
   public function classWithStaticInitializerAndConflictingMethod() {
     $this->assertEquals(
-      array('C409', 'Cannot redeclare Init::__static()'), 
+      ['C409', 'Cannot redeclare Init::__static()'], 
       $this->fixture->verify(
-        new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Init'), null, array(), array(
-          new MethodNode(array('name' => '__static')),
-          new StaticInitializerNode(array()),
-        )), 
+        new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Init'), null, [], [
+          new MethodNode(['name' => '__static']),
+          new StaticInitializerNode([]),
+        ]), 
         $this->scope
       )
     );
@@ -221,12 +221,12 @@ class MemberRedeclarationCheckTest extends \unittest\TestCase {
   #[@test]
   public function classWithTwoStaticInitializers() {
     $this->assertEquals(
-      array('C409', 'Cannot redeclare Init::__static()'), 
+      ['C409', 'Cannot redeclare Init::__static()'], 
       $this->fixture->verify(
-        new ClassNode(MODIFIER_PUBLIC, array(), new TypeName('Init'), null, array(), array(
-          new StaticInitializerNode(array()),
-          new StaticInitializerNode(array()),
-        )), 
+        new ClassNode(MODIFIER_PUBLIC, [], new TypeName('Init'), null, [], [
+          new StaticInitializerNode([]),
+          new StaticInitializerNode([]),
+        ]), 
         $this->scope
       )
     );
