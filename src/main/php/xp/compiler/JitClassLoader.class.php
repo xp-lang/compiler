@@ -33,7 +33,6 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    */
   public function __construct($path, $debug= false) {
     $this->files= new FileManager();
-    $this->emitter= Emitter::newInstance();
     $this->debug= $debug;
 
     // Maven conventions
@@ -168,6 +167,10 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     // Locate sourcecode
     if (null === ($source= $this->locateSource($class))) {
       throw new ClassNotFoundException($class);  
+    }
+
+    if (null === $this->emitter) {
+      $this->emitter= Emitter::newInstance();
     }
 
     // Parse, then emit source
