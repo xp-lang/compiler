@@ -6,14 +6,18 @@
   "description" : "XP Compiler",
   "keywords": ["xp"],
   "require" : {
-    "xp-framework/core": "~6.0",
-    "xp-framework/parser": "~6.0",
-    "php" : ">=5.4.0"
+    "xp-framework/core": "^6.5",
+    "xp-framework/parser": "^6.0",
+    "xp-framework/tokenize": "^6.6",
+    "xp-framework/patterns": "^6.6",
+    "xp-framework/logging": "^6.5",
+    "xp-framework/collections": "^6.5",
+    "php" : ">=5.5.0"
   },
   "require-dev" : {
-    "xp-framework/xml": "~6.0",
-    "xp-framework/rdbms": "~6.0",
-    "xp-framework/http": "~6.0"
+    "xp-framework/xml": "^6.0",
+    "xp-framework/rdbms": "^6.0",
+    "xp-framework/http": "^6.0"
   },
   "autoload" : {
     "files" : ["src/main/php/autoload.php"]
