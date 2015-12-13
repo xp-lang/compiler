@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 5.0.0 / 2015-12-13
+
 * **Heads up**: Changed minimum XP version to run the XP compiler to XP
   6.5.0, and with it the minimum PHP version to PHP 5.5
   (@thekid)
