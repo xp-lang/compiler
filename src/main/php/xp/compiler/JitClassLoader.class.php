@@ -121,7 +121,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     // List directory contents, replacing compileable source files with 
     // class file names. These of course don't exist yet, but will be 
     // compiled on demand
-    $return= array();
+    $return= [];
     $dir= strtr($package, '.', DIRECTORY_SEPARATOR);
     foreach ($this->files->getSourcePaths() as $path) {
       if (!is_dir($d= $path.$dir.DIRECTORY_SEPARATOR)) continue;
@@ -189,7 +189,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
       throw new ClassFormatException('Cannot compile '.$source->getURI().': '.$e->formattedErrors(''), $e);
     } catch (FormatException $e) {
       $this->debug && $e->printStackTrace();
-      throw new JitCompilationError($class, array($this), $this->emitter->messages(), $e);
+      throw new JitCompilationError($class, [$this], $this->emitter->messages(), $e);
     }
 
     // Clean up
@@ -197,7 +197,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
 
     // Define type
     $this->debug && fputs(STDERR, $r->type()->toString()."\n");
-    $r->executeWith(array());
+    $r->executeWith([]);
     \xp::$cl[$class]= $this->getClassName().'://'.$this->instanceId();
     return $r->type()->literal();
   }
@@ -240,7 +240,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @return  lang.IClassLoader
    */
   public static function instanceFor($path, $debug= false) {
-    static $pool= array();
+    static $pool= [];
 
     if (!isset($pool[$path.$debug])) {
       $pool[$path.$debug]= new self($path, $debug);

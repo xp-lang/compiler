@@ -35,7 +35,7 @@ class QuietDiagnosticListener extends \lang\Object implements DiagnosticListener
    * @param   io.File compiled
    * @param   string[] messages
    */
-  public function compilationSucceeded(Source $src, \io\File $compiled, array $messages= array()) {
+  public function compilationSucceeded(Source $src, \io\File $compiled, array $messages= []) {
     // NOOP
   }
   

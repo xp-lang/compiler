@@ -10,7 +10,7 @@ class Operator extends \lang\Object {
     $symbol     = '',
     $returns    = null,
     $modifiers  = 0,
-    $parameters = array(),
+    $parameters = [],
     $holder     = null;
 
   /**

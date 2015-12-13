@@ -7,8 +7,8 @@
  */
 class GenericType extends Types {
   protected $definition= null;
-  protected $components= array();
-  protected $placeholders= array();
+  protected $components= [];
+  protected $placeholders= [];
   
   /**
    * Constructor
@@ -70,7 +70,7 @@ class GenericType extends Types {
    * @return  xp.compiler.types.TypeName[]
    */
   protected function rewriteAll(array $types) {
-    $result= array();
+    $result= [];
     foreach ($types as $type) {
       $result[]= $type ? $this->rewrite($type) : null;
     }
@@ -241,7 +241,7 @@ class GenericType extends Types {
    * @return  [:xp.compiler.types.Method[]]
    */
   public function getExtensions() {
-    return array();
+    return [];
   }
 
   /**
@@ -353,7 +353,7 @@ class GenericType extends Types {
    * @return  [:int]
    */
   public function genericPlaceholders() {
-    return array();
+    return [];
   }
   
   /**
@@ -366,7 +366,7 @@ class GenericType extends Types {
       '%s@(%s<%s>)',
       $this->getClassName(),
       $this->definition->toString(),
-      implode(', ', array_map(array('xp', 'stringOf'), $this->components))
+      implode(', ', array_map(['xp', 'stringOf'], $this->components))
     );
   }
 }

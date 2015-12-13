@@ -11,13 +11,13 @@ class CompiledType extends Types {
   public $kind= null;
   public $indexer= null;
   public $constructor= null;
-  public $methods= array();
-  public $fields= array();
-  public $operators= array();
-  public $constants= array();
-  public $properties= array();
+  public $methods= [];
+  public $fields= [];
+  public $operators= [];
+  public $constants= [];
+  public $properties= [];
   public $generics= null;
-  public $extensions= array();
+  public $extensions= [];
   public $modifiers= 0;
 
   /**
@@ -134,7 +134,7 @@ class CompiledType extends Types {
     $this->methods[$method->name]= $method;
     if (null !== $extension) {
       $name= $extension->compoundName();
-      isset($this->extensions[$name]) || $this->extensions[$name]= array();
+      isset($this->extensions[$name]) || $this->extensions[$name]= [];
       $this->extensions[$name][]= $method;
     }
     return $method;

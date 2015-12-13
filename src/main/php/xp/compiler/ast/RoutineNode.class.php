@@ -10,8 +10,8 @@
 abstract class RoutineNode extends TypeMemberNode {
   public $comment    = null;
   public $body       = null;
-  public $parameters = array();
-  public $throws     = array();
+  public $parameters = [];
+  public $throws     = [];
   
   /**
    * Adds a statement

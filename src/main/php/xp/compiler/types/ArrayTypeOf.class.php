@@ -140,7 +140,7 @@ class ArrayTypeOf extends Types {
    * @return  [:xp.compiler.types.Method[]]
    */
   public function getExtensions() {
-    return array();
+    return [];
   }
 
   /**
@@ -250,7 +250,7 @@ class ArrayTypeOf extends Types {
    * @return  [:int]
    */
   public function genericPlaceholders() {
-    return array();
+    return [];
   }
   
   /**

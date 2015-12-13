@@ -40,9 +40,9 @@ class MethodCallVerification extends AbstractMethodCallVerification {
     // * primitive, array, map, int: Definitely don't have methods
     $type= $scope->typeOf($call->target);
     if ($type->isVariable()) {
-      return array('T203', 'Member call (var).'.$call->name.'() verification deferred until runtime');
+      return ['T203', 'Member call (var).'.$call->name.'() verification deferred until runtime'];
     } else if (!$type->isClass()) {
-      return array('T305', 'Using member calls on unsupported type '.$type->compoundName());
+      return ['T305', 'Using member calls on unsupported type '.$type->compoundName()];
     }
 
     return $this->verifyMethod($type, $call->name, $scope);

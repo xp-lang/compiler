@@ -8,7 +8,7 @@ use lang\XPClass;
  * @test    xp://net.xp_lang.tests.CompilationProfileReaderTest
  */
 class CompilationProfileReader extends \lang\Object {
-  protected $sources= array();
+  protected $sources= [];
   
   /**
    * Add source properties

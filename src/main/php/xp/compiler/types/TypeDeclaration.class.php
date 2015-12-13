@@ -195,7 +195,7 @@ class TypeDeclaration extends Types {
    * @return  [:xp.compiler.types.Method[]]
    */
   public function getExtensions() {
-    $r= array();
+    $r= [];
     foreach ($this->tree->declaration->body as $member) {
       if ($member instanceof \xp\compiler\ast\MethodNode && $member->extension) {
         $n= $member->extension->compoundName();
@@ -213,7 +213,7 @@ class TypeDeclaration extends Types {
         }
         $m->holder= $this;
 
-        isset($r[$n]) || $r[$n]= array();
+        isset($r[$n]) || $r[$n]= [];
         $r[$n][]= $m;
       }
     }
@@ -403,7 +403,7 @@ class TypeDeclaration extends Types {
    * @return  [:int]
    */
   public function genericPlaceholders() {
-    return array();
+    return [];
   }
   
   /**

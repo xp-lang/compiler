@@ -160,7 +160,7 @@ class TypeInstance extends Types {
         $m->name= $method->getName();
         $m->returns= $this->typeNameOf($method->getReturnTypeName());
         $m->modifiers= $method->getModifiers();
-        $m->parameters= array();
+        $m->parameters= [];
         foreach ($method->getParameters() as $p) {
           $m->parameters[]= new Parameter(
             $p->getName(),

@@ -40,9 +40,9 @@ class MemberAccessVerification extends \lang\Object implements Check {
     // * primitive, array, map, int: Definitely don't have fields
     $type= $scope->typeOf($access->target);
     if ($type->isVariable()) {
-      return array('T203', 'Member access (var).'.$access->name.'() verification deferred until runtime');
+      return ['T203', 'Member access (var).'.$access->name.'() verification deferred until runtime'];
     } else if (!$type->isClass()) {
-      return array('T305', 'Using member access on unsupported type '.$type->compoundName());
+      return ['T305', 'Using member access on unsupported type '.$type->compoundName()];
     }
 
     // Verify target method exists
@@ -52,7 +52,7 @@ class MemberAccessVerification extends \lang\Object implements Check {
     } else if ($target->hasProperty($access->name)) {
       $member= $target->getProperty($access->name);
     } else {
-      return array('T404', 'No such field $'.$access->name.' in '.$target->name());
+      return ['T404', 'No such field $'.$access->name.' in '.$target->name()];
     }
     
     // Verify visibility
@@ -62,13 +62,13 @@ class MemberAccessVerification extends \lang\Object implements Check {
         ($member->modifiers & MODIFIER_PRIVATE && !$enclosing->equals($target)) ||
         ($member->modifiers & MODIFIER_PROTECTED && !($enclosing->equals($target) || $enclosing->isSubclassOf($target)))
       ) {
-        return array('T403', sprintf(
+        return ['T403', sprintf(
           'Accessing %s %s::$%s from %s',
           implode(' ', \lang\reflect\Modifiers::namesOf($member->modifiers)),
           $target->name(),
           $member->name,
           $enclosing->name()
-        ));
+        )];
       }
     }
   }

@@ -12,7 +12,7 @@
  */
 class InvocationNode extends Node {
   public $name= '';
-  public $arguments= array();
+  public $arguments= [];
   
   /**
    * Creates a new InvocationNode object

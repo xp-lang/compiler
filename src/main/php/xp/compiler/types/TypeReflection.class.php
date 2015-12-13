@@ -11,14 +11,14 @@ use lang\Primitive;
  */
 class TypeReflection extends Types {
   protected $class= null;
-  public static $ovl= array(
+  public static $ovl= [
     '~'   => 'concat',
     '-'   => 'minus',
     '+'   => 'plus',
     '*'   => 'times',
     '/'   => 'div',
     '%'   => 'mod',
-  );
+  ];
   
   /**
    * Constructor
@@ -128,7 +128,7 @@ class TypeReflection extends Types {
       if (2 === sscanf($it, '%[^<]<%[^>]>', $_, $types)) {
         $components= explode(',', $types);
       } else {
-        $components= array('var', 'var');
+        $components= ['var', 'var'];
       }
       $e= new Enumerator();
       $e->key= new TypeName(trim($components[0]));
@@ -150,7 +150,7 @@ class TypeReflection extends Types {
   protected function typeNameOf($t) {
     if (false !== ($p= strpos($t, '<'))) {
       $base= substr($t, 0, $p);
-      $components= array();
+      $components= [];
       for ($args= substr($t, $p+ 1, -1).',', $o= 0, $brackets= 0, $i= 0, $s= strlen($args); $i < $s; $i++) {
         if (',' === $args{$i} && 0 === $brackets) {
           $components[]= $this->typeNameOf(ltrim(substr($args, $o, $i- $o)));
@@ -213,7 +213,7 @@ class TypeReflection extends Types {
       $c= $t->componentType();
       $n->type= new TypeName($t->getName());
       foreach ($value as $key => $element) {
-        $n->members[]= array($this->nodeOf($key, Primitive::$STRING), $this->nodeOf($value, $c));
+        $n->members[]= [$this->nodeOf($key, Primitive::$STRING), $this->nodeOf($value, $c)];
       }
       return $n;
     } else {
@@ -242,7 +242,7 @@ class TypeReflection extends Types {
     with ($constructor= $this->class->getConstructor()); {
       $c= new Constructor();
       $c->modifiers= $constructor->getModifiers();
-      $c->parameters= array();
+      $c->parameters= [];
       foreach ($constructor->getParameters() as $p) {
         $c->parameters[]= new Parameter(
           $p->getName(),
@@ -279,7 +279,7 @@ class TypeReflection extends Types {
       $m->name= $method->getName();
       $m->returns= $this->typeNameOf($method->getReturnTypeName());
       $m->modifiers= $method->getModifiers();
-      $m->parameters= array();
+      $m->parameters= [];
       foreach ($method->getParameters() as $p) {
         $m->parameters[]= new Parameter(
           $p->getName(),
@@ -319,16 +319,16 @@ class TypeReflection extends Types {
     $name= '\\'.strtr($this->class->getName(), '.', '\\');
 
     // Extension methods are registered via __import()
-    if (!method_exists($name, '__import')) return array();
-    call_user_func(array($name, '__import'), 0);
-    if (!isset(\xp::$ext[0])) return array();
+    if (!method_exists($name, '__import')) return [];
+    call_user_func([$name, '__import'], 0);
+    if (!isset(\xp::$ext[0])) return [];
 
     // Found extension methods imported into the 0-scope
     $methods= $this->class->getMethods();
-    $r= array();
+    $r= [];
     foreach (\xp::$ext[0] as $type => $name) {
       $type= $this->typeName($type);
-      $r[$type]= array();
+      $r[$type]= [];
       foreach ($methods as $method) {
         if (
           ($method->getModifiers() & MODIFIER_STATIC) &&
@@ -365,7 +365,7 @@ class TypeReflection extends Types {
       $m->name= $method->getName();
       $m->returns= $this->typeNameOf($method->getReturnTypeName());
       $m->modifiers= $method->getModifiers();
-      $m->parameters= array();
+      $m->parameters= [];
       foreach ($method->getParameters() as $p) {
         $m->parameters[]= new Parameter(
           $p->getName(),
@@ -506,7 +506,7 @@ class TypeReflection extends Types {
    * @return  [:int]
    */
   public function genericPlaceholders() {
-    $lookup= array();
+    $lookup= [];
     foreach ($this->class->genericComponents() as $i => $name) {
       $lookup[$name]= $i;
     }

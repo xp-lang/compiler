@@ -6,7 +6,7 @@
 class ConstructorNode extends RoutineNode {
   public
     $modifiers  = 0,
-    $parameters = array();
+    $parameters = [];
   
   /**
    * Returns this members's name

@@ -53,7 +53,7 @@ class Result extends \lang\Object implements \xp\compiler\emit\EmitterResult {
    * @param   array<string, var> env
    * @return  var
    */    
-  public function executeWith(array $env= array()) {
+  public function executeWith(array $env= []) {
     with ($cl= \lang\DynamicClassLoader::instanceFor(__FUNCTION__), $name= $this->type->name()); {
       $cl->setClassBytes($name, $this->source);
       $cl->loadClass0($name);

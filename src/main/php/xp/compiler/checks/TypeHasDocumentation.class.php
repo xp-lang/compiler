@@ -36,7 +36,7 @@ class TypeHasDocumentation extends \lang\Object implements Check {
   public function verify(\xp\compiler\ast\Node $node, \xp\compiler\types\Scope $scope) {
     $decl= \cast($node, 'xp.compiler.ast.TypeDeclarationNode');
     if (!isset($decl->comment) && !$decl->synthetic) {
-      return array('D201', 'No api doc for type '.$decl->name->compoundName());
+      return ['D201', 'No api doc for type '.$decl->name->compoundName()];
     }
   }
 }

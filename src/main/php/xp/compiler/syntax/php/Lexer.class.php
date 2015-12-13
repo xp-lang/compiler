@@ -14,7 +14,7 @@ use lang\XPClass;
  */
 class Lexer extends \text\parser\generic\AbstractLexer {
   protected static
-    $keywords  = array(
+    $keywords  = [
       'public'        => Parser::T_PUBLIC,
       'private'       => Parser::T_PRIVATE,
       'protected'     => Parser::T_PROTECTED,
@@ -56,26 +56,26 @@ class Lexer extends \text\parser\generic\AbstractLexer {
       'switch'        => Parser::T_SWITCH,
       'case'          => Parser::T_CASE,
       'default'       => Parser::T_DEFAULT,
-    );
+    ];
 
   protected static
-    $lookahead= array(
-      '-' => array('-=' => Parser::T_SUB_EQUAL, '--' => Parser::T_DEC, '->' => Parser::T_OBJECT_OPERATOR),
-      '>' => array('>=' => Parser::T_GE, '>>' => Parser::T_SHR),
-      '<' => array('<=' => Parser::T_SE, '<<' => Parser::T_SHL),
-      '.' => array('.=' => Parser::T_CONCAT_EQUAL),
-      '+' => array('+=' => Parser::T_ADD_EQUAL, '++' => Parser::T_INC),
-      '*' => array('*=' => Parser::T_MUL_EQUAL, '**' => Parser::T_EXP),
-      '/' => array('/=' => Parser::T_DIV_EQUAL),
-      '%' => array('%=' => Parser::T_MOD_EQUAL),
-      '=' => array('==' => Parser::T_EQUALS, '=>' => Parser::T_DOUBLE_ARROW),
-      '!' => array('!=' => Parser::T_NOT_EQUALS),
-      ':' => array('::' => Parser::T_DOUBLE_COLON),
-      '|' => array('||' => Parser::T_BOOLEAN_OR, '|=' => Parser::T_OR_EQUAL),
-      '&' => array('&&' => Parser::T_BOOLEAN_AND, '&=' => Parser::T_AND_EQUAL),
-      '^' => array('^=' => Parser::T_XOR_EQUAL),
-      '?' => array('?>' => -1)
-    );
+    $lookahead= [
+      '-' => ['-=' => Parser::T_SUB_EQUAL, '--' => Parser::T_DEC, '->' => Parser::T_OBJECT_OPERATOR],
+      '>' => ['>=' => Parser::T_GE, '>>' => Parser::T_SHR],
+      '<' => ['<=' => Parser::T_SE, '<<' => Parser::T_SHL],
+      '.' => ['.=' => Parser::T_CONCAT_EQUAL],
+      '+' => ['+=' => Parser::T_ADD_EQUAL, '++' => Parser::T_INC],
+      '*' => ['*=' => Parser::T_MUL_EQUAL, '**' => Parser::T_EXP],
+      '/' => ['/=' => Parser::T_DIV_EQUAL],
+      '%' => ['%=' => Parser::T_MOD_EQUAL],
+      '=' => ['==' => Parser::T_EQUALS, '=>' => Parser::T_DOUBLE_ARROW],
+      '!' => ['!=' => Parser::T_NOT_EQUALS],
+      ':' => ['::' => Parser::T_DOUBLE_COLON],
+      '|' => ['||' => Parser::T_BOOLEAN_OR, '|=' => Parser::T_OR_EQUAL],
+      '&' => ['&&' => Parser::T_BOOLEAN_AND, '&=' => Parser::T_AND_EQUAL],
+      '^' => ['^=' => Parser::T_XOR_EQUAL],
+      '?' => ['?>' => -1]
+    ];
 
   const 
     DELIMITERS = " |&?!.:;,@%~=<>(){}[]#+-*/\"\\'\r\n\t";
@@ -86,7 +86,7 @@ class Lexer extends \text\parser\generic\AbstractLexer {
   protected
     $comment   = null,
     $tokenizer = null,
-    $forward   = array();
+    $forward   = [];
 
   /**
    * Constructor
@@ -105,7 +105,7 @@ class Lexer extends \text\parser\generic\AbstractLexer {
     if ('<?php' !== $first) {
       throw new IllegalStateException('First token must be "<?php", have "'.$first.'"');
     }
-    $this->position= $this->forward= array(1, strlen($first));   // Y, X
+    $this->position= $this->forward= [1, strlen($first)];   // Y, X
   }
 
   /**

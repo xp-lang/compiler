@@ -4,14 +4,14 @@
  * Base class for all nodes
  */
 abstract class Node extends \lang\Object {
-  public $position = array(0, 0);
+  public $position = [0, 0];
 
   /**
    * Constructor
    *
    * @param   [:var] members default array()
    */
-  public function __construct($members= array()) {
+  public function __construct($members= []) {
     foreach ($members as $name => $value) {
       $this->{$name}= $value;
     }

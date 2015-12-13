@@ -12,7 +12,7 @@ use xp\compiler\Syntax;
  */
 class FileManager extends \lang\Object {
   protected $output= null;
-  protected $sourcePaths= array();
+  protected $sourcePaths= [];
   
   /**
    * Sets output folder

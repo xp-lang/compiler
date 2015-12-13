@@ -41,18 +41,18 @@ class RoutinesVerification extends \lang\Object implements Check {
     $empty= $routine->body === null;
     if ($scope->declarations[0] instanceof \xp\compiler\ast\InterfaceNode) {
       if (!$empty) {
-        return array('R403', 'Interface methods may not have a body '.$qname);
+        return ['R403', 'Interface methods may not have a body '.$qname];
       } else if ($routine->modifiers !== MODIFIER_PUBLIC && $routine->modifiers !== 0) {
-        return array('R401', 'Interface methods may only be public '.$qname);
+        return ['R401', 'Interface methods may only be public '.$qname];
       }
     } else {
       if (Modifiers::isAbstract($routine->modifiers) && !$empty) {
-        return array('R403', 'Abstract methods may not have a body '.$qname);
+        return ['R403', 'Abstract methods may not have a body '.$qname];
       } else if (!Modifiers::isAbstract($routine->modifiers) && $empty) {
-        return array('R401', 'Non-abstract methods must have a body '.$qname);
+        return ['R401', 'Non-abstract methods must have a body '.$qname];
       }
       if ($routine->extension && !Modifiers::isStatic($routine->modifiers)) {
-        return array('E403', 'Extension methods must be static '.$qname);
+        return ['E403', 'Extension methods must be static '.$qname];
       }
     }
   }

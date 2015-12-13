@@ -139,7 +139,7 @@ class MapTypeOf extends Types {
    * @return  [:xp.compiler.types.Method[]]
    */
   public function getExtensions() {
-    return array();
+    return [];
   }
 
   /**
@@ -249,7 +249,7 @@ class MapTypeOf extends Types {
    * @return  [:int]
    */
   public function genericPlaceholders() {
-    return array();
+    return [];
   }
   
   /**

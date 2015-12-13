@@ -8,7 +8,7 @@
 class Constructor extends \lang\Object {
   public
     $modifiers  = 0,
-    $parameters = array(),
+    $parameters = [],
     $holder     = null;
 
   /**

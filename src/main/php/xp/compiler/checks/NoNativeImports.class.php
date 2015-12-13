@@ -33,6 +33,6 @@ class NoNativeImports extends \lang\Object implements Check {
    * @return  bool
    */
   public function verify(\xp\compiler\ast\Node $node, \xp\compiler\types\Scope $scope) {
-    return array('N415', 'Native imports ('.\cast($node, 'xp.compiler.ast.NativeImportNode')->name.') make code non-portable');
+    return ['N415', 'Native imports ('.\cast($node, 'xp.compiler.ast.NativeImportNode')->name.') make code non-portable'];
   }
 }

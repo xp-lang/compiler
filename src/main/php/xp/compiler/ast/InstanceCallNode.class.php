@@ -12,7 +12,7 @@
  */
 class InstanceCallNode extends Node {
   public $target= null;
-  public $arguments= array();
+  public $arguments= [];
   public $nav= false;
   
   /**

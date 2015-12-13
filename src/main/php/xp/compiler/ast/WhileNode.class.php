@@ -19,7 +19,7 @@ class WhileNode extends Node {
    * @param   xp.compiler.ast.Node expression
    * @param   xp.compiler.ast.Node[] statements
    */
-  public function __construct(Node $expression= null, $statements= array()) {
+  public function __construct(Node $expression= null, $statements= []) {
     $this->expression= $expression;
     $this->statements= $statements;
   }

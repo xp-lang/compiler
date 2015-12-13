@@ -14,7 +14,7 @@ class DefaultDiagnosticListener extends \lang\Object implements DiagnosticListen
     $failed    = 0,
     $succeeded = 0,
     $timer     = null,
-    $messages  = array();
+    $messages  = [];
   
   /**
    * Constructor
@@ -42,7 +42,7 @@ class DefaultDiagnosticListener extends \lang\Object implements DiagnosticListen
    * @param   io.File compiled
    * @param   string[] messages
    */
-  public function compilationSucceeded(Source $src, \io\File $compiled, array $messages= array()) {
+  public function compilationSucceeded(Source $src, \io\File $compiled, array $messages= []) {
     $this->writer->write('.');
     $this->succeeded++;
     if (!empty($messages)) {
@@ -94,7 +94,7 @@ class DefaultDiagnosticListener extends \lang\Object implements DiagnosticListen
     $this->failed= $this->succeeded= $this->started= 0;
     $this->writer->write('[');
     $this->timer->start();
-    $this->messages= array();
+    $this->messages= [];
   }
   
   /**

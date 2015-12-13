@@ -33,6 +33,6 @@ class ConstantsAreDiscouraged extends \lang\Object implements Check {
    * @return  bool
    */
   public function verify(\xp\compiler\ast\Node $node, \xp\compiler\types\Scope $scope) {
-    return array('T203', 'Global constants ('.\cast($node, 'xp.compiler.ast.ConstantNode')->name.') are discouraged');
+    return ['T203', 'Global constants ('.\cast($node, 'xp.compiler.ast.ConstantNode')->name.') are discouraged'];
   }
 }

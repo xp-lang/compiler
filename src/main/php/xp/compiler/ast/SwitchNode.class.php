@@ -5,5 +5,5 @@
  */
 class SwitchNode extends Node {
   public $expression = null;
-  public $cases      = array();
+  public $cases      = [];
 }

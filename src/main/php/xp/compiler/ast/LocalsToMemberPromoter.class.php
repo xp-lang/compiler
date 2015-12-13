@@ -7,8 +7,8 @@
  * @test    xp://net.xp_lang.tests.LocalsToMemberPromoterTest
  */
 class LocalsToMemberPromoter extends Visitor {
-  protected $excludes= array('this' => true);
-  protected $replacements= array();
+  protected $excludes= ['this' => true];
+  protected $replacements= [];
 
   protected static $THIS;
   
@@ -45,8 +45,8 @@ class LocalsToMemberPromoter extends Visitor {
    * @return  array<string, xp.compiler.ast.MemberAccessNode> replaced
    */
   public function promote($node) {
-    $this->replacements= array();
+    $this->replacements= [];
     $node= $this->visitOne($node);
-    return array('replaced' => $this->replacements, 'node' => $node);
+    return ['replaced' => $this->replacements, 'node' => $node];
   }
 }

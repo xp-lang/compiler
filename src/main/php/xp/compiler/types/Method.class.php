@@ -10,7 +10,7 @@ class Method extends \lang\Object {
     $name       = '',
     $returns    = null,
     $modifiers  = 0,
-    $parameters = array(),
+    $parameters = [],
     $holder     = null;
 
   /**

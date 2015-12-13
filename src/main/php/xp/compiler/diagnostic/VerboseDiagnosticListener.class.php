@@ -37,7 +37,7 @@ class VerboseDiagnosticListener extends \lang\Object implements DiagnosticListen
    * @param   io.File compiled
    * @param   string[] messages
    */
-  public function compilationSucceeded(Source $src, \io\File $compiled, array $messages= array()) {
+  public function compilationSucceeded(Source $src, \io\File $compiled, array $messages= []) {
     if ($messages) {
       foreach ($messages as $message) {
         $this->writer->writeLine('  ', $message);

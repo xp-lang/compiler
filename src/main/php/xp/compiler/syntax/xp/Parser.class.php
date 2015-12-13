@@ -152,7 +152,7 @@ class Parser extends \text\parser\generic\AbstractParser {
     const T_WITH= 430;
     const YY_ERRORCODE= 256;
 
-    protected static $yyLhs= array(-1,
+    protected static $yyLhs= [-1,
           0,     1,     5,     1,     2,     2,     6,     6,     7,     7, 
           7,     7,     9,     9,     8,     8,     4,     4,     4,    13, 
           3,    17,     3,    19,     3,    14,    14,    15,    15,    20, 
@@ -186,8 +186,8 @@ class Parser extends \text\parser\generic\AbstractParser {
          12,    95,    96,   127,   127,   128,   128,   129,   129,   129, 
         129,   126,   126,    21,    21,    49,    49,   130,   130,   131, 
         131,   131,   131,   131,   131,   131,   131, 
-    );
-    protected static $yyLen= array(2,
+    ];
+    protected static $yyLen= [2,
           3,     0,     0,     4,     0,     1,     1,     2,     5,     6, 
           6,     6,     1,     1,     1,     3,     1,     3,     3,     0, 
           9,     0,     9,     0,     8,     0,     2,     0,     2,     0, 
@@ -221,8 +221,8 @@ class Parser extends \text\parser\generic\AbstractParser {
           4,     3,     4,     1,     3,     1,     3,     2,     1,     3, 
           5,     5,     5,     1,     3,     0,     1,     1,     2,     1, 
           1,     1,     1,     1,     1,     1,     1, 
-    );
-    protected static $yyDefRed= array(0,
+    ];
+    protected static $yyDefRed= [0,
           3,     0,     0,     0,     0,     0,     0,     7,     0,     0, 
           0,   293,     0,     0,   295,   294,     0,    15,     0,   320, 
         322,   321,   324,   326,   325,   327,   323,     1,     0,    68, 
@@ -288,8 +288,8 @@ class Parser extends \text\parser\generic\AbstractParser {
         124,   120,     0,     0,     0,   126,   150,    87,    86,    66, 
         166,     0,     0,     0,   159,     0,     0,     0,     0,   171, 
         118,     0,   154,   167,     0,   152,     0,     0,   165, 
-    );
-    protected static $yyDgoto= array(2,
+    ];
+    protected static $yyDgoto= [2,
           3,     6,    28,   143,     4,     7,     8,    17,    53,    18, 
         264,   114,    61,    99,   123,   177,    63,   269,    62,   101, 
         125,   412,   265,   266,   267,   399,   270,   271,   351,   352, 
@@ -304,8 +304,8 @@ class Parser extends \text\parser\generic\AbstractParser {
         153,   467,   201,   202,   154,   103,   155,   156,   338,   243, 
         244,   330,   245,   428,   331,   118,   119,   120,   170,    31, 
          32, 
-    );
-    protected static $yySindex = array(         -282,
+    ];
+    protected static $yySindex = [         -282,
           0,     0,  -234,   -78,  -186,  1781,  -234,     0,    35,   144, 
         106,     0,  -185,  -185,     0,     0,   205,     0,   189,     0, 
           0,     0,     0,     0,     0,     0,     0,     0,   218,     0, 
@@ -371,8 +371,8 @@ class Parser extends \text\parser\generic\AbstractParser {
           0,     0,   539,  5623,   859,     0,     0,     0,     0,     0, 
           0,  -106,   793,   539,     0,  3821,   573,   -78,   879,     0, 
           0,   573,     0,     0,   798,     0,   573,   797,     0, 
-    );
-    protected static $yyRindex= array(         1755,
+    ];
+    protected static $yyRindex= [         1755,
           0,     0,   924,     0,     0,   263,  1934,     0,   769,     0, 
           0,     0,     0,     0,     0,     0,     0,     0,     0,     0, 
           0,     0,     0,     0,     0,     0,     0,     0,     0,     0, 
@@ -438,8 +438,8 @@ class Parser extends \text\parser\generic\AbstractParser {
           0,     0,     0,     0,     0,     0,     0,     0,     0,     0, 
           0,     0,     0,     0,     0,     0,  -105,     0,     0,     0, 
           0,  -105,     0,     0,     0,     0,   833,     0,     0, 
-    );
-    protected static $yyGindex= array(0,
+    ];
+    protected static $yyGindex= [0,
           0,     0,     0,    -4,     0,     0,   975,   661,   633,   425, 
         983,   -60,     0,   914,   892,  -161,     0,     0,     0,     0, 
        -116,  -407,     0,     0,     0,    53,     0,   638,     0,     0, 
@@ -454,8 +454,8 @@ class Parser extends \text\parser\generic\AbstractParser {
           0,     0,     0,   729,     0,     0,     0,   772,     0,   778, 
           0,     0,     0,     0,     0,     0,     0,   851,   856,     0, 
         994, 
-    );
-    protected static $yyTable = array(11,
+    ];
+    protected static $yyTable = [11,
          75,    76,    77,   222,   234,   174,   249,    93,    97,   241, 
          50,   222,   283,   259,   222,   240,   110,   638,    52,   109, 
           1,    16,   589,   104,    57,   540,   314,    57,   432,    47, 
@@ -1059,8 +1059,8 @@ class Parser extends \text\parser\generic\AbstractParser {
           0,     0,     0,     0,     0,     0,     0,     0,     0,     0, 
         223,   223,     0,     0,     0,     0,     0,     0,     0,     0, 
           0,     0,     0,     0,   134,   135, 
-    );
-    protected static $yyCheck = array(4,
+    ];
+    protected static $yyCheck = [4,
          61,    62,    63,    41,   126,   122,   157,    71,    60,    40, 
          46,    41,   193,   175,    44,    46,   125,   124,    42,   125, 
         303,    46,    59,    84,    41,    59,    59,    44,    40,    34, 
@@ -1664,9 +1664,9 @@ class Parser extends \text\parser\generic\AbstractParser {
          -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1, 
         402,   403,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1, 
          -1,    -1,    -1,    -1,   402,   403, 
-    );
+    ];
     protected static $yyFinal= 2;
-    protected static $yyName= array(    
+    protected static $yyName= [    
       'end-of-file', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
       NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
       NULL, NULL, NULL, NULL, NULL, NULL, NULL, "'!'", NULL, "'#'", NULL, "'%'", "'&'", 
@@ -1707,7 +1707,7 @@ class Parser extends \text\parser\generic\AbstractParser {
       'T_BOOLEAN_AND', 'T_CONCAT_EQUAL', 'T_OR_EQUAL', 'T_AND_EQUAL', 
       'T_XOR_EQUAL', 'T_NAV', 'T_EXP', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 
       'T_WITH', 
-    );
+    ];
 
   protected static $yyTableCount= 0, $yyNameCount= 0;
 
@@ -1733,10 +1733,10 @@ class Parser extends \text\parser\generic\AbstractParser {
    * @return  string[] list of token names.
    */
   protected function yysearchtab($n) {
-    if (0 == $n) return array();
+    if (0 == $n) return [];
 
     for (
-      $result= array(), $token= $n < 0 ? -$n : 0; 
+      $result= [], $token= $n < 0 ? -$n : 0; 
       $token < self::$yyNameCount && $n+ $token < self::$yyTableCount; 
       $token++
     ) {
@@ -1766,7 +1766,7 @@ class Parser extends \text\parser\generic\AbstractParser {
    */
   public function yyparse($yyLex) {
     $yyVal= null;
-    $yyStates= $yyVals= array();
+    $yyStates= $yyVals= [];
     $yyToken= -1;
     $yyState= $yyErrorFlag= 0;
 
@@ -1879,30 +1879,30 @@ class Parser extends \text\parser\generic\AbstractParser {
     } break;
 
     case 7:  #line 211 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 8:  #line 212 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge($yyVals[-1+$yyTop], array($yyVals[0+$yyTop])); } break;
+    { $yyVal= array_merge($yyVals[-1+$yyTop], [$yyVals[0+$yyTop]]); } break;
 
     case 9:  #line 216 "src/main/jay/grammars/xp.jay"
     {
-      $yyVal= $yyLex->create(new ImportNode(array('name' => $yyVals[-3+$yyTop].'.'.$yyVals[-1+$yyTop])));
+      $yyVal= $yyLex->create(new ImportNode(['name' => $yyVals[-3+$yyTop].'.'.$yyVals[-1+$yyTop]]));
     } break;
 
     case 10:  #line 219 "src/main/jay/grammars/xp.jay"
     {
-      $yyVal= $yyLex->create(new NativeImportNode(array('name' => $yyVals[-3+$yyTop].'.'.$yyVals[-1+$yyTop])));
+      $yyVal= $yyLex->create(new NativeImportNode(['name' => $yyVals[-3+$yyTop].'.'.$yyVals[-1+$yyTop]]));
     } break;
 
     case 11:  #line 222 "src/main/jay/grammars/xp.jay"
     {
-    $yyVal= $yyLex->create(new StaticImportNode(array('name' => $yyVals[-3+$yyTop].'.'.$yyVals[-1+$yyTop])));
+    $yyVal= $yyLex->create(new StaticImportNode(['name' => $yyVals[-3+$yyTop].'.'.$yyVals[-1+$yyTop]]));
   } break;
 
     case 12:  #line 225 "src/main/jay/grammars/xp.jay"
     {
-    $this->error(E_WARNING, 'Deprecated static import form used', array($yyVals[-3+$yyTop].'::'.$yyVals[-1+$yyTop]));
-    $yyVal= $yyLex->create(new StaticImportNode(array('name' => $yyVals[-3+$yyTop].'.'.$yyVals[-1+$yyTop])));
+    $this->error(E_WARNING, 'Deprecated static import form used', [$yyVals[-3+$yyTop].'::'.$yyVals[-1+$yyTop]]);
+    $yyVal= $yyLex->create(new StaticImportNode(['name' => $yyVals[-3+$yyTop].'.'.$yyVals[-1+$yyTop]]));
   } break;
 
     case 16:  #line 238 "src/main/jay/grammars/xp.jay"
@@ -1962,7 +1962,7 @@ class Parser extends \text\parser\generic\AbstractParser {
     { $yyVal= $yyVals[0+$yyTop]; } break;
 
     case 28:  #line 284 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array(); } break;
+    { $yyVal= []; } break;
 
     case 29:  #line 285 "src/main/jay/grammars/xp.jay"
     { $yyVal= $yyVals[0+$yyTop]; } break;
@@ -1983,7 +1983,7 @@ class Parser extends \text\parser\generic\AbstractParser {
     { $yyVal[]= $yyVals[0+$yyTop]; } break;
 
     case 35:  #line 300 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array(); } break;
+    { $yyVal= []; } break;
 
     case 36:  #line 304 "src/main/jay/grammars/xp.jay"
     { $yyVal= $yyVals[0+$yyTop]; } break;
@@ -2004,13 +2004,13 @@ class Parser extends \text\parser\generic\AbstractParser {
     { $yyVal= NULL; } break;
 
     case 42:  #line 316 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 43:  #line 317 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge($yyVals[-2+$yyTop], array($yyVals[0+$yyTop])); } break;
+    { $yyVal= array_merge($yyVals[-2+$yyTop], [$yyVals[0+$yyTop]]); } break;
 
     case 44:  #line 321 "src/main/jay/grammars/xp.jay"
-    { $yyVals[0+$yyTop]= $yyLex->create(new EnumMemberNode(array('name' => $yyVals[0+$yyTop]))); } break;
+    { $yyVals[0+$yyTop]= $yyLex->create(new EnumMemberNode(['name' => $yyVals[0+$yyTop]])); } break;
 
     case 45:  #line 321 "src/main/jay/grammars/xp.jay"
     {
@@ -2018,7 +2018,7 @@ class Parser extends \text\parser\generic\AbstractParser {
     } break;
 
     case 46:  #line 324 "src/main/jay/grammars/xp.jay"
-    { $yyVals[0+$yyTop]= $yyLex->create(new EnumMemberNode(array('name' => $yyVals[0+$yyTop]))); } break;
+    { $yyVals[0+$yyTop]= $yyLex->create(new EnumMemberNode(['name' => $yyVals[0+$yyTop]])); } break;
 
     case 47:  #line 324 "src/main/jay/grammars/xp.jay"
     {
@@ -2050,10 +2050,10 @@ class Parser extends \text\parser\generic\AbstractParser {
     } break;
 
     case 51:  #line 354 "src/main/jay/grammars/xp.jay"
-    { $yyVal= $yyLex->create(new PropertyNode(array('name' => $yyVals[0+$yyTop]))); } break;
+    { $yyVal= $yyLex->create(new PropertyNode(['name' => $yyVals[0+$yyTop]])); } break;
 
     case 52:  #line 355 "src/main/jay/grammars/xp.jay"
-    { $yyVal= $yyLex->create(new IndexerNode(array('parameter' => $yyVals[-1+$yyTop]))); } break;
+    { $yyVal= $yyLex->create(new IndexerNode(['parameter' => $yyVals[-1+$yyTop]])); } break;
 
     case 53:  #line 359 "src/main/jay/grammars/xp.jay"
     { $yyVal= $yyVals[0+$yyTop]; } break;
@@ -2062,10 +2062,10 @@ class Parser extends \text\parser\generic\AbstractParser {
     { $yyVal= array_merge($yyVals[-1+$yyTop], $yyVals[0+$yyTop]); } break;
 
     case 55:  #line 364 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[-1+$yyTop]=> NULL); } break;
+    { $yyVal= [$yyVals[-1+$yyTop]=> NULL]; } break;
 
     case 56:  #line 365 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[-3+$yyTop] => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= [$yyVals[-3+$yyTop] => $yyVals[-1+$yyTop]]; } break;
 
     case 57:  #line 369 "src/main/jay/grammars/xp.jay"
     { $yyVal= NULL; } break;
@@ -2100,7 +2100,7 @@ class Parser extends \text\parser\generic\AbstractParser {
       $yyVals[-5+$yyTop]->name= $yyVals[-6+$yyTop];
       $yyVals[-5+$yyTop]->parameters= $yyVals[-3+$yyTop][0];
       $yyVals[-5+$yyTop]->throws= $yyVals[-1+$yyTop];
-      $yyVals[-5+$yyTop]->body= array_merge((array)$yyVals[0+$yyTop], array(new ReturnNode(new VariableNode($yyVals[-7+$yyTop]))));
+      $yyVals[-5+$yyTop]->body= array_merge((array)$yyVals[0+$yyTop], [new ReturnNode(new VariableNode($yyVals[-7+$yyTop]))]);
       $yyVals[-5+$yyTop]->extension= $yyVals[-3+$yyTop][1];
       $yyVal= $yyVals[-5+$yyTop];
     } break;
@@ -2123,7 +2123,7 @@ class Parser extends \text\parser\generic\AbstractParser {
             $p[0],
             $p[1]
           ), 
-          array('__construct')
+          ['__construct']
         );
         $yyVal= $yyLex->create(new MethodNode(), TRUE);
       }
@@ -2151,16 +2151,16 @@ class Parser extends \text\parser\generic\AbstractParser {
     } break;
 
     case 67:  #line 436 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop], $yyVals[-2+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop], $yyVals[-2+$yyTop]]; } break;
 
     case 68:  #line 437 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop], NULL); } break;
+    { $yyVal= [$yyVals[0+$yyTop], NULL]; } break;
 
     case 69:  #line 441 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 70:  #line 442 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge($yyVals[-2+$yyTop], array($yyVals[0+$yyTop])); } break;
+    { $yyVal= array_merge($yyVals[-2+$yyTop], [$yyVals[0+$yyTop]]); } break;
 
     case 71:  #line 446 "src/main/jay/grammars/xp.jay"
     {
@@ -2169,7 +2169,7 @@ class Parser extends \text\parser\generic\AbstractParser {
 
     case 72:  #line 449 "src/main/jay/grammars/xp.jay"
     { 
-      $yyVals[-1+$yyTop] && $yyVals[-3+$yyTop]->parameters= array('default' => $yyVals[-1+$yyTop]);
+      $yyVals[-1+$yyTop] && $yyVals[-3+$yyTop]->parameters= ['default' => $yyVals[-1+$yyTop]];
       $yyVal= $yyVals[-3+$yyTop];
     } break;
 
@@ -2206,10 +2206,10 @@ class Parser extends \text\parser\generic\AbstractParser {
     { $yyVal= array_merge($yyVals[-2+$yyTop], $yyVals[0+$yyTop]); } break;
 
     case 79:  #line 482 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[-2+$yyTop] => $yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[-2+$yyTop] => $yyVals[0+$yyTop]]; } break;
 
     case 80:  #line 483 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[-2+$yyTop] => $yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[-2+$yyTop] => $yyVals[0+$yyTop]]; } break;
 
     case 82:  #line 488 "src/main/jay/grammars/xp.jay"
     {
@@ -2236,16 +2236,16 @@ class Parser extends \text\parser\generic\AbstractParser {
     { $yyVal= (array)$yyVals[-1+$yyTop]; } break;
 
     case 87:  #line 505 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyLex->create(new ReturnNode($yyVals[-1+$yyTop]))); } break;
+    { $yyVal= [$yyLex->create(new ReturnNode($yyVals[-1+$yyTop]))]; } break;
 
     case 88:  #line 509 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array(NULL, NULL); } break;
+    { $yyVal= [NULL, NULL]; } break;
 
     case 89:  #line 510 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop], $yyVals[0+$yyTop][0]['type']); } break;
+    { $yyVal= [$yyVals[0+$yyTop], $yyVals[0+$yyTop][0]['type']]; } break;
 
     case 90:  #line 511 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop], NULL); } break;
+    { $yyVal= [$yyVals[0+$yyTop], NULL]; } break;
 
     case 91:  #line 515 "src/main/jay/grammars/xp.jay"
     { $yyVal= NULL; } break;
@@ -2254,28 +2254,28 @@ class Parser extends \text\parser\generic\AbstractParser {
     { $yyVal= $yyVals[0+$yyTop]; } break;
 
     case 93:  #line 520 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 94:  #line 521 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge($yyVals[-2+$yyTop], array($yyVals[0+$yyTop])); } break;
+    { $yyVal= array_merge($yyVals[-2+$yyTop], [$yyVals[0+$yyTop]]); } break;
 
     case 95:  #line 525 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge(array('name' => $yyVals[-1+$yyTop]), $yyVals[-2+$yyTop]); $yyVals[0+$yyTop] && $yyVal['default']= $yyVals[0+$yyTop]; } break;
+    { $yyVal= array_merge(['name' => $yyVals[-1+$yyTop]], $yyVals[-2+$yyTop]); $yyVals[0+$yyTop] && $yyVal['default']= $yyVals[0+$yyTop]; } break;
 
     case 96:  #line 526 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge(array('name' => $yyVals[0+$yyTop], 'vararg' => TRUE), $yyVals[-2+$yyTop]); } break;
+    { $yyVal= array_merge(['name' => $yyVals[0+$yyTop], 'vararg' => TRUE], $yyVals[-2+$yyTop]); } break;
 
     case 97:  #line 527 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('assign' => $yyVals[-1+$yyTop]); $yyVals[0+$yyTop] && $yyVal['default']= $yyVals[0+$yyTop]; } break;
+    { $yyVal= ['assign' => $yyVals[-1+$yyTop]]; $yyVals[0+$yyTop] && $yyVal['default']= $yyVals[0+$yyTop]; } break;
 
     case 98:  #line 528 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('name' => $yyVals[-1+$yyTop], 'type' => TypeName::$VAR, 'check' => FALSE); $yyVals[0+$yyTop] && $yyVal['default']= $yyVals[0+$yyTop]; } break;
+    { $yyVal= ['name' => $yyVals[-1+$yyTop], 'type' => TypeName::$VAR, 'check' => FALSE]; $yyVals[0+$yyTop] && $yyVal['default']= $yyVals[0+$yyTop]; } break;
 
     case 99:  #line 532 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('type' => $yyVals[0+$yyTop], 'check' => TRUE); } break;
+    { $yyVal= ['type' => $yyVals[0+$yyTop], 'check' => TRUE]; } break;
 
     case 100:  #line 533 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('type' => $yyVals[-1+$yyTop], 'check' => FALSE); } break;
+    { $yyVal= ['type' => $yyVals[-1+$yyTop], 'check' => FALSE]; } break;
 
     case 101:  #line 537 "src/main/jay/grammars/xp.jay"
     { $yyVal= NULL; } break;
@@ -2287,10 +2287,10 @@ class Parser extends \text\parser\generic\AbstractParser {
     { $yyVal= NULL; } break;
 
     case 111:  #line 562 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 112:  #line 563 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge($yyVals[-1+$yyTop], array($yyVals[0+$yyTop])); } break;
+    { $yyVal= array_merge($yyVals[-1+$yyTop], [$yyVals[0+$yyTop]]); } break;
 
     case 113:  #line 567 "src/main/jay/grammars/xp.jay"
     { $yyVals[0+$yyTop]= $yyLex->create(new ReturnNode()); } break;
@@ -2388,12 +2388,12 @@ class Parser extends \text\parser\generic\AbstractParser {
 
     case 135:  #line 612 "src/main/jay/grammars/xp.jay"
     {
-      $yyVal= $yyLex->create(new ArmNode($yyVals[-4+$yyTop]['i'], $yyVals[-4+$yyTop]['v'], $yyVals[-1+$yyTop] ? $yyVals[-1+$yyTop] : array()));
+      $yyVal= $yyLex->create(new ArmNode($yyVals[-4+$yyTop]['i'], $yyVals[-4+$yyTop]['v'], $yyVals[-1+$yyTop] ? $yyVals[-1+$yyTop] : []));
     } break;
 
     case 136:  #line 615 "src/main/jay/grammars/xp.jay"
     {
-      $yyVal= $yyLex->create(new WithNode($yyVals[-4+$yyTop], $yyVals[-1+$yyTop] ? $yyVals[-1+$yyTop] : array()));
+      $yyVal= $yyLex->create(new WithNode($yyVals[-4+$yyTop], $yyVals[-1+$yyTop] ? $yyVals[-1+$yyTop] : []));
     } break;
 
     case 138:  #line 622 "src/main/jay/grammars/xp.jay"
@@ -2404,40 +2404,40 @@ class Parser extends \text\parser\generic\AbstractParser {
 
     case 140:  #line 627 "src/main/jay/grammars/xp.jay"
     {
-      $yyVal= array('i' => array(), 'v' => array(new VariableNode($yyVals[0+$yyTop])));
+      $yyVal= ['i' => [], 'v' => [new VariableNode($yyVals[0+$yyTop])]];
     } break;
 
     case 141:  #line 630 "src/main/jay/grammars/xp.jay"
     {
       $v= new VariableNode($yyVals[-2+$yyTop]);
-      $yyVal= array('i' => array($yyLex->create(new AssignmentNode(array('op' => '=', 'variable' => $v, 'expression' => $yyVals[0+$yyTop])))), 'v' => array($v)); 
+      $yyVal= ['i' => [$yyLex->create(new AssignmentNode(['op' => '=', 'variable' => $v, 'expression' => $yyVals[0+$yyTop]]))], 'v' => [$v]]; 
     } break;
 
     case 142:  #line 637 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 143:  #line 638 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge($yyVals[-2+$yyTop], array($yyVals[0+$yyTop])); } break;
+    { $yyVal= array_merge($yyVals[-2+$yyTop], [$yyVals[0+$yyTop]]); } break;
 
     case 144:  #line 642 "src/main/jay/grammars/xp.jay"
     {
-      $yyVal= $yyLex->create(new AssignmentNode(array('op' => '=', 'variable' => new VariableNode($yyVals[-2+$yyTop]), 'expression' => $yyVals[0+$yyTop]))); 
+      $yyVal= $yyLex->create(new AssignmentNode(['op' => '=', 'variable' => new VariableNode($yyVals[-2+$yyTop]), 'expression' => $yyVals[0+$yyTop]])); 
     } break;
 
     case 145:  #line 648 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('value' => $yyVals[0+$yyTop]); } break;
+    { $yyVal= ['value' => $yyVals[0+$yyTop]]; } break;
 
     case 146:  #line 649 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('key' => $yyVals[-2+$yyTop], 'value' => $yyVals[0+$yyTop]); } break;
+    { $yyVal= ['key' => $yyVals[-2+$yyTop], 'value' => $yyVals[0+$yyTop]]; } break;
 
     case 147:  #line 653 "src/main/jay/grammars/xp.jay"
     { $yyVal= NULL; } break;
 
     case 149:  #line 658 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 150:  #line 659 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge($yyVals[-1+$yyTop], array($yyVals[0+$yyTop])); } break;
+    { $yyVal= array_merge($yyVals[-1+$yyTop], [$yyVals[0+$yyTop]]); } break;
 
     case 151:  #line 663 "src/main/jay/grammars/xp.jay"
     { $yyVals[0+$yyTop]= $yyLex->create(new CaseNode()); } break;
@@ -2457,7 +2457,7 @@ class Parser extends \text\parser\generic\AbstractParser {
     } break;
 
     case 155:  #line 673 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 156:  #line 674 "src/main/jay/grammars/xp.jay"
     { $yyVal= $yyVals[-1+$yyTop]; } break;
@@ -2472,10 +2472,10 @@ class Parser extends \text\parser\generic\AbstractParser {
     { $yyVals[-2+$yyTop]->statements= $yyVals[0+$yyTop]; } break;
 
     case 160:  #line 684 "src/main/jay/grammars/xp.jay"
-    { $yyVals[0+$yyTop] === NULL || $yyVal= array_merge($yyVals[-1+$yyTop], array($yyVals[0+$yyTop])); } break;
+    { $yyVals[0+$yyTop] === NULL || $yyVal= array_merge($yyVals[-1+$yyTop], [$yyVals[0+$yyTop]]); } break;
 
     case 161:  #line 685 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 162:  #line 689 "src/main/jay/grammars/xp.jay"
     { $yyVal= $yyVals[0+$yyTop]; } break;
@@ -2488,7 +2488,7 @@ class Parser extends \text\parser\generic\AbstractParser {
 
     case 165:  #line 694 "src/main/jay/grammars/xp.jay"
     {
-      $yyVal= array();
+      $yyVal= [];
       foreach ($yyVals[-5+$yyTop] as $type) {
         $c= new CatchNode();
         $c->position= $p;
@@ -2500,10 +2500,10 @@ class Parser extends \text\parser\generic\AbstractParser {
     } break;
 
     case 166:  #line 708 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 167:  #line 709 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge($yyVals[-2+$yyTop], array($yyVals[0+$yyTop])); } break;
+    { $yyVal= array_merge($yyVals[-2+$yyTop], [$yyVals[0+$yyTop]]); } break;
 
     case 168:  #line 713 "src/main/jay/grammars/xp.jay"
     { $yyVal= NULL; } break;
@@ -2520,10 +2520,10 @@ class Parser extends \text\parser\generic\AbstractParser {
     { $yyVal= NULL; } break;
 
     case 174:  #line 731 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 175:  #line 732 "src/main/jay/grammars/xp.jay"
-    { $yyVal= $yyVals[0+$yyTop] ? array_merge($yyVals[-2+$yyTop], array($yyVals[0+$yyTop])) : $yyVals[-2+$yyTop]; } break;
+    { $yyVal= $yyVals[0+$yyTop] ? array_merge($yyVals[-2+$yyTop], [$yyVals[0+$yyTop]]) : $yyVals[-2+$yyTop]; } break;
 
     case 176:  #line 736 "src/main/jay/grammars/xp.jay"
     { $yyVal= NULL; } break;
@@ -2571,11 +2571,11 @@ class Parser extends \text\parser\generic\AbstractParser {
     } break;
 
     case 185:  #line 775 "src/main/jay/grammars/xp.jay"
-    { $yyVals[0+$yyTop]= array('name' => $yyVals[0+$yyTop]); } break;
+    { $yyVals[0+$yyTop]= ['name' => $yyVals[0+$yyTop]]; } break;
 
     case 186:  #line 775 "src/main/jay/grammars/xp.jay"
     {
-      $yyVal= $yyLex->create(new LambdaNode(array($yyVals[-2+$yyTop]), $yyVals[0+$yyTop]));
+      $yyVal= $yyLex->create(new LambdaNode([$yyVals[-2+$yyTop]], $yyVals[0+$yyTop]));
     } break;
 
     case 187:  #line 778 "src/main/jay/grammars/xp.jay"
@@ -2677,7 +2677,7 @@ class Parser extends \text\parser\generic\AbstractParser {
 
     case 202:  #line 841 "src/main/jay/grammars/xp.jay"
     { 
-      $yyVal= $yyLex->create(new CastNode(array_merge($yyVals[0+$yyTop], array('expression' => $yyVals[-2+$yyTop])))); 
+      $yyVal= $yyLex->create(new CastNode(array_merge($yyVals[0+$yyTop], ['expression' => $yyVals[-2+$yyTop]]))); 
     } break;
 
     case 203:  #line 844 "src/main/jay/grammars/xp.jay"
@@ -2742,7 +2742,7 @@ class Parser extends \text\parser\generic\AbstractParser {
 
     case 213:  #line 883 "src/main/jay/grammars/xp.jay"
     {
-      $this->error(E_WARNING, 'Deprecated lambda syntax used', array('#{ ... }'));
+      $this->error(E_WARNING, 'Deprecated lambda syntax used', ['#{ ... }']);
       if ($yyVals[0+$yyTop]) {
         $yyVal= $yyVals[0+$yyTop][0];
         $yyVals[0+$yyTop][1]->target= $yyVals[-6+$yyTop];
@@ -2750,25 +2750,25 @@ class Parser extends \text\parser\generic\AbstractParser {
     } break;
 
     case 214:  #line 893 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array(new ReturnNode($yyVals[0+$yyTop])); } break;
+    { $yyVal= [new ReturnNode($yyVals[0+$yyTop])]; } break;
 
     case 215:  #line 894 "src/main/jay/grammars/xp.jay"
     { $yyVal= (array)$yyVals[-1+$yyTop]; } break;
 
     case 216:  #line 898 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array(); } break;
+    { $yyVal= []; } break;
 
     case 218:  #line 903 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 219:  #line 904 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge($yyVals[-2+$yyTop], array($yyVals[0+$yyTop])); } break;
+    { $yyVal= array_merge($yyVals[-2+$yyTop], [$yyVals[0+$yyTop]]); } break;
 
     case 220:  #line 908 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('name' => $yyVals[0+$yyTop]); } break;
+    { $yyVal= ['name' => $yyVals[0+$yyTop]]; } break;
 
     case 221:  #line 909 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge(array('name' => $yyVals[-1+$yyTop]), $yyVals[-2+$yyTop]); $yyVals[0+$yyTop] && $yyVal['default']= $yyVals[0+$yyTop]; } break;
+    { $yyVal= array_merge(['name' => $yyVals[-1+$yyTop]], $yyVals[-2+$yyTop]); $yyVals[0+$yyTop] && $yyVal['default']= $yyVals[0+$yyTop]; } break;
 
     case 222:  #line 913 "src/main/jay/grammars/xp.jay"
     { switch ($yyVals[0+$yyTop]) {
@@ -2801,160 +2801,160 @@ class Parser extends \text\parser\generic\AbstractParser {
 
     case 230:  #line 928 "src/main/jay/grammars/xp.jay"
     {
-      $yyVal= $yyLex->create(new ArrayNode(array('values' => (array)$yyVals[0+$yyTop])));
+      $yyVal= $yyLex->create(new ArrayNode(['values' => (array)$yyVals[0+$yyTop]]));
     } break;
 
     case 231:  #line 931 "src/main/jay/grammars/xp.jay"
     {
-      $yyVal= $yyLex->create(new MapNode(array('elements' => (array)$yyVals[0+$yyTop])));
+      $yyVal= $yyLex->create(new MapNode(['elements' => (array)$yyVals[0+$yyTop]]));
     } break;
 
     case 232:  #line 937 "src/main/jay/grammars/xp.jay"
     { $yyVal= NULL; } break;
 
     case 234:  #line 942 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 235:  #line 943 "src/main/jay/grammars/xp.jay"
-    { $yyVal= $yyVals[0+$yyTop] ? array_merge($yyVals[-2+$yyTop], array($yyVals[0+$yyTop])) : $yyVals[-2+$yyTop]; } break;
+    { $yyVal= $yyVals[0+$yyTop] ? array_merge($yyVals[-2+$yyTop], [$yyVals[0+$yyTop]]) : $yyVals[-2+$yyTop]; } break;
 
     case 236:  #line 947 "src/main/jay/grammars/xp.jay"
     { $yyVal= NULL; } break;
 
     case 238:  #line 952 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array(new StringNode($yyVals[-2+$yyTop]), $yyVals[0+$yyTop]); } break;
+    { $yyVal= [new StringNode($yyVals[-2+$yyTop]), $yyVals[0+$yyTop]]; } break;
 
     case 239:  #line 953 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array(new StringNode($yyVals[-2+$yyTop]), $yyVals[0+$yyTop]); } break;
+    { $yyVal= [new StringNode($yyVals[-2+$yyTop]), $yyVals[0+$yyTop]]; } break;
 
     case 240:  #line 957 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 241:  #line 958 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 242:  #line 959 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 243:  #line 960 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 244:  #line 961 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 245:  #line 962 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 246:  #line 963 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 247:  #line 964 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 248:  #line 965 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 249:  #line 966 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['variable' => $yyVals[-2+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 250:  #line 967 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('variable' => $yyVals[-3+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-2+$yyTop].$yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['variable' => $yyVals[-3+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-2+$yyTop].$yyVals[-1+$yyTop]]; } break;
 
     case 251:  #line 968 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('variable' => $yyVals[-3+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-2+$yyTop].$yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['variable' => $yyVals[-3+$yyTop], 'expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-2+$yyTop].$yyVals[-1+$yyTop]]; } break;
 
     case 252:  #line 972 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 253:  #line 973 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 254:  #line 974 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 255:  #line 975 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 256:  #line 976 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 257:  #line 977 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 258:  #line 978 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-3+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-2+$yyTop].'='); } break;
+    { $yyVal= ['lhs' => $yyVals[-3+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-2+$yyTop].'=']; } break;
 
     case 259:  #line 979 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-3+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-2+$yyTop].'='); } break;
+    { $yyVal= ['lhs' => $yyVals[-3+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-2+$yyTop].'=']; } break;
 
     case 260:  #line 983 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 261:  #line 984 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 262:  #line 985 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 263:  #line 986 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 264:  #line 987 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 265:  #line 988 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 266:  #line 989 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 267:  #line 990 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 268:  #line 991 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 269:  #line 992 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-3+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-2+$yyTop].$yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-3+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-2+$yyTop].$yyVals[-1+$yyTop]]; } break;
 
     case 270:  #line 993 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-3+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-2+$yyTop].$yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-3+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-2+$yyTop].$yyVals[-1+$yyTop]]; } break;
 
     case 271:  #line 994 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['lhs' => $yyVals[-2+$yyTop], 'rhs' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 272:  #line 998 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 273:  #line 999 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 274:  #line 1000 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 275:  #line 1001 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 276:  #line 1002 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 277:  #line 1003 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]); } break;
+    { $yyVal= ['expression' => $yyVals[0+$yyTop], 'op' => $yyVals[-1+$yyTop]]; } break;
 
     case 278:  #line 1007 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('expression' => $yyVals[-1+$yyTop], 'op' => $yyVals[0+$yyTop]); } break;
+    { $yyVal= ['expression' => $yyVals[-1+$yyTop], 'op' => $yyVals[0+$yyTop]]; } break;
 
     case 279:  #line 1008 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array('expression' => $yyVals[-1+$yyTop], 'op' => $yyVals[0+$yyTop]); } break;
+    { $yyVal= ['expression' => $yyVals[-1+$yyTop], 'op' => $yyVals[0+$yyTop]]; } break;
 
     case 280:  #line 1013 "src/main/jay/grammars/xp.jay"
     { $yyVal= NULL; } break;
 
     case 282:  #line 1018 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop], $yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop], $yyVals[0+$yyTop]]; } break;
 
     case 283:  #line 1019 "src/main/jay/grammars/xp.jay"
-    { $yyVals[0+$yyTop][1]->target= $yyVals[-1+$yyTop]; $yyVal= array($yyVals[0+$yyTop][0], $yyVals[-1+$yyTop]); } break;
+    { $yyVals[0+$yyTop][1]->target= $yyVals[-1+$yyTop]; $yyVal= [$yyVals[0+$yyTop][0], $yyVals[-1+$yyTop]]; } break;
 
     case 284:  #line 1023 "src/main/jay/grammars/xp.jay"
     { $yyVals[0+$yyTop]= $yyLex->create(new ArrayAccessNode(NULL)); } break;
@@ -3004,25 +3004,25 @@ class Parser extends \text\parser\generic\AbstractParser {
     { $yyVal= new TypeName('[:'.$yyVals[-1+$yyTop]->compoundName().']'); } break;
 
     case 304:  #line 1071 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 305:  #line 1072 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge($yyVals[-2+$yyTop], array($yyVals[0+$yyTop])); } break;
+    { $yyVal= array_merge($yyVals[-2+$yyTop], [$yyVals[0+$yyTop]]); } break;
 
     case 307:  #line 1077 "src/main/jay/grammars/xp.jay"
     { $yyVal= new TypeName($yyVals[0+$yyTop].'+'); } break;
 
     case 308:  #line 1081 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array(); } break;
+    { $yyVal= []; } break;
 
     case 309:  #line 1082 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 310:  #line 1083 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[-1+$yyTop]); } break;
+    { $yyVal= [$yyVals[-1+$yyTop]]; } break;
 
     case 311:  #line 1084 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge($yyVals[-3+$yyTop], array($yyVals[-1+$yyTop])); } break;
+    { $yyVal= array_merge($yyVals[-3+$yyTop], [$yyVals[-1+$yyTop]]); } break;
 
     case 312:  #line 1088 "src/main/jay/grammars/xp.jay"
     { $yyVal= new TypeName('->'.$yyVals[-1+$yyTop]->compoundName(), null); } break;
@@ -3031,10 +3031,10 @@ class Parser extends \text\parser\generic\AbstractParser {
     { $yyVal= new TypeName('->'.$yyVals[-1+$yyTop]->compoundName(), $yyVals[-3+$yyTop]); } break;
 
     case 314:  #line 1093 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array($yyVals[0+$yyTop]); } break;
+    { $yyVal= [$yyVals[0+$yyTop]]; } break;
 
     case 315:  #line 1094 "src/main/jay/grammars/xp.jay"
-    { $yyVal= array_merge(array($yyVals[-2+$yyTop]), $yyVals[0+$yyTop]); } break;
+    { $yyVal= array_merge([$yyVals[-2+$yyTop]], $yyVals[0+$yyTop]); } break;
 
     case 316:  #line 1100 "src/main/jay/grammars/xp.jay"
     { $yyVal= 0; } break;

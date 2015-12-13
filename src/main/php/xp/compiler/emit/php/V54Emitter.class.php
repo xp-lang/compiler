@@ -142,12 +142,12 @@ class V54Emitter extends Emitter {
     // If no handlers are left, create a simple catch-all-and-rethrow
     // handler
     if (0 == $numHandlers) {
-      $rethrow= new ThrowNode(array('expression' => new VariableNode($mangled)));
-      $first= new CatchNode(array(
+      $rethrow= new ThrowNode(['expression' => new VariableNode($mangled)]);
+      $first= new CatchNode([
         'type'       => new TypeName('lang.Throwable'),
         'variable'   => $mangled,
-        'statements' => $this->finalizers[0] ? array($this->finalizers[0], $rethrow) : array($rethrow)
-      ));
+        'statements' => $this->finalizers[0] ? [$this->finalizers[0], $rethrow] : [$rethrow]
+      ]);
     } else {
       $first= $try->handling[0];
       $this->scope[0]->setType(new VariableNode($first->variable), $first->type);

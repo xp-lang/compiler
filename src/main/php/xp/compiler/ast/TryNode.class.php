@@ -5,5 +5,5 @@
  */
 class TryNode extends Node {
   public $statements = null;
-  public $handling   = array();  
+  public $handling   = [];  
 }

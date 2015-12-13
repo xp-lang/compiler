@@ -81,7 +81,7 @@ abstract class InliningOptimization extends \lang\Object implements Optimization
         1 == sizeof($member->body) &&
         $member->body[0] instanceof ReturnNode
       ) {
-        $replacements= array();
+        $replacements= [];
         foreach ($member->parameters as $i => $parameter) {
           $replacements[$parameter['name']]= $call->arguments[$i];
         }

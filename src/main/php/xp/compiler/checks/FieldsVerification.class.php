@@ -36,7 +36,7 @@ class FieldsVerification extends \lang\Object implements Check {
     $field= \cast($node, 'xp.compiler.ast.FieldNode');
 
     if ($scope->declarations[0] instanceof \xp\compiler\ast\InterfaceNode) {
-      return array('I403', 'Interfaces may not have field declarations');
+      return ['I403', 'Interfaces may not have field declarations'];
     }
   }
 }

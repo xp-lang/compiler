@@ -13,7 +13,7 @@ class MapNode extends Node implements Resolveable {
    * @return  var
    */
   public function resolve() {
-    $resolved= array();
+    $resolved= [];
     foreach ($this->elements as $i => $pair) {
       if (!$pair[0] instanceof Resolveable || !$pair[1] instanceof Resolveable) {
         throw new \lang\IllegalStateException('Pair at offset '.$i.' is not resolveable: '.\xp::stringOf($pair));

@@ -22,9 +22,9 @@
 class TypeName extends \lang\Object {
   public
     $name       = '',
-    $components = array();
+    $components = [];
   
-  public static $primitives = array('int', 'double', 'bool', 'string');
+  public static $primitives = ['int', 'double', 'bool', 'string'];
   public static $VAR;
   public static $VOID;
   
@@ -39,7 +39,7 @@ class TypeName extends \lang\Object {
    * @param   string name
    * @param   xp.compiler.types.TypeName[] components
    */
-  public function __construct($name, $components= array()) {
+  public function __construct($name, $components= []) {
     $this->name= $name;
     $this->components= $components;
   }

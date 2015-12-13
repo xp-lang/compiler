@@ -723,7 +723,7 @@ abstract class Visitor extends \lang\Object {
     if (!method_exists($this, $target)) {
       throw new \lang\IllegalArgumentException('Don\'t know how to visit '.$node->getClassName().'s');
     }
-    return call_user_func(array($this, $target), $node);
+    return call_user_func([$this, $target], $node);
   }
 
   /**
@@ -732,7 +732,7 @@ abstract class Visitor extends \lang\Object {
    * @param   xp.compiler.ast.Node[] nodes
    */
   public function visitAll(array $nodes) {
-    $r= array();
+    $r= [];
     foreach ($nodes as $node) {
       $r[]= $this->visitOne($node);
     }

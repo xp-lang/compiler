@@ -15,5 +15,5 @@
  */
 class AnnotationNode extends Node {
   public $type       = null;
-  public $parameters = array();
+  public $parameters = [];
 }

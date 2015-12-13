@@ -24,17 +24,17 @@ use lang\ClassLoader;
 abstract class Scope extends \lang\Object {
   protected $task= null;
   protected $types= null;
-  protected $extensions= array();
-  protected $resolved= array();
-  protected $packages= array('lang');
+  protected $extensions= [];
+  protected $resolved= [];
+  protected $packages= ['lang'];
   protected $enclosing= null;
 
   public $importer= null;
-  public $declarations= array();
-  public $imports= array();
-  public $used= array();
+  public $declarations= [];
+  public $imports= [];
+  public $used= [];
   public $package= null;
-  public $statics= array();
+  public $statics= [];
 
   /**
    * Constructor
@@ -238,8 +238,8 @@ abstract class Scope extends \lang\Object {
       $qualified= $this->imports[$name->name];
     } else {
       $lookup= $this->package
-        ? array_merge($this->packages, array($this->package->name))
-        : array_merge($this->packages, array(null))
+        ? array_merge($this->packages, [$this->package->name])
+        : array_merge($this->packages, [null])
       ;
       try {
         $qualified= $this->task->locateClass($lookup, $name->name);

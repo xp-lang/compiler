@@ -94,8 +94,8 @@ class Runner extends \lang\Object {
    */
   protected static function textOf($markup) {
     return strip_tags(preg_replace(
-      array('#<pre>#', '#</pre>#', '#<li>#'),
-      array(self::$line, self::$line, '* '),
+      ['#<pre>#', '#</pre>#', '#<li>#'],
+      [self::$line, self::$line, '* '],
       trim($markup)
     ));
   }
@@ -106,9 +106,9 @@ class Runner extends \lang\Object {
    */
   protected static function showUsage() {
     $class= new \lang\XPClass(__CLASS__);
-    Console::$err->writeLine(strtr(self::textOf($class->getComment()), array(
+    Console::$err->writeLine(strtr(self::textOf($class->getComment()), [
       '{{VERSION}}' => $class->getClassLoader()->getResource('VERSION')
-    )));
+    ]));
     
     // List supported syntaxes
     Console::$err->writeLine(self::$line);
@@ -135,7 +135,7 @@ class Runner extends \lang\Object {
       }
     }
     
-    $files= array();
+    $files= [];
     $it= new FilteredIOCollectionIterator(new FileCollection($uri), $filter, $recursive);
     foreach ($it as $element) {
       $files[]= new FileSource(new File($element->getURI()));
@@ -150,7 +150,7 @@ class Runner extends \lang\Object {
    * @return  xp.compiler.io.FileManager
    */
   protected static function declaringFileManager() {
-    return newinstance('xp.compiler.io.FileManager', array(), '{
+    return newinstance('xp.compiler.io.FileManager', [], '{
       public $declared= array();
       public function write($r, \io\File $target) {
         $r->executeWith(array());
@@ -183,7 +183,7 @@ class Runner extends \lang\Object {
     $profiles= ['default'];
     $emitter= 'php5.5';
     $result= function($success) { return $success ? 0 : 1; };
-    $files= array();
+    $files= [];
     $listener= new DefaultDiagnosticListener(Console::$out);
     for ($i= 0, $s= sizeof($args); $i < $s; $i++) {
       if ('-?' == $args[$i] || '--help' == $args[$i]) {
@@ -222,7 +222,7 @@ class Runner extends \lang\Object {
         $manager= self::declaringFileManager();
         $result= function($success, $argv) use($manager) {
           if (!$success) return 1;
-          return (int)$manager->declared[0]->getMethod('main')->invoke(null, array($argv));
+          return (int)$manager->declared[0]->getMethod('main')->invoke(null, [$argv]);
         };
         break;
       } else if ('-w' == $args[$i]) {
@@ -231,7 +231,7 @@ class Runner extends \lang\Object {
         $manager= self::declaringFileManager();
         $result= function($success, $argv) use($manager) {
           if (!$success) return 1;
-          Console::writeLine($manager->declared[0]->getMethod('main')->invoke(null, array($argv)));
+          Console::writeLine($manager->declared[0]->getMethod('main')->invoke(null, [$argv]));
           return 0;
         };
         break;

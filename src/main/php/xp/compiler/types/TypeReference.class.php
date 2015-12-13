@@ -163,7 +163,7 @@ class TypeReference extends Types {
    */
   public function getConstructor() {
     $c= new Constructor();
-    $c->parameters= array();
+    $c->parameters= [];
     $c->holder= $this;
     return $c;
   }
@@ -188,7 +188,7 @@ class TypeReference extends Types {
     $m= new Method();
     $m->name= $name;
     $m->returns= TypeName::$VAR;
-    $m->parameters= array();
+    $m->parameters= [];
     $m->holder= $this;
     return $m;
   }
@@ -199,7 +199,7 @@ class TypeReference extends Types {
    * @return  [:xp.compiler.types.Method[]]
    */
   public function getExtensions() {
-    return array();
+    return [];
   }
 
   /**
@@ -292,7 +292,7 @@ class TypeReference extends Types {
    * @return  [:int]
    */
   public function genericPlaceholders() {
-    return array();
+    return [];
   }
 
   /**
@@ -301,14 +301,14 @@ class TypeReference extends Types {
    * @return  string
    */    
   public function toString() {
-    static $kinds= array(
+    static $kinds= [
       self::PRIMITIVE_KIND    => 'PRIMITIVE',
       self::CLASS_KIND        => 'CLASS',
       self::INTERFACE_KIND    => 'INTERFACE',
       self::ENUM_KIND         => 'ENUM',
       self::UNKNOWN_KIND      => 'UNKNOWN',
       self::PARTIAL_KIND      => 'PARTIAL'
-    );
+    ];
     return $this->getClassName().'<'.$kinds[$this->kind].'>@(*->'.$this->type->toString().')';
   }
 }

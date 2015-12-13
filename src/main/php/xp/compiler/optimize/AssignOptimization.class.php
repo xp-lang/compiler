@@ -16,7 +16,7 @@ use xp\compiler\ast\UnaryOpNode;
  * @test     xp://net.xp_lang.tests.optimization.AssignOptimizationTest
  */
 class AssignOptimization extends \lang\Object implements Optimization {
-  protected static $optimizable= array(
+  protected static $optimizable= [
     '~'   => '~=',
     '-'   => '-=',
     '+'   => '+=',
@@ -28,11 +28,11 @@ class AssignOptimization extends \lang\Object implements Optimization {
     '&'   => '&=',
     '|'   => '|=',
     '^'   => '^='
-  );      
-  protected static $switch= array(
+  ];      
+  protected static $switch= [
     '-='  => '+=',
     '+='  => '-='
-  );
+  ];
 
   /**
    * Return node this optimization works on
@@ -61,11 +61,11 @@ class AssignOptimization extends \lang\Object implements Optimization {
       isset(self::$optimizable[$assign->expression->op]) &&
       $assign->variable->equals($assign->expression->lhs)
     ) {
-      $assign= new AssignmentNode(array(
+      $assign= new AssignmentNode([
         'variable'   => $assign->variable,
         'expression' => $assign->expression->rhs,
         'op'         => self::$optimizable[$assign->expression->op]
-      ));
+      ]);
     }
     
     // Optimize "<var>-= -<expr>" to "<var>+= <expr>"
@@ -75,11 +75,11 @@ class AssignOptimization extends \lang\Object implements Optimization {
       '-' === $assign->expression->op &&
       isset(self::$switch[$assign->op])
     ) {
-      $assign= new AssignmentNode(array(
+      $assign= new AssignmentNode([
         'variable'   => $assign->variable,
         'expression' => $assign->expression->expression,
         'op'         => self::$switch[$assign->op]
-      ));
+      ]);
     }
 
     // Not optimizable

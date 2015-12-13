@@ -10,7 +10,7 @@
 class MethodCallNode extends Node {
   public $target= null;
   public $name= '';
-  public $arguments= array();
+  public $arguments= [];
   public $nav= false;
   
   /**

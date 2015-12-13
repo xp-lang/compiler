@@ -17,7 +17,7 @@ class ParseTree extends \lang\Object {
    * @param   xp.compiler.ast.Node[] imports
    * @param   xp.compiler.ast.TypeDeclarationNode declaration
    */
-  public function __construct($package= '', $imports= array(), TypeDeclarationNode $declaration= null) {
+  public function __construct($package= '', $imports= [], TypeDeclarationNode $declaration= null) {
     $this->package= $package;
     $this->imports= $imports;
     $this->declaration= $declaration;

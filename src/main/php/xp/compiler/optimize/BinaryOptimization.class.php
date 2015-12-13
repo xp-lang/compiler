@@ -17,7 +17,7 @@ use xp\compiler\ast\Resolveable;
  * @test     xp://tests.optimization.BinaryOptimizationTest
  */
 class BinaryOptimization extends \lang\Object implements Optimization {
-  protected static $optimizable= array(
+  protected static $optimizable= [
     '~'   => 'concat',
     '-'   => 'subtract',
     '+'   => 'add',
@@ -29,11 +29,11 @@ class BinaryOptimization extends \lang\Object implements Optimization {
     '&'   => 'and',
     '|'   => 'or',
     '^'   => 'xor'
-  );      
-  protected static $switch= array(
+  ];      
+  protected static $switch= [
     '-'   => '+',
     '+'   => '-'
-  );
+  ];
   
   /**
    * Evaluate concatenation
@@ -237,16 +237,16 @@ class BinaryOptimization extends \lang\Object implements Optimization {
 
     // Optimize "a + -b" to "a - b" and "a - -b" to "a + b"
     if ($in->rhs instanceof UnaryOpNode && '-' === $in->rhs->op && isset(self::$switch[$in->op])) {
-      $in= new BinaryOpNode(array(
+      $in= new BinaryOpNode([
         'lhs' => $in->lhs, 
         'rhs' => $in->rhs->expression,
         'op'  => self::$switch[$in->op]
-      ));
+      ]);
     }
 
     // Constant folding
     if ($in->lhs instanceof Resolveable && $in->rhs instanceof Resolveable) {
-      $r= call_user_func_array(array($this, 'eval'.self::$optimizable[$in->op]), array($in->lhs, $in->rhs));
+      $r= call_user_func_array([$this, 'eval'.self::$optimizable[$in->op]], [$in->lhs, $in->rhs]);
       if (null !== $r) $in= $r;
     }
 

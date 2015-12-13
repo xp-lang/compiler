@@ -21,7 +21,7 @@ abstract class AbstractMethodCallVerification extends \lang\Object implements Ch
     // Verify target method exists
     $target= new \xp\compiler\types\TypeInstance($scope->resolveType($type));
     if (!$target->hasMethod($name)) {
-      return array('T404', 'No such method '.$name.'() in '.$target->name());
+      return ['T404', 'No such method '.$name.'() in '.$target->name()];
     }
     
     // Verify visibility
@@ -32,13 +32,13 @@ abstract class AbstractMethodCallVerification extends \lang\Object implements Ch
         ($method->modifiers & MODIFIER_PRIVATE && !$enclosing->equals($target)) ||
         ($method->modifiers & MODIFIER_PROTECTED && !($enclosing->equals($target) || $enclosing->isSubclassOf($target)))
       ) {
-        return array('T403', sprintf(
+        return ['T403', sprintf(
           'Invoking %s %s::%s() from %s',
           implode(' ', \lang\reflect\Modifiers::namesOf($method->modifiers)),
           $target->name(),
           $method->name,
           $enclosing->name()
-        ));
+        )];
       }
     }
   }

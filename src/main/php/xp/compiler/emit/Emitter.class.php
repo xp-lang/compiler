@@ -16,14 +16,14 @@ use xp\compiler\ast\Node;
  */
 abstract class Emitter extends \lang\Object implements \util\log\Traceable {
   protected $cat= null;
-  protected $messages= array(
-    'warnings' => array(),
-    'errors'   => array()
-  );
+  protected $messages= [
+    'warnings' => [],
+    'errors'   => []
+  ];
   protected $optimizations= null;
   protected $checks= null;
   protected $nativeImporter= null;
-  protected $scope= array(null);
+  protected $scope= [null];
 
   /**
    * Constructor.
@@ -717,7 +717,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
 
     try {
       $this->checks->verify($node, $this->scope[0], $this) && call_user_func(
-        array($this, 'emit'.substr(get_class($node), 16, -4)),    // strlen('xp\\compiler\\ast\\'), strlen
+        [$this, 'emit'.substr(get_class($node), 16, -4)],    // strlen('xp\\compiler\\ast\\'), strlen
         $b,
         $node
       );
@@ -757,7 +757,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
     if ($context) {               // Use given context node
       $pos= $context->position;
     } else {                      // Try to determine last context node from backtrace
-      $pos= array(0, 0);
+      $pos= [0, 0];
       foreach ((new \lang\Throwable(null))->getStackTrace() as $element) {
         if (
           'emit' == substr($element->method, 0, 4) &&
@@ -777,10 +777,10 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * Clears messages
    */
   public function clearMessages() {
-    $this->messages= array(
-      'warnings' => array(),
-      'errors'   => array()
-    );
+    $this->messages= [
+      'warnings' => [],
+      'errors'   => []
+    ];
   }
 
   /**
@@ -815,7 +815,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
    * @return  string[] messages
    */
   public function messages() {
-    $r= array();
+    $r= [];
     foreach ($this->messages as $type => $messages) {
       $r+= $messages;
     }

@@ -10,9 +10,9 @@ use xp\compiler\optimize\Optimization;
  * * Optimizations to apply
  */
 class CompilationProfile extends \lang\Object {
-  public $warnings= array();
-  public $errors= array();
-  public $optimizations= array();
+  public $warnings= [];
+  public $errors= [];
+  public $optimizations= [];
   
   /**
    * Add a check that will produce a warning

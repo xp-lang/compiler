@@ -34,7 +34,7 @@ class UninitializedVariables extends \lang\Object implements Check {
   public function verify(\xp\compiler\ast\Node $node, \xp\compiler\types\Scope $scope) {
     $v= \cast($node, 'xp.compiler.ast.VariableNode');
     if (!$scope->getType($v)) {
-      return array('V404', 'Uninitialized variable '.$v->name);
+      return ['V404', 'Uninitialized variable '.$v->name];
     }
   }
 }

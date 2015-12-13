@@ -24,7 +24,7 @@ class Checks extends \lang\Object {
    * @param   bool error
    */
   public function add(Check $impl, $error) {
-    $this->impl[$impl->defer()][]= array($impl->node(), $impl, $error);
+    $this->impl[$impl->defer()][]= [$impl->node(), $impl, $error];
   }
 
   /**
@@ -32,7 +32,7 @@ class Checks extends \lang\Object {
    *
    */
   public function clear() {
-    $this->impl= array(false => array(), true => array());
+    $this->impl= [false => [], true => []];
   }
 
   /**

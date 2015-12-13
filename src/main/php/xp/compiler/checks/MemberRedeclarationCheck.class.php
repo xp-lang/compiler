@@ -36,12 +36,12 @@ class MemberRedeclarationCheck extends \lang\Object implements Check {
     $type= \cast($node, 'xp.compiler.ast.TypeDeclarationNode');
     if (!$type->body) return;   // Short-circuit
 
-    $index= array();
+    $index= [];
     $qname= $type->name->compoundName();
     foreach ($type->body as $member) {
       $key= $member->hashCode();
       if (isset($index[$key])) {
-        return array('C409', 'Cannot redeclare '.$qname.'::'.$key);
+        return ['C409', 'Cannot redeclare '.$qname.'::'.$key];
       }
       $index[$key]= true;
     }

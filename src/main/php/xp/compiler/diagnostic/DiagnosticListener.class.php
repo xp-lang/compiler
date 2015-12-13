@@ -23,7 +23,7 @@ interface DiagnosticListener {
    * @param   io.File compiled
    * @param   string[] messages
    */
-  public function compilationSucceeded(Source $src, \io\File $compiled, array $messages= array());
+  public function compilationSucceeded(Source $src, \io\File $compiled, array $messages= []);
   
   /**
    * Called when parsing fails

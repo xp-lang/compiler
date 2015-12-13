@@ -50,14 +50,14 @@ class ArrayAccessVerification extends \lang\Object implements Check {
       if ($ptr->hasIndexer()) {
         $result= $ptr->getIndexer()->type;
       } else {
-        $message= array('T305', 'Type '.$ptr->name().' does not support offset access');
+        $message= ['T305', 'Type '.$ptr->name().' does not support offset access'];
       }
     } else if ($type->isVariable()) {
-      $message= array('T203', 'Array access (var)'.$access->hashCode().' verification deferred until runtime');
+      $message= ['T203', 'Array access (var)'.$access->hashCode().' verification deferred until runtime'];
     } else if ('string' === $type->name) {
       $result= $type;
     } else {
-      $message= array('T305', 'Using array-access on unsupported type '.$type->toString());
+      $message= ['T305', 'Using array-access on unsupported type '.$type->toString()];
     }
     
     $scope->setType($access, $result);

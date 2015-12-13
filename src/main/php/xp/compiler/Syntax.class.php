@@ -6,7 +6,7 @@ use io\streams\InputStream;
  * Syntax base class
  */
 abstract class Syntax extends \lang\Object {
-  private static $syntaxes= array();
+  private static $syntaxes= [];
   protected $parser= null;
   protected $name;
 

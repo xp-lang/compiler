@@ -11,10 +11,10 @@ class CommandLineSource extends \lang\Object implements Source {
   protected $template= '';
 
   public static $NAME= '_Generated';
-  public static $TEMPLATE= array(
+  public static $TEMPLATE= [
     'xp'  => '/** Generated */ public class %s { /** Entry */ public static void main(string[] $args) {%s}}',
     'php' => '<?php /** Generated */ class %s extends \lang\Object { /** Entry */ public static function main(array $args) {%s}}'
-  );
+  ];
 
   /**
    * Constructor

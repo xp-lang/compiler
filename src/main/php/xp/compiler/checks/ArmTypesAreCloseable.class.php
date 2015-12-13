@@ -46,7 +46,7 @@ class ArmTypesAreCloseable extends \lang\Object implements Check {
     foreach ($arm->initializations as $i => $init) {
       $type= $scope->resolveType($scope->typeOf($init), false);
       if (!$type->isSubclassOf(self::$closeable)) {
-        return array('A403', 'Type '.$type->name().' for assignment #'.($i+ 1).' in ARM block is not closeable');
+        return ['A403', 'Type '.$type->name().' for assignment #'.($i+ 1).' in ARM block is not closeable'];
       }
     }
   }

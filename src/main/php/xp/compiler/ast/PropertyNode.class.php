@@ -22,7 +22,7 @@
  */
 class PropertyNode extends TypeMemberNode {
   public $type     = null;
-  public $handlers = array();
+  public $handlers = [];
 
   /**
    * Returns this members's hashcode

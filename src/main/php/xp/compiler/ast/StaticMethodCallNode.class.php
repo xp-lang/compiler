@@ -10,7 +10,7 @@
 class StaticMethodCallNode extends Node {
   public $type= null;
   public $name= '';
-  public $arguments= array();
+  public $arguments= [];
   
   /**
    * Creates a new InvocationNode object
