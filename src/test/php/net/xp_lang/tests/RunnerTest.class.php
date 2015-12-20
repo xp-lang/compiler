@@ -23,16 +23,11 @@ class RunnerTest extends \unittest\TestCase {
 
     try {
       $exit= Runner::main($args);
-      $r= ['exit' => $exit, 'out' => $out->getBytes(), 'err' => $err->getBytes()];
-    } catch (Throwable $t) {
-      // Fall through
-    } ensure($t); {
+      return ['exit' => $exit, 'out' => $out->getBytes(), 'err' => $err->getBytes()];
+    } finally {
       Console::$out->setStream($saved['out']);
       Console::$err->setStream($saved['err']);
-      if ($t) throw ($t);
     }
-    
-    return $r;
   }
 
   /**

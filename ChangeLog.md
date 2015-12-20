@@ -3,6 +3,12 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 5.0.1 / 2015-12-20
+
+* Replaced deprecated ensure() with a finally statement, creating forward
+  compatibility with XP 6.9.0
+  (@thekid)
+
 ## 5.0.0 / 2015-12-13
 
 * **Heads up**: Changed minimum XP version to run the XP compiler to XP
