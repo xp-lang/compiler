@@ -20,6 +20,7 @@
     "xp-framework/rdbms": "^6.0",
     "xp-framework/http": "^6.0"
   },
+  "bin": ["bin/xp.xp-lang.compiler.compile"],
   "autoload" : {
     "files" : ["src/main/php/autoload.php"]
   }

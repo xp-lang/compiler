@@ -5,6 +5,8 @@ XP Compiler ChangeLog
 
 ## 6.0.0 / ????-??-??
 
+* Implemented "compile" subcommand for new xp-framework/rfc#303 runners
+  (@thekid)
 * **Heads up**: Removed support for extension methods at runtime. They no
   longer exist in XP7 as per xp-framework/rfc#298
   (@thekid)
