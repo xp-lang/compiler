@@ -3,7 +3,7 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
-## 6.0.0 / ????-??-??
+## 6.0.0 / 2016-01-23
 
 * Implemented "compile" subcommand for new xp-framework/rfc#303 runners
   (@thekid)
