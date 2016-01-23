@@ -7,11 +7,11 @@ sudo: false
 php:
   - 5.5
   - 5.6
-  - nightly
+  - 7.0
   - hhvm
 
 before_script:
-  - wget 'https://github.com/xp-framework/xp-runners/releases/download/v5.6.1/setup' -O - | php
+  - wget 'https://github.com/xp-framework/xp-runners/releases/download/v6.3.0/setup' -O - | php
   - composer install --prefer-dist
   - echo "vendor/autoload.php" > composer.pth
   - echo "use=vendor/xp-framework/core" > xp.ini
