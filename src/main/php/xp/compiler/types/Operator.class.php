@@ -43,7 +43,7 @@ class Operator extends \lang\Object {
     }
     return sprintf(
       '%s<%s %s %s(%s)>',
-      $this->getClassName(),
+      nameof($this),
       implode(' ', \lang\reflect\Modifiers::namesOf($this->modifiers)),
       $this->returns->compoundName(),
       $this->symbol,

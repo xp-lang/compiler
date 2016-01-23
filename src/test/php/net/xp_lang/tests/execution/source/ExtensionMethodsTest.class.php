@@ -83,8 +83,8 @@ class ExtensionMethodsTest extends ExecutionTest {
     }');
     $instance= $class->newInstance();
     $this->assertEquals(
-      ['hashCode', 'equals', 'getClassName', 'getClass', 'toString'],
-      $instance->run(XPClass::forName('lang.Object'))
+      ['run'],
+      $instance->run(XPClass::forName('lang.Runnable'))
     );
   }
 
@@ -173,28 +173,6 @@ class ExtensionMethodsTest extends ExecutionTest {
   #[@test, @expect(class= 'lang.Error', withMessage= '/Call to undefined method .+::fieldsNamed/')]
   public function extensionDoesNotApplyIfNotImported() {
     $this->run('return self::class.fieldsNamed(text.regex.Pattern::compile("_.*"));');
-  }
-
-  /**
-   * Test extension methods do not apply if not imported
-   *
-   */
-  #[@test]
-  public function extensionApplies() {
-    $class= self::define('class', 'ClassFieldExtension2', null, '{
-      public static lang.reflect.Field[] fieldsNamed(this lang.XPClass $class, text.regex.Pattern $pattern) {
-        $r= new lang.reflect.Field[] { };
-        foreach ($field in $class.getFields()) {
-          if ($pattern.matches($field.getName())) $r[]= $field;
-        }
-        return $r;
-      }
-    }', ['package demo;']);
-
-    $r= $this->run(
-      'return '.$class->getName().'::class.fieldsNamed(text.regex.Pattern::compile("_.*"));', 
-      ['import '.$class->getName().';']
-    );
   }
 
   /**

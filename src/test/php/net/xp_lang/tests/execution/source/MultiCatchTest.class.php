@@ -18,7 +18,7 @@ class MultiCatchTest extends ExecutionTest {
       try {
         throw new io.IOException("");
       } catch (io.IOException | rdbms.SQLException $e) {
-        return $e.getClassName();
+        return nameof($e);
       }
       return null;
     '));
@@ -34,7 +34,7 @@ class MultiCatchTest extends ExecutionTest {
       try {
         throw new rdbms.SQLException("");
       } catch (io.IOException | rdbms.SQLException $e) {
-        return $e.getClassName();
+        return nameof($e);
       }
       return null;
     '));
@@ -50,7 +50,7 @@ class MultiCatchTest extends ExecutionTest {
       try {
         throw new lang.IllegalArgumentException("");
       } catch (io.IOException | rdbms.SQLException $e) {
-        return $e.getClassName();
+        return nameof($e);
       }
       return null;
     ');

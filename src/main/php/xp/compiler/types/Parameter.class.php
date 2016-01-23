@@ -67,7 +67,7 @@ class Parameter extends \lang\Object {
   public function toString() {
     return sprintf(
       '%s<%s %s%s>',
-      $this->getClassName(),
+      nameof($this),
       $this->type->compoundName(),
       $this->name,
       $this->default ? '= '.$this->default->hashCode() : ''

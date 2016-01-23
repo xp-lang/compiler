@@ -37,7 +37,7 @@ class Property extends \lang\Object {
   public function toString() {
     return sprintf(
       '%s<%s %s %s>',
-      $this->getClassName(),
+      nameof($this),
       implode(' ', \lang\reflect\Modifiers::namesOf($this->modifiers)),
       $this->type->compoundName(),
       $this->name

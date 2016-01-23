@@ -208,6 +208,6 @@ class TypeName extends \lang\Object {
    * @return  string
    */
   public function toString() {
-    return $this->getClassName().'('.$this->compoundNameOf($this).')';
+    return nameof($this).'('.$this->compoundNameOf($this).')';
   }
 }

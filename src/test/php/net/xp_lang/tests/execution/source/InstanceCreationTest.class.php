@@ -20,7 +20,7 @@ class InstanceCreationTest extends ExecutionTest {
    */
   protected function assertAnonymousInstanceOf($name, \lang\Generic $instance) {
     $this->assertInstanceOf($name, $instance);
-    $this->assertTrue((bool)strstr($instance->getClassName(), '··'), $instance->getClassName());
+    $this->assertTrue((bool)strstr(nameof($instance), '··'), nameof($instance));
   }
   
   #[@test]

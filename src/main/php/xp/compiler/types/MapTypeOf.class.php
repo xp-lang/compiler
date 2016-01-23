@@ -260,7 +260,7 @@ class MapTypeOf extends Types {
   public function toString() {
     return sprintf(
       '%s@([:%s]>)',
-      $this->getClassName(),
+      nameof($this),
       $this->component->name()
     );
   }

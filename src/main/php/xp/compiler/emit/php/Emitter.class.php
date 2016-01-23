@@ -798,7 +798,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       $this->emitOne($b, $un->expression);
       return;
     } else if (!$this->isWriteable($un->expression)) {
-      $this->error('U400', 'Cannot perform unary '.$un->op.' on '.$un->expression->getClassName(), $un);
+      $this->error('U400', 'Cannot perform unary '.$un->op.' on '.nameof($un->expression), $un);
       return;
     }
 
@@ -926,7 +926,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
     } else {
       $ptr= $this->resolveType($t);
       if (!$ptr->isEnumerable()) {
-        $this->warn('T300', 'Type '.$ptr->name().' is not enumerable in loop expression '.$loop->expression->getClassName().'['.$loop->expression->hashCode().']', $loop);
+        $this->warn('T300', 'Type '.$ptr->name().' is not enumerable in loop expression '.nameof($loop->expression).'['.$loop->expression->hashCode().']', $loop);
         $vt= TypeName::$VAR;
         $kt= new TypeName('int');
       } else {
@@ -2326,7 +2326,7 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
    * @param   xp.compiler.ast.YieldNode yield
    */
   protected function emitYield($b, $yield) {
-    $this->error('V505', 'Yield not supported in '.$this->getClassName());
+    $this->error('V505', 'Yield not supported in '.nameof($this));
   }
 
   /**
@@ -2395,6 +2395,8 @@ abstract class Emitter extends \xp\compiler\emit\Emitter {
       'unset'       => true,
       'empty'       => true,
       'eval'        => true,
+      'typeof'      => true,
+      'nameof'      => true,
       'include'     => true,
       'require'     => true,
       'include_once'=> true,

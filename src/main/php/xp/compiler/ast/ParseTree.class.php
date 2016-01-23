@@ -34,7 +34,7 @@ class ParseTree extends \lang\Object {
       "  imports     : %s\n".
       "  declaration : %s\n".
       "}",
-      $this->getClassName(), 
+      nameof($this), 
       $this->package ? $this->package->name : '<main>',
       str_replace("\n", "\n  ", \xp::stringOf($this->imports)),
       str_replace("\n", "\n  ", $this->declaration->toString())

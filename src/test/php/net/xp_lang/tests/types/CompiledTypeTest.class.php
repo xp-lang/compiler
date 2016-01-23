@@ -101,42 +101,42 @@ class CompiledTypeTest extends \unittest\TestCase {
   
   #[@test]
   public function hasParentMethod() {
-    $this->assertTrue($this->fixtureWithParent(self::$objectType)->hasMethod('getClassName'));
+    $this->assertTrue($this->fixtureWithParent(self::$objectType)->hasMethod('getClass'));
   }
 
   #[@test]
   public function getParentMethod() {
-    $m= $this->fixtureWithParent(self::$objectType)->getMethod('getClassName');
+    $m= $this->fixtureWithParent(self::$objectType)->getMethod('getClass');
     $this->assertInstanceOf(Method::class, $m);
     $this->assertEquals($this->fixture->parent(), $m->holder);
   }
 
   #[@test]
   public function hasOverwrittenMethod() {
-    $m= new Method('getClassName');
+    $m= new Method('getClass');
     $m->returns= new TypeName('string');
     $this->fixtureWithParent(self::$objectType)->addMethod($m);
-    $this->assertTrue($this->fixture->hasMethod('getClassName'));
+    $this->assertTrue($this->fixture->hasMethod('getClass'));
   }
 
   #[@test]
   public function getOverwrittenMethod() {
-    $m= new Method('getClassName');
+    $m= new Method('getClass');
     $m->returns= new TypeName('string');
     $this->fixtureWithParent(self::$objectType)->addMethod($m);
-    $m= $this->fixture->getMethod('getClassName');
+    $m= $this->fixture->getMethod('getClass');
     $this->assertInstanceOf(Method::class, $m);
     $this->assertEquals($this->fixture, $m->holder);
   }
 
   #[@test]
   public function noParentHasMethod() {
-    $this->assertFalse($this->fixtureWithParent(null)->hasMethod('getClassName'));
+    $this->assertFalse($this->fixtureWithParent(null)->hasMethod('getClass'));
   }
 
   #[@test]
   public function noParentParentMethod() {
-    $this->assertNull($this->fixtureWithParent(null)->getMethod('getClassName'));
+    $this->assertNull($this->fixtureWithParent(null)->getMethod('getClass'));
   }
 
   #[@test]

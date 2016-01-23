@@ -182,15 +182,6 @@ class TypeReflectionTest extends \unittest\TestCase {
   }
 
   #[@test]
-  public function extensionMethod() {
-    $extensions= (new TypeReflection(XPClass::forName('net.xp_lang.tests.types.ArraySortingExtensions')))->getExtensions();
-
-    $this->assertEquals(1, sizeof($extensions));
-    $this->assertEquals('lang.types.ArrayList', key($extensions));
-    $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
-  }
-
-  #[@test]
   public function selfReturnType() {
     $builder= (new TypeReflection(XPClass::forName('net.xp_lang.tests.types.Builder')));
     $this->assertEquals(
@@ -244,7 +235,7 @@ class TypeReflectionTest extends \unittest\TestCase {
       public static $a= 0, $b;
     }');
     $this->assertEquals(
-      new TypeName($cl->getField('b')->get(null)->getClassName()),
+      new TypeName(nameof($cl->getField('b')->get(null))),
       (new TypeReflection($cl))->getField('b')->type
     );
   }

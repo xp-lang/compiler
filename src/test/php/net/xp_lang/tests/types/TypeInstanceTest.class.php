@@ -36,13 +36,4 @@ class TypeInstanceTest extends \unittest\TestCase {
       (new TypeInstance(new TypeReflection(XPClass::forName('lang.Object'))))->getExtensions()
     );
   }
-
-  #[@test]
-  public function extension_methods() {
-    $extensions= (new TypeInstance(new TypeReflection(XPClass::forName('net.xp_lang.tests.types.ArraySortingExtensions'))))->getExtensions();
-
-    $this->assertEquals(1, sizeof($extensions));
-    $this->assertEquals('lang.types.ArrayList', key($extensions));
-    $this->assertEquals('sorted', $extensions['lang.types.ArrayList'][0]->name());
-  }
 }

@@ -11,6 +11,7 @@ abstract class TypeMemberNode extends Node {
   public $name= '';
   public $modifiers= 0;
   public $annotations= [];
+  public $comment= null;
 
   /**
    * Returns this routine's name

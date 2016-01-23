@@ -412,6 +412,6 @@ class TypeDeclaration extends Types {
    * @return  string
    */    
   public function toString() {
-    return $this->getClassName().'@('.$this->tree->declaration->name->toString().')';
+    return nameof($this).'@('.$this->tree->declaration->name->toString().')';
   }
 }

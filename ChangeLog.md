@@ -3,6 +3,15 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 6.0.0 / ????-??-??
+
+* **Heads up**: Removed support for extension methods at runtime. They no
+  longer exist in XP7 as per xp-framework/rfc#298
+  (@thekid)
+* Fix code to use `nameof()` instead of the deprecated `getClassName()`
+  method from lang.Generic. See xp-framework/core#120
+  (@thekid)
+
 ## 5.0.1 / 2015-12-20
 
 * Replaced deprecated ensure() with a finally statement, creating forward

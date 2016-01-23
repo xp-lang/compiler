@@ -345,7 +345,7 @@ class CompiledType extends Types {
    * @return  string
    */    
   public function toString() {
-    $s= $this->getClassName().'<'.$this->name.">@{\n";
+    $s= nameof($this).'<'.$this->name.">@{\n";
     if ($this->constructor) {
       $s.= '  '.$this->constructor->toString()."\n";
     }

@@ -1,9 +1,0 @@
-import net.xp_lang.tests.StringBuffer;
-import native standard.trim;
-
-public class StringBufferExtensions {
-
-  public static StringBuffer trim(this StringBuffer $self, string $characters) {
-    return new StringBuffer(trim($self), $characters);
-  }
-}

@@ -57,7 +57,7 @@ class StringSource extends \lang\Object implements Source {
    * @return  string
    */
   public function toString() {
-    return $this->getClassName().'<'.$this->name.'>';
+    return nameof($this).'<'.$this->name.'>';
   }
 
   /**

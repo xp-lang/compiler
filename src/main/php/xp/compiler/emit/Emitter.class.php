@@ -711,7 +711,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
     $this->cat && $this->cat->debugf(
       '@%-3d Emit %s: %s',
       $node->position[0],
-      $node->getClassName(),
+      nameof($node),
       $node->hashCode()
     );
 
@@ -722,7 +722,7 @@ abstract class Emitter extends \lang\Object implements \util\log\Traceable {
         $node
       );
     } catch (\lang\Error $e) {
-      $this->error('0422', 'Cannot emit '.$node->getClassName().': '.$e->getMessage(), $node);
+      $this->error('0422', 'Cannot emit '.nameof($node).': '.$e->getMessage(), $node);
     } catch (\lang\Throwable $e) {
       $this->error('0500', $e->toString(), $node);
     }

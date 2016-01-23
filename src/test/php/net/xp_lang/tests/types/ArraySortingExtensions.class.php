@@ -8,10 +8,6 @@
  */
 class ArraySortingExtensions extends \lang\Object {
   
-  static function __import($scope) {
-    \xp::extensions(self::class, $scope);
-  }
-
   /**
    * Returns a sorted array list
    *

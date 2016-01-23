@@ -60,7 +60,7 @@ class IsAssignable extends \lang\Object implements Check {
   public function verify(\xp\compiler\ast\Node $node, \xp\compiler\types\Scope $scope) {
     $a= \cast($node, 'xp.compiler.ast.AssignmentNode');
     if (!$this->isWriteable($a->variable)) {
-      return ['A403', 'Cannot assign to '.($a->variable instanceof \lang\Generic ? $a->variable->getClassName() : \xp::stringOf($a->variable)).'s'];
+      return ['A403', 'Cannot assign to '.($a->variable instanceof \lang\Generic ? nameof($a->variable) : \xp::stringOf($a->variable)).'s'];
     }
   }
 }

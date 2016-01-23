@@ -10,7 +10,7 @@
  * abstract class Command implements Runnable {
  *
  *   public function toString() {
- *     return $this.getClassName();
+ *     return nameof($this);
  *   }
  * }
  * ```

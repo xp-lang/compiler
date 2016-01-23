@@ -66,7 +66,7 @@ abstract class Node extends \lang\Object {
    * @return  string
    */
   public function toString() {
-    $s= $this->getClassName().'(line '.$this->position[0].', offset '.$this->position[1].")@{\n";
+    $s= nameof($this).'(line '.$this->position[0].', offset '.$this->position[1].")@{\n";
     foreach (get_object_vars($this) as $name => $value) {
       '__id' !== $name && 'position' !== $name && 'holder' !== $name && $s.= sprintf(
         "  [%-20s] %s\n", 

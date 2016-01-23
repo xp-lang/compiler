@@ -61,7 +61,7 @@ class FileSource extends \lang\Object implements Source {
    * @return  string
    */
   public function toString() {
-    return $this->getClassName().'<'.str_replace(
+    return nameof($this).'<'.str_replace(
       realpath(getcwd()), 
       '.', 
       $this->file->getURI()

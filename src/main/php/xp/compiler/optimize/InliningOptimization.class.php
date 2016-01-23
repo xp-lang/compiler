@@ -68,7 +68,7 @@ abstract class InliningOptimization extends \lang\Object implements Optimization
    */
   public function inline($call, $scope, $optimizations) {
     if (isset($call->inlined)) {
-      // DEBUG Console::writeLine('**Recursion** Not inlining ', $call->name, ' from inside ', $scope->getClassName().'::'.$scope->name);
+      // DEBUG Console::writeLine('**Recursion** Not inlining ', $call->name, ' from inside ', nameof($scope).'::'.$scope->name);
       return $call;
     }
     
@@ -86,7 +86,7 @@ abstract class InliningOptimization extends \lang\Object implements Optimization
           $replacements[$parameter['name']]= $call->arguments[$i];
         }
         
-        // DEBUG Console::writeLine('Inlining ', $call->name, ' from inside ', $scope->getClassName().'::'.$scope->name);
+        // DEBUG Console::writeLine('Inlining ', $call->name, ' from inside ', nameof($scope).'::'.$scope->name);
         $call= $optimizations->optimize(
           self::$rewriter->newInstance($replacements, $call->name)->visitOne(clone $member->body[0]->expression),
           $scope

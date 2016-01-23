@@ -23,7 +23,7 @@ class Constructor extends \lang\Object {
     }
     return sprintf(
       '%s<%s __construct(%s)>',
-      $this->getClassName(),
+      nameof($this),
       implode(' ', \lang\reflect\Modifiers::namesOf($this->modifiers)),
       substr($signature, 2)
     );

@@ -309,6 +309,6 @@ class TypeReference extends Types {
       self::UNKNOWN_KIND      => 'UNKNOWN',
       self::PARTIAL_KIND      => 'PARTIAL'
     ];
-    return $this->getClassName().'<'.$kinds[$this->kind].'>@(*->'.$this->type->toString().')';
+    return nameof($this).'<'.$kinds[$this->kind].'>@(*->'.$this->type->toString().')';
   }
 }

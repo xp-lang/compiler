@@ -19,7 +19,7 @@ class Indexer extends \lang\Object {
   public function toString() {
     return sprintf(
       '%s<%s this[%s]>',
-      $this->getClassName(),
+      nameof($this),
       $this->type->compoundName(),
       $this->parameter->compoundName()
     );

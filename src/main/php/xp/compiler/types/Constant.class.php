@@ -37,7 +37,7 @@ class Constant extends \lang\Object {
   public function toString() {
     return sprintf(
       '%s<const %s %s= %s>',
-      $this->getClassName(),
+      nameof($this),
       $this->type->compoundName(),
       $this->name,
       \xp::stringOf($this->value)

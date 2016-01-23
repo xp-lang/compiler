@@ -21,7 +21,7 @@ class CompilationProfile extends \lang\Object {
    * @return  xp.compiler.checks.Check the added check
    */
   public function addWarning(Check $check) {
-    $this->warnings[$check->getClassName()]= $check;
+    $this->warnings[nameof($check)]= $check;
     return $check;
   }
 
@@ -32,7 +32,7 @@ class CompilationProfile extends \lang\Object {
    * @return  xp.compiler.profiles.CompilationProfile this
    */
   public function withWarning(Check $check) {
-    $this->warnings[$check->getClassName()]= $check;
+    $this->warnings[nameof($check)]= $check;
     return $this;
   }
 
@@ -43,7 +43,7 @@ class CompilationProfile extends \lang\Object {
    * @return  xp.compiler.checks.Check the added check
    */
   public function addError(Check $check) {
-    $this->errors[$check->getClassName()]= $check;
+    $this->errors[nameof($check)]= $check;
     return $check;
   }
 
@@ -54,7 +54,7 @@ class CompilationProfile extends \lang\Object {
    * @return  xp.compiler.profiles.CompilationProfile this
    */
   public function withError(Check $check) {
-    $this->errors[$check->getClassName()]= $check;
+    $this->errors[nameof($check)]= $check;
     return $this;
   }
   
@@ -65,7 +65,7 @@ class CompilationProfile extends \lang\Object {
    * @return  xp.compiler.optimize.Optimization the added optimization
    */
   public function addOptimization(Optimization $optimization) {
-    $this->optimizations[$optimization->getClassName()]= $optimization;
+    $this->optimizations[nameof($optimization)]= $optimization;
     return $optimization;
   }
 
@@ -76,7 +76,7 @@ class CompilationProfile extends \lang\Object {
    * @return  xp.compiler.profiles.CompilationProfile this
    */
   public function withOptimization(Optimization $optimization) {
-    $this->optimizations[$optimization->getClassName()]= $optimization;
+    $this->optimizations[nameof($optimization)]= $optimization;
     return $this;
   }
 }

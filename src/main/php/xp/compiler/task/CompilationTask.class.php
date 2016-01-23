@@ -166,9 +166,9 @@ class CompilationTask extends \lang\Object {
    * @return  string
    */
   public function toString() {
-    $s= $this->getClassName().'(source: '.$this->source->toString().")@{\n";
+    $s= nameof($this).'(source: '.$this->source->toString().")@{\n";
     foreach ($this->done->keys() as $key) {
-      $s.= '  ['.$key->toString().'] '.$this->done[$key]->getClassName().'('.$this->done[$key]->name().")\n";
+      $s.= '  ['.$key->toString().'] '.nameof($this->done[$key]).'('.$this->done[$key]->name().")\n";
     }
     return $s.'}';
   }

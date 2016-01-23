@@ -198,7 +198,7 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
     // Define type
     $this->debug && fputs(STDERR, $r->type()->toString()."\n");
     $r->executeWith([]);
-    \xp::$cl[$class]= $this->getClassName().'://'.$this->instanceId();
+    \xp::$cl[$class]= nameof($this).'://'.$this->instanceId();
     return $r->type()->literal();
   }
 
@@ -254,6 +254,6 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
    * @return string
    */
   public function toString() {
-    return $this->getClassName().'<'.implode(', ', $this->files->getSourcePaths()).'>';
+    return nameof($this).'<'.implode(', ', $this->files->getSourcePaths()).'>';
   }
 }

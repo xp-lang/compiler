@@ -316,29 +316,7 @@ class TypeReflection extends Types {
    * @return  [:xp.compiler.types.Method[]]
    */
   public function getExtensions() {
-    $name= '\\'.strtr($this->class->getName(), '.', '\\');
-
-    // Extension methods are registered via __import()
-    if (!method_exists($name, '__import')) return [];
-    call_user_func([$name, '__import'], 0);
-    if (!isset(\xp::$ext[0])) return [];
-
-    // Found extension methods imported into the 0-scope
-    $methods= $this->class->getMethods();
-    $r= [];
-    foreach (\xp::$ext[0] as $type => $name) {
-      $type= $this->typeName($type);
-      $r[$type]= [];
-      foreach ($methods as $method) {
-        if (
-          ($method->getModifiers() & MODIFIER_STATIC) &&
-          ($method->numParameters() > 0) &&
-          (strtr($type, '.', '\\') === strtr($method->getParameter(0)->getTypeName(), '.', '\\'))
-        ) $r[$type][]= $this->getMethod($method->getName());
-      }
-    }
-    unset(\xp::$ext[0]);
-    return $r;
+    return [];
   }
 
   /**
@@ -519,6 +497,6 @@ class TypeReflection extends Types {
    * @return  string
    */    
   public function toString() {
-    return $this->getClassName().'@('.$this->class->toString().')';
+    return nameof($this).'@('.$this->class->toString().')';
   }
 }

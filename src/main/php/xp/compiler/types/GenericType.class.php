@@ -364,7 +364,7 @@ class GenericType extends Types {
   public function toString() {
     return sprintf(
       '%s@(%s<%s>)',
-      $this->getClassName(),
+      nameof($this),
       $this->definition->toString(),
       implode(', ', array_map(['xp', 'stringOf'], $this->components))
     );

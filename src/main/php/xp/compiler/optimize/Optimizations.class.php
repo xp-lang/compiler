@@ -59,9 +59,9 @@ class Optimizations extends \lang\Object {
    * @return  string
    */
   public function toString() {
-    $s= $this->getClassName().'('.$this->impl->size().")@{\n";
+    $s= nameof($this).'('.$this->impl->size().")@{\n";
     foreach ($this->impl->keys() as $key) {
-      $s.= sprintf("  [%-20s] %s\n", $key->getSimpleName(), $this->impl->get($key)->getClassName());
+      $s.= sprintf("  [%-20s] %s\n", $key->getSimpleName(), nameof($this->impl->get($key)));
     }
     return $s.'}';
   }
