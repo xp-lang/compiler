@@ -24,8 +24,7 @@ use util\cmd\Console;
 use lang\ClassLoader;
 
 /**
- * XP Compiler, version {{VERSION}}
- * Copyright (c) 2008-2015 the XP group
+ * XP Compiler
  *
  * Usage:
  * <pre>
@@ -106,9 +105,7 @@ class Runner extends \lang\Object {
    */
   protected static function showUsage() {
     $class= new \lang\XPClass(__CLASS__);
-    Console::$err->writeLine(strtr(self::textOf($class->getComment()), [
-      '{{VERSION}}' => $class->getClassLoader()->getResource('VERSION')
-    ]));
+    Console::$err->writeLine(self::textOf($class->getComment()));
     
     // List supported syntaxes
     Console::$err->writeLine(self::$line);
