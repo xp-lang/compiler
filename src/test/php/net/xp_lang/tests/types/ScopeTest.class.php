@@ -178,14 +178,14 @@ class ScopeTest extends \unittest\TestCase {
   #[@test]
   public function objectExtensionInherited() {
     with (
-      $objectType= new TypeReflection(XPClass::forName('lang.Object')), 
-      $dateType= new TypeReflection(XPClass::forName('util.Date')),
-      $classNameMethod= new Method('getClassName')
+      $parentType= new TypeReflection(XPClass::forName('unittest.TestCase')),
+      $thisType= new TypeReflection(typeof($this)),
+      $getNameMethod= new Method('getName')
     ); {
-      $this->fixture->addExtension($objectType, $classNameMethod);
+      $this->fixture->addExtension($parentType, $getNameMethod);
       $this->assertEquals(
-        $classNameMethod,
-        $this->fixture->getExtension($dateType, $classNameMethod->name)
+        $getNameMethod,
+        $this->fixture->getExtension($thisType, $getNameMethod->name)
       );
     }
   }

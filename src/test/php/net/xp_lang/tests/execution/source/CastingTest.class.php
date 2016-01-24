@@ -79,8 +79,8 @@ class CastingTest extends ExecutionTest {
   }
 
   #[@test]
-  public function dateAsObject() {
-    $this->run('return new util.Date() as lang.Object;');
+  public function dateAsValue() {
+    $this->run('return new util.Date() as lang.Value;');
   }
 
   #[@test, @expect(ClassCastException::class)]

@@ -76,7 +76,7 @@ abstract class Syntax extends \lang\Object {
       $this->parser= $this->newParser();
     }
 
-    $result= $this->parser->parse($this->newLexer($in, $source ? $source : $in->toString()));
+    $result= $this->parser->parse($this->newLexer($in, $source ? $source : \xp::stringOf($in)));
     if ($messages) foreach ($this->parser->getWarnings() as $warning) {
       $messages->warn(
         sprintf('P%03d', $warning->code),
