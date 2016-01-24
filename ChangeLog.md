@@ -3,6 +3,8 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 6.0.1 / 2016-01-24
+
 * Adjusted test code after xp-framework/rfc#297 was implemented
   (@thekid)
 
