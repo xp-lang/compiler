@@ -3,6 +3,10 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 7.0.0 / 2016-02-22
+
+* Added version compatibility with XP 7 - @thekid
+
 ## 6.0.1 / 2016-01-24
 
 * Adjusted test code after xp-framework/rfc#297 was implemented
