@@ -203,17 +203,17 @@ class ScopeTest extends \unittest\TestCase {
   #[@test]
   public function resolveFullyQualified() {
     $this->assertEquals(
-      new TypeReflection(XPClass::forName('util.cmd.Command')), 
-      $this->fixture->resolveType(new TypeName('util.cmd.Command'))
+      new TypeReflection(XPClass::forName('util.cmd.Console')), 
+      $this->fixture->resolveType(new TypeName('util.cmd.Console'))
     );
   }
 
   #[@test]
   public function resolveUnqualified() {
-    $this->fixture->addTypeImport('util.cmd.Command');
+    $this->fixture->addTypeImport('util.cmd.Console');
     $this->assertEquals(
-      new TypeReflection(XPClass::forName('util.cmd.Command')), 
-      $this->fixture->resolveType(new TypeName('Command'))
+      new TypeReflection(XPClass::forName('util.cmd.Console')), 
+      $this->fixture->resolveType(new TypeName('Console'))
     );
   }
 
@@ -221,16 +221,16 @@ class ScopeTest extends \unittest\TestCase {
   public function resolveUnqualifiedByPackageImport() {
     $this->fixture->addPackageImport('util.cmd');
     $this->assertEquals(
-      new TypeReflection(XPClass::forName('util.cmd.Command')), 
-      $this->fixture->resolveType(new TypeName('Command'))
+      new TypeReflection(XPClass::forName('util.cmd.Console')), 
+      $this->fixture->resolveType(new TypeName('Console'))
     );
   }
 
   #[@test]
   public function resolveArrayType() {
     $this->assertEquals(
-      new TypeReference(new TypeName('util.cmd.Command[]'), Types::CLASS_KIND), 
-      $this->fixture->resolveType(new TypeName('util.cmd.Command[]'))
+      new TypeReference(new TypeName('util.cmd.Console[]'), Types::CLASS_KIND), 
+      $this->fixture->resolveType(new TypeName('util.cmd.Console[]'))
     );
   }
 
@@ -238,8 +238,8 @@ class ScopeTest extends \unittest\TestCase {
   public function resolveUnqualifiedArrayType() {
     $this->fixture->addPackageImport('util.cmd');
     $this->assertEquals(
-      new TypeReference(new TypeName('util.cmd.Command[]'), Types::CLASS_KIND), 
-      $this->fixture->resolveType(new TypeName('Command[]'))
+      new TypeReference(new TypeName('util.cmd.Console[]'), Types::CLASS_KIND), 
+      $this->fixture->resolveType(new TypeName('Console[]'))
     );
   }
 
@@ -278,32 +278,32 @@ class ScopeTest extends \unittest\TestCase {
   #[@test]
   public function usedAfterPackageAndTypeImport() {
     $this->fixture->addPackageImport('util.cmd');
-    $this->fixture->resolveType(new TypeName('Command'));
+    $this->fixture->resolveType(new TypeName('Console'));
     
-    $this->assertEquals(['util.cmd.Command' => true], $this->fixture->used);
+    $this->assertEquals(['util.cmd.Console' => true], $this->fixture->used);
   }
 
   #[@test]
   public function usedAfterPackageAndMultipleTypeImport() {
     $this->fixture->addPackageImport('util.cmd');
-    $this->fixture->resolveType(new TypeName('Command'));
-    $this->fixture->resolveType(new TypeName('Command'));
+    $this->fixture->resolveType(new TypeName('Console'));
+    $this->fixture->resolveType(new TypeName('Console'));
     
-    $this->assertEquals(['util.cmd.Command' => true], $this->fixture->used);
+    $this->assertEquals(['util.cmd.Console' => true], $this->fixture->used);
   }
 
   #[@test]
   public function usedAfterTypeImport() {
-    $this->fixture->addTypeImport('util.cmd.Command');
+    $this->fixture->addTypeImport('util.cmd.Console');
     
-    $this->assertEquals(['util.cmd.Command' => true], $this->fixture->used);
+    $this->assertEquals(['util.cmd.Console' => true], $this->fixture->used);
   }
 
   #[@test]
   public function usedAfterMultipleTypeImport() {
-    $this->fixture->addTypeImport('util.cmd.Command');
-    $this->fixture->addTypeImport('util.cmd.Command');
+    $this->fixture->addTypeImport('util.cmd.Console');
+    $this->fixture->addTypeImport('util.cmd.Console');
     
-    $this->assertEquals(['util.cmd.Command' => true], $this->fixture->used);
+    $this->assertEquals(['util.cmd.Console' => true], $this->fixture->used);
   }
 }

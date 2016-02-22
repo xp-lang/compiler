@@ -6,7 +6,7 @@
   "description" : "XP Compiler",
   "keywords": ["xp"],
   "require" : {
-    "xp-framework/core": "^7.0 | ^6.5",
+    "xp-framework/core": "^7.0 | ^6.11",
     "xp-framework/parser": "^7.0 | ^6.0",
     "xp-framework/tokenize": "^7.0 | ^6.6",
     "xp-framework/patterns": "^7.0 | ^6.6",

@@ -2,7 +2,7 @@
 
 use lang\XPClass;
 use lang\Type;
-use lang\types\ArrayList;
+use lang\Primitive;
 
 /**
  * Tests class declarations
@@ -215,7 +215,7 @@ class ClassDeclarationTest extends ExecutionTest {
   #[@test]
   public function staticMemberInitialization() {
     $class= self::define('class', $this->name, null, '{
-      public static XPClass $arrayClass = lang.types.ArrayList::class;
+      public static XPClass $arrayClass = lang.Type::class;
     }');
     $this->assertInstanceOf(XPClass::class, $class->getField('arrayClass')->get(null));
   }
@@ -227,13 +227,9 @@ class ClassDeclarationTest extends ExecutionTest {
   #[@test]
   public function memberInitialization() {
     $class= self::define('class', $this->name, null, '{
-      public lang.types.ArrayList $elements = lang.types.ArrayList::class.newInstance(1, 2, 3);
+      public lang.Type $type = lang.Type::forName("string");
     }');
-    
-    with ($instance= $class->newInstance(), $elements= $class->getField('elements')->get($instance)); {
-      $this->assertInstanceOf(ArrayList::class, $elements);
-      $this->assertEquals(new ArrayList(1, 2, 3), $elements);
-    }
+    $this->assertEquals(Primitive::$STRING, $class->getField('type')->get($class->newInstance()));
   }
 
   /**
@@ -243,15 +239,9 @@ class ClassDeclarationTest extends ExecutionTest {
   #[@test]
   public function memberInitializationWithParent() {
     $class= self::define('class', $this->name, 'unittest.TestCase', '{
-      public lang.types.ArrayList $elements = lang.types.ArrayList::class.newInstance(1, 2, 3);
+      public lang.Type $type = lang.Type::forName("string");
     }');
-    
-    with ($instance= $class->newInstance($this->name)); {
-      $this->assertEquals($this->name, $instance->getName());
-      $elements= $class->getField('elements')->get($instance);
-      $this->assertInstanceOf(ArrayList::class, $elements);
-      $this->assertEquals(new ArrayList(1, 2, 3), $elements);
-    }
+    $this->assertEquals(Primitive::$STRING, $class->getField('type')->get($class->newInstance('test')));
   }
 
   /**

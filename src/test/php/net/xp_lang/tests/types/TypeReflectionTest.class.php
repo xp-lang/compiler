@@ -168,8 +168,8 @@ class TypeReflectionTest extends \unittest\TestCase {
 
   #[@test]
   public function arrayListClassEnumerator() {
-    $enum= (new TypeReflection(XPClass::forName('lang.types.ArrayList')))->getEnumerator();
-    $this->assertEquals(new TypeName('int'), $enum->key);
+    $enum= (new TypeReflection(new XPClass(\ArrayObject::class)))->getEnumerator();
+    $this->assertEquals(new TypeName('var'), $enum->key);
     $this->assertEquals(new TypeName('var'), $enum->value);
   }
 

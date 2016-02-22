@@ -107,12 +107,19 @@ class InstanceCreationTest extends ExecutionTest {
 
   #[@test]
   public function anonymous_instance_from_abstract_base_class() {
-    $command= $this->run('return new util.cmd.Command() {
+    \lang\ClassLoader::defineType('net.xp_lang.tests.Command', [
+      'kind'       => 'abstract class',
+      'extends'    => ['lang.Object'],
+      'implements' => ['lang.Runnable'],
+      'use'        => []
+    ], []);
+
+    $command= $this->run('return new net.xp_lang.tests.Command() {
       public void run() {
         throw new lang.MethodNotImplementedException("run");
       }
     };');
-    $this->assertAnonymousInstanceOf('util.cmd.Command', $command);
+    $this->assertAnonymousInstanceOf('net.xp_lang.tests.Command', $command);
   }
 
   #[@test]

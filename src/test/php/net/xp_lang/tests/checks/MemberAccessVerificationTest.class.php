@@ -101,13 +101,6 @@ class MemberAccessVerificationTest extends \unittest\TestCase {
   }
 
   #[@test]
-  public function integerPublicMemberAccess() {
-    $this->assertNull(
-      $this->verify(new MemberAccessNode($this->newInstance('lang.types.Integer'), 'value'))
-    );
-  }
-
-  #[@test]
   public function stringProtectedMemberAccess() {
     $this->assertEquals(
       ['T403', 'Accessing protected net.xp_lang.tests.StringBuffer::$buffer from Fixture'],

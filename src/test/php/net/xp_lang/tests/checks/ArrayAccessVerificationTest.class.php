@@ -72,9 +72,9 @@ class ArrayAccessVerificationTest extends \unittest\TestCase {
   }
 
   #[@test]
-  public function arrayList() {
+  public function arrayObject() {
     $this->assertNull(
-      $this->verify(new InstanceCreationNode(['type' => new TypeName('lang.types.ArrayList')]))
+      $this->verify(new InstanceCreationNode(['type' => new TypeName('php.ArrayObject')]))
     );
   }
 

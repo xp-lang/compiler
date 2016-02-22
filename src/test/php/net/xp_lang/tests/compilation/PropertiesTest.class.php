@@ -103,15 +103,15 @@ use lang\reflect\Modifiers;
   public function property_with_get_and_set_exists() {
     $this->assertEquals(
       true, 
-      $this->compile('class %s { public lang.types.Bytes buffer { get; set; } }')->hasProperty('buffer')
+      $this->compile('class %s { public util.Bytes buffer { get; set; } }')->hasProperty('buffer')
     );
   }
 
   #[@test]
   public function property_with_get_and_set() {
     $this->assertProperty(
-      MODIFIER_PUBLIC, 'buffer', new TypeName('lang.types.Bytes'),
-      $this->compile('class %s { public lang.types.Bytes buffer { get; set; } }')->getProperty('buffer')
+      MODIFIER_PUBLIC, 'buffer', new TypeName('util.Bytes'),
+      $this->compile('class %s { public util.Bytes buffer { get; set; } }')->getProperty('buffer')
     );
   }
 

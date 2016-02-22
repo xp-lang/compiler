@@ -11,10 +11,10 @@ class ArraySortingExtensions extends \lang\Object {
   /**
    * Returns a sorted array list
    *
-   * @param   lang.types.ArrayList self
-   * @return  lang.types.ArrayList
+   * @param   var[] self
+   * @return  var[]
    */
-  public static function sorted(\lang\types\ArrayList $self) {
+  public static function sorted(array $self) {
     // Implementation here
   }
 }
