@@ -134,6 +134,8 @@ class JitClassLoader extends \lang\Object implements \lang\IClassLoader {
           $return[]= $e.'/';
         } else if (strstr($e, \xp::CLASS_FILE_EXT)) {
           $return[]= $e;
+        } else if ('module.xp' === $e) {
+          $return[]= $e;
         } else {
           $return[]= preg_replace($syntaxes, \xp::CLASS_FILE_EXT, $e);
         }

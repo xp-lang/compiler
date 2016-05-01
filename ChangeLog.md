@@ -3,6 +3,10 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 7.0.1 / 2016-05-01
+
+* Fixed `module.xp` being treated as class with XP language - @thekid
+
 ## 7.0.0 / 2016-02-22
 
 * Added version compatibility with XP 7 - @thekid
