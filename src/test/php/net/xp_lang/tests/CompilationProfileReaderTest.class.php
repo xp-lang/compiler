@@ -29,7 +29,9 @@ class CompilationProfileReaderTest extends \unittest\TestCase {
    * @return  util.Properties
    */
   private function newProperties($source) {
-    return (new Properties(null))->load(new MemoryInputStream(preg_replace('/^\s*/', '', $source)));
+    $prop= new Properties(null);
+    $prop->load(new MemoryInputStream(preg_replace('/^\s*/', '', $source)));
+    return $prop;
   }
 
   #[@test]
