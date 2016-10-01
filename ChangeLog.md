@@ -3,6 +3,11 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 7.1.0 / 2016-10-01
+
+* Added version compatibility with XP 8 - @thekid
+* Added support for PHP 7.1 - @thekid
+
 ## 7.0.1 / 2016-05-01
 
 * Fixed `module.xp` being treated as class with XP language - @thekid
