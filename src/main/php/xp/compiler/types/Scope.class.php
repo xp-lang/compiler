@@ -227,22 +227,23 @@ abstract class Scope extends \lang\Object {
       
       // Fall through
     }
-    
-    if ('xp' === $name->name) {
+
+    $normalized= strtr($name->name, '\\', '.');
+    if ('xp' === $normalized) {
       return new TypeReference($name, Types::UNKNOWN_KIND);
-    } else if (0 === strncmp('php.', $name->name, 4)) {
-      return new TypeReflection(new XPClass(substr($name->name, strrpos($name->name, '.')+ 1)));
-    } else if (strpos($name->name, '.')) {
-      $qualified= $name->name;
-    } else if (isset($this->imports[$name->name])) {
-      $qualified= $this->imports[$name->name];
+    } else if (0 === strncmp('php.', $normalized, 4)) {
+      return new TypeReflection(new XPClass(substr($normalized, strrpos($normalized, '.')+ 1)));
+    } else if (strpos($normalized, '.')) {
+      $qualified= $normalized;
+    } else if (isset($this->imports[$normalized])) {
+      $qualified= $this->imports[$normalized];
     } else {
       $lookup= $this->package
         ? array_merge($this->packages, [$this->package->name])
         : array_merge($this->packages, [null])
       ;
       try {
-        $qualified= $this->task->locateClass($lookup, $name->name);
+        $qualified= $this->task->locateClass($lookup, $normalized);
       } catch (\lang\ElementNotFoundException $e) {
         throw new ResolveException('Cannot resolve '.$name->toString(), 423, $e);
       }
