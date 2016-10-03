@@ -3,6 +3,12 @@ XP Compiler ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 7.1.1 / 2016-10-01
+
+* Fixed forward compatibility with PHP 7.1. It was really only unittests
+  failing though; see https://bugs.php.net/bug.php?id=73217
+  (@thekid)
+
 ## 7.1.0 / 2016-10-01
 
 * Added version compatibility with XP 8 - @thekid
