@@ -1,37 +1,26 @@
 <?php namespace net\xp_lang\tests\execution\source;
 
-/**
- * Tests arrays
- *
- */
 class FinallyTest extends ExecutionTest {
   
-  /**
-   * Test try ... finally
-   *
-   */
   #[@test]
   public function tryFinallyNoException() {
-    $this->assertEquals(['Try', 'Finally'], $this->run('
-      $r= [];
+    $executed= $this->run('
+      $r= new util.collections.Vector();
       try {
         $r[]= "Try";
       } finally {
         $r[]= "Finally";
       }
       return $r;
-    '));
+    ');
+    $this->assertEquals(['Try', 'Finally'], $executed->elements());
   }
 
-  /**
-   * Test try ... finally
-   *
-   */
   #[@test]
   public function tryFinallyWithException() {
-    $this->assertEquals(['Try', 'Finally', 'Catch'], $this->run('
+    $executed= $this->run('
       try {
-        $r= [];
+        $r= new util.collections.Vector();
         try {
           $r[]= "Try";
           throw new FormatException("Error");
@@ -42,34 +31,28 @@ class FinallyTest extends ExecutionTest {
         $r[]= "Catch";
       }
       return $r;
-    '));
+    ');
+    $this->assertEquals(['Try', 'Finally', 'Catch'], $executed->elements());
   }
 
-  /**
-   * Test try ... finally
-   *
-   */
   #[@test]
   public function tryFinallyWithReturn() {
-    $this->assertEquals(['Try', 'Finally'], $this->run('
-      $r= [];
+    $executed= $this->run('
+      $r= new util.collections.Vector();
       try {
         $r[]= "Try";
         return $r;
       } finally {
         $r[]= "Finally";
       }
-    '));
+    ');
+    $this->assertEquals(['Try', 'Finally'], $executed->elements());
   }
 
-  /**
-   * Test try ... catch ... finally
-   *
-   */
   #[@test]
   public function tryCatchFinallyWithException() {
-    $this->assertEquals(['Try', 'Catch', 'Finally'], $this->run('
-      $r= [];
+    $executed= $this->run('
+      $r= new util.collections.Vector();
       try {
         $r[]= "Try";
         throw new FormatException("Error");
@@ -79,17 +62,14 @@ class FinallyTest extends ExecutionTest {
         $r[]= "Finally";
       }
       return $r;
-    '));
+    ');
+    $this->assertEquals(['Try', 'Catch', 'Finally'], $executed->elements());
   }
 
-  /**
-   * Test try ... catch ... finally
-   *
-   */
   #[@test]
   public function tryCatchFinallyWithReturnInsideCatch() {
-    $this->assertEquals(['Try', 'Catch', 'Finally'], $this->run('
-      $r= [];
+    $executed= $this->run('
+      $r= new util.collections.Vector();
       try {
         $r[]= "Try";
         throw new FormatException("Error");
@@ -99,17 +79,14 @@ class FinallyTest extends ExecutionTest {
       } finally {
         $r[]= "Finally";
       }
-    '));
+    ');
+    $this->assertEquals(['Try', 'Catch', 'Finally'], $executed->elements());
   }
 
-  /**
-   * Test try ... catch ... finally
-   *
-   */
   #[@test]
   public function tryCatchFinallyNoException() {
-    $this->assertEquals(['Try', 'Finally'], $this->run('
-      $r= [];
+    $executed= $this->run('
+      $r= new util.collections.Vector();
       try {
         $r[]= "Try";
       } catch (FormatException $e) {
@@ -118,6 +95,7 @@ class FinallyTest extends ExecutionTest {
         $r[]= "Finally";
       }
       return $r;
-    '));
+    ');
+    $this->assertEquals(['Try', 'Finally'], $executed->elements());
   }
 }
